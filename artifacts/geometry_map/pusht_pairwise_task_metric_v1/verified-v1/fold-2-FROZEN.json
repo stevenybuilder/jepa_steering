@@ -1,0 +1,317 @@
+{
+  "complete": true,
+  "held_state": 2,
+  "train_states": [
+    0,
+    1,
+    3
+  ],
+  "fits": {
+    "joint_xy_squared_proxy": {
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "iterations": 9,
+      "evaluations": 10,
+      "lambda_numeric": 0.013165239371243457,
+      "tau_numeric": 0.2665293233342249,
+      "original_label_scale": 7.267947693049886e-05,
+      "original_pointwise_augmentedpenalty": 0.1795642938660898,
+      "state_pair_counts": [
+        2016,
+        2016,
+        2016
+      ],
+      "state_tie_counts": [
+        0,
+        0,
+        0
+      ],
+      "tie_tolerance": 2.069767705499884e-08,
+      "objective_trace": [
+        0.5840585734435011,
+        0.5530369207516984,
+        0.5521798972592747,
+        0.5519384902425395,
+        0.551911021760762,
+        0.5519107613318882,
+        0.551910750885299,
+        0.5519107507364545,
+        0.5519107507362216
+      ],
+      "weights_min": 0.37785948743259423,
+      "weights_max": 1.622941338771691,
+      "weights": [
+        0.9633303845898105,
+        0.37785948743259423,
+        1.622941338771691,
+        0.6774446555616983,
+        1.3912786838920101,
+        1.3487550220700175,
+        1.0778090948075878,
+        0.8955649592803435,
+        1.1556248773083857,
+        1.1200664974953922,
+        1.064497820181885,
+        1.054937765993567,
+        1.0261522347459986,
+        0.8811628749765698,
+        1.0663884203907013,
+        1.0293836954951152
+      ]
+    },
+    "one_minus_requested_goal_coverage": {
+      "success": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "iterations": 10,
+      "evaluations": 11,
+      "lambda_numeric": 0.013165239371243457,
+      "tau_numeric": 0.2665293233342249,
+      "original_label_scale": 0.959039863941564,
+      "original_pointwise_augmentedpenalty": 0.1795642938660898,
+      "state_pair_counts": [
+        2016,
+        2016,
+        2016
+      ],
+      "state_tie_counts": [
+        0,
+        1275,
+        0
+      ],
+      "tie_tolerance": 1e-08,
+      "objective_trace": [
+        0.6282160273960912,
+        0.6028618396414384,
+        0.6026213681660608,
+        0.6026006830246392,
+        0.6025886891561398,
+        0.6025886506393824,
+        0.6025886303545215,
+        0.6025886288843656,
+        0.6025886288819606,
+        0.6025886288818538
+      ],
+      "weights_min": 0.21688705623685775,
+      "weights_max": 1.459977870715027,
+      "weights": [
+        1.4405527888353364,
+        0.9503775534417036,
+        0.21688705623685775,
+        1.235261555673101,
+        1.459977870715027,
+        1.2466606755424252,
+        0.6877209431229712,
+        0.8390442122141477,
+        0.9942388653139065,
+        0.7660475452553227,
+        1.0153137269511787,
+        0.9960191370139735,
+        1.0000819950727462,
+        1.0063868614345286,
+        0.9959068757343826,
+        1.0981575446120064
+      ]
+    }
+  },
+  "training": {
+    "joint_xy_squared_proxy": {
+      "native": {
+        "objective": 0.5892324711996986,
+        "prior_penalty": 0.0,
+        "mean_pair_cross_entropy": 0.5892324711996987,
+        "mean_strict_pair_accuracy": 0.7151124338624338,
+        "projected_gradient_maxabs": 0.05990094485835883,
+        "states": [
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.40809333939026454,
+            "strict_pair_accuracy": 0.8531746031746031
+          },
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.575396889812297,
+            "strict_pair_accuracy": 0.8278769841269841
+          },
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.7842071843965343,
+            "strict_pair_accuracy": 0.4642857142857143
+          }
+        ],
+        "within_state_spearman": [
+          0.8798992673992673,
+          0.8472069597069597,
+          -0.0787087912087912
+        ]
+      },
+      "saved_pointwise": {
+        "objective": 0.7066739349276945,
+        "prior_penalty": 0.15213020771804997,
+        "mean_pair_cross_entropy": 0.5545437272096445,
+        "mean_strict_pair_accuracy": 0.7721560846560847,
+        "projected_gradient_maxabs": 0.07620002426672481,
+        "states": [
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.43175881525499576,
+            "strict_pair_accuracy": 0.8601190476190477
+          },
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.5787867328571679,
+            "strict_pair_accuracy": 0.7996031746031746
+          },
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.6530856335167698,
+            "strict_pair_accuracy": 0.6567460317460317
+          }
+        ],
+        "within_state_spearman": [
+          0.8901098901098901,
+          0.815018315018315,
+          0.5073717948717948
+        ]
+      },
+      "pairwise_logistic": {
+        "objective": 0.5519107507362216,
+        "prior_penalty": 0.016299640170775516,
+        "mean_pair_cross_entropy": 0.5356111105654461,
+        "mean_strict_pair_accuracy": 0.7824074074074074,
+        "projected_gradient_maxabs": 7.838644702079511e-09,
+        "states": [
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.3984469892060685,
+            "strict_pair_accuracy": 0.876984126984127
+          },
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.5746839381944947,
+            "strict_pair_accuracy": 0.8219246031746031
+          },
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.633702404295775,
+            "strict_pair_accuracy": 0.6483134920634921
+          }
+        ],
+        "within_state_spearman": [
+          0.9113553113553112,
+          0.8408424908424909,
+          0.4885073260073259
+        ]
+      }
+    },
+    "one_minus_requested_goal_coverage": {
+      "native": {
+        "objective": 0.6307684612543311,
+        "prior_penalty": 0.0,
+        "mean_pair_cross_entropy": 0.6307684612543311,
+        "mean_strict_pair_accuracy": 0.5886223303986462,
+        "projected_gradient_maxabs": 0.04215040830520226,
+        "states": [
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.4129847153517586,
+            "strict_pair_accuracy": 0.8531746031746031
+          },
+          {
+            "pairs": 2016,
+            "ties": 1275,
+            "cross_entropy": 0.7307840980153502,
+            "strict_pair_accuracy": 0.3913630229419703
+          },
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.7485365703958844,
+            "strict_pair_accuracy": 0.5213293650793651
+          }
+        ],
+        "within_state_spearman": [
+          0.88489010989011,
+          -0.16116200283735607,
+          0.0738095238095238
+        ]
+      },
+      "saved_pointwise": {
+        "objective": 0.6582622722199408,
+        "prior_penalty": 0.022033096952189433,
+        "mean_pair_cross_entropy": 0.6362291752677515,
+        "mean_strict_pair_accuracy": 0.5501500814000815,
+        "projected_gradient_maxabs": 0.04980422189343432,
+        "states": [
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.42056488077232684,
+            "strict_pair_accuracy": 0.8635912698412699
+          },
+          {
+            "pairs": 2016,
+            "ties": 1275,
+            "cross_entropy": 0.7438655743053504,
+            "strict_pair_accuracy": 0.3076923076923077
+          },
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.744257070725577,
+            "strict_pair_accuracy": 0.4791666666666667
+          }
+        ],
+        "within_state_spearman": [
+          0.8966575091575091,
+          -0.28056780364611666,
+          -0.055906593406593395
+        ]
+      },
+      "pairwise_logistic": {
+        "objective": 0.6025886288818538,
+        "prior_penalty": 0.017453406523490235,
+        "mean_pair_cross_entropy": 0.5851352223583636,
+        "mean_strict_pair_accuracy": 0.6475778120514962,
+        "projected_gradient_maxabs": 9.322314416292457e-09,
+        "states": [
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.3934469294149737,
+            "strict_pair_accuracy": 0.8640873015873016
+          },
+          {
+            "pairs": 2016,
+            "ties": 1275,
+            "cross_entropy": 0.7094771897440307,
+            "strict_pair_accuracy": 0.48043184885290147
+          },
+          {
+            "pairs": 2016,
+            "ties": 0,
+            "cross_entropy": 0.6524815479160863,
+            "strict_pair_accuracy": 0.5982142857142857
+          }
+        ],
+        "within_state_spearman": [
+          0.8974358974358972,
+          -0.028402034453147634,
+          0.2932692307692307
+        ]
+      }
+    }
+  },
+  "fit_saved_before_held_scoring": true,
+  "path": "fold-2-FROZEN.npz",
+  "sha256": "24b296419361c6032c5bddf97a430b14e39be4f348f2d2b8c66998bb77adab42"
+}

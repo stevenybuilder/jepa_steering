@@ -1,0 +1,44 @@
+{
+  "inputs": [
+    {
+      "episode": 3,
+      "bank": "/root/geometry-map-jepawm-pusht-v1/joint-visual-action-factorial-64-v1/inputs/episode-003/expanded-dev-003.pt",
+      "receipt": "/root/geometry-map-jepawm-pusht-v1/joint-visual-action-factorial-64-v1/inputs/episode-003/DONE.json"
+    },
+    {
+      "episode": 0,
+      "bank": "/root/geometry-map-jepawm-pusht-v1/joint-visual-action-factorial-64-backup-v1/from-49987413/inputs/episode-000/expanded-dev-000.pt",
+      "receipt": "/root/geometry-map-jepawm-pusht-v1/joint-visual-action-factorial-64-backup-v1/from-49987413/inputs/episode-000/DONE.json"
+    }
+  ],
+  "site": "true384-channel newest predictor visual INPUT H3, before400mixing; P3 downstream trace observed",
+  "rank": 4,
+  "patches": 64,
+  "doses": [
+    -0.1,
+    0.1
+  ],
+  "arms": [
+    "targeted",
+    "random_basis",
+    "random_patches",
+    "random_both"
+  ],
+  "random_seed_rule": "2026090649+episode",
+  "basis": "Centered channel PCA of63 natural action-history contrasts times256patches; no labels/outcomes",
+  "controls": "random orthonormalrank4 and/or fixed random64patches, per-candidate float32 DELIVERED norm matched2e-6 rtol/atol",
+  "conservation": "unchanged actions,proprio,pastframes,unselectedpatches; off-subspace change bounded by measured arithmetic rounding",
+  "practical_lead": "Exploratory only: mean selected goalcoverage gain>=.01,positive>=3/4states,and mean exceeding every corresponding matchedcontrol; all4fixedconfig required",
+  "limitations": "n4seenstates,64dependentplans; action-HISTORY/consequence response notisolatedcurrentaction; rank4 localization notmanifold orDAS learnedcausalalignment; finitebank notfullCEM",
+  "primary_sources": [
+    "https://arxiv.org/html/2308.10248v5#S3",
+    "https://arxiv.org/html/2308.10248v5#A7",
+    "https://proceedings.mlr.press/v236/geiger24a/geiger24a.pdf"
+  ],
+  "checkpoint_sha256": "9beca3eafe0739c3b3adb5d734fa435ccbda0fea8a65d53d4cccec176aaaa0eb",
+  "script_sha256": "43bc0674a1042f71f24249196aa3b26b2c2dac8e3b44f4d4af530baa3d5aa4a8",
+  "max_seconds": 300.0,
+  "held_access": false,
+  "simulator_calls": 0,
+  "cem_calls": 0
+}

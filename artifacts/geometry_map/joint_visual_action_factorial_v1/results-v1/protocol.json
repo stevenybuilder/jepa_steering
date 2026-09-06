@@ -1,0 +1,72 @@
+{
+  "rows": [
+    {
+      "key": "near-dev-000",
+      "source_id": 0,
+      "split": "development_external",
+      "center_origin": "immutable original nativeCEM selectedH6 plan",
+      "path": "near-dev-000.pt",
+      "sha256": "6eb197c6cfada0e5c1e04a82742d5416d9fc5fe78b81459ce26db8fc6efede3e",
+      "bytes": 91412933
+    },
+    {
+      "key": "near-dev-001",
+      "source_id": 1,
+      "split": "development_external",
+      "center_origin": "immutable original nativeCEM selectedH6 plan",
+      "path": "near-dev-001.pt",
+      "sha256": "ebff730a398c3a705d37bccfb68f6270c1786f004b6de1010e7971704f2a7881",
+      "bytes": 91245893
+    },
+    {
+      "key": "near-dev-002",
+      "source_id": 2,
+      "split": "development_external",
+      "center_origin": "immutable original nativeCEM selectedH6 plan",
+      "path": "near-dev-002.pt",
+      "sha256": "de830b324f56acb699135ddb7814a2591c18af00f58199321118f2ca02b6ae05",
+      "bytes": 91527045
+    },
+    {
+      "key": "near-dev-003",
+      "source_id": 3,
+      "split": "development_external",
+      "center_origin": "immutable original nativeCEM selectedH6 plan",
+      "path": "near-dev-003.pt",
+      "sha256": "7ab9ec7d0a57810f68f42d46fafbdc0b3896b260e974574e1a5c399a97868664",
+      "bytes": 91441925
+    }
+  ],
+  "block_condition_site": 3,
+  "imagined_horizon": 3,
+  "arms": [
+    "visual",
+    "action",
+    "joint",
+    "permuted_visual",
+    "permuted_joint"
+  ],
+  "doses": [
+    -0.1,
+    0.1
+  ],
+  "visual_input": "Newest imagined visual input frame[B,1,16,16,384] BEFORE predictor projection/proprio concatenation; previous visual frame and entire proprio field unchanged",
+  "visual_delta": "recipient natural imagined input minus same-state central-plan natural imagined input, freshly captured; not actual camera pixels",
+  "action_condition": "Fixed recipient-minus-central z from nativeLinear10to400; newest P3condition slot only, past slots unchanged; external plans NEVER changed",
+  "interaction": "Vector yjoint-yvisual-yaction+ynative and direct block-output contrast; squared-error/cost interaction decomposed into additive cross-term plus output-coupling contribution",
+  "sham": "Fixed256patch permutation of visual delta, equal raw Frobenius norm; both shamvisual-only and shamjoint arms",
+  "component_budget": "Joint retains each single-component dose; x/z norms have different units, no equal-total-budget or confirmed joint-superiority claim",
+  "motivation_primary_sources": {
+    "conditional_action_identification": "https://arxiv.org/abs/2607.22430v2",
+    "same_action_visual_consistency": "https://arxiv.org/abs/2608.12939v1",
+    "dense_trained_policy": "https://arxiv.org/abs/2607.18236"
+  },
+  "literature_scope": "Parent-reviewed methodological motivation only; not a robotics guarantee or adaptation of a trained action/state identification method",
+  "limitations": "Same-state donors differ in imagined action/history; visual/condition edits may be inconsistent with external plan; n4states not36independent plans; no significance or efficacy gate",
+  "max_process_seconds": 300,
+  "checkpoint_sha256": "9beca3eafe0739c3b3adb5d734fa435ccbda0fea8a65d53d4cccec176aaaa0eb",
+  "script_sha256": "75f3172d1a49e0b5994721448e0297582224fdd903df70a131fafd9e8468dbe0",
+  "held_access": false,
+  "cem_calls": 0,
+  "simulator_calls": 0
+}

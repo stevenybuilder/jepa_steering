@@ -1,0 +1,75 @@
+{
+  "arms": [
+    "unsteered",
+    "identity",
+    "subspace_up",
+    "sham_up",
+    "subspace_down",
+    "sham_down"
+  ],
+  "bank_sha256": "0f31bf2eded70608bc9e64f251eaf08d475be43325961209552b0caf46cf0dab",
+  "beta": 0.5,
+  "block": 3,
+  "candidate_count": 300,
+  "candidate_sha256": "f4c295a148a22a9534cedd7d04b396f537bc8049842020886ba4f7fb0f1ca166",
+  "complete": false,
+  "cross_process_numerical_policy": {
+    "applies_to": [
+      "costs",
+      "pooled_visual",
+      "proprio"
+    ],
+    "max_absolute_error": 1e-06,
+    "prior_failed_cross_process_max_cost_error": 2.384185791015625e-07,
+    "scope": "float32 replay consistency only; no effect or specificity acceptance criterion changed",
+    "unsteered_cost_ranks_and_argmin": "exact",
+    "within_run_identity_complete_traces": "bit exact"
+  },
+  "diagnostic_receipt_sha256": "5fb967e3558531c46a44fc8127bdfac87438d127f94ab42461a8c5e8f1475bce",
+  "episode": 0,
+  "future_layout": "[future step 1..6,candidate,...]; observed context excluded",
+  "future_model_steps": 6,
+  "imagined_edit_step": 0,
+  "model": {
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "config": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "loader": "official constructor/checkpoint; heads_cfg cleared",
+    "model_name": "jepa_wm_metaworld"
+  },
+  "natural_reference": {
+    "sources": [
+      {
+        "done": "/root/geometry-map-jepawm-reach-wall-v1/canary/capture-pooled/DONE.json",
+        "sha256": "ce1d8d640d5bbb8dc32c31693af58a9d7085413dd2b49e067d66fbcb617e79da"
+      },
+      {
+        "done": "/root/geometry-map-jepawm-reach-wall-v1/canary/analysis-input/seed2/DONE.json",
+        "sha256": "8a7d2f3bfae846ea36ef45583dc949e3bf91c14e8c840adb4d3d7f4d499312c8"
+      },
+      {
+        "done": "/root/geometry-map-jepawm-reach-wall-v1/canary/analysis-input/seed3/DONE.json",
+        "sha256": "6acf20ed15e8497e81d23de60c9daaceec067a71d7a59e85c388c8fd0d4e4bb1"
+      }
+    ],
+    "split": "discovery",
+    "states": 2850,
+    "trajectories": 150
+  },
+  "new_cem_optimizations": 0,
+  "new_physical_forks": 0,
+  "patch_script_sha256": "d939b36545ff8b629383745d751ae803679be6dc7624b4d50034613590468214",
+  "rank": 10,
+  "rank_convention": "1-based average rank for ties, lower cost is better",
+  "raw_complement_metric": "Euclidean complement of QR(diag(scale) @ standardized_basis)",
+  "remaining_controls": [
+    "unrelated-site",
+    "time-shift",
+    "held-out confirmation",
+    "full-episode efficacy"
+  ],
+  "replan": 0,
+  "scope": "one development state, six arms, identical recorded candidates; candidates are not independent episodes",
+  "script_sha256": "ac91a44dc1a618ad314f84d460334a89afce9bd59bd5eaa03b789c35fc6688a9",
+  "standardized_complement_metric": "Euclidean complement of saved orthonormal basis after dividing by saved scale",
+  "trace_dtype": "float32"
+}

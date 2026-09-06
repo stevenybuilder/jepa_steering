@@ -1,0 +1,51 @@
+{
+  "diagnosis_complete": true,
+  "root_cause": "UNCERTAIN",
+  "old_cached_trajectory_replay_fixed": false,
+  "production_change": "reporting and failure preservation only; no simulator dynamics or numerical threshold changed",
+  "tests": {"passed": 7, "seconds": 2.19, "test_file": "tests/test_precompute_native_replay.py"},
+  "episode": 4,
+  "bank_sha256": "31c51836b0cf853962277d91cc64bbe802f02add95bd5910433ca3e7ebb94ecb",
+  "observed_failure": {
+    "first_failing_saved_waypoint_replan": 4,
+    "first_failing_saved_waypoint_raw_prefix": 60,
+    "prior_saved_waypoints_exact": [0, 15, 30, 45],
+    "pixel_max_error": 48.0,
+    "qpos_max_error": 0.000005233348342903454,
+    "qvel_max_error": 0.00013208854672153159,
+    "proprio_max_error": 0.0000007301568984985352,
+    "exact_fields": ["submitted saved action chunks", "mocap_pos", "mocap_quat", "simulation time", "task state", "act", "userdata"],
+    "raw_onset_limit": "Original bank has sparse replan snapshots, not every original raw-step physics state; the first raw divergence within prefixes46..60 is not identifiable from this bank."
+  },
+  "executed_controls": {
+    "rendered_capture_host": 49155754,
+    "original_bank_host": 49982193,
+    "cpu_only_hosts": [49155754, 49982193],
+    "cpu_only_model_execution": false,
+    "cpu_only_render_execution": false,
+    "native_chunks_vs_instrumented_single_steps": "bit-identical full physical traces on each host",
+    "cross_host_cpu_only_traces": "identical serialized artifact SHA256 on both hosts",
+    "both_hosts_reproduce_same_bank_qpos_qvel_discrepancy": true,
+    "mujoco_version_both": "3.3.0",
+    "numpy_version_both": "2.2.6",
+    "excluded_as_sufficient_explanations": ["hardware-only difference", "single-step versus native chunk grouping", "control/contact observation instrumentation", "model encoding", "rendering"],
+    "auxiliary_solver_state": "Missing initial auxiliary solver state such as qacc_warmstart is possible but UNPROVEN; no restoration or causal claim was made."
+  },
+  "implemented_reporting_fix": [
+    "Compute and report all physics checks even when pixel equality fails first.",
+    "Require exact equality between each saved raw-action prefix and its cached native planned chunk.",
+    "Save actual partial states, frames, controls, physics, and passed waypoints when production replay fails; emit no ready marker.",
+    "Provide a bounded CPU-only native-versus-instrumented diagnostic explicitly marked replay_ready=false and pixels_verified=false."
+  ],
+  "unchanged_guards": {"pixels_max_error": 0.0, "physics_max_error": 0.000001},
+  "implication": "Failure to resume an old sparse cache is not a prerequisite for fresh full baseline/steering/sham episodes initialized together on the same worker/runtime; later cache continuation remains unverified.",
+  "copied_and_hash_verified": true,
+  "sha256": {
+    "replay-49155754/replay-diagnostic-v3/episode-004-FAILED-trace.pt": "c0c049d1604538279d0c28a00e857a6acdc9651a765eb44940a1f4c00af78a89",
+    "replay-49155754/replay-diagnostic-v3/FAILED.json": "bcac235c6901ebd60b1edc35c244f67b483ba0713ddc2a9664ef80cb0b448f9d",
+    "replay-49155754/code-v3-diagnostic/precompute_native_replay.py": "7ac58bc701248af5f5717b3359888698cc1d667147ae09d6cf8750932aa38365",
+    "replay-49155754/code-v4-physics-only/precompute_native_replay.py": "01f5c5afc3454250d2624c480c3833aa10724b495dafe0b4a02bc33fbfe21d44",
+    "source-49982193/physics-only-diagnostic-v1/physics_traces.pt": "f6858beaf0ccf600683798f67b3b8078d2c34b0266928845de08c4e5c0842eac",
+    "replay-49155754/physics-only-diagnostic-v2/physics_traces.pt": "f6858beaf0ccf600683798f67b3b8078d2c34b0266928845de08c4e5c0842eac"
+  }
+}

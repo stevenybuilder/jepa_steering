@@ -1,0 +1,49 @@
+{
+  "mode": "evaluate",
+  "rows": [
+    {
+      "path": "train-2020.pt",
+      "sha256": "6cef9c89f5904726db90d886e5bbc820a5decb41ef396c7a94b36dbe93720f36",
+      "bytes": 67525813,
+      "source_id": 2020,
+      "split": "development_validation",
+      "key": "train-2020"
+    },
+    {
+      "path": "train-2121.pt",
+      "sha256": "0b87ad1ae7999a5ecec6bedbd435a0f01568950e2c9ecb4ea3aff39a69d9e1cf",
+      "bytes": 67525941,
+      "source_id": 2121,
+      "split": "development_validation",
+      "key": "train-2121"
+    }
+  ],
+  "bases": [
+    "readable",
+    "action_effect",
+    "random"
+  ],
+  "rank": 2,
+  "horizon": 1,
+  "epsilon_ratio": 0.001,
+  "candidate_ids": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "alpha": 100.0,
+  "pca_rank": 16,
+  "doses": [
+    0.001,
+    0.005
+  ],
+  "script_sha256": "d6000e54baba7abfbd0c2efaefb7d9a61d43be419fa8a1c9288435c86c9469df",
+  "calibration_sha256": "88b91e0b81969d257b516833f9d29cb9ce2c1459061a45c925fc47c252767484",
+  "no_runtime_future_truth": true,
+  "no_held_study_access": true,
+  "goal_contract": "Original saved float32 objective shared all arms; fresh encoding difference recorded. Goal unused by model unroll/residual target."
+}

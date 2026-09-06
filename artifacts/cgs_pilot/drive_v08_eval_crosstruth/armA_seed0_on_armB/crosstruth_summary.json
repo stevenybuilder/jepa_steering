@@ -1,0 +1,137 @@
+{
+ "model_arm": "A",
+ "model_seed": 0,
+ "truth_arm": "B",
+ "scope": {
+  "scope": "CROSS-TRUTH: model arm A seed 0 scored on arm B truth; discovery scenes only (confirmation sealed)",
+  "model_arm": "A",
+  "model_seed": 0,
+  "truth_arm": "B",
+  "n_cells": 248,
+  "n_cells_confirmation_dropped": 224,
+  "discovery_seeds": [
+   1061,
+   1062,
+   1063,
+   1066,
+   1069,
+   1071,
+   1073,
+   1075,
+   1078,
+   1079,
+   1080,
+   1081,
+   1082,
+   1083,
+   1085,
+   1086,
+   1087,
+   1088,
+   1089,
+   1092,
+   1096,
+   1097,
+   1101,
+   1103,
+   1104,
+   1105,
+   1107,
+   1111,
+   1114,
+   1117,
+   1119
+  ],
+  "discovery_seeds_source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armA_seed0/discovery_seeds.txt",
+  "discovery_seeds_absent_from_truth_manifest": [],
+  "truth_arm_discovery_list_identical": true,
+  "merge_dir": "/root/cgs-pilot/artifacts/drive_v08_merged/static/armB",
+  "main_eval_dir": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armA_seed0"
+ },
+ "levels": {
+  "level1": {
+   "gate": {
+    "n": 31,
+    "interaction_nmse_median": 3.133044929497392,
+    "interaction_nmse_ci": [
+     2.7853771543604555,
+     3.073325475769211
+    ],
+    "captured_fraction": -2.133044929497392,
+    "rec_h1_minus_h0": -0.09127229030250544,
+    "rec_h1_minus_h0_p": 0.0011997600479904018,
+    "flip_rate_h1_vs_h0": 0.8709677419354839,
+    "gate_verdict": "PASS",
+    "verdict_with_specificity": "FAIL"
+   },
+   "b_gate_verdict": "FAIL",
+   "b_gate_route": null,
+   "b_gate_captured_fraction": 0.0,
+   "b_gate_verdict_crossgate": "FAIL",
+   "b_gate_route_crossgate": null
+  },
+  "level3": {
+   "gate": {
+    "n": 31,
+    "interaction_nmse_median": 1.112032813635104,
+    "interaction_nmse_ci": [
+     1.1002765437972304,
+     1.220851969214703
+    ],
+    "captured_fraction": -0.11203281363510409,
+    "rec_h1_minus_h0": -0.35650599258885113,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "flip_rate_h1_vs_h0": 0.8709677419354839,
+    "gate_verdict": "FAIL",
+    "verdict_with_specificity": "FAIL"
+   },
+   "b_gate_verdict": "FAIL",
+   "b_gate_route": null,
+   "b_gate_captured_fraction": 0.0,
+   "b_gate_verdict_crossgate": "FAIL",
+   "b_gate_route_crossgate": "T1c_prime"
+  }
+ },
+ "own_truth_reference": {
+  "level1": {
+   "gate": {
+    "n": 31,
+    "interaction_nmse_median": 0.44498845638099754,
+    "interaction_nmse_ci": [
+     0.41881559728451107,
+     0.5362145017298092
+    ],
+    "captured_fraction": 0.5550115436190024,
+    "rec_h1_minus_h0": 0.2490458286993143,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "flip_rate_h1_vs_h0": 0.8709677419354839,
+    "gate_verdict": "PASS",
+    "verdict_with_specificity": "PASS"
+   },
+   "b_gate_verdict": "PASS_PLANNER",
+   "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armA_seed0"
+  },
+  "level3": {
+   "gate": {
+    "n": 31,
+    "interaction_nmse_median": 0.3517322551384245,
+    "interaction_nmse_ci": [
+     0.4585546852698757,
+     0.6641916188311274
+    ],
+    "captured_fraction": 0.6482677448615755,
+    "rec_h1_minus_h0": 0.17628039728410363,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "flip_rate_h1_vs_h0": 0.8709677419354839,
+    "gate_verdict": "PASS",
+    "verdict_with_specificity": "PASS"
+   },
+   "b_gate_verdict": "PASS_PLANNER",
+   "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armA_seed0"
+  }
+ },
+ "readout": [
+  "L1 cross(truth B): nmse=3.133 cap=-2.133 rec=-0.091(p=0.0011997600479904018) flip=0.8709677419354839 n=31 B-gate FAIL/FAIL || own(truth A): nmse=0.445 cap=0.555 rec=+0.249(p=0.0001999600079984003) flip=0.8709677419354839 n=31 B-gate PASS_PLANNER",
+  "L3 cross(truth B): nmse=1.112 cap=-0.112 rec=-0.357(p=0.0001999600079984003) flip=0.8709677419354839 n=31 B-gate FAIL/FAIL || own(truth A): nmse=0.352 cap=0.648 rec=+0.176(p=0.0001999600079984003) flip=0.8709677419354839 n=31 B-gate PASS_PLANNER"
+ ]
+}

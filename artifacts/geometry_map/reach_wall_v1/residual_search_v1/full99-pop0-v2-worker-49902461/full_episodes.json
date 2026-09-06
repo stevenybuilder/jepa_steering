@@ -1,0 +1,965 @@
+{
+  "complete": true,
+  "model": {
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "config": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "loader": "official constructor/checkpoint; heads_cfg cleared",
+    "model_name": "jepa_wm_metaworld"
+  },
+  "parameters_sha256": "81b73f2c3271b6be45e65c87ce3ee85f1cf295dfb74fef0c72a373344e5f4a94",
+  "protocol": {
+    "candidates": [
+      {
+        "block": 4,
+        "dose": 1,
+        "family": "branch_scale",
+        "head": 3,
+        "id": "broad0-067",
+        "mask": "all",
+        "pulse": 2,
+        "rank": 1,
+        "sign": -1,
+        "site": "attention_preproj"
+      },
+      {
+        "block": 1,
+        "dose": 1,
+        "family": "pca_gain",
+        "head": null,
+        "id": "broad0-126",
+        "mask": "center",
+        "pulse": 1,
+        "rank": 8,
+        "sign": 1,
+        "site": "residual"
+      }
+    ],
+    "episodes": [
+      7
+    ],
+    "held_data_opened": false,
+    "interpretation": "Exploratory selected candidates, not independent confirmation",
+    "native_cem": {
+      "iterations": 15,
+      "max_raw_prefix": 15,
+      "maximum_horizon": 6,
+      "near_end_horizon": "Released planner shortens toremainingsteps; no override",
+      "population": 300
+    },
+    "phase": "adaptive_development_full99",
+    "prediction_truth": "Compare only physically executed5-step prefix horizons, not counterfactual future after replan",
+    "primary": "Native ever-success; final-success/reward/final-hand-goal-distance all reported, no endpoint swapping",
+    "raw_episode_steps": 99,
+    "seconds_limit": 7200.0,
+    "sham": "Same-state post-projection/gate norm and fixed permutation; adaptive states/populations differ, no cumulative cross-arm dose equality claim",
+    "source_sha256": {
+      "discovery_bases.npz": "efe6976974107bd5284a871f6a87d622223e8f677e4cfbd8b86e2c3771a05042",
+      "full99_population0_v1.json": "84ca37aea07d0c2bd4c6380cf597b2ea2b988524f93dd01e7ad6bc2db394c272",
+      "reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml": "37400233186d343e7a830ce820b75e86ad134bc26fa1adf43ebc3fd7ed4591c3",
+      "run_residual_search_full_v1.py": "42b24177491956784de38bbeedaa3904aa62594f5f35833cd4533b3015670ffe"
+    },
+    "timing_policy": "Pulse indexes imagined steps within each native unroll; a pulse beyond a shortened horizon does not fire"
+  },
+  "rows": [
+    {
+      "arm": "unsteered",
+      "candidate": null,
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.13422061502933502,
+      "hand_goal_progress_m": 0.14835117757320404,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.13277965784072876,
+      "native_ever_success": false,
+      "native_final_success": false,
+      "native_reward_max": 6.139752388000488,
+      "native_reward_sum": 536.82402074337,
+      "progress_vs_baseline_m": 0.0,
+      "raw_steps": 99,
+      "replans": [
+        {
+          "bytes": 9052095,
+          "path": "episode-007-unsteered-replan-00.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.0192814189940691,
+              "visual_mse": 0.6303858160972595
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.05767740309238434,
+              "visual_mse": 1.1261361837387085
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.08939045667648315,
+              "visual_mse": 1.338135838508606
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "26d767201b45468ee75b43b3dee090f39d882930cc14786a2508216aadb8694d"
+        },
+        {
+          "bytes": 9052223,
+          "path": "episode-007-unsteered-replan-01.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.013650404289364815,
+              "visual_mse": 0.32341304421424866
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.03410087898373604,
+              "visual_mse": 0.585801899433136
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.05462310090661049,
+              "visual_mse": 0.9220487475395203
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "98031bc0cba36e0d83cee29e446b69cd0b0af702d8300858bda0ef4a41354543"
+        },
+        {
+          "bytes": 9052287,
+          "path": "episode-007-unsteered-replan-02.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.01994670368731022,
+              "visual_mse": 0.4275495111942291
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.044912200421094894,
+              "visual_mse": 0.8849357962608337
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.0746566653251648,
+              "visual_mse": 1.237022042274475
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "6bba4467dc9853ce5e1c8de37861b946e35ae7f7f2cb761e0bc50bc2ca45a1c8"
+        },
+        {
+          "bytes": 9052287,
+          "path": "episode-007-unsteered-replan-03.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.018942825496196747,
+              "visual_mse": 0.40375956892967224
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.04607590660452843,
+              "visual_mse": 0.7500914931297302
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.05895659327507019,
+              "visual_mse": 1.1016863584518433
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "343809d29ab0be1db9384af9bb7faba1ee7dcb51b0f73b0f2f32760ca80e4fa0"
+        },
+        {
+          "bytes": 9052223,
+          "path": "episode-007-unsteered-replan-04.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.02857484295964241,
+              "visual_mse": 0.5056794881820679
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.0546022392809391,
+              "visual_mse": 0.7267587780952454
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.06135563552379608,
+              "visual_mse": 1.0335018634796143
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "0d08222959a7d954c68600914f2b3da2fa8b102aa8328cdecfaaf4e0e1686937"
+        },
+        {
+          "bytes": 8281599,
+          "path": "episode-007-unsteered-replan-05.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.0005282656056806445,
+              "visual_mse": 0.12582965195178986
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.0012432807125151157,
+              "visual_mse": 0.21019434928894043
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.014125396497547626,
+              "visual_mse": 0.5203894376754761
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "700eebdd510a6b510d7ab4e58cbf0b98a50a2ff0c37de8a66aeb120f795555b1"
+        },
+        {
+          "bytes": 4231911,
+          "path": "episode-007-unsteered-replan-06.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.0047929794527590275,
+              "visual_mse": 0.33000800013542175
+            }
+          ],
+          "raw_steps": 9,
+          "sha256": "5b8d1360e94579c7efcc2a1ce2b4a7264d024439a29d854c3e415ac8ce269f6f"
+        }
+      ],
+      "same_initial_physics_and_first300": true,
+      "seconds": 504.178720402997,
+      "sham": false
+    },
+    {
+      "arm": "broad0-067-edit",
+      "candidate": {
+        "block": 4,
+        "dose": 1,
+        "family": "branch_scale",
+        "head": 3,
+        "id": "broad0-067",
+        "mask": "all",
+        "pulse": 2,
+        "rank": 1,
+        "sign": -1,
+        "site": "attention_preproj"
+      },
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.13193900883197784,
+      "hand_goal_progress_m": 0.15063278377056122,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.13193900883197784,
+      "native_ever_success": false,
+      "native_final_success": false,
+      "native_reward_max": 6.2013020515441895,
+      "native_reward_sum": 534.9092257022858,
+      "progress_vs_baseline_m": 0.0022816061973571777,
+      "raw_steps": 99,
+      "replans": [
+        {
+          "bytes": 9205443,
+          "path": "episode-007-broad0-067-edit-replan-00.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.025515388697385788,
+              "visual_mse": 0.7596299648284912
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.06442413479089737,
+              "visual_mse": 1.1949230432510376
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.11770553886890411,
+              "visual_mse": 1.5415420532226562
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "d2ff9c5b415dbc0fc14c6d063c838f9867a596fd9a9751c344bb566f710b8f9e"
+        },
+        {
+          "bytes": 9205379,
+          "path": "episode-007-broad0-067-edit-replan-01.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.017684848979115486,
+              "visual_mse": 0.37249886989593506
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.04558826982975006,
+              "visual_mse": 0.8323690891265869
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.06535682082176208,
+              "visual_mse": 1.0952723026275635
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "898b43efe8b60de9011a07808d776eed5150777a4c4a4bca90565e73cdce935c"
+        },
+        {
+          "bytes": 9205699,
+          "path": "episode-007-broad0-067-edit-replan-02.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.0006573477294296026,
+              "visual_mse": 0.13913844525814056
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.00937644299119711,
+              "visual_mse": 0.3264445662498474
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.04873467609286308,
+              "visual_mse": 0.975155770778656
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "bc6121b6c7238eb54cbe4b9ed280039171af73d8af212e0259b53ad6b9ec198b"
+        },
+        {
+          "bytes": 9205571,
+          "path": "episode-007-broad0-067-edit-replan-03.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.011719871312379837,
+              "visual_mse": 0.3765256106853485
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.03790981322526932,
+              "visual_mse": 0.7125257849693298
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.05787856876850128,
+              "visual_mse": 1.0436426401138306
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "ffb3df112353f61e29dbe44925f898836b1e5b81a9466b6a9ce45b5b230a10f9"
+        },
+        {
+          "bytes": 9205571,
+          "path": "episode-007-broad0-067-edit-replan-04.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.004545064643025398,
+              "visual_mse": 0.24402694404125214
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.032274723052978516,
+              "visual_mse": 0.6645546555519104
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.051774196326732635,
+              "visual_mse": 1.072177767753601
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "0c869a9458c813a66af27a96716735d98fb3b5b93063209c3f63a345b5b279f2"
+        },
+        {
+          "bytes": 8434947,
+          "path": "episode-007-broad0-067-edit-replan-05.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.009266119450330734,
+              "visual_mse": 0.36496976017951965
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.03218221664428711,
+              "visual_mse": 0.7657854557037354
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.0724778026342392,
+              "visual_mse": 1.169631838798523
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "6ff9e1155e1abf36738620783edc98830d6a0d2b7627726d0bb60fe8244dde41"
+        },
+        {
+          "bytes": 4385235,
+          "path": "episode-007-broad0-067-edit-replan-06.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.015050463378429413,
+              "visual_mse": 0.5870195627212524
+            }
+          ],
+          "raw_steps": 9,
+          "sha256": "7cda96faa0fcaaa8bc7a0227fca7ec6f1d77d28a3f00f815ba5398954f03db63"
+        }
+      ],
+      "same_initial_physics_and_first300": true,
+      "seconds": 516.1928861420602,
+      "sham": false
+    },
+    {
+      "arm": "broad0-067-sham",
+      "candidate": {
+        "block": 4,
+        "dose": 1,
+        "family": "branch_scale",
+        "head": 3,
+        "id": "broad0-067",
+        "mask": "all",
+        "pulse": 2,
+        "rank": 1,
+        "sign": -1,
+        "site": "attention_preproj"
+      },
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.20647788047790527,
+      "hand_goal_progress_m": 0.07609391212463379,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.17017056047916412,
+      "native_ever_success": false,
+      "native_final_success": false,
+      "native_reward_max": 4.4931559562683105,
+      "native_reward_sum": 266.9785945415497,
+      "progress_vs_baseline_m": -0.07225726544857025,
+      "raw_steps": 99,
+      "replans": [
+        {
+          "bytes": 9205443,
+          "path": "episode-007-broad0-067-sham-replan-00.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.023260023444890976,
+              "visual_mse": 0.6653977632522583
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.07182765007019043,
+              "visual_mse": 1.146232008934021
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.0992237851023674,
+              "visual_mse": 1.3292251825332642
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "09fc6159aa2f1d177423103c412eec5a7f791ee8b201085e0ee0f51dd77da578"
+        },
+        {
+          "bytes": 9205443,
+          "path": "episode-007-broad0-067-sham-replan-01.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.006413110066205263,
+              "visual_mse": 0.660395622253418
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.0025095718447118998,
+              "visual_mse": 0.516712486743927
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.004533939529210329,
+              "visual_mse": 0.7884554266929626
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "2520b0578557947fd06cbe22893663b5b63500911ffa968435cd8df44d0b1e1c"
+        },
+        {
+          "bytes": 9205571,
+          "path": "episode-007-broad0-067-sham-replan-02.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.00331917405128479,
+              "visual_mse": 0.2930849492549896
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.002550381701439619,
+              "visual_mse": 0.3818744122982025
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.016000330448150635,
+              "visual_mse": 0.8138458132743835
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "503640bf2ef9a618099ed09bb2a5705e7935195c704d872698901f3ceafafd90"
+        },
+        {
+          "bytes": 9205571,
+          "path": "episode-007-broad0-067-sham-replan-03.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.005188537761569023,
+              "visual_mse": 0.2715208828449249
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.02437710575759411,
+              "visual_mse": 0.506536602973938
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.032020244747400284,
+              "visual_mse": 0.7358279228210449
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "44456bf30dbfca8eac68834fddf2e1d6bcfdd0613419ae07b9377e7fc324d784"
+        },
+        {
+          "bytes": 9205571,
+          "path": "episode-007-broad0-067-sham-replan-04.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.009715517982840538,
+              "visual_mse": 0.28726840019226074
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.03556637838482857,
+              "visual_mse": 0.6694192886352539
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.04985625669360161,
+              "visual_mse": 0.9884600043296814
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "18f7a7c78347a7f7e102cd5db4c84eeb8c598b9c72830991a837d4b0c4d4e478"
+        },
+        {
+          "bytes": 8434819,
+          "path": "episode-007-broad0-067-sham-replan-05.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.009587930515408516,
+              "visual_mse": 0.26096656918525696
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.02955567091703415,
+              "visual_mse": 0.7769766449928284
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.05368402227759361,
+              "visual_mse": 1.111528992652893
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "917a7bc87e0f43d7b8e57a8f0cb4cf75bf99e2d93bb062cf32460824e26084d5"
+        },
+        {
+          "bytes": 4385171,
+          "path": "episode-007-broad0-067-sham-replan-06.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.001659874338656664,
+              "visual_mse": 0.21372736990451813
+            }
+          ],
+          "raw_steps": 9,
+          "sha256": "175f8cc0f2161dc9c07ad4dda78c9e9cc4ca6bf7c81d0efb74904923ce5624a0"
+        }
+      ],
+      "same_initial_physics_and_first300": true,
+      "seconds": 515.9644756531343,
+      "sham": true
+    },
+    {
+      "arm": "broad0-126-edit",
+      "candidate": {
+        "block": 1,
+        "dose": 1,
+        "family": "pca_gain",
+        "head": null,
+        "id": "broad0-126",
+        "mask": "center",
+        "pulse": 1,
+        "rank": 8,
+        "sign": 1,
+        "site": "residual"
+      },
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.19767120480537415,
+      "hand_goal_progress_m": 0.08490058779716492,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.17354433238506317,
+      "native_ever_success": false,
+      "native_final_success": false,
+      "native_reward_max": 4.4197998046875,
+      "native_reward_sum": 290.9972095489502,
+      "progress_vs_baseline_m": -0.06345058977603912,
+      "raw_steps": 99,
+      "replans": [
+        {
+          "bytes": 9205443,
+          "path": "episode-007-broad0-126-edit-replan-00.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.02032349444925785,
+              "visual_mse": 0.6068657040596008
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.05832181125879288,
+              "visual_mse": 1.0811277627944946
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.09790966659784317,
+              "visual_mse": 1.3312915563583374
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "c12f2d21f72b1aae903e544bc3da9c2655a4bce5e897df9bf9026ee5f848431a"
+        },
+        {
+          "bytes": 9205443,
+          "path": "episode-007-broad0-126-edit-replan-01.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.002958414377644658,
+              "visual_mse": 0.5871536731719971
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.00477729132398963,
+              "visual_mse": 0.6792477965354919
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.004057887941598892,
+              "visual_mse": 0.7284102439880371
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "98b5e0db9f51a8e51bfd32d9afd4f3e6a09d49969f1a707ac92b6f0714578e53"
+        },
+        {
+          "bytes": 9205507,
+          "path": "episode-007-broad0-126-edit-replan-02.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.0057360706850886345,
+              "visual_mse": 0.239523246884346
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.011266961693763733,
+              "visual_mse": 0.41054224967956543
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.03282548487186432,
+              "visual_mse": 0.6035654544830322
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "f787125912a35a15fba8efa1d140da8048ce5e4b7c89e9c9dca949b7fbbae7fb"
+        },
+        {
+          "bytes": 9205635,
+          "path": "episode-007-broad0-126-edit-replan-03.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.0016011904226616025,
+              "visual_mse": 0.29207107424736023
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.008339792490005493,
+              "visual_mse": 0.37752172350883484
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.028467319905757904,
+              "visual_mse": 0.6283522248268127
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "ef72a1326cc634a1c2379defacfbd67d6f170ff3bade3a6da447b314185a589a"
+        },
+        {
+          "bytes": 9205571,
+          "path": "episode-007-broad0-126-edit-replan-04.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.004086093977093697,
+              "visual_mse": 0.17603309452533722
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.009464169852435589,
+              "visual_mse": 0.33783769607543945
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.035657260566949844,
+              "visual_mse": 0.6185486912727356
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "1842e56e1c98b19a83cfffdf5dd1ceaf90ac4525723228363eebe530bac3f5c9"
+        },
+        {
+          "bytes": 8434819,
+          "path": "episode-007-broad0-126-edit-replan-05.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.019446777179837227,
+              "visual_mse": 0.517082929611206
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.024893708527088165,
+              "visual_mse": 0.758568525314331
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.05218088999390602,
+              "visual_mse": 1.0706048011779785
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "f3a07064e2e27576a3c7fc0f92396a1ff4279209d44a54269305ab3656f3b64c"
+        },
+        {
+          "bytes": 4385107,
+          "path": "episode-007-broad0-126-edit-replan-06.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.007196621969342232,
+              "visual_mse": 0.3218672573566437
+            }
+          ],
+          "raw_steps": 9,
+          "sha256": "fee5b42da66398eb2ba0f836d94dadc35a03016ba98dc4f351c9a576cefd9444"
+        }
+      ],
+      "same_initial_physics_and_first300": true,
+      "seconds": 513.0880935750902,
+      "sham": false
+    },
+    {
+      "arm": "broad0-126-sham",
+      "candidate": {
+        "block": 1,
+        "dose": 1,
+        "family": "pca_gain",
+        "head": null,
+        "id": "broad0-126",
+        "mask": "center",
+        "pulse": 1,
+        "rank": 8,
+        "sign": 1,
+        "site": "residual"
+      },
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.215354785323143,
+      "hand_goal_progress_m": 0.06721700727939606,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.215354785323143,
+      "native_ever_success": false,
+      "native_final_success": false,
+      "native_reward_max": 2.5240795612335205,
+      "native_reward_sum": 209.6473617553711,
+      "progress_vs_baseline_m": -0.08113417029380798,
+      "raw_steps": 99,
+      "replans": [
+        {
+          "bytes": 9205443,
+          "path": "episode-007-broad0-126-sham-replan-00.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.0014528643805533648,
+              "visual_mse": 0.3611017167568207
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.009108992293477058,
+              "visual_mse": 0.6108487844467163
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.0214681439101696,
+              "visual_mse": 0.9893004298210144
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "4b14c87549db69d7430c86c7475ef4ca622d17763f2fc1c711f123f1a4696404"
+        },
+        {
+          "bytes": 9205379,
+          "path": "episode-007-broad0-126-sham-replan-01.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.006469270214438438,
+              "visual_mse": 0.8286786079406738
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.0160532183945179,
+              "visual_mse": 1.170393943786621
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.010765550658106804,
+              "visual_mse": 1.0191365480422974
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "ccb7dbced1a14d963e941abb551d454b7bbd380fab2d4b1e2a595a9c087cbbe3"
+        },
+        {
+          "bytes": 9205507,
+          "path": "episode-007-broad0-126-sham-replan-02.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.016861358657479286,
+              "visual_mse": 0.4619334638118744
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.049494996666908264,
+              "visual_mse": 1.042051911354065
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.07763518393039703,
+              "visual_mse": 1.3797011375427246
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "b21027dda2fb6e0cfb75aa9af64517b3c163f74c26a84dae5b8dc45c223834b9"
+        },
+        {
+          "bytes": 9205571,
+          "path": "episode-007-broad0-126-sham-replan-03.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.00918723363429308,
+              "visual_mse": 0.38727888464927673
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.0394141748547554,
+              "visual_mse": 0.9819466471672058
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.0455281138420105,
+              "visual_mse": 1.1881608963012695
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "ff156e2a645927c704af91fc46a41c04be0a797eac59db1ab2b7ba794eb721b5"
+        },
+        {
+          "bytes": 9205507,
+          "path": "episode-007-broad0-126-sham-replan-04.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.008386284112930298,
+              "visual_mse": 0.49987682700157166
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.034326788038015366,
+              "visual_mse": 1.170109748840332
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.052524715662002563,
+              "visual_mse": 1.3709896802902222
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "8177ba25205d4c05e7d7b3c16c5bfdf1516f2c2bab683981b526c5d3b78c79ed"
+        },
+        {
+          "bytes": 8434819,
+          "path": "episode-007-broad0-126-sham-replan-05.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.017066026106476784,
+              "visual_mse": 0.6162165999412537
+            },
+            {
+              "imagined_horizon": 2,
+              "proprio_mse": 0.05018877238035202,
+              "visual_mse": 1.1560262441635132
+            },
+            {
+              "imagined_horizon": 3,
+              "proprio_mse": 0.09632760286331177,
+              "visual_mse": 1.571743369102478
+            }
+          ],
+          "raw_steps": 15,
+          "sha256": "3355d06eab36d58db9f9f18bb8da380a776e7b3f46b51536cbfcf74b57406da2"
+        },
+        {
+          "bytes": 4385043,
+          "path": "episode-007-broad0-126-sham-replan-06.pt",
+          "prediction_errors": [
+            {
+              "imagined_horizon": 1,
+              "proprio_mse": 0.021625900641083717,
+              "visual_mse": 0.862108051776886
+            }
+          ],
+          "raw_steps": 9,
+          "sha256": "d97cf6f3d4d8d7a8ec528b0d44dee7f59ed4edabb8b6e65931f3a76a1f71a1fc"
+        }
+      ],
+      "same_initial_physics_and_first300": true,
+      "seconds": 513.2100709513761,
+      "sham": true
+    }
+  ],
+  "seconds": 2572.873026403133
+}

@@ -1,0 +1,60 @@
+{
+  "verdict": "PASS_PLANNER",
+  "thresholds": {
+    "min_scenes": 16,
+    "max_interaction_nmse_median": 0.75,
+    "spec_p": 0.05,
+    "min_flip_rate": 0.25,
+    "energy_p": 0.05
+  },
+  "n_scenes": 54,
+  "domain": "driving",
+  "primary_hazard_level": 1,
+  "token_group": "hazard_corridor",
+  "identity_contrast": {
+    "status": "ok",
+    "rec_h1_minus_h3": {
+      "ci_high": 0.0448933329349826,
+      "ci_low": 0.029952823888975657,
+      "mean": 0.037408376253258845,
+      "median": 0.04494148683722876,
+      "n": 54,
+      "sign_flip_p": 0.0001999600079984003
+    },
+    "delta_h1_minus_h3": {
+      "ci_high": -1720.0162522448638,
+      "ci_low": -1926.9837737996686,
+      "mean": -1824.9615804780597,
+      "median": -1977.9582877275284,
+      "n": 54,
+      "sign_flip_p": 0.0001999600079984003
+    },
+    "flip_rate_h1_vs_h3": 0.0,
+    "identity_interaction_cosine": {
+      "ci_high": 0.8135786846420098,
+      "ci_low": 0.8021488937326061,
+      "mean": 0.8083296271059671,
+      "median": 0.8175519326273173,
+      "n": 54,
+      "sign_flip_p": 0.0001999600079984003
+    }
+  },
+  "T1a_enough_scenes": true,
+  "T1b_interaction_nmse_median": 0.540864362942318,
+  "T1b_ok": true,
+  "T1c_rec_h1_minus_h0": 0.20590044642634855,
+  "T1c_p": 0.0001999600079984003,
+  "T1c_rec_h1_minus_h0prime": 0.12501632981531113,
+  "T1c_ok": true,
+  "T1c_prime": null,
+  "t1c_route": "T1c",
+  "T2a_flip_rate_h1_vs_h0": 0.8888888888888888,
+  "T2a_ok": true,
+  "T2b_energy_gap_norm_h1_vs_h0": 52.920503818269694,
+  "T2b_p": 0.125,
+  "T2b_ok": false,
+  "model_captured_interaction_fraction": 0.459135637057682,
+  "statement": "Mechanism arms licensed.",
+  "cross_gate_file": null,
+  "gate_file": "/root/cgs-pilot/artifacts/drive_eval/armB_seed0/cf_gate_discovery_level1.json"
+}

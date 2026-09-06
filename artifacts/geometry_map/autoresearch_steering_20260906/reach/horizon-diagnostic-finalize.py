@@ -1,0 +1,13 @@
+from dispatch import *
+from datetime import datetime,timezone
+reports=['horizon-diagnostic-FINDINGS.md','horizon-diagnostic-summary-v1.json'];hashes={n:hashlib.sha256((LOCAL/n).read_bytes()).hexdigest()for n in reports}
+for w in [49155754,49902461]:
+ r=root(w)+'/horizon-diagnostic-report-v1';run(w,'mkdir '+r)
+ for n in reports:
+  upload(w,LOCAL/n,r+'/'+n);assert run(w,'sha256sum '+r+'/'+n).split()[0]==hashes[n]
+status=[]
+for w in HOSTS:
+ pid=json.load((LOCAL/f'horizon-diagnostic-launch-{w}.json').open())['pid'];assert not run(w,'ps -p '+str(pid)+' -o args= || true').strip();assert not run(w,'nvidia-smi --query-compute-apps=pid --format=csv,noheader').strip();receipt=json.load((LOCAL/f'horizon-diagnostic-backup-{w}.json').open());assert receipt['complete']and receipt['source_and_backup_identical'];status.append(dict(worker=w,pid=pid,pid_absent=True,gpu_compute_empty=True,verified_bytes=receipt['bytes'],receipt_sha256=hashlib.sha256((LOCAL/f'horizon-diagnostic-backup-{w}.json').read_bytes()).hexdigest()))
+now=datetime.now(timezone.utc).isoformat();s=json.load((LOCAL/'horizon-diagnostic-summary-v1.json').open());d=dict(complete=True,utc=now,instances=status,report_sha256=hashes,diagnostic_process_seconds=s['aggregate_process_seconds'],diagnostic_process_gpuh=s['aggregate_process_seconds']/3600,total_reach_campaign_process_gpuh=(148.83125630399445+s['aggregate_process_seconds'])/3600,held_access=False,full99=False,prior15step_gate_failed_unchanged=True,no_promotion=True,no_jobs_remaining=True,source_and_distinct_backup_verified=True,verified_bytes=sum(x['verified_bytes']for x in status));(LOCAL/'horizon-diagnostic-CHECKPOINT.json').write_text(json.dumps(d,indent=2)+'\n')
+with Path('/Users/stevenyang/Documents/GPU_RESOURCE_BOARD.md').open('a')as f:f.write('\n\n## Reach actual H6 diagnostic COMPLETE — '+now+'\n\nOwner `rep_geometry_transcoder/autoresearch_steering_20260906/reach_steering` releases49155754/49902461/49982193 assignments afterall3PIDsabsent/directGPUcomputeempty and178,707,514bytes source+distinctbackupSHAverified. Same8DEVstarts/14frozenselectedplans/420rawsteps; first15states/pixels/actions exact. ActualH6forecastgains persist (visual−10.249%,proprio−38.205%,all8);30stepprogress+2.766mmvsnativeplanner but−.172mmvsnativebank, so nocorrection-specificpromotion. ActualH6goalobjectiveoracleamong<=4selectedarmsdisagreeswithbestphysicalonepisode72,5.233mmregret; no301oracleclaim. Original15stepgatefailedunchanged, nofull99/held12–65.45.340processseconds=.012594GPUh; campaignReach total.053936GPUh. Reports/receipts`reach/horizon-diagnostic-*`, finalCHECKPOINT; compactreportdoublyverified491+461. Alljobs/transferscomplete; projectleasesretained/no lifecyclechanges.\n')
+print(json.dumps(d,indent=2))

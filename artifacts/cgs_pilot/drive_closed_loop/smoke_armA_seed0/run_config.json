@@ -1,0 +1,64 @@
+{
+ "args": {
+  "mode": "run",
+  "out": "/root/cgs-pilot/artifacts/drive_closed_loop/smoke_armA_seed0",
+  "arm": "A",
+  "model_dir": "/root/cgs-pilot/artifacts/drive_models/armA_seed0",
+  "checkpoint": "jepa-latest.pth.tar",
+  "model_name": "jepa_wm_driving",
+  "repo": "/root/cgs-pilot/vendor/jepa-wms",
+  "stimulus": "/root/cgs-pilot/artifacts/drive_closed_loop/_smoke_factorial/armA",
+  "seeds": [
+   3
+  ],
+  "seeds_file": null,
+  "max_scenes": null,
+  "confirmation_file": null,
+  "allow_confirmation": false,
+  "episode_seeds": 1,
+  "n_replans": 8,
+  "execute_steps": 1,
+  "cem_samples": 64,
+  "cem_elites": 8,
+  "cem_iters": 4,
+  "cem_init_mean": 0.0,
+  "cem_init_std": 0.5,
+  "cem_min_std": 0.02,
+  "tb_min": -1.0,
+  "tb_max": 0.5,
+  "steer_max": 0.0,
+  "eval_batch": 64,
+  "device": "cuda:0",
+  "bridge_python": "/opt/conda/envs/metadrive/bin/python",
+  "no_model": false,
+  "policies": "always_throttle,always_brake,cem",
+  "n_boot": 2000
+ },
+ "cem": {
+  "samples": 64,
+  "elites": 8,
+  "iters": 4,
+  "init_mean": 0.0,
+  "init_std": 0.5,
+  "min_std": 0.02,
+  "tb_min": -1.0,
+  "tb_max": 0.5,
+  "steer_max": 0.0,
+  "horizon": 3,
+  "eval_batch": 64,
+  "token_group": "hazard_corridor",
+  "hazard_dilate": 1,
+  "executed": "final_mean",
+  "momentum": 0.0
+ },
+ "model_tag": "armA_seed0",
+ "seeds": [
+  3
+ ],
+ "started": "2026-09-03T17:29:41Z",
+ "label_first": {
+  "principle": "cross model design jepa.md 'Label-first principle' (COAST arXiv 2605.17144 s3.2/s4.1)",
+  "sealed_seeds_checked": 0,
+  "allow_confirmation": false
+ }
+}

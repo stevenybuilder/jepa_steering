@@ -1,0 +1,36 @@
+{
+  "complete": true,
+  "created_utc": "2026-09-05T16:32:45.296669+00:00",
+  "files": [
+    {
+      "filename": "train-00102-of-00126.parquet",
+      "rows": 100,
+      "seed": 1,
+      "sha256": "127c3128c6c28a6fdbe72e392e756429ca322c63c9edd961288d321f1ab5b0e5"
+    },
+    {
+      "filename": "train-00103-of-00126.parquet",
+      "rows": 100,
+      "seed": 2,
+      "sha256": "32694cbfdf5d1aa0d617f867c05d93b61813fdc3f0f1aa2b009aaa5ca163e4b2"
+    },
+    {
+      "filename": "train-00104-of-00126.parquet",
+      "rows": 100,
+      "seed": 3,
+      "sha256": "f0256315f77110415e2cf7449c25f47aafba9e0cfc9d4cb2b3c41c9443e82a83"
+    }
+  ],
+  "manifest_sha256": "f4f48867338f0909f1e7807fcb4c0dd6d8331de7b1395dd629addd4d64cb3876",
+  "schema_version": 1,
+  "shard_count": 12,
+  "shard_rule": "(collection_seed - 1) * 4 + episode // 25",
+  "split_counts": {
+    "confirmation": 75,
+    "discovery": 150,
+    "validation": 75
+  },
+  "split_rule": "episode 0:49 discovery, 50:74 validation, 75:99 confirmation within every seed",
+  "task": "mw-reach-wall",
+  "trajectory_count": 300
+}

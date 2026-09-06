@@ -1,0 +1,799 @@
+{
+  "accepted_operator": null,
+  "arms": [
+    "unsteered",
+    "identity",
+    "block3_step1_up",
+    "block3_step1_down",
+    "block0_step1_up",
+    "block0_step1_down",
+    "block3_step2_up",
+    "block3_step2_down"
+  ],
+  "bank_sha256": "0f31bf2eded70608bc9e64f251eaf08d475be43325961209552b0caf46cf0dab",
+  "block0_rank": 10,
+  "block3_rank": 10,
+  "candidate_count": 300,
+  "candidate_sha256": "f4c295a148a22a9534cedd7d04b396f537bc8049842020886ba4f7fb0f1ca166",
+  "checkpoint_sha256": "c3297772c7af4e84c28bd0c0937e22398a888848305014bb3ab3f1508a310bd8",
+  "complete": true,
+  "control_basis_sha256": "5c76a6096623c363d9fdec66d1b83c260c40549c2836778a4d003a11e64f61c5",
+  "cross_process_replay": {
+    "applies_to": [
+      "costs",
+      "pooled_visual",
+      "proprio"
+    ],
+    "input_and_physics_checks": "existing replay guards unchanged",
+    "interpretation": "Float32 process-replay tolerance, not a scientific effect threshold",
+    "max_absolute_error": 1e-06,
+    "native_cached_plan_bound": 1e-05,
+    "native_plan_test": "not rerun; no CEM in this capture",
+    "unsteered_ranks_and_argmin": "exact"
+  },
+  "decoder_sha256": "200feda5534ad2270a8cac7be0b2890d0c5b888198d92d735bad17aa5c2e6f8d",
+  "diagnostic_done_sha256": "5fb967e3558531c46a44fc8127bdfac87438d127f94ab42461a8c5e8f1475bce",
+  "episode": 0,
+  "future_model_steps": 6,
+  "goal": "Immutable cached raw visual/proprio goal; exact encoded goal at original saved dtype",
+  "goal_xyz": [
+    0.04625238850712776,
+    0.890625536441803,
+    0.2452712059020996
+  ],
+  "helper_sha256": {
+    "capture_causal_support.py": "ac91a44dc1a618ad314f84d460334a89afce9bd59bd5eaa03b789c35fc6688a9",
+    "causal_planner_forks.py": "852c439ff07e07967f85399a2b100ce084874e02b90fefb749dc413230320bd5",
+    "fit_causal_subspace.py": "4fecf9307002eb59deff6cb37d952d113beb64bbc7404786d2876bcf376a294a",
+    "model_loader.py": "9195db62c04108584fbe40b23946117fe6e828c1f1da8c0ebabe6e706a6a1163",
+    "subspace_control.py": "d939b36545ff8b629383745d751ae803679be6dc7624b4d50034613590468214"
+  },
+  "identity_checks": {
+    "costs_exact": true,
+    "proprio_exact": true,
+    "visual_exact": true
+  },
+  "location_control": "Block0 is off-shortlist, not proven causally unrelated. Independent same-procedure basis; each requested raw delta norm matched to paired block3-step1 delta.",
+  "model": {
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "config": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "loader": "official constructor/checkpoint; heads_cfg cleared",
+    "model_name": "jepa_wm_metaworld"
+  },
+  "new_cem_optimizations": 0,
+  "new_physical_forks": 0,
+  "nominal_beta": 0.5,
+  "norm_policy": "Requested raw norms match per candidate; measured rounded pooled activation norms reported separately; zero off-site direction with nonzero reference aborts.",
+  "numerical_interpretation": "Location/timing diagnostics and decoded proxy changes; no behavioral efficacy or causal-unrelatedness claim",
+  "offsite_basis_sha256": "5c76a6096623c363d9fdec66d1b83c260c40549c2836778a4d003a11e64f61c5",
+  "offsite_fit": {
+    "episodes": 150,
+    "motion_mask_threshold": 0.007420435446511681,
+    "probe_iterations": 5,
+    "ridge_alpha": 100.0,
+    "sources": [
+      {
+        "path": "/root/geometry-map-jepawm-reach-wall-v1/canary/capture-pooled/DONE.json",
+        "sha256": "ce1d8d640d5bbb8dc32c31693af58a9d7085413dd2b49e067d66fbcb617e79da"
+      },
+      {
+        "path": "/root/geometry-map-jepawm-reach-wall-v1/canary/analysis-input/seed2/DONE.json",
+        "sha256": "8a7d2f3bfae846ea36ef45583dc949e3bf91c14e8c840adb4d3d7f4d499312c8"
+      },
+      {
+        "path": "/root/geometry-map-jepawm-reach-wall-v1/canary/analysis-input/seed3/DONE.json",
+        "sha256": "6acf20ed15e8497e81d23de60c9daaceec067a71d7a59e85c388c8fd0d4e4bb1"
+      }
+    ]
+  },
+  "original_start_xyz": [
+    0.004601670429110527,
+    0.6010369658470154,
+    0.1949342042207718
+  ],
+  "parameters_after_sha256": "81b73f2c3271b6be45e65c87ce3ee85f1cf295dfb74fef0c72a373344e5f4a94",
+  "parameters_before_sha256": "81b73f2c3271b6be45e65c87ce3ee85f1cf295dfb74fef0c72a373344e5f4a94",
+  "parameters_unchanged": true,
+  "protocol_sha256": "bb679be038cb990fdb41b55d4fed356179a2c69a84047074578dfc8372fd0158",
+  "replan": 0,
+  "rows": [
+    {
+      "accepted_operator": null,
+      "arm": "unsteered",
+      "behavioral_specificity": "not_measured",
+      "cross_process_replay": {
+        "costs": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 2.384185791015625e-07
+        },
+        "pooled_visual": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 0.0
+        },
+        "proprio": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 0.0
+        }
+      },
+      "decoded_goal_progress_delta_mean_by_future_step": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "decoded_xyz_delta_mean_by_future_step": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "decoded_xyz_delta_mean_norm_by_future_step": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "family": "predictor",
+      "imagined_edit_step": 1,
+      "initial_best_candidate": 255,
+      "initial_best_candidate_changed": false,
+      "layer": 3,
+      "max_requested_norm_match_error": 0.0,
+      "max_rounded_norm_error": 0.0,
+      "mean_absolute_rank_change_by_future_step": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "realized_raw_norm_mean": 0.0,
+      "requested_raw_norm_mean": 0.0,
+      "scope": "same-candidate one-development-state diagnostic",
+      "seconds": 0.1624159081839025,
+      "selected_actions": "Not measured; argmin of this initial300-candidate bank is not the final native CEM selection",
+      "terminal_cost_mean_change": 0.0,
+      "terminal_mean_absolute_rank_change": 0.0,
+      "unsteered_initial_best_candidate": 255
+    },
+    {
+      "accepted_operator": null,
+      "arm": "identity",
+      "behavioral_specificity": "not_measured",
+      "cross_process_replay": {
+        "costs": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 2.384185791015625e-07
+        },
+        "pooled_visual": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 0.0
+        },
+        "proprio": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 0.0
+        }
+      },
+      "decoded_goal_progress_delta_mean_by_future_step": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "decoded_xyz_delta_mean_by_future_step": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          0.0,
+          0.0,
+          0.0
+        ]
+      ],
+      "decoded_xyz_delta_mean_norm_by_future_step": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "family": "predictor",
+      "imagined_edit_step": 1,
+      "initial_best_candidate": 255,
+      "initial_best_candidate_changed": false,
+      "layer": 3,
+      "max_requested_norm_match_error": 0.0,
+      "max_rounded_norm_error": 0.0,
+      "mean_absolute_rank_change_by_future_step": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "realized_raw_norm_mean": 0.0,
+      "requested_raw_norm_mean": 0.0,
+      "scope": "same-candidate one-development-state diagnostic",
+      "seconds": 5.511394115164876,
+      "selected_actions": "Not measured; argmin of this initial300-candidate bank is not the final native CEM selection",
+      "terminal_cost_mean_change": 0.0,
+      "terminal_mean_absolute_rank_change": 0.0,
+      "unsteered_initial_best_candidate": 255
+    },
+    {
+      "accepted_operator": null,
+      "arm": "block3_step1_up",
+      "behavioral_specificity": "not_measured",
+      "cross_process_replay": {
+        "costs": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 0.0
+        },
+        "pooled_visual": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 0.0
+        },
+        "proprio": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 0.0
+        }
+      },
+      "decoded_goal_progress_delta_mean_by_future_step": [
+        0.00010992087520725853,
+        -8.183139563261905e-06,
+        -2.6161980933635994e-05,
+        -8.482893724689337e-05,
+        -0.00011328120237888955,
+        -0.00014927275841362033
+      ],
+      "decoded_xyz_delta_mean_by_future_step": [
+        [
+          -0.0002704819172667842,
+          0.00015870549494123587,
+          4.784631983210793e-05
+        ],
+        [
+          -2.3918560577966788e-05,
+          4.70041172439443e-05,
+          -0.00022229415014578786
+        ],
+        [
+          -3.0536626424924316e-05,
+          4.6896751484284034e-05,
+          -0.00028647874034286774
+        ],
+        [
+          -6.797748749313148e-05,
+          -3.2919477982022255e-06,
+          -0.000286765640318671
+        ],
+        [
+          -0.00012230574350549585,
+          -1.564041040200655e-05,
+          -0.0002888379988093078
+        ],
+        [
+          -0.00016213285831068208,
+          -3.677802151673237e-05,
+          -0.0003021223442062265
+        ]
+      ],
+      "decoded_xyz_delta_mean_norm_by_future_step": [
+        0.0004921281086287096,
+        0.00035170024583941207,
+        0.0005068461665131377,
+        0.0005390714598516292,
+        0.0005901276682644866,
+        0.0006497652524155028
+      ],
+      "family": "predictor",
+      "imagined_edit_step": 1,
+      "initial_best_candidate": 255,
+      "initial_best_candidate_changed": false,
+      "layer": 3,
+      "max_requested_norm_match_error": 0.0,
+      "max_rounded_norm_error": 7.748603820800781e-06,
+      "mean_absolute_rank_change_by_future_step": [
+        1.68,
+        0.9666666666666667,
+        1.7,
+        1.3266666666666667,
+        1.4466666666666668,
+        1.52
+      ],
+      "realized_raw_norm_mean": 0.8320543169975281,
+      "requested_raw_norm_mean": 0.8320543169975281,
+      "scope": "same-candidate one-development-state diagnostic",
+      "seconds": 5.522329747211188,
+      "selected_actions": "Not measured; argmin of this initial300-candidate bank is not the final native CEM selection",
+      "terminal_cost_mean_change": 0.0013379660667851567,
+      "terminal_mean_absolute_rank_change": 1.52,
+      "unsteered_initial_best_candidate": 255
+    },
+    {
+      "accepted_operator": null,
+      "arm": "block3_step1_down",
+      "behavioral_specificity": "not_measured",
+      "cross_process_replay": {
+        "costs": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 2.384185791015625e-07
+        },
+        "pooled_visual": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 0.0
+        },
+        "proprio": {
+          "actual_dtype": "torch.float32",
+          "bound": 1e-06,
+          "cached_dtype": "torch.float32",
+          "max_absolute_error": 0.0
+        }
+      },
+      "decoded_goal_progress_delta_mean_by_future_step": [
+        0.00029522556504095834,
+        0.00022590451193993285,
+        0.00013940056064900248,
+        9.777133597857719e-05,
+        0.00010123154400873931,
+        0.00012211941023659438
+      ],
+      "decoded_xyz_delta_mean_by_future_step": [
+        [
+          -0.00016039906228069593,
+          0.0003095360337113066,
+          0.00016077097660797236
+        ],
+        [
+          -0.00010310525466691558,
+          0.00019531312044232234,
+          0.0003278183267661989
+        ],
+        [
+          -5.89588993896705e-05,
+          8.479118456710122e-05,
+          0.0003760855064468413
+        ],
+        [
+          3.695691732188555e-05,
+          2.6655496948335687e-05,
+          0.0003438293970763638
+        ],
+        [
+          6.752581402119998e-05,
+          2.127673454209722e-05,
+          0.00034515301750344987
+        ],
+        [
+          9.244745740118545e-05,
+          4.2263486324979336e-05,
+          0.00033696240332424884
+        ]
+      ],
+      "decoded_xyz_delta_mean_norm_by_future_step": [
+        0.0005479033078234907,
+        0.0004715179444614881,
+        0.0005502435446578315,
+        0.0005467787314887767,
+        0.00058942456388949,
+        0.0006192882999880137
+      ],
+      "family": "predictor",
+      "imagined_edit_step": 1,
+      "initial_best_candidate": 255,
+      "initial_best_candidate_changed": false,
+      "layer": 3,
+      "max_requested_norm_match_error": 0.0,
+      "max_rounded_norm_error": 7.510185241699219e-06,
+      "mean_absolute_rank_change_by_future_step": [
+        1.7666666666666666,
+        1.04,
+        1.7133333333333334,
+        1.4866666666666666,
+        1.5866666666666667,
+        1.5466666666666666
+      ],
+      "realized_raw_norm_mean": 0.8198145627975464,
+      "requested_raw_norm_mean": 0.8198146820068359,
+      "scope": "same-candidate one-development-state diagnostic",
+      "seconds": 5.506973099894822,
+      "selected_actions": "Not measured; argmin of this initial300-candidate bank is not the final native CEM selection",
+      "terminal_cost_mean_change": -0.0006830096244812012,
+      "terminal_mean_absolute_rank_change": 1.5466666666666666,
+      "unsteered_initial_best_candidate": 255
+    },
+    {
+      "accepted_operator": null,
+      "arm": "block0_step1_up",
+      "behavioral_specificity": "not_measured",
+      "cross_process_replay": null,
+      "decoded_goal_progress_delta_mean_by_future_step": [
+        -0.000244811486363537,
+        -0.0003398082900396371,
+        -0.000542269453549118,
+        -0.0005564386254618053,
+        -0.0007279011638569585,
+        -0.0009586483333922235
+      ],
+      "decoded_xyz_delta_mean_by_future_step": [
+        [
+          -0.00022260823040410192,
+          5.826268695316735e-05,
+          -0.0014030916566942272
+        ],
+        [
+          0.000278173182846326,
+          -0.00011995316687325268,
+          -0.0012893830430359232
+        ],
+        [
+          5.643215562044869e-05,
+          -0.00024331608529991092,
+          -0.0014316951819031906
+        ],
+        [
+          -0.00010157804252560299,
+          -0.00023069914751644587,
+          -0.0013922210946201558
+        ],
+        [
+          -0.00017764748001965447,
+          -0.00038111103579063776,
+          -0.0013862200891977487
+        ],
+        [
+          -0.00029032258923762216,
+          -0.0005926879860432003,
+          -0.0014383038478708895
+        ]
+      ],
+      "decoded_xyz_delta_mean_norm_by_future_step": [
+        0.0016964588984861417,
+        0.001698352759097443,
+        0.0021504914172128563,
+        0.00225044880837163,
+        0.002331412773225233,
+        0.002609844424582242
+      ],
+      "family": "predictor",
+      "imagined_edit_step": 1,
+      "initial_best_candidate": 255,
+      "initial_best_candidate_changed": false,
+      "layer": 0,
+      "max_requested_norm_match_error": 1.1920928955078125e-07,
+      "max_rounded_norm_error": 4.5299530029296875e-06,
+      "mean_absolute_rank_change_by_future_step": [
+        6.34,
+        4.626666666666667,
+        5.913333333333333,
+        5.033333333333333,
+        5.166666666666667,
+        5.3
+      ],
+      "realized_raw_norm_mean": 0.8320542573928833,
+      "requested_raw_norm_mean": 0.8320543169975281,
+      "scope": "same-candidate one-development-state diagnostic",
+      "seconds": 5.3675542678684,
+      "selected_actions": "Not measured; argmin of this initial300-candidate bank is not the final native CEM selection",
+      "terminal_cost_mean_change": 0.005824123043566942,
+      "terminal_mean_absolute_rank_change": 5.3,
+      "unsteered_initial_best_candidate": 255
+    },
+    {
+      "accepted_operator": null,
+      "arm": "block0_step1_down",
+      "behavioral_specificity": "not_measured",
+      "cross_process_replay": null,
+      "decoded_goal_progress_delta_mean_by_future_step": [
+        0.0005566976911483614,
+        0.0003374240245212419,
+        0.0004415461079603696,
+        0.00044877613473080324,
+        0.0005295079886518694,
+        0.0005792209090936407
+      ],
+      "decoded_xyz_delta_mean_by_future_step": [
+        [
+          3.702671703835552e-05,
+          0.00039998413844599196,
+          0.001034094004206225
+        ],
+        [
+          -0.00033599555062040356,
+          0.0002675863286824879,
+          0.0008461961681790897
+        ],
+        [
+          -0.00024564534800191625,
+          0.0003390146310340192,
+          0.0009171915290925401
+        ],
+        [
+          -9.908835317822665e-05,
+          0.0003125514851209924,
+          0.0009233135660690727
+        ],
+        [
+          -7.463943538080113e-05,
+          0.00039946902621234496,
+          0.0008917713965936632
+        ],
+        [
+          -4.428980142565036e-05,
+          0.0004509175927031872,
+          0.0008801410994246587
+        ]
+      ],
+      "decoded_xyz_delta_mean_norm_by_future_step": [
+        0.0015616857045352675,
+        0.0013985649398636961,
+        0.0016218971044059589,
+        0.0017064391564033928,
+        0.0018948134335670301,
+        0.0019586291863337925
+      ],
+      "family": "predictor",
+      "imagined_edit_step": 1,
+      "initial_best_candidate": 255,
+      "initial_best_candidate_changed": false,
+      "layer": 0,
+      "max_requested_norm_match_error": 1.1920928955078125e-07,
+      "max_rounded_norm_error": 5.781650543212891e-06,
+      "mean_absolute_rank_change_by_future_step": [
+        4.586666666666667,
+        3.4,
+        4.786666666666667,
+        4.613333333333333,
+        4.266666666666667,
+        4.506666666666667
+      ],
+      "realized_raw_norm_mean": 0.8198144435882568,
+      "requested_raw_norm_mean": 0.8198146224021912,
+      "scope": "same-candidate one-development-state diagnostic",
+      "seconds": 5.448308733291924,
+      "selected_actions": "Not measured; argmin of this initial300-candidate bank is not the final native CEM selection",
+      "terminal_cost_mean_change": -0.002349559450522065,
+      "terminal_mean_absolute_rank_change": 4.506666666666667,
+      "unsteered_initial_best_candidate": 255
+    },
+    {
+      "accepted_operator": null,
+      "arm": "block3_step2_up",
+      "behavioral_specificity": "not_measured",
+      "cross_process_replay": null,
+      "decoded_goal_progress_delta_mean_by_future_step": [
+        0.0,
+        4.9100397399838196e-05,
+        -3.5658619126888723e-05,
+        -7.78326276858198e-05,
+        -9.977889548653529e-05,
+        -0.00014390837248096162
+      ],
+      "decoded_xyz_delta_mean_by_future_step": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -0.0002704359544164422,
+          8.276650951358506e-05,
+          0.00013084777431177845
+        ],
+        [
+          -2.9135425890408346e-05,
+          1.331567028432253e-05,
+          -0.00018712315532038698
+        ],
+        [
+          -4.811574565601282e-05,
+          -7.796143180522537e-06,
+          -0.00025730868734209934
+        ],
+        [
+          -0.00010424048962204804,
+          -1.2875625467255736e-05,
+          -0.0002626072181877387
+        ],
+        [
+          -0.00014718905743282723,
+          -4.1465523987586444e-05,
+          -0.00028035000316419125
+        ]
+      ],
+      "decoded_xyz_delta_mean_norm_by_future_step": [
+        0.0,
+        0.0004106250253018665,
+        0.00032146707057870296,
+        0.0004792363421919192,
+        0.0005305998915218396,
+        0.0006091291851775058
+      ],
+      "family": "predictor",
+      "imagined_edit_step": 2,
+      "initial_best_candidate": 255,
+      "initial_best_candidate_changed": false,
+      "layer": 3,
+      "max_requested_norm_match_error": 0.0,
+      "max_rounded_norm_error": 6.973743438720703e-06,
+      "mean_absolute_rank_change_by_future_step": [
+        0.0,
+        0.58,
+        1.2933333333333332,
+        1.2533333333333334,
+        1.3733333333333333,
+        1.4733333333333334
+      ],
+      "realized_raw_norm_mean": 0.8320544362068176,
+      "requested_raw_norm_mean": 0.8320543169975281,
+      "scope": "same-candidate one-development-state diagnostic",
+      "seconds": 5.43732880987227,
+      "selected_actions": "Not measured; argmin of this initial300-candidate bank is not the final native CEM selection",
+      "terminal_cost_mean_change": 0.0012966481735929847,
+      "terminal_mean_absolute_rank_change": 1.4733333333333334,
+      "unsteered_initial_best_candidate": 255
+    },
+    {
+      "accepted_operator": null,
+      "arm": "block3_step2_down",
+      "behavioral_specificity": "not_measured",
+      "cross_process_replay": null,
+      "decoded_goal_progress_delta_mean_by_future_step": [
+        0.0,
+        0.0003044684761798976,
+        0.00016581854455904025,
+        7.972258104223205e-05,
+        6.991543676715755e-05,
+        8.129336588833414e-05
+      ],
+      "decoded_xyz_delta_mean_by_future_step": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          -5.0940108330093726e-05,
+          0.0003233349177924172,
+          3.669133865151247e-05
+        ],
+        [
+          -8.503913068793587e-05,
+          0.0001393294920260435,
+          0.0002721910888951001
+        ],
+        [
+          -9.471151568386336e-06,
+          2.4950011580316956e-05,
+          0.0003069439564406057
+        ],
+        [
+          2.9132202977180187e-05,
+          5.058831810822821e-06,
+          0.00030511936171503663
+        ],
+        [
+          5.68672149229831e-05,
+          1.4638442212729179e-05,
+          0.00030157461602790423
+        ]
+      ],
+      "decoded_xyz_delta_mean_norm_by_future_step": [
+        0.0,
+        0.00044015518125341046,
+        0.00040442010413476034,
+        0.00048609218866814516,
+        0.0005198351891676911,
+        0.000570497612731649
+      ],
+      "family": "predictor",
+      "imagined_edit_step": 2,
+      "initial_best_candidate": 255,
+      "initial_best_candidate_changed": false,
+      "layer": 3,
+      "max_requested_norm_match_error": 0.0,
+      "max_rounded_norm_error": 6.854534149169922e-06,
+      "mean_absolute_rank_change_by_future_step": [
+        0.0,
+        0.5733333333333334,
+        1.1466666666666667,
+        1.3333333333333333,
+        1.3933333333333333,
+        1.4733333333333334
+      ],
+      "realized_raw_norm_mean": 0.8198148608207703,
+      "requested_raw_norm_mean": 0.8198146820068359,
+      "scope": "same-candidate one-development-state diagnostic",
+      "seconds": 5.4608479999005795,
+      "selected_actions": "Not measured; argmin of this initial300-candidate bank is not the final native CEM selection",
+      "terminal_cost_mean_change": -0.00044673203956335783,
+      "terminal_mean_absolute_rank_change": 1.4733333333333334,
+      "unsteered_initial_best_candidate": 255
+    }
+  ],
+  "schema_version": 1,
+  "scope": "One development state; same fixed candidates; no behavioral-specificity conclusion",
+  "script_sha256": "264eb552e095991071fa0993aa75e28345549ae485223037b8b2d8a7ec0a8216",
+  "time_control": "Identical recorded candidate-specific block3-step1 raw vector applied once to newest256 tokens of block3 unroll call2. No donor/current-h recomputation at step2.",
+  "time_index": "One-based imagined future1..6; earlier context tokens untouched",
+  "within_run_identity": "Bit-exact complete native visual/proprio traces, costs and action inputs"
+}

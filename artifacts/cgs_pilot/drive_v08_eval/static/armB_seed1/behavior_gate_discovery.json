@@ -1,0 +1,67 @@
+{
+  "verdict": "PASS_PLANNER",
+  "thresholds": {
+    "min_scenes": 16,
+    "max_interaction_nmse_median": 0.75,
+    "spec_p": 0.05,
+    "min_flip_rate": 0.25,
+    "energy_p": 0.05
+  },
+  "n_scenes": 31,
+  "domain": "driving",
+  "primary_hazard_level": 3,
+  "token_group": "hazard_corridor",
+  "identity_contrast": {
+    "status": "ok",
+    "rec_h1_minus_h3": {
+      "ci_high": 0.04632456125405548,
+      "ci_low": -0.023363568704014348,
+      "mean": 0.009777042864496432,
+      "median": -0.021008746042823767,
+      "n": 31,
+      "sign_flip_p": 0.5710857828434314
+    },
+    "delta_h1_minus_h3": {
+      "ci_high": 1876.8771310516872,
+      "ci_low": 1315.1052772722187,
+      "mean": 1587.5646225110117,
+      "median": 1173.0168165846626,
+      "n": 31,
+      "sign_flip_p": 0.0001999600079984003
+    },
+    "flip_rate_h1_vs_h3": 0.03225806451612903,
+    "identity_interaction_cosine": {
+      "ci_high": 0.7883902044136458,
+      "ci_low": 0.75303798806858,
+      "mean": 0.7708888007124339,
+      "median": 0.7812529225094635,
+      "n": 31,
+      "sign_flip_p": 0.0001999600079984003
+    }
+  },
+  "T1a_enough_scenes": true,
+  "T1b_interaction_nmse_median": 0.48401208127843753,
+  "T1b_ok": true,
+  "T1c_rec_h1_minus_h0": 0.2707925965135001,
+  "T1c_p": 0.0001999600079984003,
+  "T1c_rec_h1_minus_h0prime": 0.18069825995073294,
+  "T1c_ok": true,
+  "T1c_prime": {
+    "n": 31,
+    "nmse_primary_median": 0.48401208127843753,
+    "nmse_cross_median": 0.5828968334141262,
+    "diff_mean": -0.02155426831299792,
+    "p": 0.2920353982300885,
+    "ok": false
+  },
+  "t1c_route": "T1c",
+  "T2a_flip_rate_h1_vs_h0": 0.8709677419354839,
+  "T2a_ok": true,
+  "T2b_energy_gap_norm_h1_vs_h0": -0.6036050531878204,
+  "T2b_p": 0.0001999600079984003,
+  "T2b_ok": true,
+  "model_captured_interaction_fraction": 0.5159879187215625,
+  "statement": "Mechanism arms licensed.",
+  "cross_gate_file": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armB_seed1/cf_gate_discovery_level1.json",
+  "gate_file": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armB_seed1/cf_gate_discovery.json"
+}

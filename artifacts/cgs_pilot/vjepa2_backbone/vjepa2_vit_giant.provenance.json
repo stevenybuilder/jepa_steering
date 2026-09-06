@@ -1,0 +1,181 @@
+{
+  "output": "/root/cgs-pilot/checkpoints/vjepa2_opensource/vjepa2_vit_giant.pth",
+  "output_sha256": "d78b79db9a07986491fe2c610d628b64d4cbed99f82e83fe7d2709892007fde5",
+  "output_bytes": 2024497521,
+  "output_dtype": "float16",
+  "output_format": {
+    "top_level_key": "encoder",
+    "prefix": "",
+    "n_tensors": 484
+  },
+  "source_repo": "facebook/vjepa2-vitg-fpc64-256",
+  "source_file": "model.safetensors",
+  "source_sha256": "f205e77aa2ade168db6b09d4bc420d156141f64ab964278a9c181a2bdf2a232b",
+  "source_sha256_expected_from_hf_lfs": "f205e77aa2ade168db6b09d4bc420d156141f64ab964278a9c181a2bdf2a232b",
+  "source_bytes": 4138311608,
+  "source_config_sha256": "d76799e52c1a5cf6b1e9204857232dd8047b034a9538e89e0c215df6859210c2",
+  "source_config": {
+    "architectures": [
+      "VJEPA2Model"
+    ],
+    "attention_probs_dropout_prob": 0.0,
+    "crop_size": 256,
+    "drop_path_rate": 0.0,
+    "frames_per_clip": 64,
+    "hidden_act": "gelu",
+    "hidden_dropout_prob": 0.0,
+    "hidden_size": 1408,
+    "image_size": 256,
+    "in_chans": 3,
+    "initializer_range": 0.02,
+    "layer_norm_eps": 1e-06,
+    "mlp_ratio": 4.363636363636363,
+    "model_type": "vjepa2",
+    "num_attention_heads": 22,
+    "num_hidden_layers": 40,
+    "patch_size": 16,
+    "pred_hidden_size": 384,
+    "pred_mlp_ratio": 4.0,
+    "pred_num_attention_heads": 12,
+    "pred_num_hidden_layers": 12,
+    "pred_num_mask_tokens": 10,
+    "pred_zero_init_mask_tokens": true,
+    "qkv_bias": true,
+    "torch_dtype": "float32",
+    "transformers_version": "4.53.0.dev0",
+    "tubelet_size": 2,
+    "use_SiLU": false,
+    "wide_SiLU": true
+  },
+  "native_kwargs": {
+    "num_frames": 512,
+    "img_size": 256,
+    "tubelet_size": 2,
+    "uniform_power": true,
+    "use_sdpa": true,
+    "use_activation_checkpointing": false,
+    "use_rope": true,
+    "use_silu": false,
+    "wide_silu": true,
+    "local_window": [
+      8,
+      -1,
+      -1
+    ]
+  },
+  "mapping": "inverse of transformers convert_vjepa2_to_hf.py::convert_encoder_keys; HF predictor dropped",
+  "torch": "2.7.1+cu128",
+  "transformers": "5.16.1",
+  "elapsed_s": 75.82214903831482,
+  "report": {
+    "checks": {
+      "fp32_native_vs_hf": {
+        "random_clip": {
+          "max_abs": 0.001739501953125,
+          "max_abs_over_ref_max": 3.459679934083993e-05,
+          "rel_fro": 6.251360225194669e-06,
+          "mean_abs": 8.59609917824855e-06,
+          "ref_abs_max": 50.279273986816406,
+          "min_token_cosine": 0.9999997019767761,
+          "after_layernorm_max_abs": 0.000507354736328125,
+          "after_layernorm_rel_fro": 6.190995956808909e-06,
+          "shape_native": [
+            1,
+            2048,
+            1408
+          ],
+          "shape_hf": [
+            1,
+            2048,
+            1408
+          ]
+        },
+        "dup_image": {
+          "max_abs": 0.0004177093505859375,
+          "max_abs_over_ref_max": 7.03064565340445e-06,
+          "rel_fro": 4.266102116092063e-06,
+          "mean_abs": 7.008566171862185e-06,
+          "ref_abs_max": 59.41265869140625,
+          "min_token_cosine": 0.9999997615814209,
+          "after_layernorm_max_abs": 0.0001265406608581543,
+          "after_layernorm_rel_fro": 4.241398452761294e-06,
+          "shape_native": [
+            1,
+            256,
+            1408
+          ],
+          "shape_hf": [
+            1,
+            256,
+            1408
+          ]
+        }
+      },
+      "fp16_rounded_native_vs_hf": {
+        "random_clip": {
+          "max_abs": 0.6651325225830078,
+          "max_abs_over_ref_max": 0.013228761472518684,
+          "rel_fro": 0.0015793650019162058,
+          "mean_abs": 0.0024015139788389206,
+          "ref_abs_max": 50.279273986816406,
+          "min_token_cosine": 0.9998184442520142,
+          "after_layernorm_max_abs": 0.19455289840698242,
+          "after_layernorm_rel_fro": 0.0015665299489918104
+        },
+        "dup_image": {
+          "max_abs": 0.24184226989746094,
+          "max_abs_over_ref_max": 0.004070551212892316,
+          "rel_fro": 0.0021860444498949683,
+          "mean_abs": 0.0033572902902960777,
+          "ref_abs_max": 59.41265869140625,
+          "min_token_cosine": 0.9999244809150696,
+          "after_layernorm_max_abs": 0.07642650604248047,
+          "after_layernorm_rel_fro": 0.002162958464689805
+        }
+      },
+      "fp16_rounded_vs_fp32_native": {
+        "random_clip": {
+          "max_abs": 0.6633930206298828,
+          "max_abs_over_ref_max": 0.013194171680486552,
+          "rel_fro": 0.0015793107008579877,
+          "mean_abs": 0.002401495585218072,
+          "ref_abs_max": 50.27924728393555,
+          "min_token_cosine": 0.9998193979263306,
+          "after_layernorm_max_abs": 0.1940455436706543,
+          "after_layernorm_rel_fro": 0.0015665011630400718
+        },
+        "dup_image": {
+          "max_abs": 0.241912841796875,
+          "max_abs_over_ref_max": 0.004071740868904724,
+          "rel_fro": 0.002185747922389284,
+          "mean_abs": 0.0033572823740541935,
+          "ref_abs_max": 59.41263198852539,
+          "min_token_cosine": 0.9999244809150696,
+          "after_layernorm_max_abs": 0.0764474868774414,
+          "after_layernorm_rel_fro": 0.002162708279536907
+        }
+      },
+      "fp16_weight_rounding_max_abs": 0.0031223297119140625
+    },
+    "criteria": {
+      "rel_fp32": 0.0001,
+      "maxabs_norm_fp32": 0.001,
+      "rel_fp16": 0.02,
+      "hf_attn": "eager"
+    },
+    "grid": {
+      "tokens_per_frame": 256,
+      "grid": 16,
+      "embed_dim": 1408,
+      "patch_size": 16
+    },
+    "hf_num_layers": 40,
+    "equivalence_ok": true,
+    "gpu": {
+      "allocated_gb": 0.0079345703125,
+      "max_allocated_gb": 5.045592784881592
+    },
+    "roundtrip_max_abs": 0.0,
+    "roundtrip_load_msg": "clean (no missing/unexpected keys)"
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "complete": true,
+  "outputs": [
+    {
+      "path": "episode-000.pt",
+      "sha256": "63ded25f34e6a629761ecd00def44f6748eee5190d098fdcec4d316fa269de77",
+      "bytes": 264916876
+    },
+    {
+      "path": "episode-000.json",
+      "sha256": "6ac43a0758e02691c79f32af556e8c7e7b2b7b0a0385ba3ed36ce530285bd0fc",
+      "bytes": 36968
+    },
+    {
+      "path": "episode-004.pt",
+      "sha256": "83295fdda1c7176c38c4cdc5ad220dd122233d210ad00ff03faa3a1a329d68bb",
+      "bytes": 264916876
+    },
+    {
+      "path": "episode-004.json",
+      "sha256": "d6137b5c2bdcc29827c8cddf5058b7d6638d2b621215e3ad21f6fbd6e6a6e3be",
+      "bytes": 36542
+    },
+    {
+      "path": "episode-007.pt",
+      "sha256": "54a1831bf8186c35c449fa092c625d6fcfa32a1eebe125900ef478910cbde0cc",
+      "bytes": 264916940
+    },
+    {
+      "path": "episode-007.json",
+      "sha256": "7a8854eec3c586458fab6d0974c0dd7d34a4f0d2f86b7579560e66832fda8adc",
+      "bytes": 36991
+    }
+  ],
+  "seconds": 45.98521991504822,
+  "model": {
+    "model_name": "jepa_wm_metaworld",
+    "config": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "loader": "official constructor/checkpoint; heads_cfg cleared"
+  },
+  "parameter_sha256": "81b73f2c3271b6be45e65c87ce3ee85f1cf295dfb74fef0c72a373344e5f4a94",
+  "states": 3,
+  "conditions": 18,
+  "simulator_calls": 0,
+  "cem_calls": 0,
+  "held_data": false,
+  "limitations": [
+    "Three adaptively explored development states; not confirmation",
+    "Five historical optimized action plans per state, not random independent candidates or full nativeCEM evaluation",
+    "Actual truth only through15raw/H3; H6 cost is only associated with executed prefix outcomes",
+    "Action Jacobian differentiates model nominal commands, not true physical dynamics; native environment clips some commands",
+    "Output correction target is TRAIN-only associational OLS; causal finite response is separately measured",
+    "Whitening changes regularized metric; a pure orthogonal rotation leaves mapped patch invariant",
+    "Fixed norm projection can amplify a poor predicted target; all signed/null/sham outcomes retained"
+  ]
+}

@@ -1,0 +1,2382 @@
+{
+  "complete": true,
+  "rows": [
+    {
+      "held_state": 0,
+      "label": "joint_xy_squared_proxy",
+      "weights": {
+        "mean": 0.9405758430453982,
+        "median": 0.6003799124998663,
+        "minimum": 0.0,
+        "maximum": 3.929247012687411,
+        "zero_count": 3,
+        "rms_change_from_native": 1.0208931979872833,
+        "values": [
+          0.5504246957992575,
+          3.929247012687411,
+          1.32030399968714,
+          0.0,
+          0.0,
+          2.526504884510522,
+          1.4841682057828787,
+          0.6503351292004751,
+          0.0,
+          0.13431846778340958,
+          0.7570087408639553,
+          0.31103223436565525,
+          0.48884900075580895,
+          0.3612027714245976,
+          1.2068731131720538,
+          1.3289452326932063
+        ]
+      },
+      "training": {
+        "native_mse": 0.19113580800809835,
+        "fitted_mse": 0.0925852988936083,
+        "mse_reduction_fraction": 0.5156046380922747,
+        "per_state_ranking": [
+          {
+            "episode": 1,
+            "native_rho": 0.8472069597069597,
+            "fitted_rho": 0.839102564102564
+          },
+          {
+            "episode": 2,
+            "native_rho": 0.9418956043956044,
+            "fitted_rho": 0.9110347985347985
+          },
+          {
+            "episode": 3,
+            "native_rho": -0.0787087912087912,
+            "fitted_rho": 0.37559523809523804
+          }
+        ],
+        "mean_native_within_state_rho": 0.5701312576312576,
+        "mean_fitted_within_state_rho": 0.7085775335775334
+      },
+      "channels": {
+        "predicted": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.1814009245107503,
+              "median": 0.15346179535753776,
+              "minimum": 0.06642311323400826,
+              "maximum": 0.38469911930316886
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8185990754892497,
+              "median": 0.8465382046424622,
+              "minimum": 0.6153008806968311,
+              "maximum": 0.9335768867659917
+            },
+            "within_state_activation_variation_fraction_in_span": 0.1723860312421036,
+            "native_cost_std": 0.26535779020636535,
+            "span_cost_std": 0.07482045628351165,
+            "complement_cost_std": 0.20298704312432253,
+            "variance_decomposition": {
+              "native": 0.07041475682320542,
+              "span": 0.0055981006784728785,
+              "complement": 0.04120373967635558,
+              "twice_covariance": 0.02361291646837696
+            }
+          },
+          "margins": {
+            "native_winner": 0,
+            "native_runner": 5,
+            "native_margin": 0.00032597450738469647,
+            "native_pair_span_margin": -0.00035944903196207575,
+            "native_pair_complement_margin": 0.0006854235393467661,
+            "fitted_pair_span_margin": -7.279966592129182e-05,
+            "native_winner_span_fraction": 0.11005968220148482,
+            "native_runner_span_fraction": 0.10464678644040272,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.07270807235029775,
+                "native_runner_cost": 0.07303404685768244,
+                "original_pair_margin": 0.00032597450738469647,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.00032597450738469647,
+                "winner_cost_change": -0.0,
+                "runner_cost_change": -0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 0,
+                "native_winner_cost": 0.07205962458238964,
+                "native_runner_cost": 0.07245726143128453,
+                "original_pair_margin": 0.0003976368488948917,
+                "original_pair_margin_ratio": 1.219840324585945,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.0003976368488948917,
+                "winner_cost_change": -0.0006484477679081086,
+                "runner_cost_change": -0.0005767854263979127,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.010861402261301466,
+                  "median": 0.00902807326062427,
+                  "minimum": 0.00014519773982506632,
+                  "maximum": 0.042347821499164294
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 0,
+                "native_winner_cost": 0.07141117681448153,
+                "native_runner_cost": 0.07188047600488662,
+                "original_pair_margin": 0.00046929919040508694,
+                "original_pair_margin_ratio": 1.4396806491718903,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.00046929919040508694,
+                "winner_cost_change": -0.0012968955358162173,
+                "runner_cost_change": -0.0011535708527958253,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.02172280452260293,
+                  "median": 0.01805614652124854,
+                  "minimum": 0.00029039547965013264,
+                  "maximum": 0.08469564299832859
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.07011428127866531,
+                "native_runner_cost": 0.07072690515209079,
+                "original_pair_margin": 0.0006126238734254774,
+                "original_pair_margin_ratio": 1.8793612983437804,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.0006126238734254774,
+                "winner_cost_change": -0.0025937910716324346,
+                "runner_cost_change": -0.0023071417055916506,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.04344560904520586,
+                  "median": 0.03611229304249708,
+                  "minimum": 0.0005807909593002653,
+                  "maximum": 0.16939128599665718
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.8701007326007324,
+          "held_fitted_rho": 0.8765567765567764,
+          "held_native_scaled_label_mse": 0.08052351340459474,
+          "held_fitted_scaled_label_mse": 0.07545955814005025
+        },
+        "actual_oracle_encoding": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.14244528693447917,
+              "median": 0.1170377504819558,
+              "minimum": 0.03434422019771683,
+              "maximum": 0.3637808413615764
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8575547130655208,
+              "median": 0.8829622495180441,
+              "minimum": 0.6362191586384236,
+              "maximum": 0.9656557798022832
+            },
+            "within_state_activation_variation_fraction_in_span": 0.17408610005450934,
+            "native_cost_std": 0.27865733688607586,
+            "span_cost_std": 0.07590340753990146,
+            "complement_cost_std": 0.21453426432987005,
+            "variance_decomposition": {
+              "native": 0.07764991140043997,
+              "span": 0.0057613272761683695,
+              "complement": 0.04602495057155855,
+              "twice_covariance": 0.025863633552713046
+            }
+          },
+          "margins": {
+            "native_winner": 8,
+            "native_runner": 2,
+            "native_margin": 0.0045914980913993805,
+            "native_pair_span_margin": 0.0007523705859935105,
+            "native_pair_complement_margin": 0.0038391275054058746,
+            "fitted_pair_span_margin": 0.0008954973091832299,
+            "native_winner_span_fraction": 0.035004264809245386,
+            "native_runner_span_fraction": 0.04657357680830398,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 8,
+                "native_winner_cost": 0.0465479794314788,
+                "native_runner_cost": 0.05113947752287818,
+                "original_pair_margin": 0.0045914980913993805,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.0045914980913993805,
+                "winner_cost_change": -0.0,
+                "runner_cost_change": -0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 8,
+                "native_winner_cost": 0.04641960802885705,
+                "native_runner_cost": 0.05104688780105386,
+                "original_pair_margin": 0.0046272797721968115,
+                "original_pair_margin_ratio": 1.0077930296572388,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.0046272797721968115,
+                "winner_cost_change": -0.00012837140262174932,
+                "runner_cost_change": -9.258972182431957e-05,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.009417385498924916,
+                  "median": 0.006455996681338815,
+                  "minimum": 0.0002385968438334971,
+                  "maximum": 0.044558102982384384
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 8,
+                "native_winner_cost": 0.0462912366262353,
+                "native_runner_cost": 0.05095429807922954,
+                "original_pair_margin": 0.004663061452994242,
+                "original_pair_margin_ratio": 1.0155860593144777,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.004663061452994242,
+                "winner_cost_change": -0.00025674280524349863,
+                "runner_cost_change": -0.00018517944364863914,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.01883477099784983,
+                  "median": 0.01291199336267763,
+                  "minimum": 0.0004771936876669942,
+                  "maximum": 0.08911620596476877
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 8,
+                "native_winner_cost": 0.046034493820991805,
+                "native_runner_cost": 0.0507691186355809,
+                "original_pair_margin": 0.004734624814589097,
+                "original_pair_margin_ratio": 1.031172118628954,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.004734624814589097,
+                "winner_cost_change": -0.0005134856104869973,
+                "runner_cost_change": -0.0003703588872972783,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.03766954199569966,
+                  "median": 0.02582398672535526,
+                  "minimum": 0.0009543873753339884,
+                  "maximum": 0.17823241192953754
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.8798992673992673,
+          "held_fitted_rho": 0.8876831501831502,
+          "held_native_scaled_label_mse": 0.0841722655607574,
+          "held_fitted_scaled_label_mse": 0.0789004107039678
+        }
+      }
+    },
+    {
+      "held_state": 0,
+      "label": "one_minus_requested_goal_coverage",
+      "weights": {
+        "mean": 0.8989656434638316,
+        "median": 0.9094833116171481,
+        "minimum": 0.3445557146995602,
+        "maximum": 1.778688947148816,
+        "zero_count": 0,
+        "rms_change_from_native": 0.34458762537095644,
+        "values": [
+          0.9700059875384938,
+          1.778688947148816,
+          0.8899158038966846,
+          0.3445557146995602,
+          0.5088032960774832,
+          0.5120762895299104,
+          1.0869501155916474,
+          1.0448640098625257,
+          0.7486515852985234,
+          0.6473566425305644,
+          0.7350081009836961,
+          0.932259745276915,
+          1.2411336263477408,
+          0.8722880486213589,
+          0.9290508193376118,
+          1.141841562679773
+        ]
+      },
+      "training": {
+        "native_mse": 0.02012253010423482,
+        "fitted_mse": 0.013088850366480158,
+        "mse_reduction_fraction": 0.34954251286096527,
+        "per_state_ranking": [
+          {
+            "episode": 1,
+            "native_rho": -0.16116200283735607,
+            "fitted_rho": -0.16337684038645475
+          },
+          {
+            "episode": 2,
+            "native_rho": 0.9343406593406592,
+            "fitted_rho": 0.9463369963369962
+          },
+          {
+            "episode": 3,
+            "native_rho": 0.0738095238095238,
+            "fitted_rho": -0.010851648351648351
+          }
+        ],
+        "mean_native_within_state_rho": 0.282329393437609,
+        "mean_fitted_within_state_rho": 0.25736950253296437
+      },
+      "channels": {
+        "predicted": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.1814009245107503,
+              "median": 0.15346179535753776,
+              "minimum": 0.06642311323400826,
+              "maximum": 0.38469911930316886
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8185990754892497,
+              "median": 0.8465382046424622,
+              "minimum": 0.6153008806968311,
+              "maximum": 0.9335768867659917
+            },
+            "within_state_activation_variation_fraction_in_span": 0.1723860312421036,
+            "native_cost_std": 0.26535779020636535,
+            "span_cost_std": 0.07482045628351165,
+            "complement_cost_std": 0.20298704312432253,
+            "variance_decomposition": {
+              "native": 0.07041475682320542,
+              "span": 0.0055981006784728785,
+              "complement": 0.04120373967635558,
+              "twice_covariance": 0.02361291646837696
+            }
+          },
+          "margins": {
+            "native_winner": 0,
+            "native_runner": 5,
+            "native_margin": 0.00032597450738469647,
+            "native_pair_span_margin": -0.00035944903196207575,
+            "native_pair_complement_margin": 0.0006854235393467661,
+            "fitted_pair_span_margin": -0.00019181062663535447,
+            "native_winner_span_fraction": 0.11005968220148482,
+            "native_runner_span_fraction": 0.10464678644040272,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.07270807235029775,
+                "native_runner_cost": 0.07303404685768244,
+                "original_pair_margin": 0.00032597450738469647,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.00032597450738469647,
+                "winner_cost_change": -0.0,
+                "runner_cost_change": -0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 0,
+                "native_winner_cost": 0.07219381266585692,
+                "native_runner_cost": 0.0725616967745733,
+                "original_pair_margin": 0.000367884108716382,
+                "original_pair_margin_ratio": 1.1285671130172956,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.000367884108716382,
+                "winner_cost_change": -0.0005142596844408218,
+                "runner_cost_change": -0.00047235008310914155,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.013924241545826055,
+                  "median": 0.010054850767339252,
+                  "minimum": 0.0023757125498142105,
+                  "maximum": 0.0386493861244646
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 0,
+                "native_winner_cost": 0.07167955298141611,
+                "native_runner_cost": 0.07208934669146416,
+                "original_pair_margin": 0.00040979371004805365,
+                "original_pair_margin_ratio": 1.2571342260345486,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.00040979371004805365,
+                "winner_cost_change": -0.0010285193688816436,
+                "runner_cost_change": -0.0009447001662182831,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.02784848309165211,
+                  "median": 0.020109701534678504,
+                  "minimum": 0.004751425099628421,
+                  "maximum": 0.0772987722489292
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.07065103361253446,
+                "native_runner_cost": 0.07114464652524588,
+                "original_pair_margin": 0.0004936129127114247,
+                "original_pair_margin_ratio": 1.5142684520691398,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.0004936129127114247,
+                "winner_cost_change": -0.0020570387377632873,
+                "runner_cost_change": -0.0018894003324365662,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.05569696618330422,
+                  "median": 0.04021940306935701,
+                  "minimum": 0.009502850199256842,
+                  "maximum": 0.1545975444978584
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.8355311355311353,
+          "held_fitted_rho": 0.8545787545787545,
+          "held_native_scaled_label_mse": 0.025271448106052096,
+          "held_fitted_scaled_label_mse": 0.0169735326565916
+        },
+        "actual_oracle_encoding": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.14244528693447917,
+              "median": 0.1170377504819558,
+              "minimum": 0.03434422019771683,
+              "maximum": 0.3637808413615764
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8575547130655208,
+              "median": 0.8829622495180441,
+              "minimum": 0.6362191586384236,
+              "maximum": 0.9656557798022832
+            },
+            "within_state_activation_variation_fraction_in_span": 0.17408610005450934,
+            "native_cost_std": 0.27865733688607586,
+            "span_cost_std": 0.07590340753990146,
+            "complement_cost_std": 0.21453426432987005,
+            "variance_decomposition": {
+              "native": 0.07764991140043997,
+              "span": 0.0057613272761683695,
+              "complement": 0.04602495057155855,
+              "twice_covariance": 0.025863633552713046
+            }
+          },
+          "margins": {
+            "native_winner": 8,
+            "native_runner": 2,
+            "native_margin": 0.0045914980913993805,
+            "native_pair_span_margin": 0.0007523705859935105,
+            "native_pair_complement_margin": 0.0038391275054058746,
+            "fitted_pair_span_margin": 0.0006593224102491264,
+            "native_winner_span_fraction": 0.035004264809245386,
+            "native_runner_span_fraction": 0.04657357680830398,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 8,
+                "native_winner_cost": 0.0465479794314788,
+                "native_runner_cost": 0.05113947752287818,
+                "original_pair_margin": 0.0045914980913993805,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.0045914980913993805,
+                "winner_cost_change": -0.0,
+                "runner_cost_change": -0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 8,
+                "native_winner_cost": 0.04645887150673797,
+                "native_runner_cost": 0.05102710755420125,
+                "original_pair_margin": 0.00456823604746328,
+                "original_pair_margin_ratio": 0.9949336701283455,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.00456823604746328,
+                "winner_cost_change": -8.910792474083325e-05,
+                "runner_cost_change": -0.00011236996867692933,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.011238594472764443,
+                  "median": 0.007152405594252401,
+                  "minimum": 0.00012176854941967594,
+                  "maximum": 0.036613236401460525
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 8,
+                "native_winner_cost": 0.04636976358199713,
+                "native_runner_cost": 0.050914737585524325,
+                "original_pair_margin": 0.004544974003527193,
+                "original_pair_margin_ratio": 0.9898673402566942,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.004544974003527193,
+                "winner_cost_change": -0.0001782158494816665,
+                "runner_cost_change": -0.00022473993735385865,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.022477188945528886,
+                  "median": 0.014304811188504803,
+                  "minimum": 0.00024353709883935187,
+                  "maximum": 0.07322647280292105
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 8,
+                "native_winner_cost": 0.046191547732515464,
+                "native_runner_cost": 0.05068999764817046,
+                "original_pair_margin": 0.004498449915654998,
+                "original_pair_margin_ratio": 0.9797346805133869,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.004498449915654998,
+                "winner_cost_change": -0.000356431698963333,
+                "runner_cost_change": -0.0004494798747077173,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.04495437789105777,
+                  "median": 0.028609622377009605,
+                  "minimum": 0.00048707419767870375,
+                  "maximum": 0.1464529456058421
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.88489010989011,
+          "held_fitted_rho": 0.8925824175824175,
+          "held_native_scaled_label_mse": 0.0239219025590248,
+          "held_fitted_scaled_label_mse": 0.01566775385098722
+        }
+      }
+    },
+    {
+      "held_state": 1,
+      "label": "joint_xy_squared_proxy",
+      "weights": {
+        "mean": 0.7521514087510195,
+        "median": 0.10856724421895564,
+        "minimum": 0.0,
+        "maximum": 4.234351382962328,
+        "zero_count": 6,
+        "rms_change_from_native": 1.4091463044070485,
+        "values": [
+          0.35551313996510564,
+          1.808153481708193,
+          4.1973612380247936,
+          0.0,
+          0.9073548014570209,
+          0.18525291312004244,
+          0.10870803590820177,
+          4.234351382962328,
+          0.005439501227430174,
+          0.1084264525297095,
+          0.12386159311348675,
+          0.0,
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ]
+      },
+      "training": {
+        "native_mse": 0.17720182142604102,
+        "fitted_mse": 0.09971212411207715,
+        "mse_reduction_fraction": 0.4372962799725275,
+        "per_state_ranking": [
+          {
+            "episode": 0,
+            "native_rho": 0.8798992673992673,
+            "fitted_rho": 0.8689560439560439
+          },
+          {
+            "episode": 2,
+            "native_rho": 0.9418956043956044,
+            "fitted_rho": 0.9222985347985347
+          },
+          {
+            "episode": 3,
+            "native_rho": -0.0787087912087912,
+            "fitted_rho": 0.400091575091575
+          }
+        ],
+        "mean_native_within_state_rho": 0.5810286935286935,
+        "mean_fitted_within_state_rho": 0.7304487179487179
+      },
+      "channels": {
+        "predicted": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.12440671983722093,
+              "median": 0.1193522652846702,
+              "minimum": 0.1007781451475085,
+              "maximum": 0.19966675799230352
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.875593280162779,
+              "median": 0.8806477347153299,
+              "minimum": 0.8003332420076965,
+              "maximum": 0.8992218548524915
+            },
+            "within_state_activation_variation_fraction_in_span": 0.17715928343361853,
+            "native_cost_std": 0.0756809792229877,
+            "span_cost_std": 0.022359132655484254,
+            "complement_cost_std": 0.05664522753606521,
+            "variance_decomposition": {
+              "native": 0.005727610616150296,
+              "span": 0.0004999308131055423,
+              "complement": 0.0032086818026126006,
+              "twice_covariance": 0.0020189980004321545
+            }
+          },
+          "margins": {
+            "native_winner": 0,
+            "native_runner": 2,
+            "native_margin": 0.0016799748828464356,
+            "native_pair_span_margin": -0.00037524602544368457,
+            "native_pair_complement_margin": 0.002055220908290134,
+            "fitted_pair_span_margin": -0.001053820073085502,
+            "native_winner_span_fraction": 0.11089070944637734,
+            "native_runner_span_fraction": 0.10998701379535014,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.6197013844457415,
+                "native_runner_cost": 0.621381359328588,
+                "original_pair_margin": 0.0016799748828464356,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.0016799748828464356,
+                "winner_cost_change": -0.0,
+                "runner_cost_change": -0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 0,
+                "native_winner_cost": 0.6192554140603317,
+                "native_runner_cost": 0.6207657454312676,
+                "original_pair_margin": 0.0015103313709359245,
+                "original_pair_margin_ratio": 0.8990202093836792,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.0015103313709359245,
+                "winner_cost_change": -0.0004459703854098728,
+                "runner_cost_change": -0.0006156138973203288,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.004190842143550033,
+                  "median": 0.0018307049174229161,
+                  "minimum": 3.9495736916012926e-05,
+                  "maximum": 0.021443825990679573
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 0,
+                "native_winner_cost": 0.6188094436749217,
+                "native_runner_cost": 0.6201501315339473,
+                "original_pair_margin": 0.0013406878590255245,
+                "original_pair_margin_ratio": 0.7980404187674246,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.0013406878590255245,
+                "winner_cost_change": -0.0008919407708197456,
+                "runner_cost_change": -0.0012312277946406576,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.008381684287100066,
+                  "median": 0.0036614098348458322,
+                  "minimum": 7.899147383202585e-05,
+                  "maximum": 0.042887651981359146
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.6179175029041021,
+                "native_runner_cost": 0.6189189037393067,
+                "original_pair_margin": 0.0010014008352046133,
+                "original_pair_margin_ratio": 0.5960808375348491,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.0010014008352046133,
+                "winner_cost_change": -0.0017838815416394913,
+                "runner_cost_change": -0.0024624555892813153,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.016763368574200133,
+                  "median": 0.0073228196696916645,
+                  "minimum": 0.0001579829476640517,
+                  "maximum": 0.08577530396271829
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.9053571428571427,
+          "held_fitted_rho": 0.8842032967032966,
+          "held_native_scaled_label_mse": 0.0646798844705192,
+          "held_fitted_scaled_label_mse": 0.06654217866944842
+        },
+        "actual_oracle_encoding": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.129517251946195,
+              "median": 0.11829638216277964,
+              "minimum": 0.10785254702377037,
+              "maximum": 0.2152210052333338
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.870482748053805,
+              "median": 0.8817036178372204,
+              "minimum": 0.7847789947666661,
+              "maximum": 0.8921474529762295
+            },
+            "within_state_activation_variation_fraction_in_span": 0.16704956623794415,
+            "native_cost_std": 0.08002792759339634,
+            "span_cost_std": 0.028907252911039055,
+            "complement_cost_std": 0.058744738187255625,
+            "variance_decomposition": {
+              "native": 0.006404469194893889,
+              "span": 0.0008356292708627758,
+              "complement": 0.003450944264689209,
+              "twice_covariance": 0.002117895659341904
+            }
+          },
+          "margins": {
+            "native_winner": 34,
+            "native_runner": 4,
+            "native_margin": 0.014317216127179067,
+            "native_pair_span_margin": 0.003202566020357997,
+            "native_pair_complement_margin": 0.011114650106821,
+            "fitted_pair_span_margin": -0.0018293102956763614,
+            "native_winner_span_fraction": 0.1113237784099484,
+            "native_runner_span_fraction": 0.11375670254268451,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 34,
+                "native_winner_cost": 0.6469115509858294,
+                "native_runner_cost": 0.6612287671130085,
+                "original_pair_margin": 0.014317216127179067,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 4,
+                "margin_to_strongest_challenger": 0.014317216127179067,
+                "winner_cost_change": 0.0,
+                "runner_cost_change": -0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 34,
+                "native_winner_cost": 0.6475228797839728,
+                "native_runner_cost": 0.6605821268321433,
+                "original_pair_margin": 0.01305924704817052,
+                "original_pair_margin_ratio": 0.9121359161003036,
+                "strongest_challenger_index": 4,
+                "margin_to_strongest_challenger": 0.01305924704817052,
+                "winner_cost_change": 0.0006113287981434211,
+                "runner_cost_change": -0.0006466402808651679,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.005198525912272437,
+                  "median": 0.003689338235915993,
+                  "minimum": 0.00011677933200955912,
+                  "maximum": 0.025229846439429906
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 34,
+                "native_winner_cost": 0.6481342085821162,
+                "native_runner_cost": 0.6599354865512782,
+                "original_pair_margin": 0.011801277969161972,
+                "original_pair_margin_ratio": 0.8242718322006073,
+                "strongest_challenger_index": 4,
+                "margin_to_strongest_challenger": 0.011801277969161972,
+                "winner_cost_change": 0.0012226575962868422,
+                "runner_cost_change": -0.0012932805617303358,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.010397051824544874,
+                  "median": 0.007378676471831986,
+                  "minimum": 0.00023355866401911823,
+                  "maximum": 0.05045969287885981
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 34,
+                "native_winner_cost": 0.6493568661784032,
+                "native_runner_cost": 0.6586422059895478,
+                "original_pair_margin": 0.009285339811144655,
+                "original_pair_margin_ratio": 0.648543664401199,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.007183449119007368,
+                "winner_cost_change": 0.0024453151925736844,
+                "runner_cost_change": -0.0025865611234606716,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.02079410364908975,
+                  "median": 0.014757352943663971,
+                  "minimum": 0.00046711732803823646,
+                  "maximum": 0.10091938575771962
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.8472069597069597,
+          "held_fitted_rho": 0.8734890109890109,
+          "held_native_scaled_label_mse": 0.08657827520485109,
+          "held_fitted_scaled_label_mse": 0.0851553753202406
+        }
+      }
+    },
+    {
+      "held_state": 1,
+      "label": "one_minus_requested_goal_coverage",
+      "weights": {
+        "mean": 0.8998903784761206,
+        "median": 0.9897917263755691,
+        "minimum": 0.2087873054021946,
+        "maximum": 2.005213998810651,
+        "zero_count": 0,
+        "rms_change_from_native": 0.46688904735225667,
+        "values": [
+          0.7746304561207963,
+          1.0192501827957576,
+          1.3101433411707886,
+          1.1688009097915706,
+          0.24656060735408405,
+          0.9193969584916314,
+          1.1653122459296588,
+          2.005213998810651,
+          0.34578391024952343,
+          0.23657899351788272,
+          1.0854756637695322,
+          0.2087873054021946,
+          0.8052496774291092,
+          0.9628695116720071,
+          1.0167139410791313,
+          1.12747835203361
+        ]
+      },
+      "training": {
+        "native_mse": 0.025192281871779115,
+        "fitted_mse": 0.018723451697688406,
+        "mse_reduction_fraction": 0.25677825482483263,
+        "per_state_ranking": [
+          {
+            "episode": 0,
+            "native_rho": 0.88489010989011,
+            "fitted_rho": 0.8863095238095237
+          },
+          {
+            "episode": 2,
+            "native_rho": 0.9343406593406592,
+            "fitted_rho": 0.9463827838827839
+          },
+          {
+            "episode": 3,
+            "native_rho": 0.0738095238095238,
+            "fitted_rho": -0.07390109890109889
+          }
+        ],
+        "mean_native_within_state_rho": 0.631013431013431,
+        "mean_fitted_within_state_rho": 0.5862637362637362
+      },
+      "channels": {
+        "predicted": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.12440671983722093,
+              "median": 0.1193522652846702,
+              "minimum": 0.1007781451475085,
+              "maximum": 0.19966675799230352
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.875593280162779,
+              "median": 0.8806477347153299,
+              "minimum": 0.8003332420076965,
+              "maximum": 0.8992218548524915
+            },
+            "within_state_activation_variation_fraction_in_span": 0.17715928343361853,
+            "native_cost_std": 0.0756809792229877,
+            "span_cost_std": 0.022359132655484254,
+            "complement_cost_std": 0.05664522753606521,
+            "variance_decomposition": {
+              "native": 0.005727610616150296,
+              "span": 0.0004999308131055423,
+              "complement": 0.0032086818026126006,
+              "twice_covariance": 0.0020189980004321545
+            }
+          },
+          "margins": {
+            "native_winner": 0,
+            "native_runner": 2,
+            "native_margin": 0.0016799748828464356,
+            "native_pair_span_margin": -0.00037524602544368457,
+            "native_pair_complement_margin": 0.002055220908290134,
+            "fitted_pair_span_margin": 0.0004991224403474837,
+            "native_winner_span_fraction": 0.11089070944637734,
+            "native_runner_span_fraction": 0.10998701379535014,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.6197013844457415,
+                "native_runner_cost": 0.621381359328588,
+                "original_pair_margin": 0.0016799748828464356,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.0016799748828464356,
+                "winner_cost_change": -0.0,
+                "runner_cost_change": -0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 0,
+                "native_winner_cost": 0.6192747838947237,
+                "native_runner_cost": 0.6211733508940179,
+                "original_pair_margin": 0.0018985669992942489,
+                "original_pair_margin_ratio": 1.1301163003564945,
+                "strongest_challenger_index": 2,
+                "margin_to_strongest_challenger": 0.0018985669992942489,
+                "winner_cost_change": -0.0004266005510178371,
+                "runner_cost_change": -0.0002080084345700479,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0020043929520229707,
+                  "median": 0.0015522691683472851,
+                  "minimum": 0.00011383521588990965,
+                  "maximum": 0.00598624537955837
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 0,
+                "native_winner_cost": 0.6188481833437058,
+                "native_runner_cost": 0.6209653424594479,
+                "original_pair_margin": 0.002117159115742062,
+                "original_pair_margin_ratio": 1.2602326007129887,
+                "strongest_challenger_index": 6,
+                "margin_to_strongest_challenger": 0.0019512818726937775,
+                "winner_cost_change": -0.0008532011020356742,
+                "runner_cost_change": -0.0004160168691400958,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.004008785904045941,
+                  "median": 0.0031045383366945702,
+                  "minimum": 0.0002276704317798193,
+                  "maximum": 0.01197249075911674
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.6179949822416702,
+                "native_runner_cost": 0.6205493255903077,
+                "original_pair_margin": 0.0025543433486375777,
+                "original_pair_margin_ratio": 1.5204652014259115,
+                "strongest_challenger_index": 6,
+                "margin_to_strongest_challenger": 0.0016603189665398421,
+                "winner_cost_change": -0.0017064022040713485,
+                "runner_cost_change": -0.0008320337382801916,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.008017571808091883,
+                  "median": 0.0062090766733891405,
+                  "minimum": 0.0004553408635596386,
+                  "maximum": 0.02394498151823348
+                }
+              }
+            ]
+          },
+          "held_native_rho": -0.23959330898779127,
+          "held_fitted_rho": -0.22324259649297462,
+          "held_native_scaled_label_mse": 0.005915071212507122,
+          "held_fitted_scaled_label_mse": 0.006003473257494995
+        },
+        "actual_oracle_encoding": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.129517251946195,
+              "median": 0.11829638216277964,
+              "minimum": 0.10785254702377037,
+              "maximum": 0.2152210052333338
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.870482748053805,
+              "median": 0.8817036178372204,
+              "minimum": 0.7847789947666661,
+              "maximum": 0.8921474529762295
+            },
+            "within_state_activation_variation_fraction_in_span": 0.16704956623794415,
+            "native_cost_std": 0.08002792759339634,
+            "span_cost_std": 0.028907252911039055,
+            "complement_cost_std": 0.058744738187255625,
+            "variance_decomposition": {
+              "native": 0.006404469194893889,
+              "span": 0.0008356292708627758,
+              "complement": 0.003450944264689209,
+              "twice_covariance": 0.002117895659341904
+            }
+          },
+          "margins": {
+            "native_winner": 34,
+            "native_runner": 4,
+            "native_margin": 0.014317216127179067,
+            "native_pair_span_margin": 0.003202566020357997,
+            "native_pair_complement_margin": 0.011114650106821,
+            "fitted_pair_span_margin": 0.003963840982676594,
+            "native_winner_span_fraction": 0.1113237784099484,
+            "native_runner_span_fraction": 0.11375670254268451,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 34,
+                "native_winner_cost": 0.6469115509858294,
+                "native_runner_cost": 0.6612287671130085,
+                "original_pair_margin": 0.014317216127179067,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 4,
+                "margin_to_strongest_challenger": 0.014317216127179067,
+                "winner_cost_change": -0.0,
+                "runner_cost_change": -0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 34,
+                "native_winner_cost": 0.6464091311522423,
+                "native_runner_cost": 0.660916666020001,
+                "original_pair_margin": 0.014507534867758687,
+                "original_pair_margin_ratio": 1.0132929990641357,
+                "strongest_challenger_index": 4,
+                "margin_to_strongest_challenger": 0.014507534867758687,
+                "winner_cost_change": -0.0005024198335871072,
+                "runner_cost_change": -0.00031210109300745673,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.002116573084371906,
+                  "median": 0.001618339194983343,
+                  "minimum": 1.6428524241051556e-05,
+                  "maximum": 0.006213855243442768
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 34,
+                "native_winner_cost": 0.6459067113186552,
+                "native_runner_cost": 0.6606045649269936,
+                "original_pair_margin": 0.014697853608338418,
+                "original_pair_margin_ratio": 1.0265859981282792,
+                "strongest_challenger_index": 4,
+                "margin_to_strongest_challenger": 0.014697853608338418,
+                "winner_cost_change": -0.0010048396671742143,
+                "runner_cost_change": -0.0006242021860149135,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.004233146168743812,
+                  "median": 0.003236678389966686,
+                  "minimum": 3.285704848210311e-05,
+                  "maximum": 0.012427710486885535
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 34,
+                "native_winner_cost": 0.6449018716514809,
+                "native_runner_cost": 0.6599803627409787,
+                "original_pair_margin": 0.01507849108949777,
+                "original_pair_margin_ratio": 1.0531719962565584,
+                "strongest_challenger_index": 58,
+                "margin_to_strongest_challenger": 0.014242382660007769,
+                "winner_cost_change": -0.0020096793343484286,
+                "runner_cost_change": -0.001248404372029827,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.008466292337487623,
+                  "median": 0.006473356779933372,
+                  "minimum": 6.571409696420622e-05,
+                  "maximum": 0.02485542097377107
+                }
+              }
+            ]
+          },
+          "held_native_rho": -0.16116200283735607,
+          "held_fitted_rho": -0.14624442052136796,
+          "held_native_scaled_label_mse": 0.008533073521786515,
+          "held_fitted_scaled_label_mse": 0.008889581331554187
+        }
+      }
+    },
+    {
+      "held_state": 2,
+      "label": "joint_xy_squared_proxy",
+      "weights": {
+        "mean": 1.1047467685927028,
+        "median": 0.8660041104359999,
+        "minimum": 0.2648970827410415,
+        "maximum": 3.719171739904916,
+        "zero_count": 0,
+        "rms_change_from_native": 0.8498325433132332,
+        "values": [
+          0.5481251720776074,
+          0.5273454012013382,
+          3.719171739904916,
+          2.0334915501452366,
+          0.8026398789916326,
+          0.5271592901749989,
+          2.0107374923213994,
+          0.9293683418803672,
+          0.6555109782030333,
+          1.020433717512642,
+          0.2648970827410415,
+          0.6546327018095812,
+          0.9931982880538632,
+          0.42075334332654074,
+          1.0596982220638926,
+          1.508785097075152
+        ]
+      },
+      "training": {
+        "native_mse": 0.17657945945447484,
+        "fitted_mse": 0.07441122351722673,
+        "mse_reduction_fraction": 0.578596379515981,
+        "per_state_ranking": [
+          {
+            "episode": 0,
+            "native_rho": 0.8798992673992673,
+            "fitted_rho": 0.8901098901098901
+          },
+          {
+            "episode": 1,
+            "native_rho": 0.8472069597069597,
+            "fitted_rho": 0.815018315018315
+          },
+          {
+            "episode": 3,
+            "native_rho": -0.0787087912087912,
+            "fitted_rho": 0.5073717948717948
+          }
+        ],
+        "mean_native_within_state_rho": 0.5494658119658119,
+        "mean_fitted_within_state_rho": 0.7374999999999999
+      },
+      "channels": {
+        "predicted": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.16165761106740179,
+              "median": 0.1575090954025955,
+              "minimum": 0.05604830100439199,
+              "maximum": 0.4899362551844642
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8383423889325982,
+              "median": 0.8424909045974045,
+              "minimum": 0.5100637448155358,
+              "maximum": 0.943951698995608
+            },
+            "within_state_activation_variation_fraction_in_span": 0.21886026124146227,
+            "native_cost_std": 0.30102042972481174,
+            "span_cost_std": 0.09903435783995128,
+            "complement_cost_std": 0.21476050030962573,
+            "variance_decomposition": {
+              "native": 0.09061329911171032,
+              "span": 0.009807804032771518,
+              "complement": 0.046122072493240754,
+              "twice_covariance": 0.034683422585698044
+            }
+          },
+          "margins": {
+            "native_winner": 0,
+            "native_runner": 3,
+            "native_margin": 0.0008456519622868641,
+            "native_pair_span_margin": 0.00037986831766616876,
+            "native_pair_complement_margin": 0.00046578364462068755,
+            "fitted_pair_span_margin": 0.000505707669221216,
+            "native_winner_span_fraction": 0.05773424667493825,
+            "native_runner_span_fraction": 0.06139359487793354,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.08961997751877267,
+                "native_runner_cost": 0.09046562948105953,
+                "original_pair_margin": 0.0008456519622868641,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.0008456519622868641,
+                "winner_cost_change": 0.0,
+                "runner_cost_change": 0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 0,
+                "native_winner_cost": 0.0897926795285696,
+                "native_runner_cost": 0.09066979132874524,
+                "original_pair_margin": 0.000877111800175634,
+                "original_pair_margin_ratio": 1.0372018741654596,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.000877111800175634,
+                "winner_cost_change": 0.00017270200979694066,
+                "runner_cost_change": 0.00020416184768570227,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.01009715084625789,
+                  "median": 0.00545539297155535,
+                  "minimum": 0.00011007273843347675,
+                  "maximum": 0.09329304999890282
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 0,
+                "native_winner_cost": 0.08996538153836654,
+                "native_runner_cost": 0.09087395317643093,
+                "original_pair_margin": 0.0009085716380643899,
+                "original_pair_margin_ratio": 1.0744037483309026,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.0009085716380643899,
+                "winner_cost_change": 0.0003454040195938813,
+                "runner_cost_change": 0.00040832369537140454,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.02019430169251578,
+                  "median": 0.0109107859431107,
+                  "minimum": 0.0002201454768669535,
+                  "maximum": 0.18658609999780565
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.09031078555796043,
+                "native_runner_cost": 0.09128227687180233,
+                "original_pair_margin": 0.0009714913138419018,
+                "original_pair_margin_ratio": 1.1488074966617887,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.0009714913138419018,
+                "winner_cost_change": 0.0006908080391877626,
+                "runner_cost_change": 0.0008166473907428091,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.04038860338503156,
+                  "median": 0.0218215718862214,
+                  "minimum": 0.000440290953733907,
+                  "maximum": 0.3731721999956113
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.9413919413919412,
+          "held_fitted_rho": 0.935576923076923,
+          "held_native_scaled_label_mse": 0.13341384456319694,
+          "held_fitted_scaled_label_mse": 0.1424600647858779
+        },
+        "actual_oracle_encoding": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.1652650797625037,
+              "median": 0.1608177686113478,
+              "minimum": 0.0505332081792815,
+              "maximum": 0.3286943951742701
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8347349202374963,
+              "median": 0.8391822313886521,
+              "minimum": 0.6713056048257299,
+              "maximum": 0.9494667918207185
+            },
+            "within_state_activation_variation_fraction_in_span": 0.19333475172340042,
+            "native_cost_std": 0.31633275642085107,
+            "span_cost_std": 0.08068824825534665,
+            "complement_cost_std": 0.24125714380259716,
+            "variance_decomposition": {
+              "native": 0.10006641278481349,
+              "span": 0.006510593406516451,
+              "complement": 0.05820500943578705,
+              "twice_covariance": 0.03535080994250999
+            }
+          },
+          "margins": {
+            "native_winner": 51,
+            "native_runner": 3,
+            "native_margin": 0.01993572319839014,
+            "native_pair_span_margin": 0.008200816188635988,
+            "native_pair_complement_margin": 0.011734907009754145,
+            "fitted_pair_span_margin": 0.005865779877186753,
+            "native_winner_span_fraction": 0.07796422236645686,
+            "native_runner_span_fraction": 0.16143218562080314,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 51,
+                "native_winner_cost": 0.05969414643083522,
+                "native_runner_cost": 0.07962986962922536,
+                "original_pair_margin": 0.01993572319839014,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.01993572319839014,
+                "winner_cost_change": -0.0,
+                "runner_cost_change": -0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 51,
+                "native_winner_cost": 0.05966651727955707,
+                "native_runner_cost": 0.0790184814000849,
+                "original_pair_margin": 0.01935196412052783,
+                "original_pair_margin_ratio": 0.970717938243171,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.01935196412052783,
+                "winner_cost_change": -2.762915127815293e-05,
+                "runner_cost_change": -0.000611388229140462,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.009032670748987216,
+                  "median": 0.006328432302866681,
+                  "minimum": 0.00046284523575800717,
+                  "maximum": 0.06818958266035384
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 51,
+                "native_winner_cost": 0.05963888812827891,
+                "native_runner_cost": 0.07840709317094444,
+                "original_pair_margin": 0.018768205042665527,
+                "original_pair_margin_ratio": 0.9414358764863422,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.018768205042665527,
+                "winner_cost_change": -5.525830255630586e-05,
+                "runner_cost_change": -0.001222776458280924,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.01806534149797443,
+                  "median": 0.012656864605733361,
+                  "minimum": 0.0009256904715160143,
+                  "maximum": 0.13637916532070768
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 51,
+                "native_winner_cost": 0.05958362982572261,
+                "native_runner_cost": 0.07718431671266351,
+                "original_pair_margin": 0.017600686886940907,
+                "original_pair_margin_ratio": 0.882871752972684,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.017600686886940907,
+                "winner_cost_change": -0.00011051660511261172,
+                "runner_cost_change": -0.002445552916561848,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.03613068299594886,
+                  "median": 0.025313729211466723,
+                  "minimum": 0.0018513809430320287,
+                  "maximum": 0.27275833064141536
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.9418956043956044,
+          "held_fitted_rho": 0.9419871794871794,
+          "held_native_scaled_label_mse": 0.13389225758882348,
+          "held_fitted_scaled_label_mse": 0.13622468247618114
+        }
+      }
+    },
+    {
+      "held_state": 2,
+      "label": "one_minus_requested_goal_coverage",
+      "weights": {
+        "mean": 0.9559822227488319,
+        "median": 0.9911455346003777,
+        "minimum": 0.49361550667056125,
+        "maximum": 1.643248788479861,
+        "zero_count": 0,
+        "rms_change_from_native": 0.3234174149200135,
+        "values": [
+          0.9617827905188582,
+          0.750444010061355,
+          1.2852245912245106,
+          1.643248788479861,
+          1.2239460796204005,
+          0.5117712301889837,
+          1.1676257831362526,
+          1.1323972185541247,
+          0.49361550667056125,
+          0.4992862941182988,
+          0.6913952299622437,
+          0.7457995093819605,
+          1.0326785672944208,
+          0.8412314791323726,
+          1.020508278681897,
+          1.29476020695521
+        ]
+      },
+      "training": {
+        "native_mse": 0.020888238258217617,
+        "fitted_mse": 0.014644289777653516,
+        "mse_reduction_fraction": 0.29892173784008214,
+        "per_state_ranking": [
+          {
+            "episode": 0,
+            "native_rho": 0.88489010989011,
+            "fitted_rho": 0.8966575091575091
+          },
+          {
+            "episode": 1,
+            "native_rho": -0.16116200283735607,
+            "fitted_rho": -0.28056780364611666
+          },
+          {
+            "episode": 3,
+            "native_rho": 0.0738095238095238,
+            "fitted_rho": -0.055906593406593395
+          }
+        ],
+        "mean_native_within_state_rho": 0.26584587695409256,
+        "mean_fitted_within_state_rho": 0.186727704034933
+      },
+      "channels": {
+        "predicted": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.16165761106740179,
+              "median": 0.1575090954025955,
+              "minimum": 0.05604830100439199,
+              "maximum": 0.4899362551844642
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8383423889325982,
+              "median": 0.8424909045974045,
+              "minimum": 0.5100637448155358,
+              "maximum": 0.943951698995608
+            },
+            "within_state_activation_variation_fraction_in_span": 0.21886026124146227,
+            "native_cost_std": 0.30102042972481174,
+            "span_cost_std": 0.09903435783995128,
+            "complement_cost_std": 0.21476050030962573,
+            "variance_decomposition": {
+              "native": 0.09061329911171032,
+              "span": 0.009807804032771518,
+              "complement": 0.046122072493240754,
+              "twice_covariance": 0.034683422585698044
+            }
+          },
+          "margins": {
+            "native_winner": 0,
+            "native_runner": 3,
+            "native_margin": 0.0008456519622868641,
+            "native_pair_span_margin": 0.00037986831766616876,
+            "native_pair_complement_margin": 0.00046578364462068755,
+            "fitted_pair_span_margin": 0.0006011405981486751,
+            "native_winner_span_fraction": 0.05773424667493825,
+            "native_runner_span_fraction": 0.06139359487793354,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.08961997751877267,
+                "native_runner_cost": 0.09046562948105953,
+                "original_pair_margin": 0.0008456519622868641,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.0008456519622868641,
+                "winner_cost_change": 0.0,
+                "runner_cost_change": 0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 0,
+                "native_winner_cost": 0.08965239978650488,
+                "native_runner_cost": 0.09055336981891238,
+                "original_pair_margin": 0.0009009700324074943,
+                "original_pair_margin_ratio": 1.0654147008315757,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.0009009700324074943,
+                "winner_cost_change": 3.242226773221515e-05,
+                "runner_cost_change": 8.774033785284148e-05,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0052386697910218405,
+                  "median": 0.0037501499351751772,
+                  "minimum": 0.00011284698462335913,
+                  "maximum": 0.023753511419073822
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 0,
+                "native_winner_cost": 0.0896848220542371,
+                "native_runner_cost": 0.09064111015676521,
+                "original_pair_margin": 0.0009562881025281106,
+                "original_pair_margin_ratio": 1.130829401663135,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.0009562881025281106,
+                "winner_cost_change": 6.48445354644303e-05,
+                "runner_cost_change": 0.00017548067570568297,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.010477339582043681,
+                  "median": 0.0075002998703503545,
+                  "minimum": 0.00022569396924671827,
+                  "maximum": 0.047507022838147644
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 0,
+                "native_winner_cost": 0.08974966658970153,
+                "native_runner_cost": 0.0908165908324709,
+                "original_pair_margin": 0.001066924242769371,
+                "original_pair_margin_ratio": 1.2616588033262865,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.001066924242769371,
+                "winner_cost_change": 0.0001296890709288606,
+                "runner_cost_change": 0.00035096135141136594,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.020954679164087362,
+                  "median": 0.015000599740700709,
+                  "minimum": 0.00045138793849343654,
+                  "maximum": 0.09501404567629529
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.7804029304029303,
+          "held_fitted_rho": 0.7663919413919412,
+          "held_native_scaled_label_mse": 0.035836041024315785,
+          "held_fitted_scaled_label_mse": 0.03873649075986826
+        },
+        "actual_oracle_encoding": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.1652650797625037,
+              "median": 0.1608177686113478,
+              "minimum": 0.0505332081792815,
+              "maximum": 0.3286943951742701
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8347349202374963,
+              "median": 0.8391822313886521,
+              "minimum": 0.6713056048257299,
+              "maximum": 0.9494667918207185
+            },
+            "within_state_activation_variation_fraction_in_span": 0.19333475172340042,
+            "native_cost_std": 0.31633275642085107,
+            "span_cost_std": 0.08068824825534665,
+            "complement_cost_std": 0.24125714380259716,
+            "variance_decomposition": {
+              "native": 0.10006641278481349,
+              "span": 0.006510593406516451,
+              "complement": 0.05820500943578705,
+              "twice_covariance": 0.03535080994250999
+            }
+          },
+          "margins": {
+            "native_winner": 51,
+            "native_runner": 3,
+            "native_margin": 0.01993572319839014,
+            "native_pair_span_margin": 0.008200816188635988,
+            "native_pair_complement_margin": 0.011734907009754145,
+            "fitted_pair_span_margin": 0.006875439861212351,
+            "native_winner_span_fraction": 0.07796422236645686,
+            "native_runner_span_fraction": 0.16143218562080314,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 51,
+                "native_winner_cost": 0.05969414643083522,
+                "native_runner_cost": 0.07962986962922536,
+                "original_pair_margin": 0.01993572319839014,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.01993572319839014,
+                "winner_cost_change": -0.0,
+                "runner_cost_change": -0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 51,
+                "native_winner_cost": 0.05960308419097624,
+                "native_runner_cost": 0.07920746330751048,
+                "original_pair_margin": 0.01960437911653424,
+                "original_pair_margin_ratio": 0.9833793798921396,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.01960437911653424,
+                "winner_cost_change": -9.106223985897249e-05,
+                "runner_cost_change": -0.0004224063217148818,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.004842175504204252,
+                  "median": 0.004108711693397228,
+                  "minimum": 0.0001339159420481475,
+                  "maximum": 0.018098022802951703
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 51,
+                "native_winner_cost": 0.059512021951117273,
+                "native_runner_cost": 0.07878505698579559,
+                "original_pair_margin": 0.019273035034678317,
+                "original_pair_margin_ratio": 0.9667587597842783,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.019273035034678317,
+                "winner_cost_change": -0.00018212447971794498,
+                "runner_cost_change": -0.0008448126434297636,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.009684351008408504,
+                  "median": 0.008217423386794456,
+                  "minimum": 0.000267831884096295,
+                  "maximum": 0.03619604560590341
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 51,
+                "native_winner_cost": 0.05932989747139933,
+                "native_runner_cost": 0.07794024434236584,
+                "original_pair_margin": 0.018610346870966507,
+                "original_pair_margin_ratio": 0.9335175195685572,
+                "strongest_challenger_index": 3,
+                "margin_to_strongest_challenger": 0.018610346870966507,
+                "winner_cost_change": -0.00036424895943588996,
+                "runner_cost_change": -0.0016896252868595272,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.019368702016817008,
+                  "median": 0.01643484677358891,
+                  "minimum": 0.00053566376819259,
+                  "maximum": 0.07239209121180681
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.9343406593406592,
+          "held_fitted_rho": 0.934065934065934,
+          "held_native_scaled_label_mse": 0.021314321848990785,
+          "held_fitted_scaled_label_mse": 0.02288071623890684
+        }
+      }
+    },
+    {
+      "held_state": 3,
+      "label": "joint_xy_squared_proxy",
+      "weights": {
+        "mean": 1.2006055774156237,
+        "median": 0.9209606738456741,
+        "minimum": 0.0,
+        "maximum": 4.409204342767397,
+        "zero_count": 1,
+        "rms_change_from_native": 1.0837099082261843,
+        "values": [
+          1.0876825530966368,
+          0.0,
+          1.1013959310392798,
+          4.409204342767397,
+          1.4511974690593947,
+          2.5008427082488276,
+          0.9269028032845168,
+          2.259280319739962,
+          0.4212563548173217,
+          0.39768968035430935,
+          0.9150185444068314,
+          0.2305656891427546,
+          0.6279756124024348,
+          1.6249040943475601,
+          0.6196435932244038,
+          0.6361295427183482
+        ]
+      },
+      "training": {
+        "native_mse": 0.19871012201513025,
+        "fitted_mse": 0.09277561909617722,
+        "mse_reduction_fraction": 0.5331107537183583,
+        "per_state_ranking": [
+          {
+            "episode": 0,
+            "native_rho": 0.8798992673992673,
+            "fitted_rho": 0.9149725274725273
+          },
+          {
+            "episode": 1,
+            "native_rho": 0.8472069597069597,
+            "fitted_rho": 0.8656593406593405
+          },
+          {
+            "episode": 2,
+            "native_rho": 0.9418956043956044,
+            "fitted_rho": 0.9233516483516483
+          }
+        ],
+        "mean_native_within_state_rho": 0.8896672771672772,
+        "mean_fitted_within_state_rho": 0.9013278388278386
+      },
+      "channels": {
+        "predicted": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.1107784207352949,
+              "median": 0.11641576130545701,
+              "minimum": 0.04022435172566428,
+              "maximum": 0.20287480227412263
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8892215792647051,
+              "median": 0.883584238694543,
+              "minimum": 0.7971251977258773,
+              "maximum": 0.9597756482743358
+            },
+            "within_state_activation_variation_fraction_in_span": 0.2179209097158239,
+            "native_cost_std": 0.0997712523487505,
+            "span_cost_std": 0.030192263276681744,
+            "complement_cost_std": 0.07289922603306867,
+            "variance_decomposition": {
+              "native": 0.009954302795238054,
+              "span": 0.000911572761768465,
+              "complement": 0.005314297156220437,
+              "twice_covariance": 0.0037284328772491542
+            }
+          },
+          "margins": {
+            "native_winner": 1,
+            "native_runner": 5,
+            "native_margin": 0.001024382448368888,
+            "native_pair_span_margin": -0.0022217509190719954,
+            "native_pair_complement_margin": 0.0032461333674408954,
+            "fitted_pair_span_margin": -0.0032303579247608223,
+            "native_winner_span_fraction": 0.049602463037593775,
+            "native_runner_span_fraction": 0.042276881381007214,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 1,
+                "native_winner_cost": 0.30919846648544513,
+                "native_runner_cost": 0.310222848933814,
+                "original_pair_margin": 0.001024382448368888,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.001024382448368888,
+                "winner_cost_change": 0.0,
+                "runner_cost_change": 0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 1,
+                "native_winner_cost": 0.31023590655199423,
+                "native_runner_cost": 0.31100813724894094,
+                "original_pair_margin": 0.0007722306969467074,
+                "original_pair_margin_ratio": 0.7538499885236429,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.0007722306969467074,
+                "winner_cost_change": 0.0010374400665491184,
+                "runner_cost_change": 0.0007852883151269116,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.006692829465876076,
+                  "median": 0.0036229468931424516,
+                  "minimum": 0.00028870578734077943,
+                  "maximum": 0.06707191560017793
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 1,
+                "native_winner_cost": 0.3112733466185434,
+                "native_runner_cost": 0.31179342556406786,
+                "original_pair_margin": 0.0005200789455244714,
+                "original_pair_margin_ratio": 0.5076999770472317,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.0005200789455244714,
+                "winner_cost_change": 0.0020748801330982367,
+                "runner_cost_change": 0.0015705766302538233,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.013385658931752153,
+                  "median": 0.007245893786284903,
+                  "minimum": 0.0005774115746815589,
+                  "maximum": 0.13414383120035586
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 1,
+                "native_winner_cost": 0.3133482267516416,
+                "native_runner_cost": 0.31336400219432164,
+                "original_pair_margin": 1.577544268005493e-05,
+                "original_pair_margin_ratio": 0.01539995409446343,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 1.577544268005493e-05,
+                "winner_cost_change": 0.0041497602661964735,
+                "runner_cost_change": 0.0031411532605076465,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.026771317863504306,
+                  "median": 0.014491787572569807,
+                  "minimum": 0.0011548231493631177,
+                  "maximum": 0.2682876624007117
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.33081501831501825,
+          "held_fitted_rho": 0.2934523809523809,
+          "held_native_scaled_label_mse": 2.420649195595648,
+          "held_fitted_scaled_label_mse": 2.3963416597959517
+        },
+        "actual_oracle_encoding": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.18280418008463112,
+              "median": 0.14719942988494072,
+              "minimum": 0.04579250818580728,
+              "maximum": 0.37370907883393295
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8171958199153688,
+              "median": 0.8528005701150592,
+              "minimum": 0.626290921166067,
+              "maximum": 0.9542074918141927
+            },
+            "within_state_activation_variation_fraction_in_span": 0.24574772186613358,
+            "native_cost_std": 0.1443519635579948,
+            "span_cost_std": 0.08946052328382893,
+            "complement_cost_std": 0.08300054912757811,
+            "variance_decomposition": {
+              "native": 0.02083748938304866,
+              "span": 0.008003185226216498,
+              "complement": 0.006889091155479507,
+              "twice_covariance": 0.005945213001352656
+            }
+          },
+          "margins": {
+            "native_winner": 15,
+            "native_runner": 14,
+            "native_margin": 0.0004685932535258841,
+            "native_pair_span_margin": 0.007686029148125842,
+            "native_pair_complement_margin": -0.007217435894599944,
+            "fitted_pair_span_margin": 0.023445783686429418,
+            "native_winner_span_fraction": 0.07675380215117372,
+            "native_runner_span_fraction": 0.09722957078443688,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 15,
+                "native_winner_cost": 0.37314682364602403,
+                "native_runner_cost": 0.3736154168995499,
+                "original_pair_margin": 0.0004685932535258841,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 14,
+                "margin_to_strongest_challenger": 0.0004685932535258841,
+                "winner_cost_change": 0.0,
+                "runner_cost_change": 0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 15,
+                "native_winner_cost": 0.3740081282900196,
+                "native_runner_cost": 0.3784166601781214,
+                "original_pair_margin": 0.004408531888101808,
+                "original_pair_margin_ratio": 9.408013997065131,
+                "strongest_challenger_index": 54,
+                "margin_to_strongest_challenger": 0.003888323586553666,
+                "winner_cost_change": 0.0008613046439956086,
+                "runner_cost_change": 0.004801243278571505,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.007307166343255289,
+                  "median": 0.0057959699607407975,
+                  "minimum": 0.0002564646248841952,
+                  "maximum": 0.022143668117311676
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 15,
+                "native_winner_cost": 0.37486943293401526,
+                "native_runner_cost": 0.38321790345669293,
+                "original_pair_margin": 0.008348470522677676,
+                "original_pair_margin_ratio": 17.816027994130145,
+                "strongest_challenger_index": 54,
+                "margin_to_strongest_challenger": 0.003363441138821366,
+                "winner_cost_change": 0.0017226092879912172,
+                "runner_cost_change": 0.00960248655714301,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.014614332686510578,
+                  "median": 0.011591939921481595,
+                  "minimum": 0.0005129292497683904,
+                  "maximum": 0.04428733623462335
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 15,
+                "native_winner_cost": 0.3765920422220065,
+                "native_runner_cost": 0.39282039001383595,
+                "original_pair_margin": 0.016228347791829467,
+                "original_pair_margin_ratio": 34.63205598826029,
+                "strongest_challenger_index": 54,
+                "margin_to_strongest_challenger": 0.002313676243356766,
+                "winner_cost_change": 0.0034452185759824344,
+                "runner_cost_change": 0.01920497311428602,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.029228665373021157,
+                  "median": 0.02318387984296319,
+                  "minimum": 0.0010258584995367808,
+                  "maximum": 0.0885746724692467
+                }
+              }
+            ]
+          },
+          "held_native_rho": -0.0787087912087912,
+          "held_fitted_rho": -0.12637362637362637,
+          "held_native_scaled_label_mse": 2.0503957698140622,
+          "held_fitted_scaled_label_mse": 2.050184020204596
+        }
+      }
+    },
+    {
+      "held_state": 3,
+      "label": "one_minus_requested_goal_coverage",
+      "weights": {
+        "mean": 0.9271896814805785,
+        "median": 0.9406169955467316,
+        "minimum": 0.4609517826730392,
+        "maximum": 1.467420835000453,
+        "zero_count": 0,
+        "rms_change_from_native": 0.24990536795005674,
+        "values": [
+          1.0484248612245455,
+          0.64993284025211,
+          1.467420835000453,
+          0.4609517826730392,
+          0.9119088258453537,
+          1.088610388842572,
+          0.7525922575651091,
+          0.7375926213160806,
+          0.6815842610657236,
+          1.1484720364128949,
+          1.1068845691819889,
+          1.0673519159223142,
+          0.9259342656356585,
+          0.7448071583577403,
+          0.9552997254578047,
+          1.0872665589358672
+        ]
+      },
+      "training": {
+        "native_mse": 0.015927163690835803,
+        "fitted_mse": 0.010296481837665242,
+        "mse_reduction_fraction": 0.353526965784269,
+        "per_state_ranking": [
+          {
+            "episode": 0,
+            "native_rho": 0.88489010989011,
+            "fitted_rho": 0.9044413919413918
+          },
+          {
+            "episode": 1,
+            "native_rho": -0.16116200283735607,
+            "fitted_rho": -0.09940712058601671
+          },
+          {
+            "episode": 2,
+            "native_rho": 0.9343406593406592,
+            "fitted_rho": 0.9422619047619046
+          }
+        ],
+        "mean_native_within_state_rho": 0.5526895887978044,
+        "mean_fitted_within_state_rho": 0.58243205870576
+      },
+      "channels": {
+        "predicted": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.1107784207352949,
+              "median": 0.11641576130545701,
+              "minimum": 0.04022435172566428,
+              "maximum": 0.20287480227412263
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8892215792647051,
+              "median": 0.883584238694543,
+              "minimum": 0.7971251977258773,
+              "maximum": 0.9597756482743358
+            },
+            "within_state_activation_variation_fraction_in_span": 0.2179209097158239,
+            "native_cost_std": 0.0997712523487505,
+            "span_cost_std": 0.030192263276681744,
+            "complement_cost_std": 0.07289922603306867,
+            "variance_decomposition": {
+              "native": 0.009954302795238054,
+              "span": 0.000911572761768465,
+              "complement": 0.005314297156220437,
+              "twice_covariance": 0.0037284328772491542
+            }
+          },
+          "margins": {
+            "native_winner": 1,
+            "native_runner": 5,
+            "native_margin": 0.001024382448368888,
+            "native_pair_span_margin": -0.0022217509190719954,
+            "native_pair_complement_margin": 0.0032461333674408954,
+            "fitted_pair_span_margin": -0.0029625584935344287,
+            "native_winner_span_fraction": 0.049602463037593775,
+            "native_runner_span_fraction": 0.042276881381007214,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 1,
+                "native_winner_cost": 0.30919846648544513,
+                "native_runner_cost": 0.310222848933814,
+                "original_pair_margin": 0.001024382448368888,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.001024382448368888,
+                "winner_cost_change": 0.0,
+                "runner_cost_change": 0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 1,
+                "native_winner_cost": 0.3094850596093351,
+                "native_runner_cost": 0.3103242401640883,
+                "original_pair_margin": 0.0008391805547532383,
+                "original_pair_margin_ratio": 0.8192062994533492,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.0008391805547532383,
+                "winner_cost_change": 0.00028659312388994043,
+                "runner_cost_change": 0.00010139123027433177,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0020050673077253267,
+                  "median": 0.001414599635629347,
+                  "minimum": 5.303966475959627e-06,
+                  "maximum": 0.007950666960154227
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 1,
+                "native_winner_cost": 0.309771652733225,
+                "native_runner_cost": 0.3104256313943627,
+                "original_pair_margin": 0.0006539786611376996,
+                "original_pair_margin_ratio": 0.6384125989068069,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.0006539786611376996,
+                "winner_cost_change": 0.0005731862477798809,
+                "runner_cost_change": 0.00020278246054866353,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.004010134615450653,
+                  "median": 0.002829199271258694,
+                  "minimum": 1.0607932951919255e-05,
+                  "maximum": 0.015901333920308455
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 1,
+                "native_winner_cost": 0.3103448389810049,
+                "native_runner_cost": 0.31062841385491136,
+                "original_pair_margin": 0.00028357487390645586,
+                "original_pair_margin_ratio": 0.2768251978135596,
+                "strongest_challenger_index": 5,
+                "margin_to_strongest_challenger": 0.00028357487390645586,
+                "winner_cost_change": 0.0011463724955597617,
+                "runner_cost_change": 0.00040556492109732707,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.008020269230901307,
+                  "median": 0.005658398542517388,
+                  "minimum": 2.121586590383851e-05,
+                  "maximum": 0.03180266784061691
+                }
+              }
+            ]
+          },
+          "held_native_rho": -0.30366300366300364,
+          "held_fitted_rho": -0.3043040293040293,
+          "held_native_scaled_label_mse": 0.11185323749726635,
+          "held_fitted_scaled_label_mse": 0.11230595121653762
+        },
+        "actual_oracle_encoding": {
+          "energy": {
+            "fraction_native_cost_in_span": {
+              "mean": 0.18280418008463112,
+              "median": 0.14719942988494072,
+              "minimum": 0.04579250818580728,
+              "maximum": 0.37370907883393295
+            },
+            "fraction_native_cost_in_complement": {
+              "mean": 0.8171958199153688,
+              "median": 0.8528005701150592,
+              "minimum": 0.626290921166067,
+              "maximum": 0.9542074918141927
+            },
+            "within_state_activation_variation_fraction_in_span": 0.24574772186613358,
+            "native_cost_std": 0.1443519635579948,
+            "span_cost_std": 0.08946052328382893,
+            "complement_cost_std": 0.08300054912757811,
+            "variance_decomposition": {
+              "native": 0.02083748938304866,
+              "span": 0.008003185226216498,
+              "complement": 0.006889091155479507,
+              "twice_covariance": 0.005945213001352656
+            }
+          },
+          "margins": {
+            "native_winner": 15,
+            "native_runner": 14,
+            "native_margin": 0.0004685932535258841,
+            "native_pair_span_margin": 0.007686029148125842,
+            "native_pair_complement_margin": -0.007217435894599944,
+            "fitted_pair_span_margin": 0.008309048654653178,
+            "native_winner_span_fraction": 0.07675380215117372,
+            "native_runner_span_fraction": 0.09722957078443688,
+            "blends": [
+              {
+                "blend": 0.0,
+                "selected_index": 15,
+                "native_winner_cost": 0.37314682364602403,
+                "native_runner_cost": 0.3736154168995499,
+                "original_pair_margin": 0.0004685932535258841,
+                "original_pair_margin_ratio": 1.0,
+                "strongest_challenger_index": 14,
+                "margin_to_strongest_challenger": 0.0004685932535258841,
+                "winner_cost_change": 0.0,
+                "runner_cost_change": 0.0,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.0,
+                  "median": 0.0,
+                  "minimum": 0.0,
+                  "maximum": 0.0
+                }
+              },
+              {
+                "blend": 0.25,
+                "selected_index": 15,
+                "native_winner_cost": 0.37429129499196145,
+                "native_runner_cost": 0.37491564312211917,
+                "original_pair_margin": 0.0006243481301577147,
+                "original_pair_margin_ratio": 1.3323882182679079,
+                "strongest_challenger_index": 14,
+                "margin_to_strongest_challenger": 0.0006243481301577147,
+                "winner_cost_change": 0.0011444713459374295,
+                "runner_cost_change": 0.0013002262225692651,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.008292689636927687,
+                  "median": 0.0036293192638291592,
+                  "minimum": 1.136555121254149e-05,
+                  "maximum": 0.02963648903459741
+                }
+              },
+              {
+                "blend": 0.5,
+                "selected_index": 15,
+                "native_winner_cost": 0.3754357663378989,
+                "native_runner_cost": 0.3762158693446884,
+                "original_pair_margin": 0.0007801030067895454,
+                "original_pair_margin_ratio": 1.6647764365358155,
+                "strongest_challenger_index": 14,
+                "margin_to_strongest_challenger": 0.0007801030067895454,
+                "winner_cost_change": 0.002288942691874859,
+                "runner_cost_change": 0.0026004524451385303,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.016585379273855373,
+                  "median": 0.0072586385276583185,
+                  "minimum": 2.273110242508298e-05,
+                  "maximum": 0.05927297806919482
+                }
+              },
+              {
+                "blend": 1.0,
+                "selected_index": 15,
+                "native_winner_cost": 0.37772470902977373,
+                "native_runner_cost": 0.378816321789827,
+                "original_pair_margin": 0.0010916127600532621,
+                "original_pair_margin_ratio": 2.3295528730717496,
+                "strongest_challenger_index": 14,
+                "margin_to_strongest_challenger": 0.0010916127600532621,
+                "winner_cost_change": 0.004577885383749718,
+                "runner_cost_change": 0.0052009048902770605,
+                "absolute_cost_change_relative_to_native": {
+                  "mean": 0.033170758547710746,
+                  "median": 0.014517277055316637,
+                  "minimum": 4.546220485016596e-05,
+                  "maximum": 0.11854595613838964
+                }
+              }
+            ]
+          },
+          "held_native_rho": 0.0738095238095238,
+          "held_fitted_rho": 0.03255494505494505,
+          "held_native_scaled_label_mse": 0.043684183979594005,
+          "held_fitted_scaled_label_mse": 0.0450933991587093
+        }
+      }
+    }
+  ],
+  "seconds": 2.0210020397789776,
+  "fit_source_done_sha256": "105cb5a3e12cfc9bf84e44a6e7592bfc0fdd0082c548cd49b3de89c22fbbe873",
+  "sources": [
+    {
+      "complete": true,
+      "episode": 0,
+      "source_root": "/root/geometry-map-jepawm-pusht-v1/expanded-candidate-bank-v1/worker-49987413/results-v1",
+      "source_done_sha256": "5e0250a7152c746aab19d7176d5c42c1a00395a897e960e94a53505dd89170b1",
+      "native_objective_reconstruction_maxabs": {
+        "predicted": 1.0397372829373808e-07,
+        "actual": 7.143401359321899e-08
+      },
+      "shape": [
+        64,
+        102400
+      ],
+      "model_calls": 0,
+      "simulator_calls": 0,
+      "outputs": [
+        {
+          "path": "terminal-differences.npz",
+          "sha256": "014c52e123caed8817a19c1b980850adfc784ab853aacafe4a88c6180109b4a3",
+          "bytes": 47794356
+        }
+      ]
+    },
+    {
+      "complete": true,
+      "episode": 1,
+      "source_root": "/root/geometry-map-jepawm-pusht-v1/expanded-candidate-bank-v1/worker-49987402/results-v1",
+      "source_done_sha256": "b6c77c0ad92708d1c96120a8a78f1b82233089021f25f7c413bd07ce31839180",
+      "native_objective_reconstruction_maxabs": {
+        "predicted": 9.140115642125579e-08,
+        "actual": 1.0478338030583956e-07
+      },
+      "shape": [
+        64,
+        102400
+      ],
+      "model_calls": 0,
+      "simulator_calls": 0,
+      "outputs": [
+        {
+          "path": "terminal-differences.npz",
+          "sha256": "4d2056948cac6c5b5648887ed00f8a7ed0862a59de1212adbdc7b7553d86bb41",
+          "bytes": 47850513
+        }
+      ]
+    },
+    {
+      "complete": true,
+      "episode": 2,
+      "source_root": "/root/geometry-map-jepawm-pusht-v1/expanded-candidate-bank-v1/worker-49987398/results-v1",
+      "source_done_sha256": "7615ff288ca1a293c958df419058e0529fe4af2f050979a08c22e7da6bcbb179",
+      "native_objective_reconstruction_maxabs": {
+        "predicted": 1.0346833301255742e-07,
+        "actual": 1.2436099461332617e-07
+      },
+      "shape": [
+        64,
+        102400
+      ],
+      "model_calls": 0,
+      "simulator_calls": 0,
+      "outputs": [
+        {
+          "path": "terminal-differences.npz",
+          "sha256": "2d61c7ef7c62f7cef882138465f73b9d3ea59e6cf1dcc513528de5b52a7fe8a4",
+          "bytes": 47781218
+        }
+      ]
+    },
+    {
+      "complete": true,
+      "episode": 3,
+      "source_root": "/root/geometry-map-jepawm-pusht-v1/expanded-candidate-bank-v1/worker-49987414/results-v1",
+      "source_done_sha256": "6fc4198da929d0338fd6d53d25c832c64c15f1143479efc7488e86fbaa848aa9",
+      "native_objective_reconstruction_maxabs": {
+        "predicted": 7.178692129627962e-08,
+        "actual": 1.1407321687251226e-07
+      },
+      "shape": [
+        64,
+        102400
+      ],
+      "model_calls": 0,
+      "simulator_calls": 0,
+      "outputs": [
+        {
+          "path": "terminal-differences.npz",
+          "sha256": "3311aa4f17e91db10efedc3825adb954f02579c43e4322a8194b0cb10b565847",
+          "bytes": 47795111
+        }
+      ]
+    }
+  ],
+  "script_sha256": "f186803bb69ffca6ad5cfeaecf231ef89b3c24564f778f2c75914e93f30dd6d0",
+  "new_optimization_calls": 0,
+  "model_calls": 0,
+  "simulator_calls": 0,
+  "interpretation_constraints": [
+    "Fraction of cost in complement alone is not a capacity proof; compare within-state variation and pair margins",
+    "Fitted weights and all originally frozen blends reused, no new doses/selection",
+    "Four previously seen development states, no untouched confirmation"
+  ]
+}

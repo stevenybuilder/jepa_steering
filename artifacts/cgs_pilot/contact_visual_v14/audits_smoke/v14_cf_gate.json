@@ -1,0 +1,164 @@
+{
+  "cache_meta": {
+    "checkpoint": "/root/cgs-pilot/checkpoints/jepa_wm_droid.pth.tar",
+    "checkpoint_sha256": "daa69198aef764932f1cb809239a4e19c71da20a93c6a0b9f3869cb30a13f4aa",
+    "config_sha256": "231e8566aced452aaab157851e14a6c2981e2561580503608ff0c89be9e17c01",
+    "droid_reference": null,
+    "manifest_sha256": "d4369121b8e00ffb461230be6df4aca9daf61c065351d33e7c5c200103c1cc19",
+    "model_name": "jepa_wm_droid",
+    "n_cells": 8,
+    "n_with_masks": 0,
+    "torch": "2.7.1+cu128"
+  },
+  "cache_sha256": "7c119ab9aaeefb94ce760b9916635f7afd53bbd4c906e2e12413b25629351e3c",
+  "checks": {
+    "enough_scenes": false,
+    "interaction_cosine_ok": false,
+    "median_rec_ok": true
+  },
+  "criteria": {
+    "interaction_cosine_positive_sign_flip_p_below": 0.05,
+    "median_rec_h1_at_least": 0.5,
+    "min_attainable_p": 0.5,
+    "min_scenes": 16
+  },
+  "manifest_sha256": "d4369121b8e00ffb461230be6df4aca9daf61c065351d33e7c5c200103c1cc19",
+  "model_label": "JEPA-WM DROID",
+  "n_scenes": 2,
+  "per_scene": {
+    "contact_seed000101": {
+      "action_effect_nmse": {
+        "0": 1.006834218611273,
+        "1": 1.0754765241148054
+      },
+      "arc": {
+        "0": 0.7576088309288025,
+        "1": 0.776418149471283
+      },
+      "drift_energy": {
+        "0": 0.05463558807969093,
+        "1": 0.05403674393892288
+      },
+      "interaction_cosine": 0.27888978425580213,
+      "interaction_nmse": 0.9314637771287994,
+      "interaction_pred_norm": 8.399711608886719,
+      "interaction_true_norm": 22.3974666595459,
+      "n_tokens_used": 256,
+      "rec_h0_control": 0.5111585035973129,
+      "rec_h1": 0.46932006656220704,
+      "true_action_effect_norm": {
+        "0": 40.68067932128906,
+        "1": 39.70888900756836
+      }
+    },
+    "contact_seed000102": {
+      "action_effect_nmse": {
+        "0": 1.1652718942069162,
+        "1": 1.4338502898749355
+      },
+      "arc": {
+        "0": 0.6170341968536377,
+        "1": 0.6090099215507507
+      },
+      "drift_energy": {
+        "0": 0.06365670263767242,
+        "1": 0.063848115503788
+      },
+      "interaction_cosine": 0.14249258206808793,
+      "interaction_nmse": 0.9824761400240853,
+      "interaction_pred_norm": 5.8127899169921875,
+      "interaction_true_norm": 29.775726318359375,
+      "n_tokens_used": 256,
+      "rec_h0_control": 0.704909558191686,
+      "rec_h1": 0.6274423064816896,
+      "true_action_effect_norm": {
+        "0": 36.59714889526367,
+        "1": 33.253665924072266
+      }
+    }
+  },
+  "pooled": {
+    "action_effect_nmse": {
+      "0": {
+        "ci_high": 1.1652718942069162,
+        "ci_low": 1.006834218611273,
+        "mean": 1.0860530564090947,
+        "median": 1.0860530564090947,
+        "n": 2
+      },
+      "1": {
+        "ci_high": 1.4338502898749355,
+        "ci_low": 1.0754765241148054,
+        "mean": 1.2546634069948706,
+        "median": 1.2546634069948706,
+        "n": 2
+      }
+    },
+    "arc": {
+      "0": {
+        "ci_high": 0.7576088309288025,
+        "ci_low": 0.6170341968536377,
+        "mean": 0.6873215138912201,
+        "median": 0.6873215138912201,
+        "n": 2
+      },
+      "1": {
+        "ci_high": 0.776418149471283,
+        "ci_low": 0.6090099215507507,
+        "mean": 0.6927140355110168,
+        "median": 0.6927140355110168,
+        "n": 2
+      }
+    },
+    "drift_energy": {
+      "0": {
+        "ci_high": 0.06365670263767242,
+        "ci_low": 0.05463558807969093,
+        "mean": 0.05914614535868168,
+        "median": 0.05914614535868168,
+        "n": 2
+      },
+      "1": {
+        "ci_high": 0.063848115503788,
+        "ci_low": 0.05403674393892288,
+        "mean": 0.05894242972135544,
+        "median": 0.05894242972135544,
+        "n": 2
+      }
+    },
+    "interaction_cosine": {
+      "ci_high": 0.27888978425580213,
+      "ci_low": 0.14249258206808793,
+      "mean": 0.21069118316194502,
+      "median": 0.21069118316194502,
+      "n": 2,
+      "sign_flip_p_vs_zero": 0.5
+    },
+    "interaction_nmse": {
+      "ci_high": 0.9824761400240853,
+      "ci_low": 0.9314637771287994,
+      "mean": 0.9569699585764424,
+      "median": 0.9569699585764424,
+      "n": 2
+    },
+    "rec_h0_control": {
+      "ci_high": 0.704909558191686,
+      "ci_low": 0.5111585035973129,
+      "mean": 0.6080340308944994,
+      "median": 0.6080340308944994,
+      "n": 2
+    },
+    "rec_h1": {
+      "ci_high": 0.6274423064816896,
+      "ci_low": 0.46932006656220704,
+      "mean": 0.5483811865219483,
+      "median": 0.5483811865219483,
+      "n": 2,
+      "sign_flip_p_vs_zero": 0.5
+    }
+  },
+  "seeds_file": null,
+  "statement": "Only 2 complete scenes (< 16); the gate cannot be decided. Numbers are indicative only.",
+  "token_mask": "all_tokens_no_masks",
+  "verdict": "INSUFFICIENT_SCENES"
+}

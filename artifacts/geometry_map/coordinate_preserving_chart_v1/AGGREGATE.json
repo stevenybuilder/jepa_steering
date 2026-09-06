@@ -1,0 +1,4143 @@
+{
+  "complete": true,
+  "scope": "Four repeatedly seen Push development states0..3; frozen control transport, no optimization, CEM, simulator or held evaluation",
+  "states": 4,
+  "control_parents": [
+    "linear_rank4",
+    "nonlinear_RBF_rank4"
+  ],
+  "points_per_parent": 21,
+  "arms_per_point": 5,
+  "total_intervention_conditions": 840,
+  "process_seconds": 211.8476521059638,
+  "cap_seconds": 900,
+  "tests_passed": 13,
+  "candidate_promoted": false,
+  "rows": [
+    {
+      "episode": 0,
+      "seconds": 31.5093313989928,
+      "source_done_sha256": "a247c7174db13aecaab876161b334a81a894766475ec48a449013f9eff5165c2",
+      "native": {
+        "control_parent": "native",
+        "method": "native",
+        "waypoint": "central",
+        "native_cost": [
+          0.07270807772874832,
+          0.07564964145421982,
+          0.07551288604736328,
+          0.08312439173460007,
+          0.08814243227243423,
+          0.07303406298160553,
+          0.07515470683574677,
+          0.0841028094291687,
+          0.0828760638833046
+        ],
+        "cost_vs_physical_distance_spearman": 0.03333333333333333,
+        "negative_cost_vs_physical_progress_spearman": 0.03333333333333333,
+        "selected_action_index": 0,
+        "selected_actual_progress_px": 30.950502395629883,
+        "selected_actual_goal_xy_distance_px": 6.3033576011657715,
+        "initial_goal_xy_distance_px": 37.25386047363281,
+        "physical_progress_px_by_action": [
+          30.950502395629883,
+          29.53887176513672,
+          32.329586029052734,
+          26.74671745300293,
+          33.31991958618164,
+          30.37542724609375,
+          31.023746490478516,
+          30.543081283569336,
+          30.36760711669922
+        ],
+        "physical_goal_xy_distance_px_by_action": [
+          6.3033576011657715,
+          7.714987754821777,
+          4.924274921417236,
+          10.507143020629883,
+          3.9339396953582764,
+          6.878432273864746,
+          6.230113983154297,
+          6.710779190063477,
+          6.886253833770752
+        ],
+        "original_native_planner_action_index": 0,
+        "original_native_planner_actual_progress_px": 30.950502395629883,
+        "original_native_planner_actual_goal_xy_distance_px": 6.3033576011657715,
+        "fixed_bank_physical_oracle_index": 4,
+        "actual_visual_MSE_H1_H6": [
+          0.04895128143551164,
+          0.057360673740146535,
+          0.12840280631408024,
+          0.07825755076878131,
+          0.07530083037957948,
+          0.08101741832527339
+        ],
+        "native_visual_MSE_H1_H6": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "requested_raw_norm": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "realized_raw_norm": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "off_PCA64_maxabs": 0,
+        "actual_support": {
+          "outside_train_box": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "nearest_train_distance": [
+            0.3455523675071451,
+            0.0000027606990092088586,
+            0.000004462244715616487,
+            0.000005252146738148744,
+            0.0000053585371259780735,
+            0.0000058531032798570394,
+            0.000004014418181536264,
+            0.0000029386661557149217,
+            0.000004185873836444933
+          ]
+        },
+        "selected_block_distance_px": 3.163135899893798,
+        "selected_wrapped_angle_error_rad": 0.03057760000228882
+      },
+      "canary": {
+        "complete": true,
+        "exact_zero": true,
+        "graph_roundtrip_maxabs": 1.4210854715202004e-13,
+        "gradient_fd_relative": 0.0006714295570132725,
+        "native_graph_jacobian_singular_values": [
+          0.07547201930519463,
+          0.023182842915814426,
+          0.009173729349083814,
+          0.0032748835717777668
+        ],
+        "native_graph_rank_relative1e_4": 4,
+        "seconds": 6.03275047801435
+      },
+      "old_RBF_forecasts_bitexact": {
+        "visual": 0,
+        "proprio": 0
+      },
+      "parents": {
+        "linear_rank4": {
+          "methods": {
+            "rbf_same_coordinate": {
+              "mean_target_hellinger2": 0.012649598252028226,
+              "mean_path_forecast_H3_MSE": 0.13518254430784232,
+              "mean_path_forecast_H6_MSE": 0.08548391596325441,
+              "central_forecast_H1_H6_MSE": [
+                0.04895128143551164,
+                0.057360673740146535,
+                0.1260311356708802,
+                0.07790495566513747,
+                0.07381970822887027,
+                0.08036501204932814
+              ],
+              "central_native_cost": [
+                0.07449997216463089,
+                0.07780811935663223,
+                0.07290397584438324,
+                0.08295158296823502,
+                0.09625691175460815,
+                0.07288170605897903,
+                0.07783769816160202,
+                0.08866725116968155,
+                0.08110516518354416
+              ],
+              "central_spearman": -0.03333333333333333,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.5750751495361328,
+              "central_selected_block_distance_px": 2.3611487264950446,
+              "central_selected_wrapped_angle_error_rad": 0.02477848529815674,
+              "central_realized_raw_norm": [
+                92.8297490436145,
+                98.99599351150667,
+                110.12747416209552,
+                100.66890046032242,
+                100.12505724230151,
+                96.460312279218,
+                93.78572743312296,
+                94.05637527731353,
+                92.99860192634321
+              ],
+              "central_requested_raw_norm": [
+                92.82974634359306,
+                98.99599164815288,
+                110.12747134834208,
+                100.66890206623006,
+                100.12506844647271,
+                96.46031398303043,
+                93.785735904006,
+                94.05637247202102,
+                92.99861035478774
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.23773582158887782,
+                0.3278517589837383,
+                0.2068809274551898,
+                0.22100474000128262,
+                0.32553659052297307,
+                0.18460954258211362,
+                0.1891115550749368,
+                0.150905955306723,
+                0.2968096574958887
+              ],
+              "coordinate_error_max": 32.0053024867488,
+              "realized_coordinate_error_max": 32.005304551212994,
+              "maximum_PCA64_complement_error": 0.000031839899204411104
+            },
+            "graph_same_coordinate": {
+              "mean_target_hellinger2": 0.012364390376023947,
+              "mean_path_forecast_H3_MSE": 0.1352017525351364,
+              "mean_path_forecast_H6_MSE": 0.08562758474998816,
+              "central_forecast_H1_H6_MSE": [
+                0.04895128143551164,
+                0.057360673740146535,
+                0.12593332506937374,
+                0.07785647507198461,
+                0.07378296618984019,
+                0.08034070730866778
+              ],
+              "central_native_cost": [
+                0.07449432462453842,
+                0.07798314839601517,
+                0.07292048633098602,
+                0.08274306356906891,
+                0.0964784249663353,
+                0.07288078963756561,
+                0.0778462141752243,
+                0.08861980587244034,
+                0.08113414794206619
+              ],
+              "central_spearman": 0.049999999999999996,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.5750751495361328,
+              "central_selected_block_distance_px": 2.3611487264950446,
+              "central_selected_wrapped_angle_error_rad": 0.02477848529815674,
+              "central_realized_raw_norm": [
+                92.85840341311307,
+                101.2666949317192,
+                110.77946332078103,
+                100.30387338166187,
+                101.08682326438826,
+                96.60932689304681,
+                94.24969732461344,
+                94.0644729806709,
+                92.80587597398686
+              ],
+              "central_requested_raw_norm": [
+                92.85840602354777,
+                101.26669209550023,
+                110.77946326348444,
+                100.30387282912058,
+                101.08682395774672,
+                96.60932883466964,
+                94.24969577222072,
+                94.06448638032234,
+                92.80587959082725
+              ],
+              "central_outside_box_count": 1,
+              "central_nearest_donor_standardized_distance": [
+                0.24060337548947838,
+                0.3928424557634868,
+                0.24610363382137856,
+                0.2667550473771276,
+                0.3283374411099614,
+                0.19946456838486404,
+                0.19287861895614355,
+                0.15843218465704353,
+                0.29562112307235705
+              ],
+              "coordinate_error_max": 4.055232419307098e-13,
+              "realized_coordinate_error_max": 0.000026059945125380166,
+              "maximum_PCA64_complement_error": 0.00003201550096142147
+            },
+            "rbf_matched_dose": {
+              "mean_target_hellinger2": 0.013252403424121439,
+              "mean_path_forecast_H3_MSE": 0.1347198884068181,
+              "mean_path_forecast_H6_MSE": 0.08504069490069853,
+              "central_forecast_H1_H6_MSE": [
+                0.04895128143551164,
+                0.057360673740146535,
+                0.12613997808713293,
+                0.07788873064117381,
+                0.07386482596847133,
+                0.08035423412594465
+              ],
+              "central_native_cost": [
+                0.07439805567264557,
+                0.07765813916921616,
+                0.07288319617509842,
+                0.08292552083730698,
+                0.09581270068883896,
+                0.07284947484731674,
+                0.07770036160945892,
+                0.08841787278652191,
+                0.08115832507610321
+              ],
+              "central_spearman": -0.03333333333333333,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.5750751495361328,
+              "central_selected_block_distance_px": 2.3611487264950446,
+              "central_selected_wrapped_angle_error_rad": 0.02477848529815674,
+              "central_realized_raw_norm": [
+                88.18826269828618,
+                94.046185000525,
+                104.62109336849527,
+                95.28867728689046,
+                95.11881629750194,
+                91.6372937964701,
+                89.09645241369014,
+                89.35355526342718,
+                88.16558805363137
+              ],
+              "central_requested_raw_norm": [
+                88.1882590263966,
+                94.04619206578323,
+                104.62109778089774,
+                95.28867918765248,
+                95.1188150241458,
+                91.63729828388782,
+                89.09644910885496,
+                89.35355384845357,
+                88.16558561130137
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.22778458663696807,
+                0.3395784066648942,
+                0.21168035199373242,
+                0.22221348743693825,
+                0.3225689129805402,
+                0.19858236617138375,
+                0.2083709472373231,
+                0.16304631221035365,
+                0.27735607056171263
+              ],
+              "coordinate_error_max": 29.31536324387631,
+              "realized_coordinate_error_max": 29.3153625963104,
+              "maximum_PCA64_complement_error": 0.00003185123649551702,
+              "ray": {
+                "alpha_min": 0.921087490361046,
+                "alpha_max": 0.9551233115562212,
+                "alpha_mean": 0.9445506502211785,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 1.1877432370965835e-10,
+                "central_alpha": [
+                  0.9496449775522393,
+                  0.9491101094830441,
+                  0.9448011405196013,
+                  0.9444834433221416,
+                  0.9503972045062739,
+                  0.9473908730936245,
+                  0.9500799838109089,
+                  0.949583022629227,
+                  0.9480788974536409
+                ],
+                "recipient_points": 189
+              }
+            },
+            "graph_matched_dose": {
+              "mean_target_hellinger2": 0.01317849471233785,
+              "mean_path_forecast_H3_MSE": 0.13449371328122478,
+              "mean_path_forecast_H6_MSE": 0.08506183733621941,
+              "central_forecast_H1_H6_MSE": [
+                0.04895128143551164,
+                0.057360673740146535,
+                0.126043419561426,
+                0.07784426773602059,
+                0.07383482397157838,
+                0.08032895873826142
+              ],
+              "central_native_cost": [
+                0.07439188659191132,
+                0.07775013893842697,
+                0.07289838045835495,
+                0.08272728323936462,
+                0.09593513607978821,
+                0.07284761220216751,
+                0.07769564539194107,
+                0.0883711501955986,
+                0.0811830684542656
+              ],
+              "central_spearman": 0.049999999999999996,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.5750751495361328,
+              "central_selected_block_distance_px": 2.3611487264950446,
+              "central_selected_wrapped_angle_error_rad": 0.02477848529815674,
+              "central_realized_raw_norm": [
+                88.18825852890996,
+                94.04618939168196,
+                104.6210853911405,
+                95.28868297344698,
+                95.11880286576671,
+                91.63729389003079,
+                89.09644877166149,
+                89.35355394634335,
+                88.16559824827826
+              ],
+              "central_requested_raw_norm": [
+                88.18825902641863,
+                94.04619206573085,
+                104.62109778091701,
+                95.2886791876464,
+                95.11881502421812,
+                91.63729828388175,
+                89.09644910880904,
+                89.35355384842234,
+                88.16558561127638
+              ],
+              "central_outside_box_count": 1,
+              "central_nearest_donor_standardized_distance": [
+                0.2306742832875866,
+                0.40134023388446494,
+                0.24920195199438908,
+                0.2667971943681123,
+                0.32431491480913316,
+                0.21247805185606314,
+                0.21292675416105245,
+                0.16988560825505492,
+                0.27692655229040003
+              ],
+              "coordinate_error_max": 3.42556035377332e-13,
+              "realized_coordinate_error_max": 0.000018313920048913932,
+              "maximum_PCA64_complement_error": 0.00003174510373282757,
+              "ray": {
+                "alpha_min": 0.8768639883469831,
+                "alpha_max": 0.9526728390947454,
+                "alpha_mean": 0.938573360669774,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 7.79891706770286e-11,
+                "central_alpha": [
+                  0.9492633486522806,
+                  0.9286197629176485,
+                  0.9377602462606518,
+                  0.9473961181816861,
+                  0.9419007400603192,
+                  0.9453308937940363,
+                  0.9457897448643706,
+                  0.9493625773914545,
+                  0.9500346098724748
+                ],
+                "recipient_points": 189
+              }
+            },
+            "common_norm_sham": {
+              "mean_target_hellinger2": 0.03041860875673592,
+              "mean_path_forecast_H3_MSE": 0.15323299583750655,
+              "mean_path_forecast_H6_MSE": 0.08533797796426243,
+              "central_forecast_H1_H6_MSE": [
+                0.04895128143551164,
+                0.057360673740146535,
+                0.14266501081772184,
+                0.08099165562583188,
+                0.07767746665656006,
+                0.08293376584918644
+              ],
+              "central_native_cost": [
+                0.07194399833679199,
+                0.07418636977672577,
+                0.0766715556383133,
+                0.08961568027734756,
+                0.08313886821269989,
+                0.07344784587621689,
+                0.0732409879565239,
+                0.08099581301212311,
+                0.08742387592792511
+              ],
+              "central_spearman": 0.31666666666666665,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 3.163135899893798,
+              "central_selected_wrapped_angle_error_rad": 0.03057760000228882,
+              "central_realized_raw_norm": [
+                88.18826383505484,
+                94.04618995332923,
+                104.62109468844997,
+                95.28867513949456,
+                95.11880905175202,
+                91.63729893312872,
+                89.09644321700641,
+                89.3535544397306,
+                88.16559056208798
+              ],
+              "central_requested_raw_norm": [
+                88.1882590264134,
+                94.04619206574523,
+                104.62109778092498,
+                95.28867918766454,
+                95.11881502414907,
+                91.63729828387889,
+                89.0964491088057,
+                89.35355384841996,
+                88.16558561128588
+              ],
+              "central_outside_box_count": 3,
+              "central_nearest_donor_standardized_distance": [
+                0.24249785906771498,
+                0.2570464519357689,
+                0.3073043430902542,
+                0.21565491113463872,
+                0.2793896158650607,
+                0.26917012475503943,
+                0.2616981976560961,
+                0.26245586721593106,
+                0.2589693735598347
+              ],
+              "coordinate_error_max": 0,
+              "realized_coordinate_error_max": 0,
+              "maximum_PCA64_complement_error": 0.00003214683577201782
+            }
+          },
+          "matched_pair_realized_norm_error_max": 0.000015945413991858004,
+          "matched_graph_minus_RBF_H3_MSE": -0.00009655852570691903,
+          "matched_graph_minus_RBF_H6_MSE": -0.000025275387683237893,
+          "matched_graph_minus_RBF_progress_px": 0
+        },
+        "nonlinear_RBF_rank4": {
+          "methods": {
+            "rbf_same_coordinate": {
+              "mean_target_hellinger2": 0.009254348499234765,
+              "mean_path_forecast_H3_MSE": 0.13573242697973678,
+              "mean_path_forecast_H6_MSE": 0.08663616170685044,
+              "central_forecast_H1_H6_MSE": [
+                0.04895128143551164,
+                0.057360673740146535,
+                0.13226251229428065,
+                0.08013378860410014,
+                0.07517744244162504,
+                0.07893327078057223
+              ],
+              "central_native_cost": [
+                0.0750638097524643,
+                0.08338343352079391,
+                0.07359915971755981,
+                0.08971913903951645,
+                0.0996401235461235,
+                0.07320536673069,
+                0.07845492660999298,
+                0.09324377775192261,
+                0.07943599671125412
+              ],
+              "central_spearman": 0.06666666666666667,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.5750751495361328,
+              "central_selected_block_distance_px": 2.3611487264950446,
+              "central_selected_wrapped_angle_error_rad": 0.02477848529815674,
+              "central_realized_raw_norm": [
+                189.1333880165659,
+                184.491704110035,
+                194.54188830994818,
+                175.92826340272515,
+                197.725955782058,
+                196.64681754878563,
+                183.4003646299841,
+                199.21662237088336,
+                179.63239644781606
+              ],
+              "central_requested_raw_norm": [
+                189.13339454599674,
+                184.49170390735785,
+                194.54189543231175,
+                175.92826510857944,
+                197.7259525015969,
+                196.64682075341184,
+                183.40037108389157,
+                199.2166169210313,
+                179.63239831172194
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.38830849727656713,
+                0.2818554302827445,
+                0.4870547467520585,
+                0.3727880819607642,
+                0.3104674392293013,
+                0.3721763519602277,
+                0.3796238061616365,
+                0.39712389549895616,
+                0.3814654860131492
+              ],
+              "coordinate_error_max": 46.222999609131165,
+              "realized_coordinate_error_max": 46.22300087677464,
+              "maximum_PCA64_complement_error": 0.00003193959603464691
+            },
+            "graph_same_coordinate": {
+              "mean_target_hellinger2": 0.008840517734643071,
+              "mean_path_forecast_H3_MSE": 0.13724150990317646,
+              "mean_path_forecast_H6_MSE": 0.0872176167206403,
+              "central_forecast_H1_H6_MSE": [
+                0.04895128143551164,
+                0.057360673740146535,
+                0.13172769902833198,
+                0.07992130968823499,
+                0.07498848259678689,
+                0.07880486617122259
+              ],
+              "central_native_cost": [
+                0.07494860142469406,
+                0.08259571343660355,
+                0.07356332242488861,
+                0.08872683346271515,
+                0.09838204830884933,
+                0.0731787160038948,
+                0.07820399105548859,
+                0.09286108613014221,
+                0.07910923659801483
+              ],
+              "central_spearman": 0.06666666666666667,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.5750751495361328,
+              "central_selected_block_distance_px": 2.3611487264950446,
+              "central_selected_wrapped_angle_error_rad": 0.02477848529815674,
+              "central_realized_raw_norm": [
+                191.70802528126947,
+                186.14000671404025,
+                197.7858173731833,
+                177.78347681095002,
+                201.1843579411978,
+                200.03225661335406,
+                185.04545296668354,
+                202.68794194380388,
+                181.19573981626834
+              ],
+              "central_requested_raw_norm": [
+                191.70802499723703,
+                186.1400117141633,
+                197.78582376070995,
+                177.78347899957942,
+                201.18435364434842,
+                200.03225604778783,
+                185.0454502748026,
+                202.68794078247285,
+                181.1957405835906
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.5160925674642094,
+                0.390425202302625,
+                0.5115121392545232,
+                0.4377482915577415,
+                0.43957755281099753,
+                0.5069970518489846,
+                0.5028159234453592,
+                0.559619309855272,
+                0.5186676934184167
+              ],
+              "coordinate_error_max": 3.4518046167849885e-13,
+              "realized_coordinate_error_max": 0.00002285683150791381,
+              "maximum_PCA64_complement_error": 0.000032108099071948004
+            },
+            "rbf_matched_dose": {
+              "mean_target_hellinger2": 0.009880941559094936,
+              "mean_path_forecast_H3_MSE": 0.13548669092235208,
+              "mean_path_forecast_H6_MSE": 0.0861512255094676,
+              "central_forecast_H1_H6_MSE": [
+                0.04895128143551164,
+                0.057360673740146535,
+                0.13200034527546725,
+                0.07998424690459728,
+                0.0750701507844199,
+                0.07893187051752279
+              ],
+              "central_native_cost": [
+                0.07487435638904572,
+                0.082879438996315,
+                0.07338833808898926,
+                0.08931214362382889,
+                0.09918388724327087,
+                0.0730828195810318,
+                0.07822632044553757,
+                0.09271536767482758,
+                0.07937861979007721
+              ],
+              "central_spearman": 0.06666666666666667,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.5750751495361328,
+              "central_selected_block_distance_px": 2.3611487264950446,
+              "central_selected_wrapped_angle_error_rad": 0.02477848529815674,
+              "central_realized_raw_norm": [
+                179.67672741709444,
+                175.26712626825312,
+                184.81480390059025,
+                167.1318529326057,
+                187.83965035833708,
+                186.81448019645327,
+                174.23035002864862,
+                189.2557867792201,
+                170.65078374485944
+              ],
+              "central_requested_raw_norm": [
+                179.67672481873913,
+                175.26711871202318,
+                184.81480066071316,
+                167.1318518531283,
+                187.83965487653649,
+                186.81447971576088,
+                174.2303525296987,
+                189.25578607494865,
+                170.65077839613045
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.3731608451872171,
+                0.2824386172347699,
+                0.46905131922728877,
+                0.39634998652520004,
+                0.3125331143514332,
+                0.36032440068825866,
+                0.3752959071481651,
+                0.3931296897837898,
+                0.38667647249114295
+              ],
+              "coordinate_error_max": 42.741978403183545,
+              "realized_coordinate_error_max": 42.74197241132192,
+              "maximum_PCA64_complement_error": 0.000032292617916374056,
+              "ray": {
+                "alpha_min": 0.913030773739635,
+                "alpha_max": 0.9572773913503312,
+                "alpha_mean": 0.9423555994504997,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 1.4125589586910792e-10,
+                "central_alpha": [
+                  0.9479477686982278,
+                  0.9482282100501749,
+                  0.9475681808411451,
+                  0.9482181890622741,
+                  0.9479722000940711,
+                  0.9479270324204805,
+                  0.9482072829131738,
+                  0.9479507392412216,
+                  0.948399617688878
+                ],
+                "recipient_points": 189
+              }
+            },
+            "graph_matched_dose": {
+              "mean_target_hellinger2": 0.009659591969102621,
+              "mean_path_forecast_H3_MSE": 0.1364621974273973,
+              "mean_path_forecast_H6_MSE": 0.08641321251747769,
+              "central_forecast_H1_H6_MSE": [
+                0.04895128143551164,
+                0.057360673740146535,
+                0.13145831505532374,
+                0.07976172047863093,
+                0.07487980668940825,
+                0.07882626710821906
+              ],
+              "central_native_cost": [
+                0.07473617047071457,
+                0.08207719027996063,
+                0.0732983648777008,
+                0.08832495659589767,
+                0.09786438941955566,
+                0.07303136587142944,
+                0.0779736191034317,
+                0.09219289571046829,
+                0.07908821105957031
+              ],
+              "central_spearman": 0.06666666666666667,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.5750751495361328,
+              "central_selected_block_distance_px": 2.3611487264950446,
+              "central_selected_wrapped_angle_error_rad": 0.02477848529815674,
+              "central_realized_raw_norm": [
+                179.67672942206005,
+                175.26712212530364,
+                184.81479553251233,
+                167.1318463913585,
+                187.83965301841096,
+                186.8144764760529,
+                174.23035593041158,
+                189.2557868250578,
+                170.65077662192317
+              ],
+              "central_requested_raw_norm": [
+                179.67672481870082,
+                175.26711871201417,
+                184.81480066066462,
+                167.13185185313068,
+                187.8396548765223,
+                186.81447971583182,
+                174.23035252968458,
+                189.25578607501646,
+                170.65077839611465
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.4862036947565471,
+                0.374628966629072,
+                0.48780887463505535,
+                0.44958124062524557,
+                0.4220873620565588,
+                0.47668760271866584,
+                0.4896953207881421,
+                0.5370609396544552,
+                0.5087413553784533
+              ],
+              "coordinate_error_max": 2.6671393099950733e-13,
+              "realized_coordinate_error_max": 0.00002099270644213215,
+              "maximum_PCA64_complement_error": 0.000031545438068159015,
+              "ray": {
+                "alpha_min": 0.9150706995001912,
+                "alpha_max": 0.9550371284910426,
+                "alpha_mean": 0.9381780320145456,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 1.169837560155429e-10,
+                "central_alpha": [
+                  0.9342529754494109,
+                  0.9391015375383205,
+                  0.9309452236564795,
+                  0.9376020851482991,
+                  0.9305663950912759,
+                  0.9308137352538921,
+                  0.9390544999182424,
+                  0.9306247474361697,
+                  0.9395366197033894
+                ],
+                "recipient_points": 189
+              }
+            },
+            "common_norm_sham": {
+              "mean_target_hellinger2": 0.031001012388151138,
+              "mean_path_forecast_H3_MSE": 0.1600720192337753,
+              "mean_path_forecast_H6_MSE": 0.08802626241385894,
+              "central_forecast_H1_H6_MSE": [
+                0.04895128143551164,
+                0.057360673740146535,
+                0.15613699796412808,
+                0.08408820899196612,
+                0.08035188127633257,
+                0.08538201928533956
+              ],
+              "central_native_cost": [
+                0.07198264449834824,
+                0.07331948727369308,
+                0.07798358798027039,
+                0.09646740555763245,
+                0.07958158850669861,
+                0.07448723912239075,
+                0.0718982145190239,
+                0.07787412405014038,
+                0.09323354065418243
+              ],
+              "central_spearman": 0.25,
+              "central_selected_action": 6,
+              "central_selected_progress_delta_px": 0.07324409484863281,
+              "central_selected_block_distance_px": 3.961889800411619,
+              "central_selected_wrapped_angle_error_rad": 0.034674465656280525,
+              "central_realized_raw_norm": [
+                179.67673586748714,
+                175.26712492202347,
+                184.81480429333828,
+                167.1318413972941,
+                187.83966350199233,
+                186.81447899028913,
+                174.2303568929409,
+                189.2557862879912,
+                170.65078125362086
+              ],
+              "central_requested_raw_norm": [
+                179.6767248186969,
+                175.26711871198995,
+                184.8148006606962,
+                167.13185185315047,
+                187.83965487651705,
+                186.81447971574127,
+                174.23035252969697,
+                189.2557860749797,
+                170.65077839613585
+              ],
+              "central_outside_box_count": 7,
+              "central_nearest_donor_standardized_distance": [
+                0.3711607697073755,
+                0.4264320045078755,
+                0.3494832202959114,
+                0.27194937520002826,
+                0.42068861125242996,
+                0.5297375308088166,
+                0.38623877968452586,
+                0.4460744551695774,
+                0.44498782214905946
+              ],
+              "coordinate_error_max": 0,
+              "realized_coordinate_error_max": 0,
+              "maximum_PCA64_complement_error": 0.00003190580252315778
+            }
+          },
+          "matched_pair_realized_norm_error_max": 0.00001936627933218915,
+          "matched_graph_minus_RBF_H3_MSE": -0.0005420302201435134,
+          "matched_graph_minus_RBF_H6_MSE": -0.00010560340930372558,
+          "matched_graph_minus_RBF_progress_px": 0
+        }
+      },
+      "goal_coverage": {
+        "complete": true,
+        "episode": 0,
+        "source_input_sha256": "36b4ce523359fa5d6f386a1b8de6b11fcd2ccd88f21ab1a5a3792d28f296c082",
+        "experiment_summary_sha256": "fd988b9b7f1c6a1ed85952d34621b288013dc033e6312909ce64faf3600e8fbc",
+        "verified_goal_coverage_source_sha256": "08456343ea3628271f6dda88fe1925d7c64f61bbb273580c738c2007d4e12898",
+        "computed_vs_reference_maxabs": 0,
+        "goal_block_pose": [
+          292.8369445800781,
+          217.58035278320312,
+          0.7797816395759583
+        ],
+        "goal_aligned_coverage_original9": [
+          0.8875360659541516,
+          0.862871704162541,
+          0.9155333335871617,
+          0.9118296167213228,
+          0.8623852130092422,
+          0.9112206501672233,
+          0.8665820239782988,
+          0.8573180680887731,
+          0.9187203345343005
+        ],
+        "native_selected_coverage": 0.8875360659541516,
+        "rows": [
+          {
+            "control_parent": "native",
+            "method": "native",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.8875360659541516,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "rbf_same_coordinate",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.9112206501672233,
+            "delta_vs_native": 0.023684584213071735
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "graph_same_coordinate",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.9112206501672233,
+            "delta_vs_native": 0.023684584213071735
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "rbf_matched_dose",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.9112206501672233,
+            "delta_vs_native": 0.023684584213071735
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "graph_matched_dose",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.9112206501672233,
+            "delta_vs_native": 0.023684584213071735
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "common_norm_sham",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.8875360659541516,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "rbf_same_coordinate",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.9112206501672233,
+            "delta_vs_native": 0.023684584213071735
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "graph_same_coordinate",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.9112206501672233,
+            "delta_vs_native": 0.023684584213071735
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "rbf_matched_dose",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.9112206501672233,
+            "delta_vs_native": 0.023684584213071735
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "graph_matched_dose",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.9112206501672233,
+            "delta_vs_native": 0.023684584213071735
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "common_norm_sham",
+            "selected_index": 6,
+            "goal_aligned_coverage": 0.8665820239782988,
+            "delta_vs_native": -0.020954041975852822
+          }
+        ],
+        "scope": "Descriptive expert-goal polygon coverage; not original painted-default native reward, no refit or primary endpoint replacement",
+        "simulator_calls": 0,
+        "model_calls": 0,
+        "held_accessed": false
+      }
+    },
+    {
+      "episode": 1,
+      "seconds": 31.42464600095991,
+      "source_done_sha256": "4c1b1475395fed72c22b0ebb6667b3ce5e8daf86c43bd80d52fe9074ab6fdd9c",
+      "native": {
+        "control_parent": "native",
+        "method": "native",
+        "waypoint": "central",
+        "native_cost": [
+          0.6197014451026917,
+          0.6221851706504822,
+          0.6213814616203308,
+          0.626183807849884,
+          0.6220043897628784,
+          0.6218660473823547,
+          0.6219437718391418,
+          0.625096321105957,
+          0.6223818063735962
+        ],
+        "cost_vs_physical_distance_spearman": 0.35,
+        "negative_cost_vs_physical_progress_spearman": 0.35,
+        "selected_action_index": 0,
+        "selected_actual_progress_px": 62.561065673828125,
+        "selected_actual_goal_xy_distance_px": 72.92108154296875,
+        "initial_goal_xy_distance_px": 135.48214721679688,
+        "physical_progress_px_by_action": [
+          62.561065673828125,
+          62.5693359375,
+          62.50884246826172,
+          61.98567199707031,
+          62.893218994140625,
+          62.778526306152344,
+          62.24388885498047,
+          62.1722412109375,
+          62.77086639404297
+        ],
+        "physical_goal_xy_distance_px_by_action": [
+          72.92108154296875,
+          72.91281127929688,
+          72.97330474853516,
+          73.49647521972656,
+          72.58892822265625,
+          72.70362091064453,
+          73.2382583618164,
+          73.30990600585938,
+          72.7112808227539
+        ],
+        "original_native_planner_action_index": 0,
+        "original_native_planner_actual_progress_px": 62.561065673828125,
+        "original_native_planner_actual_goal_xy_distance_px": 72.92108154296875,
+        "fixed_bank_physical_oracle_index": 4,
+        "actual_visual_MSE_H1_H6": [
+          0.04411297048433893,
+          0.054943210994542385,
+          0.07559474961754044,
+          0.07075359745628954,
+          0.07719099706249201,
+          0.08706988996023547
+        ],
+        "native_visual_MSE_H1_H6": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "requested_raw_norm": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "realized_raw_norm": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "off_PCA64_maxabs": 0,
+        "actual_support": {
+          "outside_train_box": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "nearest_train_distance": [
+            0.5052636682173555,
+            0.000007622377280999251,
+            0.000008773380556346109,
+            0.0000016203257106623872,
+            0.000004329755409328631,
+            0.000005477996000107912,
+            0.0000043033150071482814,
+            0.0000023185555600923193,
+            0.000008337356155340307
+          ]
+        },
+        "selected_block_distance_px": 72.50001212456644,
+        "selected_wrapped_angle_error_rad": 0.9604173898696899
+      },
+      "canary": {
+        "complete": true,
+        "exact_zero": true,
+        "graph_roundtrip_maxabs": 1.4210854715202004e-13,
+        "gradient_fd_relative": 0.006604938533197951,
+        "native_graph_jacobian_singular_values": [
+          0.12746196313385363,
+          0.07654924493081307,
+          0.004779381648313567,
+          0.0012446155555611463
+        ],
+        "native_graph_rank_relative1e_4": 4,
+        "seconds": 5.74793257098645
+      },
+      "old_RBF_forecasts_bitexact": {
+        "visual": 0,
+        "proprio": 0
+      },
+      "parents": {
+        "linear_rank4": {
+          "methods": {
+            "rbf_same_coordinate": {
+              "mean_target_hellinger2": 0.004574288564617746,
+              "mean_path_forecast_H3_MSE": 0.0736658420369769,
+              "mean_path_forecast_H6_MSE": 0.08926487739633007,
+              "central_forecast_H1_H6_MSE": [
+                0.04411297048433893,
+                0.054943210994542385,
+                0.07939083837477992,
+                0.07086024637147227,
+                0.0771682024229052,
+                0.08812337046090653
+              ],
+              "central_native_cost": [
+                0.6196506023406982,
+                0.6234613656997681,
+                0.6202966570854187,
+                0.6263462901115417,
+                0.6220483779907227,
+                0.622201144695282,
+                0.6217707991600037,
+                0.6265016794204712,
+                0.6207102537155151
+              ],
+              "central_spearman": 0.3,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 72.50001212456644,
+              "central_selected_wrapped_angle_error_rad": 0.9604173898696899,
+              "central_realized_raw_norm": [
+                98.22666618801641,
+                137.72729084471587,
+                57.072437459379124,
+                58.50055722174196,
+                136.99678472429645,
+                144.5356086376868,
+                52.83693754320209,
+                115.28916725388905,
+                81.13828488860494
+              ],
+              "central_requested_raw_norm": [
+                98.22664371230215,
+                137.727289896209,
+                57.07243788363588,
+                58.50055308992593,
+                136.99677624184042,
+                144.53561922716264,
+                52.836933611860225,
+                115.28917318506716,
+                81.1382816923809
+              ],
+              "central_outside_box_count": 3,
+              "central_nearest_donor_standardized_distance": [
+                0.5707530228261912,
+                0.26582873659248313,
+                0.2893560292154615,
+                0.2821134689237518,
+                0.27400083498773536,
+                0.2681003292920372,
+                0.29039405173073113,
+                0.27033983514924437,
+                0.2827247932407243
+              ],
+              "coordinate_error_max": 17.70241820105945,
+              "realized_coordinate_error_max": 17.70242035301696,
+              "maximum_PCA64_complement_error": 0.00003169893506549393
+            },
+            "graph_same_coordinate": {
+              "mean_target_hellinger2": 0.004475529541377909,
+              "mean_path_forecast_H3_MSE": 0.07368890008333903,
+              "mean_path_forecast_H6_MSE": 0.08932114004892468,
+              "central_forecast_H1_H6_MSE": [
+                0.04411297048433893,
+                0.054943210994542385,
+                0.07990286898574249,
+                0.07091284280968609,
+                0.07718992304908814,
+                0.08817021901851176
+              ],
+              "central_native_cost": [
+                0.61961829662323,
+                0.6235327124595642,
+                0.620272696018219,
+                0.6263797283172607,
+                0.6220651865005493,
+                0.6222320199012756,
+                0.6217776536941528,
+                0.6265508532524109,
+                0.6207036375999451
+              ],
+              "central_spearman": 0.3,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 72.50001212456644,
+              "central_selected_wrapped_angle_error_rad": 0.9604173898696899,
+              "central_realized_raw_norm": [
+                99.17106652067581,
+                138.9675421014717,
+                57.858214647301835,
+                59.55620479705338,
+                137.9798549426008,
+                145.65115418995518,
+                53.68361018971466,
+                116.47767537603917,
+                81.92332589736647
+              ],
+              "central_requested_raw_norm": [
+                99.17106326108434,
+                138.9675439808681,
+                57.8582206434778,
+                59.55619650325069,
+                137.9798606310666,
+                145.65115296254737,
+                53.68361128221662,
+                116.47766820224543,
+                81.92331809854768
+              ],
+              "central_outside_box_count": 4,
+              "central_nearest_donor_standardized_distance": [
+                0.5856018029108748,
+                0.324903894614035,
+                0.32489675529202505,
+                0.324901267657371,
+                0.3249037275511231,
+                0.32490260247959146,
+                0.3249004360973419,
+                0.3249004020162727,
+                0.32490413399717655
+              ],
+              "coordinate_error_max": 3.105885769780861e-13,
+              "realized_coordinate_error_max": 0.000020178644148726254,
+              "maximum_PCA64_complement_error": 0.00003208476742566635
+            },
+            "rbf_matched_dose": {
+              "mean_target_hellinger2": 0.00464269942312967,
+              "mean_path_forecast_H3_MSE": 0.07369072356935474,
+              "mean_path_forecast_H6_MSE": 0.08908204169744768,
+              "central_forecast_H1_H6_MSE": [
+                0.04411297048433893,
+                0.054943210994542385,
+                0.07917769379184268,
+                0.07085114293322578,
+                0.07716741751929872,
+                0.08806689233979217
+              ],
+              "central_native_cost": [
+                0.6196423172950745,
+                0.6233903765678406,
+                0.620345413684845,
+                0.6263320446014404,
+                0.6220256090164185,
+                0.622174859046936,
+                0.621771514415741,
+                0.6264289617538452,
+                0.6207756996154785
+              ],
+              "central_spearman": 0.3,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 72.50001212456644,
+              "central_selected_wrapped_angle_error_rad": 0.9604173898696899,
+              "central_realized_raw_norm": [
+                93.31530915342402,
+                130.84092948281173,
+                54.21882220605413,
+                55.57552314295905,
+                130.14693845072844,
+                137.30883855195916,
+                50.19508442033675,
+                109.52471794443196,
+                77.08136472343303
+              ],
+              "central_requested_raw_norm": [
+                93.31531152664758,
+                130.840925401414,
+                54.21881598944121,
+                55.57552543544068,
+                130.14693742978415,
+                137.3088382657509,
+                50.195086931268925,
+                109.52471452575074,
+                77.08136760776708
+              ],
+              "central_outside_box_count": 3,
+              "central_nearest_donor_standardized_distance": [
+                0.5655650677133506,
+                0.2529551915014598,
+                0.2754349823578574,
+                0.2685975956342417,
+                0.26067741550710133,
+                0.25506881004942605,
+                0.2764092823486886,
+                0.25732123857686956,
+                0.26911704496768174
+              ],
+              "coordinate_error_max": 16.435799450656475,
+              "realized_coordinate_error_max": 16.43580068247385,
+              "maximum_PCA64_complement_error": 0.00003168887025872813,
+              "ray": {
+                "alpha_min": 0.9221209198417313,
+                "alpha_max": 0.9601341743107099,
+                "alpha_mean": 0.9465411426067909,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 1.1809220268332865e-10,
+                "central_alpha": [
+                  0.9504022799541048,
+                  0.9498795519379684,
+                  0.9508342490565695,
+                  0.9507664375596079,
+                  0.9500625925102355,
+                  0.9498923046062515,
+                  0.9507788205362573,
+                  0.9501432431924144,
+                  0.9506606580657575
+                ],
+                "recipient_points": 189
+              }
+            },
+            "graph_matched_dose": {
+              "mean_target_hellinger2": 0.00457157532509882,
+              "mean_path_forecast_H3_MSE": 0.07372652449668896,
+              "mean_path_forecast_H6_MSE": 0.08911554726141854,
+              "central_forecast_H1_H6_MSE": [
+                0.04411297048433893,
+                0.054943210994542385,
+                0.07959602260679145,
+                0.07089798810045846,
+                0.07718666168612981,
+                0.08809767527303425
+              ],
+              "central_native_cost": [
+                0.6196106672286987,
+                0.6234438419342041,
+                0.6203356981277466,
+                0.6263576149940491,
+                0.6220381259918213,
+                0.6221993565559387,
+                0.621777355670929,
+                0.6264597773551941,
+                0.6207835674285889
+              ],
+              "central_spearman": 0.3,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 72.50001212456644,
+              "central_selected_wrapped_angle_error_rad": 0.9604173898696899,
+              "central_realized_raw_norm": [
+                93.31532683248486,
+                130.84092972813693,
+                54.218813359820835,
+                55.5755229319658,
+                130.14693924364192,
+                137.3088419189713,
+                50.19508781494183,
+                109.5247192435,
+                77.08135449717584
+              ],
+              "central_requested_raw_norm": [
+                93.31531152670357,
+                130.84092540148168,
+                54.21881598943743,
+                55.57552543543194,
+                130.14693742974865,
+                137.3088382658002,
+                50.195086931267554,
+                109.52471452582083,
+                77.08136760773085
+              ],
+              "central_outside_box_count": 3,
+              "central_nearest_donor_standardized_distance": [
+                0.5772833289573804,
+                0.3058838342147481,
+                0.30484673200440193,
+                0.3035789437517981,
+                0.3065012799254932,
+                0.3062742925586063,
+                0.30417046368515455,
+                0.3055924826363009,
+                0.3059861396680108
+              ],
+              "coordinate_error_max": 2.714282550885238e-13,
+              "realized_coordinate_error_max": 0.000017506546221706095,
+              "maximum_PCA64_complement_error": 0.000032914678434803335,
+              "ray": {
+                "alpha_min": 0.9202124266454206,
+                "alpha_max": 0.9558297537567313,
+                "alpha_mean": 0.9404146734047341,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 1.0379608283983544e-10,
+                "central_alpha": [
+                  0.9415233252556021,
+                  0.9414589662178656,
+                  0.9382888873116286,
+                  0.9343729274482513,
+                  0.9433598902789271,
+                  0.9426647183359051,
+                  0.936196100874426,
+                  0.9405729773360605,
+                  0.9417731110248297
+                ],
+                "recipient_points": 189
+              }
+            },
+            "common_norm_sham": {
+              "mean_target_hellinger2": 0.02852996709989384,
+              "mean_path_forecast_H3_MSE": 0.07396505419332829,
+              "mean_path_forecast_H6_MSE": 0.08631333411417919,
+              "central_forecast_H1_H6_MSE": [
+                0.04411297048433893,
+                0.054943210994542385,
+                0.07484723472548567,
+                0.07033179619913375,
+                0.0770396517721773,
+                0.08662349336121727
+              ],
+              "central_native_cost": [
+                0.6192567348480225,
+                0.6212878227233887,
+                0.6211481690406799,
+                0.6261840462684631,
+                0.6210179328918457,
+                0.6208726167678833,
+                0.6218858361244202,
+                0.6246004104614258,
+                0.6219411492347717
+              ],
+              "central_spearman": 0.65,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 72.50001212456644,
+              "central_selected_wrapped_angle_error_rad": 0.9604173898696899,
+              "central_realized_raw_norm": [
+                93.31531168933702,
+                130.84092889905347,
+                54.21881445674163,
+                55.575522113889065,
+                130.14693543909414,
+                137.30884058677634,
+                50.1950920409179,
+                109.52470822389704,
+                77.08136642896974
+              ],
+              "central_requested_raw_norm": [
+                93.31531152668704,
+                130.84092540139852,
+                54.21881598945408,
+                55.57552543542963,
+                130.1469374297484,
+                137.3088382658045,
+                50.19508693126721,
+                109.52471452581379,
+                77.08136760776185
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.5174277144280636,
+                0.288998177404434,
+                0.1197651110093241,
+                0.12275536088390158,
+                0.26140138792821477,
+                0.30329349332973127,
+                0.11087041186863342,
+                0.24192168708121864,
+                0.17025783855307383
+              ],
+              "coordinate_error_max": 0,
+              "realized_coordinate_error_max": 0,
+              "maximum_PCA64_complement_error": 0.000031571689401932446
+            }
+          },
+          "matched_pair_realized_norm_error_max": 0.00002078605652400256,
+          "matched_graph_minus_RBF_H3_MSE": 0.0004183288149487707,
+          "matched_graph_minus_RBF_H6_MSE": 0.00003078293324207393,
+          "matched_graph_minus_RBF_progress_px": 0
+        },
+        "nonlinear_RBF_rank4": {
+          "methods": {
+            "rbf_same_coordinate": {
+              "mean_target_hellinger2": 0.003580488897569012,
+              "mean_path_forecast_H3_MSE": 0.07355740306329259,
+              "mean_path_forecast_H6_MSE": 0.08902782895297408,
+              "central_forecast_H1_H6_MSE": [
+                0.04411297048433893,
+                0.054943210994542385,
+                0.07901624184219447,
+                0.0707208661434715,
+                0.07718571293974613,
+                0.0875555289374579
+              ],
+              "central_native_cost": [
+                0.6195511817932129,
+                0.6226633787155151,
+                0.6207009553909302,
+                0.6260807514190674,
+                0.6217872500419617,
+                0.6218992471694946,
+                0.6217173933982849,
+                0.6256629824638367,
+                0.6213761568069458
+              ],
+              "central_spearman": 0.31666666666666665,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 72.50001212456644,
+              "central_selected_wrapped_angle_error_rad": 0.9604173898696899,
+              "central_realized_raw_norm": [
+                76.2621348247311,
+                104.3659313300343,
+                48.102725452176074,
+                45.849928042372476,
+                105.74252111937852,
+                109.28995600271537,
+                43.609679594842284,
+                88.24592730294444,
+                65.83846806058745
+              ],
+              "central_requested_raw_norm": [
+                76.26213476373576,
+                104.36593224476944,
+                48.10272870730977,
+                45.84993042447645,
+                105.74250858531038,
+                109.28995478821153,
+                43.609695234360174,
+                88.24591956663079,
+                65.83846860477053
+              ],
+              "central_outside_box_count": 3,
+              "central_nearest_donor_standardized_distance": [
+                0.49932801396134047,
+                0.2227028508519618,
+                0.23427775978287757,
+                0.23325331302118277,
+                0.22984035592791535,
+                0.22756611082375874,
+                0.2371529092510122,
+                0.22412440961347732,
+                0.23116857547336106
+              ],
+              "coordinate_error_max": 21.60971250920673,
+              "realized_coordinate_error_max": 21.609712571838685,
+              "maximum_PCA64_complement_error": 0.0000323987462744757
+            },
+            "graph_same_coordinate": {
+              "mean_target_hellinger2": 0.003515102801611647,
+              "mean_path_forecast_H3_MSE": 0.07368222149085589,
+              "mean_path_forecast_H6_MSE": 0.08913797121536302,
+              "central_forecast_H1_H6_MSE": [
+                0.04411297048433893,
+                0.054943210994542385,
+                0.0794088818305846,
+                0.0707581608959962,
+                0.07720158792489634,
+                0.08758657994649052
+              ],
+              "central_native_cost": [
+                0.6195274591445923,
+                0.6227130889892578,
+                0.6206838488578796,
+                0.626105010509491,
+                0.6218011975288391,
+                0.6219164729118347,
+                0.621720552444458,
+                0.6257023811340332,
+                0.6213792562484741
+              ],
+              "central_spearman": 0.31666666666666665,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 72.50001212456644,
+              "central_selected_wrapped_angle_error_rad": 0.9604173898696899,
+              "central_realized_raw_norm": [
+                77.01587476461715,
+                105.24669791695895,
+                48.87908897236925,
+                46.71912367583214,
+                106.48612542518416,
+                110.08564440392497,
+                44.3675459216611,
+                89.1187867681337,
+                66.58030264812038
+              ],
+              "central_requested_raw_norm": [
+                77.01587994334234,
+                105.24669625334548,
+                48.87908098277276,
+                46.71911193912665,
+                106.48612174940912,
+                110.0856457759361,
+                44.36754904407093,
+                89.11878187926644,
+                66.58029928776793
+              ],
+              "central_outside_box_count": 3,
+              "central_nearest_donor_standardized_distance": [
+                0.5154798977869031,
+                0.26249696869285605,
+                0.2624941979008776,
+                0.26249537748869445,
+                0.26249861185749224,
+                0.2624956217118292,
+                0.26249563841697127,
+                0.2624950758015853,
+                0.2624951491980654
+              ],
+              "coordinate_error_max": 2.296383543579212e-13,
+              "realized_coordinate_error_max": 0.000018046287292670664,
+              "maximum_PCA64_complement_error": 0.00003216503749037258
+            },
+            "rbf_matched_dose": {
+              "mean_target_hellinger2": 0.003827701389673166,
+              "mean_path_forecast_H3_MSE": 0.07358639028270834,
+              "mean_path_forecast_H6_MSE": 0.08888695102076195,
+              "central_forecast_H1_H6_MSE": [
+                0.04411297048433893,
+                0.054943210994542385,
+                0.0788242297852917,
+                0.07072123779902854,
+                0.07718490323885971,
+                0.08752934946355137
+              ],
+              "central_native_cost": [
+                0.6195566654205322,
+                0.6226378083229065,
+                0.6207345724105835,
+                0.6260826587677002,
+                0.6217869520187378,
+                0.621895968914032,
+                0.6217253804206848,
+                0.6256338357925415,
+                0.6214236617088318
+              ],
+              "central_spearman": 0.31666666666666665,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 72.50001212456644,
+              "central_selected_wrapped_angle_error_rad": 0.9604173898696899,
+              "central_realized_raw_norm": [
+                72.44902871139186,
+                99.14764044485992,
+                45.69758867823996,
+                43.557435132407754,
+                100.45538536208103,
+                103.8254584349871,
+                41.42921236173568,
+                83.83362387525968,
+                62.54654627165887
+              ],
+              "central_requested_raw_norm": [
+                72.449028025523,
+                99.14763563256349,
+                45.69759227197647,
+                43.5574339032258,
+                100.45538315609886,
+                103.82545704884318,
+                41.429210472659115,
+                83.83362358830219,
+                62.54654517445502
+              ],
+              "central_outside_box_count": 3,
+              "central_nearest_donor_standardized_distance": [
+                0.4971513014464825,
+                0.2116934911147023,
+                0.22265548876411895,
+                0.22172006735666205,
+                0.21844613225176057,
+                0.21628185599247324,
+                0.22537509770235784,
+                0.21307506740950485,
+                0.21974043892760986
+              ],
+              "coordinate_error_max": 19.890402747177113,
+              "realized_coordinate_error_max": 19.89040837487076,
+              "maximum_PCA64_complement_error": 0.000032613798263220195,
+              "ray": {
+                "alpha_min": 0.9158830569676724,
+                "alpha_max": 0.9609878148326771,
+                "alpha_mean": 0.9478704065169307,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 1.290345608140342e-10,
+                "central_alpha": [
+                  0.9497077457596816,
+                  0.9496568984658751,
+                  0.9495490526067414,
+                  0.9497064075254258,
+                  0.9496569145154723,
+                  0.9496675700147108,
+                  0.9495794038266041,
+                  0.9496953184106331,
+                  0.9496421995807367
+                ],
+                "recipient_points": 189
+              }
+            },
+            "graph_matched_dose": {
+              "mean_target_hellinger2": 0.003776955441571772,
+              "mean_path_forecast_H3_MSE": 0.07370790639201562,
+              "mean_path_forecast_H6_MSE": 0.08896237656990408,
+              "central_forecast_H1_H6_MSE": [
+                0.04411297048433893,
+                0.054943210994542385,
+                0.07913440602225413,
+                0.07075552200745064,
+                0.07719860933242802,
+                0.08755196214858585
+              ],
+              "central_native_cost": [
+                0.619535505771637,
+                0.6226798892021179,
+                0.6207288503646851,
+                0.6261051297187805,
+                0.621800422668457,
+                0.6219114661216736,
+                0.6217301487922668,
+                0.6256648898124695,
+                0.6214374899864197
+              ],
+              "central_spearman": 0.31666666666666665,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 72.50001212456644,
+              "central_selected_wrapped_angle_error_rad": 0.9604173898696899,
+              "central_realized_raw_norm": [
+                72.44902386002529,
+                99.14763612761644,
+                45.6975914026973,
+                43.557435690632815,
+                100.45538339097267,
+                103.82546437535628,
+                41.429208433038184,
+                83.83363132002604,
+                62.54653724696999
+              ],
+              "central_requested_raw_norm": [
+                72.44902802554913,
+                99.14763563251645,
+                45.69759227191332,
+                43.557433903236976,
+                100.45538315606144,
+                103.82545704884092,
+                41.42921047262792,
+                83.83362358830786,
+                62.54654517451919
+              ],
+              "central_outside_box_count": 3,
+              "central_nearest_donor_standardized_distance": [
+                0.5111153620135062,
+                0.24719498778287863,
+                0.24530039843679793,
+                0.24467910280267738,
+                0.24754227892806258,
+                0.24748063706844217,
+                0.24501523135108363,
+                0.24685227089792472,
+                0.24650561459807604
+              ],
+              "coordinate_error_max": 2.755815978388928e-13,
+              "realized_coordinate_error_max": 0.000018730512598512897,
+              "maximum_PCA64_complement_error": 0.00003175827006085541,
+              "ray": {
+                "alpha_min": 0.9153441779497058,
+                "alpha_max": 0.9571363453291752,
+                "alpha_mean": 0.9410527869250475,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 1.1459633242338896e-10,
+                "central_alpha": [
+                  0.9404396730999878,
+                  0.9417057513991125,
+                  0.9344987014164161,
+                  0.9321273270846149,
+                  0.943022527948429,
+                  0.9427990890517179,
+                  0.9334068444572807,
+                  0.9404073522979814,
+                  0.9390864548476117
+                ],
+                "recipient_points": 189
+              }
+            },
+            "common_norm_sham": {
+              "mean_target_hellinger2": 0.029687096818815917,
+              "mean_path_forecast_H3_MSE": 0.07409793859459599,
+              "mean_path_forecast_H6_MSE": 0.08629424480309303,
+              "central_forecast_H1_H6_MSE": [
+                0.04411297048433893,
+                0.054943210994542385,
+                0.0749661098025342,
+                0.07041898037290517,
+                0.0770737238781598,
+                0.08671246005011483
+              ],
+              "central_native_cost": [
+                0.6193578243255615,
+                0.6214918494224548,
+                0.6211869120597839,
+                0.6261796355247498,
+                0.6212495565414429,
+                0.6211130619049072,
+                0.6218938827514648,
+                0.6247028112411499,
+                0.6220385432243347
+              ],
+              "central_spearman": 0.5666666666666667,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 72.50001212456644,
+              "central_selected_wrapped_angle_error_rad": 0.9604173898696899,
+              "central_realized_raw_norm": [
+                72.44902705406977,
+                99.14764254918587,
+                45.69758859036938,
+                43.55743217132961,
+                100.45538624471104,
+                103.8254606134508,
+                41.42921342046182,
+                83.83362740139634,
+                62.546548377884854
+              ],
+              "central_requested_raw_norm": [
+                72.44902802554897,
+                99.14763563253095,
+                45.69759227194427,
+                43.55743390325262,
+                100.45538315604485,
+                103.82545704880096,
+                41.42921047264216,
+                83.83362358829925,
+                62.546545174532
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.5122544131971712,
+                0.21899324613110566,
+                0.10094321893347286,
+                0.09620949966384637,
+                0.2218858908737484,
+                0.22933456328938523,
+                0.09150812467410564,
+                0.1851745627322935,
+                0.1381529592050256
+              ],
+              "coordinate_error_max": 0,
+              "realized_coordinate_error_max": 0,
+              "maximum_PCA64_complement_error": 0.00003213056511874868
+            }
+          },
+          "matched_pair_realized_norm_error_max": 0.000017074621155188652,
+          "matched_graph_minus_RBF_H3_MSE": 0.00031017623696243113,
+          "matched_graph_minus_RBF_H6_MSE": 0.000022612685034478774,
+          "matched_graph_minus_RBF_progress_px": 0
+        }
+      },
+      "goal_coverage": {
+        "complete": true,
+        "episode": 1,
+        "source_input_sha256": "413e5b4f0e6d43a0cede21d12bd303301d976bd6bb2b4f438a14db45b5a9e996",
+        "experiment_summary_sha256": "5ae85bceb1524058a45688c31cdb4881e3a01c99239c398f0eaadf699bf8433a",
+        "verified_goal_coverage_source_sha256": "08456343ea3628271f6dda88fe1925d7c64f61bbb273580c738c2007d4e12898",
+        "computed_vs_reference_maxabs": 0,
+        "goal_block_pose": [
+          279.42401123046875,
+          315.5226135253906,
+          1.8602958917617798
+        ],
+        "goal_aligned_coverage_original9": [
+          0.2617597857963,
+          0.2617597857963,
+          0.2617597857963,
+          0.2617597857963,
+          0.2617597857963,
+          0.2617597857963,
+          0.2617597857963,
+          0.2617597857963,
+          0.2617597857963
+        ],
+        "native_selected_coverage": 0.2617597857963,
+        "rows": [
+          {
+            "control_parent": "native",
+            "method": "native",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "rbf_same_coordinate",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "graph_same_coordinate",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "rbf_matched_dose",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "graph_matched_dose",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "common_norm_sham",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "rbf_same_coordinate",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "graph_same_coordinate",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "rbf_matched_dose",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "graph_matched_dose",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "common_norm_sham",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.2617597857963,
+            "delta_vs_native": 0
+          }
+        ],
+        "scope": "Descriptive expert-goal polygon coverage; not original painted-default native reward, no refit or primary endpoint replacement",
+        "simulator_calls": 0,
+        "model_calls": 0,
+        "held_accessed": false
+      }
+    },
+    {
+      "episode": 2,
+      "seconds": 74.78482940501999,
+      "source_done_sha256": "088aef2eaa5f74cc6ddef28318143a629342f943eeac890577c83a76fe069799",
+      "native": {
+        "control_parent": "native",
+        "method": "native",
+        "waypoint": "central",
+        "native_cost": [
+          0.08962000161409378,
+          0.11881068348884583,
+          0.11975667625665665,
+          0.09046562016010284,
+          0.09226703643798828,
+          0.10589678585529327,
+          0.09418200701475143,
+          0.0937202051281929,
+          0.10237933695316315
+        ],
+        "cost_vs_physical_distance_spearman": 0.18333333333333335,
+        "negative_cost_vs_physical_progress_spearman": 0.18333333333333335,
+        "selected_action_index": 0,
+        "selected_actual_progress_px": 211.60552978515625,
+        "selected_actual_goal_xy_distance_px": 4.22645378112793,
+        "initial_goal_xy_distance_px": 215.8319854736328,
+        "physical_progress_px_by_action": [
+          211.60552978515625,
+          205.8916473388672,
+          212.32264709472656,
+          212.24679565429688,
+          210.71002197265625,
+          209.9259490966797,
+          211.9199676513672,
+          210.54159545898438,
+          211.37860107421875
+        ],
+        "physical_goal_xy_distance_px_by_action": [
+          4.22645378112793,
+          9.94034481048584,
+          3.509336233139038,
+          3.5851900577545166,
+          5.121963977813721,
+          5.906034469604492,
+          3.9120230674743652,
+          5.2903828620910645,
+          4.453382968902588
+        ],
+        "original_native_planner_action_index": 0,
+        "original_native_planner_actual_progress_px": 211.60552978515625,
+        "original_native_planner_actual_goal_xy_distance_px": 4.22645378112793,
+        "fixed_bank_physical_oracle_index": 2,
+        "actual_visual_MSE_H1_H6": [
+          0.10065209776936743,
+          0.09387366583603064,
+          0.11972351127069891,
+          0.13119668978477292,
+          0.11947823814421321,
+          0.12493269600755197
+        ],
+        "native_visual_MSE_H1_H6": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "requested_raw_norm": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "realized_raw_norm": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "off_PCA64_maxabs": 0,
+        "actual_support": {
+          "outside_train_box": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "nearest_train_distance": [
+            0.46520028251019385,
+            0.0000029506933089894995,
+            0.000004705464889328622,
+            0.0000029998002773179322,
+            0.0000027350024955590908,
+            0.0000070105806487427365,
+            0.000007190655654907118,
+            0.0000024856369670647797,
+            9.194149286092728e-7
+          ]
+        },
+        "selected_block_distance_px": 2.288469353935363,
+        "selected_wrapped_angle_error_rad": 0.07463645935058594
+      },
+      "canary": {
+        "complete": true,
+        "exact_zero": true,
+        "graph_roundtrip_maxabs": 1.1368683772161603e-13,
+        "gradient_fd_relative": 0.0006887811066618616,
+        "native_graph_jacobian_singular_values": [
+          0.06961694528629687,
+          0.030988913731411848,
+          0.005277077915573709,
+          0.000900187680011917
+        ],
+        "native_graph_rank_relative1e_4": 4,
+        "seconds": 9.739487194106914
+      },
+      "old_RBF_forecasts_bitexact": {
+        "visual": 0,
+        "proprio": 0
+      },
+      "parents": {
+        "linear_rank4": {
+          "methods": {
+            "rbf_same_coordinate": {
+              "mean_target_hellinger2": 0.014067507372237742,
+              "mean_path_forecast_H3_MSE": 0.12478665922745154,
+              "mean_path_forecast_H6_MSE": 0.12840231360021803,
+              "central_forecast_H1_H6_MSE": [
+                0.10065209776936743,
+                0.09387366583603064,
+                0.12411970048364275,
+                0.13360112699579993,
+                0.12087962078886717,
+                0.12656851649000989
+              ],
+              "central_native_cost": [
+                0.09205559641122818,
+                0.10802864283323288,
+                0.13131068646907806,
+                0.09418537467718124,
+                0.09295245260000229,
+                0.09513460844755173,
+                0.09779348224401474,
+                0.09572626650333405,
+                0.09310474991798401
+              ],
+              "central_spearman": -0.03333333333333333,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 2.288469353935363,
+              "central_selected_wrapped_angle_error_rad": 0.07463645935058594,
+              "central_realized_raw_norm": [
+                115.58474304111908,
+                105.87524712311978,
+                142.535005791408,
+                113.40968733306634,
+                118.23213227560376,
+                104.94493180961645,
+                127.5826685503736,
+                117.59556829632692,
+                113.75402604848647
+              ],
+              "central_requested_raw_norm": [
+                115.58474000621203,
+                105.87525162452732,
+                142.53500934454974,
+                113.40968085435388,
+                118.23212438623148,
+                104.94493262460786,
+                127.58266982566535,
+                117.59556570178368,
+                113.75402041796124
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.26901095841963596,
+                0.36897420721229207,
+                0.31473110948492145,
+                0.3539665312926195,
+                0.3248130731737784,
+                0.3571464000187566,
+                0.2613484266905245,
+                0.34640093950368334,
+                0.3396723456381665
+              ],
+              "coordinate_error_max": 54.079556779565856,
+              "realized_coordinate_error_max": 54.07955388629441,
+              "maximum_PCA64_complement_error": 0.00003188580304119837
+            },
+            "graph_same_coordinate": {
+              "mean_target_hellinger2": 0.013977357465773822,
+              "mean_path_forecast_H3_MSE": 0.12496868389518379,
+              "mean_path_forecast_H6_MSE": 0.12876659529819626,
+              "central_forecast_H1_H6_MSE": [
+                0.10065209776936743,
+                0.09387366583603064,
+                0.12412915892959753,
+                0.13372257937421123,
+                0.12103778862424341,
+                0.12681136168506213
+              ],
+              "central_native_cost": [
+                0.09210969507694244,
+                0.10788793116807938,
+                0.13322842121124268,
+                0.09422457963228226,
+                0.09306228905916214,
+                0.09520519524812698,
+                0.09800513088703156,
+                0.09581022709608078,
+                0.09295196086168289
+              ],
+              "central_spearman": -0.016666666666666666,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 2.288469353935363,
+              "central_selected_wrapped_angle_error_rad": 0.07463645935058594,
+              "central_realized_raw_norm": [
+                117.93777127170918,
+                106.90396626292888,
+                152.2437791939457,
+                114.73724240146356,
+                121.18162390817412,
+                105.13805244699903,
+                132.78623985642733,
+                120.33126409781744,
+                115.67612217204396
+              ],
+              "central_requested_raw_norm": [
+                117.9377746074421,
+                106.90396856439652,
+                152.24376928098764,
+                114.73724810017745,
+                121.18162679104248,
+                105.13805264441535,
+                132.78624056189446,
+                120.33126292281675,
+                115.67613263434586
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.28082781087075614,
+                0.3607374788499999,
+                0.36073429904137405,
+                0.36073620505774806,
+                0.360739896784118,
+                0.3607368516489797,
+                0.29973781611966394,
+                0.36073584142594467,
+                0.3607369729146252
+              ],
+              "coordinate_error_max": 3.7566265734918364e-13,
+              "realized_coordinate_error_max": 0.000028911393494531828,
+              "maximum_PCA64_complement_error": 0.00003172552924368688
+            },
+            "rbf_matched_dose": {
+              "mean_target_hellinger2": 0.014804266300052405,
+              "mean_path_forecast_H3_MSE": 0.12428318087992625,
+              "mean_path_forecast_H6_MSE": 0.12803634568702266,
+              "central_forecast_H1_H6_MSE": [
+                0.10065209776936743,
+                0.09387366583603064,
+                0.12384354247752036,
+                0.1334223013168514,
+                0.12076443111615888,
+                0.12643126395952292
+              ],
+              "central_native_cost": [
+                0.09188279509544373,
+                0.1086251512169838,
+                0.13068202137947083,
+                0.09397027641534805,
+                0.0928473249077797,
+                0.0956161692738533,
+                0.09753735363483429,
+                0.09559818357229233,
+                0.0933280885219574
+              ],
+              "central_spearman": -0.016666666666666666,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 2.288469353935363,
+              "central_selected_wrapped_angle_error_rad": 0.07463645935058594,
+              "central_realized_raw_norm": [
+                109.80550118398814,
+                100.58148460141305,
+                135.4082590999469,
+                107.73919424119742,
+                112.32051746204651,
+                99.6976927193765,
+                121.20352652781537,
+                111.71579426450349,
+                108.06632359119637
+              ],
+              "central_requested_raw_norm": [
+                109.80550300589765,
+                100.58148904330534,
+                135.40825887731526,
+                107.73919681164077,
+                112.3205181669291,
+                99.6976859933775,
+                121.20353633436557,
+                111.71578741668976,
+                108.06631939706264
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.27244683758596816,
+                0.34990015992892215,
+                0.29929792390326304,
+                0.33736359836076824,
+                0.31634210086462433,
+                0.3399603594088777,
+                0.26426707263644783,
+                0.3301268720431066,
+                0.3239570354461831
+              ],
+              "coordinate_error_max": 49.9314184999065,
+              "realized_coordinate_error_max": 49.931418387394935,
+              "maximum_PCA64_complement_error": 0.00003148933806151888,
+              "ray": {
+                "alpha_min": 0.9398190407062401,
+                "alpha_max": 0.9526459854031799,
+                "alpha_mean": 0.9495250312339893,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 3.922195901395753e-11,
+                "central_alpha": [
+                  0.9517593655690888,
+                  0.9480418825417729,
+                  0.9481550563301226,
+                  0.9517878209590123,
+                  0.9516326912142148,
+                  0.9509562260618196,
+                  0.9508518002963768,
+                  0.9514260929965843,
+                  0.9519627836875912
+                ],
+                "recipient_points": 189
+              }
+            },
+            "graph_matched_dose": {
+              "mean_target_hellinger2": 0.014888454880565404,
+              "mean_path_forecast_H3_MSE": 0.12417366799057608,
+              "mean_path_forecast_H6_MSE": 0.12812813347006896,
+              "central_forecast_H1_H6_MSE": [
+                0.10065209776936743,
+                0.09387366583603064,
+                0.12371013028741869,
+                0.13339853531652662,
+                0.12083093309351407,
+                0.12652859573463768
+              ],
+              "central_native_cost": [
+                0.0918661504983902,
+                0.10859975218772888,
+                0.13155876100063324,
+                0.09395667165517807,
+                0.0929008275270462,
+                0.09570084512233734,
+                0.09753024578094482,
+                0.09561671316623688,
+                0.09325195848941803
+              ],
+              "central_spearman": -0.016666666666666666,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 2.288469353935363,
+              "central_selected_wrapped_angle_error_rad": 0.07463645935058594,
+              "central_realized_raw_norm": [
+                109.80550804628092,
+                100.58148740407204,
+                135.4082535505687,
+                107.73920215545441,
+                112.32052412936275,
+                99.69767995671941,
+                121.20354549854311,
+                111.71579006409345,
+                108.06631527745283
+              ],
+              "central_requested_raw_norm": [
+                109.80550300589363,
+                100.58148904330291,
+                135.40825887733226,
+                107.73919681163153,
+                112.32051816691569,
+                99.69768599337776,
+                121.20353633438738,
+                111.7157874166928,
+                108.06631939707005
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.28328261323739634,
+                0.33830123920248384,
+                0.32046648862343974,
+                0.3398685774059773,
+                0.33563436827552084,
+                0.34260387775506557,
+                0.2979303428137678,
+                0.3360805008685896,
+                0.3382813188705222
+              ],
+              "coordinate_error_max": 4.716522204378251e-13,
+              "realized_coordinate_error_max": 0.000023183146230890476,
+              "maximum_PCA64_complement_error": 0.000031796206104495184,
+              "ray": {
+                "alpha_min": 0.8646767572751486,
+                "alpha_max": 0.9507996541466781,
+                "alpha_mean": 0.9301698990987383,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 2.970068635477219e-11,
+                "central_alpha": [
+                  0.9345525258254241,
+                  0.9378045381177031,
+                  0.8883736710200338,
+                  0.9421528847716303,
+                  0.9304050069940359,
+                  0.9497336138082204,
+                  0.9158617318375519,
+                  0.9316529722499496,
+                  0.9377507195039385
+                ],
+                "recipient_points": 189
+              }
+            },
+            "common_norm_sham": {
+              "mean_target_hellinger2": 0.029153267713263632,
+              "mean_path_forecast_H3_MSE": 0.11971478644995655,
+              "mean_path_forecast_H6_MSE": 0.1245270158525436,
+              "central_forecast_H1_H6_MSE": [
+                0.10065209776936743,
+                0.09387366583603064,
+                0.1194663484673618,
+                0.13152742694477776,
+                0.11935545778817556,
+                0.12468525631014038
+              ],
+              "central_native_cost": [
+                0.0901535376906395,
+                0.11896035075187683,
+                0.12376373261213303,
+                0.09075338393449783,
+                0.09291620552539825,
+                0.10552656650543213,
+                0.09503067284822464,
+                0.09463261067867279,
+                0.10114065557718277
+              ],
+              "central_spearman": 0.18333333333333335,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 2.288469353935363,
+              "central_selected_wrapped_angle_error_rad": 0.07463645935058594,
+              "central_realized_raw_norm": [
+                109.80550349596564,
+                100.58149025848823,
+                135.40826578082428,
+                107.73920258857036,
+                112.32051959664676,
+                99.69768334173865,
+                121.20353477707995,
+                111.71579025027413,
+                108.0663190655003
+              ],
+              "central_requested_raw_norm": [
+                109.80550300590143,
+                100.58148904330096,
+                135.40825887732228,
+                107.73919681163619,
+                112.32051816691991,
+                99.69768599337746,
+                121.20353633438208,
+                111.7157874166945,
+                108.06631939706318
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.43432059967697867,
+                0.11888602084781971,
+                0.1600488035683917,
+                0.12734514936348315,
+                0.13276101470507207,
+                0.11784278674737966,
+                0.14326151958141128,
+                0.1320435277782183,
+                0.12773173943229715
+              ],
+              "coordinate_error_max": 0,
+              "realized_coordinate_error_max": 0,
+              "maximum_PCA64_complement_error": 0.00003201918449652341
+            }
+          },
+          "matched_pair_realized_norm_error_max": 0.000020582682140002362,
+          "matched_graph_minus_RBF_H3_MSE": -0.00013341219010166994,
+          "matched_graph_minus_RBF_H6_MSE": 0.00009733177511475621,
+          "matched_graph_minus_RBF_progress_px": 0
+        },
+        "nonlinear_RBF_rank4": {
+          "methods": {
+            "rbf_same_coordinate": {
+              "mean_target_hellinger2": 0.01268654849845916,
+              "mean_path_forecast_H3_MSE": 0.12595939707765108,
+              "mean_path_forecast_H6_MSE": 0.12825628654901985,
+              "central_forecast_H1_H6_MSE": [
+                0.10065209776936743,
+                0.09387366583603064,
+                0.12625539069424616,
+                0.1340594131443852,
+                0.12150973997112843,
+                0.12718196569414608
+              ],
+              "central_native_cost": [
+                0.09176482260227203,
+                0.10330729931592941,
+                0.12654981017112732,
+                0.09351726621389389,
+                0.09261246770620346,
+                0.09150213748216629,
+                0.09701430797576904,
+                0.0957009345293045,
+                0.0911412164568901
+              ],
+              "central_spearman": -0.2333333333333333,
+              "central_selected_action": 8,
+              "central_selected_progress_delta_px": -0.2269287109375,
+              "central_selected_block_distance_px": 2.3150362085073626,
+              "central_selected_wrapped_angle_error_rad": 0.08455228805541992,
+              "central_realized_raw_norm": [
+                210.6802430651846,
+                151.38343519585922,
+                227.87092281478888,
+                207.19762505361095,
+                210.37475000852183,
+                188.8666592096792,
+                222.25906338462383,
+                213.39728121317304,
+                205.76384855782942
+              ],
+              "central_requested_raw_norm": [
+                210.68024585799435,
+                151.38343286500793,
+                227.87092946762607,
+                207.19761546687266,
+                210.37475372002504,
+                188.8666551478639,
+                222.25906643302625,
+                213.39727740621487,
+                205.76385181508806
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.3607548646750554,
+                0.4142414763702627,
+                0.2476350276914475,
+                0.3607444025039101,
+                0.30390760787615817,
+                0.3764182950975012,
+                0.28322835714391725,
+                0.34436710413003335,
+                0.3206067193689366
+              ],
+              "coordinate_error_max": 88.95456089184044,
+              "realized_coordinate_error_max": 88.95456289534397,
+              "maximum_PCA64_complement_error": 0.000031905569350176854
+            },
+            "graph_same_coordinate": {
+              "mean_target_hellinger2": 0.012536106817424297,
+              "mean_path_forecast_H3_MSE": 0.12631907746237317,
+              "mean_path_forecast_H6_MSE": 0.12903243777544532,
+              "central_forecast_H1_H6_MSE": [
+                0.10065209776936743,
+                0.09387366583603064,
+                0.1262258076023262,
+                0.13428181657062926,
+                0.12185137029168569,
+                0.12771752033247477
+              ],
+              "central_native_cost": [
+                0.09198369085788727,
+                0.10371491312980652,
+                0.13075192272663116,
+                0.09370981156826019,
+                0.09299582988023758,
+                0.09170082956552505,
+                0.09764410555362701,
+                0.09595727920532227,
+                0.09088438004255295
+              ],
+              "central_spearman": -0.2333333333333333,
+              "central_selected_action": 8,
+              "central_selected_progress_delta_px": -0.2269287109375,
+              "central_selected_block_distance_px": 2.3150362085073626,
+              "central_selected_wrapped_angle_error_rad": 0.08455228805541992,
+              "central_realized_raw_norm": [
+                218.88387896727062,
+                151.99203943838782,
+                244.29339833883697,
+                214.23530655141676,
+                219.27279615431948,
+                193.49908756149594,
+                233.7995469642305,
+                222.1857502561293,
+                213.32725421058416
+              ],
+              "central_requested_raw_norm": [
+                218.88387884817556,
+                151.99203814986632,
+                244.2934010751343,
+                214.23529458917372,
+                219.27279752903686,
+                193.499096783508,
+                233.79955792685,
+                222.18574734508633,
+                213.3272510243734
+              ],
+              "central_outside_box_count": 2,
+              "central_nearest_donor_standardized_distance": [
+                0.4964275977350689,
+                0.48953391847380595,
+                0.48953193328558353,
+                0.4895333814383103,
+                0.48953632173511086,
+                0.4895321824015275,
+                0.48953351477029394,
+                0.48953413411320795,
+                0.4895341085615777
+              ],
+              "coordinate_error_max": 4.056671679591112e-13,
+              "realized_coordinate_error_max": 0.000022875773262816273,
+              "maximum_PCA64_complement_error": 0.00003181740446445147
+            },
+            "rbf_matched_dose": {
+              "mean_target_hellinger2": 0.01330295684747398,
+              "mean_path_forecast_H3_MSE": 0.1254005197307412,
+              "mean_path_forecast_H6_MSE": 0.1278930598648575,
+              "central_forecast_H1_H6_MSE": [
+                0.10065209776936743,
+                0.09387366583603064,
+                0.12586664475332177,
+                0.1338650916514547,
+                0.12135067176799404,
+                0.12698388383038908
+              ],
+              "central_native_cost": [
+                0.09162101149559021,
+                0.10393573343753815,
+                0.12616531550884247,
+                0.09335692226886749,
+                0.09252112358808517,
+                0.09197995811700821,
+                0.09680449217557907,
+                0.09558094292879105,
+                0.09131845086812973
+              ],
+              "central_spearman": -0.16666666666666669,
+              "central_selected_action": 8,
+              "central_selected_progress_delta_px": -0.2269287109375,
+              "central_selected_block_distance_px": 2.3150362085073626,
+              "central_selected_wrapped_angle_error_rad": 0.08455228805541992,
+              "central_realized_raw_norm": [
+                200.14623046721894,
+                143.81425894902554,
+                216.47738434957762,
+                196.83774042317376,
+                199.8560207800022,
+                179.42331603288304,
+                211.1461206321736,
+                202.72742006876075,
+                195.4756541084012
+              ],
+              "central_requested_raw_norm": [
+                200.14623356506695,
+                143.81426122175375,
+                216.47738299422787,
+                196.8377346935112,
+                199.85601603402026,
+                179.4233223904438,
+                211.1461131113686,
+                202.72741353589205,
+                195.47565922432543
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.3601870665731972,
+                0.39619435356526594,
+                0.2363827480805095,
+                0.3444912084828918,
+                0.2905392323853474,
+                0.3597602220867017,
+                0.2706866423367221,
+                0.32864899315195717,
+                0.3065781499840218
+              ],
+              "coordinate_error_max": 81.75652124161758,
+              "realized_coordinate_error_max": 81.75651658189015,
+              "maximum_PCA64_complement_error": 0.0000319096045515721,
+              "ray": {
+                "alpha_min": 0.9386375725680267,
+                "alpha_max": 0.9541418803602113,
+                "alpha_mean": 0.9496251390877535,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 4.0472514228895307e-11,
+                "central_alpha": [
+                  0.9496924922124066,
+                  0.953253640313406,
+                  0.9453235685184467,
+                  0.9502148830197115,
+                  0.9493224912130955,
+                  0.9515566768665877,
+                  0.9479354291042199,
+                  0.9491511805624526,
+                  0.9502167312036676
+                ],
+                "recipient_points": 189
+              }
+            },
+            "graph_matched_dose": {
+              "mean_target_hellinger2": 0.013390289014205336,
+              "mean_path_forecast_H3_MSE": 0.12519567144213184,
+              "mean_path_forecast_H6_MSE": 0.128177510771789,
+              "central_forecast_H1_H6_MSE": [
+                0.10065209776936743,
+                0.09387366583603064,
+                0.1255319706222702,
+                0.13387439033050783,
+                0.12151767087641913,
+                0.12725669466313577
+              ],
+              "central_native_cost": [
+                0.09169796109199524,
+                0.10437718778848648,
+                0.12915395200252533,
+                0.0934024527668953,
+                0.09279309213161469,
+                0.09242305904626846,
+                0.097113236784935,
+                0.09570126235485077,
+                0.09115710109472275
+              ],
+              "central_spearman": -0.16666666666666669,
+              "central_selected_action": 8,
+              "central_selected_progress_delta_px": -0.2269287109375,
+              "central_selected_block_distance_px": 2.3150362085073626,
+              "central_selected_wrapped_angle_error_rad": 0.08455228805541992,
+              "central_realized_raw_norm": [
+                200.1462292181858,
+                143.81425948914284,
+                216.47737891954864,
+                196.83772769945836,
+                199.85601359690986,
+                179.42332146228784,
+                211.14612066770664,
+                202.72740856464358,
+                195.47565400012968
+              ],
+              "central_requested_raw_norm": [
+                200.1462335651073,
+                143.81426122176575,
+                216.47738299423406,
+                196.83773469352298,
+                199.85601603400238,
+                179.42332239050668,
+                211.14611311138526,
+                202.7274135359218,
+                195.4756592243318
+              ],
+              "central_outside_box_count": 1,
+              "central_nearest_donor_standardized_distance": [
+                0.4751553352913501,
+                0.46529259888537217,
+                0.43045605689733607,
+                0.4506063945499421,
+                0.44638539109955616,
+                0.4555670322148748,
+                0.44119189524686925,
+                0.44673493835049577,
+                0.449411768444943
+              ],
+              "coordinate_error_max": 2.7489982992315284e-13,
+              "realized_coordinate_error_max": 0.000021187207693782907,
+              "maximum_PCA64_complement_error": 0.000031905271580479067,
+              "ray": {
+                "alpha_min": 0.8454044559664595,
+                "alpha_max": 0.9525244185982871,
+                "alpha_mean": 0.9156078467614628,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 3.7914560380158946e-11,
+                "central_alpha": [
+                  0.9153520462361797,
+                  0.9504808928700044,
+                  0.8793223842024958,
+                  0.920481654188066,
+                  0.9118531666937173,
+                  0.9306174771230786,
+                  0.9012498545088903,
+                  0.9125716753037949,
+                  0.9180398389097348
+                ],
+                "recipient_points": 189
+              }
+            },
+            "common_norm_sham": {
+              "mean_target_hellinger2": 0.028735774988308548,
+              "mean_path_forecast_H3_MSE": 0.12006776584800043,
+              "mean_path_forecast_H6_MSE": 0.12439990599597488,
+              "central_forecast_H1_H6_MSE": [
+                0.10065209776936743,
+                0.09387366583603064,
+                0.11984537298779467,
+                0.13184256512933673,
+                0.11927115788068551,
+                0.1244877080755016
+              ],
+              "central_native_cost": [
+                0.09071502834558487,
+                0.1189674660563469,
+                0.126333549618721,
+                0.0910789743065834,
+                0.09345840662717819,
+                0.10505741834640503,
+                0.0957786962389946,
+                0.09549851715564728,
+                0.10022033751010895
+              ],
+              "central_spearman": 0.18333333333333335,
+              "central_selected_action": 0,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 2.288469353935363,
+              "central_selected_wrapped_angle_error_rad": 0.07463645935058594,
+              "central_realized_raw_norm": [
+                200.1462309373237,
+                143.8142617890148,
+                216.47738495041918,
+                196.83773690599216,
+                199.85602607103533,
+                179.42331441695381,
+                211.1461083455813,
+                202.72742150136114,
+                195.47566307551116
+              ],
+              "central_requested_raw_norm": [
+                200.14623356509463,
+                143.81426122175753,
+                216.47738299424475,
+                196.83773469352903,
+                199.85601603402378,
+                179.4233223904707,
+                211.14611311137492,
+                202.72741353590413,
+                195.47565922433364
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.432136875355628,
+                0.16998610477679535,
+                0.25587053410584104,
+                0.2326574514536802,
+                0.23622584156491344,
+                0.2120765474609895,
+                0.2495714550365613,
+                0.23961705358970445,
+                0.23104745057070414
+              ],
+              "coordinate_error_max": 0,
+              "realized_coordinate_error_max": 0,
+              "maximum_PCA64_complement_error": 0.00003263594805380521
+            }
+          },
+          "matched_pair_realized_norm_error_max": 0.000022325830229874555,
+          "matched_graph_minus_RBF_H3_MSE": -0.0003346741310515655,
+          "matched_graph_minus_RBF_H6_MSE": 0.0002728108327466894,
+          "matched_graph_minus_RBF_progress_px": 0
+        }
+      },
+      "goal_coverage": {
+        "complete": true,
+        "episode": 2,
+        "source_input_sha256": "f83a8b326d77c36bf71998c8d80c0a8b46335affaa31943927204389d42e5bf0",
+        "experiment_summary_sha256": "72d8b7d6185f8bda24baddd1e7c151152581986dbab5ae6919261f6bc54a4886",
+        "verified_goal_coverage_source_sha256": "08456343ea3628271f6dda88fe1925d7c64f61bbb273580c738c2007d4e12898",
+        "computed_vs_reference_maxabs": 5.551115123125783e-16,
+        "goal_block_pose": [
+          213.2290496826172,
+          287.3973388671875,
+          1.9002419710159302
+        ],
+        "goal_aligned_coverage_original9": [
+          0.8788121899921324,
+          0.8025825740848317,
+          0.8839194533298316,
+          0.8882480421214454,
+          0.8677919833235327,
+          0.8658597500584836,
+          0.8848496176941798,
+          0.8846426737168953,
+          0.869571913538018
+        ],
+        "native_selected_coverage": 0.8788121899921324,
+        "rows": [
+          {
+            "control_parent": "native",
+            "method": "native",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.8788121899921324,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "rbf_same_coordinate",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.8788121899921324,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "graph_same_coordinate",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.8788121899921324,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "rbf_matched_dose",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.8788121899921324,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "graph_matched_dose",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.8788121899921324,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "common_norm_sham",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.8788121899921324,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "rbf_same_coordinate",
+            "selected_index": 8,
+            "goal_aligned_coverage": 0.869571913538018,
+            "delta_vs_native": -0.009240276454114404
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "graph_same_coordinate",
+            "selected_index": 8,
+            "goal_aligned_coverage": 0.869571913538018,
+            "delta_vs_native": -0.009240276454114404
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "rbf_matched_dose",
+            "selected_index": 8,
+            "goal_aligned_coverage": 0.869571913538018,
+            "delta_vs_native": -0.009240276454114404
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "graph_matched_dose",
+            "selected_index": 8,
+            "goal_aligned_coverage": 0.869571913538018,
+            "delta_vs_native": -0.009240276454114404
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "common_norm_sham",
+            "selected_index": 0,
+            "goal_aligned_coverage": 0.8788121899921324,
+            "delta_vs_native": 0
+          }
+        ],
+        "scope": "Descriptive expert-goal polygon coverage; not original painted-default native reward, no refit or primary endpoint replacement",
+        "simulator_calls": 0,
+        "model_calls": 0,
+        "held_accessed": false
+      }
+    },
+    {
+      "episode": 3,
+      "seconds": 74.12884530099109,
+      "source_done_sha256": "9b0d6af96e1fa92d62c2d94bd88a7f884deb2d457513343cfdb60da1d7bfdb89",
+      "native": {
+        "control_parent": "native",
+        "method": "native",
+        "waypoint": "central",
+        "native_cost": [
+          0.3112969398498535,
+          0.309198796749115,
+          0.32295963168144226,
+          0.37307339906692505,
+          0.322073370218277,
+          0.3102228045463562,
+          0.3143898844718933,
+          0.31379255652427673,
+          0.31396785378456116
+        ],
+        "cost_vs_physical_distance_spearman": 0.6833333333333333,
+        "negative_cost_vs_physical_progress_spearman": 0.6833333333333333,
+        "selected_action_index": 1,
+        "selected_actual_progress_px": 54.116554260253906,
+        "selected_actual_goal_xy_distance_px": 108.34346771240234,
+        "initial_goal_xy_distance_px": 162.46002197265625,
+        "physical_progress_px_by_action": [
+          52.04161071777344,
+          54.116554260253906,
+          49.856231689453125,
+          24.841537475585938,
+          50.66472625732422,
+          53.325592041015625,
+          50.7481689453125,
+          49.201995849609375,
+          54.743812561035156
+        ],
+        "physical_goal_xy_distance_px_by_action": [
+          110.41841125488281,
+          108.34346771240234,
+          112.60379028320312,
+          137.6184844970703,
+          111.79529571533203,
+          109.13442993164062,
+          111.71185302734375,
+          113.25802612304688,
+          107.7162094116211
+        ],
+        "original_native_planner_action_index": 0,
+        "original_native_planner_actual_progress_px": 52.04161071777344,
+        "original_native_planner_actual_goal_xy_distance_px": 110.41841125488281,
+        "fixed_bank_physical_oracle_index": 8,
+        "actual_visual_MSE_H1_H6": [
+          0.08957060075010315,
+          0.0895423732951135,
+          0.12152009768853789,
+          0.12397452067278945,
+          0.4173978574494381,
+          0.6810734401981505
+        ],
+        "native_visual_MSE_H1_H6": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "requested_raw_norm": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "realized_raw_norm": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "off_PCA64_maxabs": 0,
+        "actual_support": {
+          "outside_train_box": [
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false,
+            false
+          ],
+          "nearest_train_distance": [
+            0.37708120915140303,
+            0.0000034958073346880755,
+            0.0000048788504432871636,
+            0.000009749072611347207,
+            0.0000025511902045050496,
+            0.0000024344137909256687,
+            0.0000029247301345819764,
+            0.000007954177873176371,
+            0.00000461883118894674
+          ]
+        },
+        "selected_block_distance_px": 33.13363134370566,
+        "selected_wrapped_angle_error_rad": 0.11840653419494629
+      },
+      "canary": {
+        "complete": true,
+        "exact_zero": true,
+        "graph_roundtrip_maxabs": 1.1368683772161603e-13,
+        "gradient_fd_relative": 0.00097100856196263,
+        "native_graph_jacobian_singular_values": [
+          0.13342312866508307,
+          0.019943611063226202,
+          0.005994698730173304,
+          0.004848672054330434
+        ],
+        "native_graph_rank_relative1e_4": 4,
+        "seconds": 9.300832594977692
+      },
+      "old_RBF_forecasts_bitexact": {
+        "visual": 0,
+        "proprio": 0
+      },
+      "parents": {
+        "linear_rank4": {
+          "methods": {
+            "rbf_same_coordinate": {
+              "mean_target_hellinger2": 0.015732723416294902,
+              "mean_path_forecast_H3_MSE": 0.12142019537954614,
+              "mean_path_forecast_H6_MSE": 0.6807656625068451,
+              "central_forecast_H1_H6_MSE": [
+                0.08957060075010315,
+                0.0895423732951135,
+                0.11859593450374653,
+                0.12190408643511895,
+                0.4087795216558325,
+                0.6796182495866714
+              ],
+              "central_native_cost": [
+                0.3093584477901459,
+                0.31004124879837036,
+                0.31914302706718445,
+                0.3605928421020508,
+                0.3244783878326416,
+                0.3080647587776184,
+                0.3123410940170288,
+                0.31097060441970825,
+                0.31235045194625854
+              ],
+              "central_spearman": 0.5499999999999999,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.7909622192382812,
+              "central_selected_block_distance_px": 31.482767131597303,
+              "central_selected_wrapped_angle_error_rad": 0.12350213527679443,
+              "central_realized_raw_norm": [
+                38.227924562450134,
+                47.95720601468279,
+                28.138802753538776,
+                21.860491355753915,
+                53.78230989556619,
+                30.682631786719508,
+                44.27332937128312,
+                30.515099832023218,
+                44.85913068724821
+              ],
+              "central_requested_raw_norm": [
+                38.227917345976714,
+                47.957211442523224,
+                28.138801860312547,
+                21.860487652856065,
+                53.7823135926208,
+                30.68262793677082,
+                44.27333021313634,
+                30.515096029236876,
+                44.85913335926272
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.3819549880197083,
+                0.06217821384359423,
+                0.06260220148385634,
+                0.06369419707587434,
+                0.05548441190847106,
+                0.06278958374592702,
+                0.0617869942267707,
+                0.06253090565366,
+                0.0625402164930951
+              ],
+              "coordinate_error_max": 16.105893547682996,
+              "realized_coordinate_error_max": 16.10588494885772,
+              "maximum_PCA64_complement_error": 0.00003221345778881002
+            },
+            "graph_same_coordinate": {
+              "mean_target_hellinger2": 0.015293712774291635,
+              "mean_path_forecast_H3_MSE": 0.12128038544572298,
+              "mean_path_forecast_H6_MSE": 0.6807152114493691,
+              "central_forecast_H1_H6_MSE": [
+                0.08957060075010315,
+                0.0895423732951135,
+                0.11854195826227289,
+                0.12185905799092024,
+                0.40849594370497605,
+                0.6796162286358377
+              ],
+              "central_native_cost": [
+                0.30929499864578247,
+                0.31006717681884766,
+                0.31908899545669556,
+                0.36067721247673035,
+                0.3252300024032593,
+                0.3080316185951233,
+                0.3122541010379791,
+                0.31093358993530273,
+                0.31230130791664124
+              ],
+              "central_spearman": 0.5499999999999999,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.7909622192382812,
+              "central_selected_block_distance_px": 31.482767131597303,
+              "central_selected_wrapped_angle_error_rad": 0.12350213527679443,
+              "central_realized_raw_norm": [
+                38.43173418395501,
+                48.20818806103622,
+                28.21555733780809,
+                21.759421926116723,
+                54.51616082847854,
+                30.710646173472128,
+                44.58657310253615,
+                30.570955900127775,
+                45.09428309618036
+              ],
+              "central_requested_raw_norm": [
+                38.43174308686497,
+                48.20819018937302,
+                28.21556087081525,
+                21.759421430959158,
+                54.516160235629094,
+                30.71064318268239,
+                44.58656768936426,
+                30.570958379776677,
+                45.094268879658145
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.38219118813113107,
+                0.06292949233176841,
+                0.06292262693062983,
+                0.06292198740941497,
+                0.06292804821920306,
+                0.06292833870574029,
+                0.06292789196649064,
+                0.0629320390099513,
+                0.06292587840429549
+              ],
+              "coordinate_error_max": 3.0440738227016973e-13,
+              "realized_coordinate_error_max": 0.00002416246774090817,
+              "maximum_PCA64_complement_error": 0.00003230514365049064
+            },
+            "rbf_matched_dose": {
+              "mean_target_hellinger2": 0.01586331663420424,
+              "mean_path_forecast_H3_MSE": 0.12132666957737777,
+              "mean_path_forecast_H6_MSE": 0.6806976485324769,
+              "central_forecast_H1_H6_MSE": [
+                0.08957060075010315,
+                0.0895423732951135,
+                0.11873606691893446,
+                0.12200270491718099,
+                0.4091908032624373,
+                0.6796815040301624
+              ],
+              "central_native_cost": [
+                0.3094419538974762,
+                0.30998170375823975,
+                0.31931427121162415,
+                0.36123397946357727,
+                0.3243566155433655,
+                0.3081536889076233,
+                0.31243470311164856,
+                0.3110966384410858,
+                0.31241846084594727
+              ],
+              "central_spearman": 0.6166666666666666,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.7909622192382812,
+              "central_selected_block_distance_px": 31.482767131597303,
+              "central_selected_wrapped_angle_error_rad": 0.12350213527679443,
+              "central_realized_raw_norm": [
+                36.316520382720064,
+                45.559356445145745,
+                26.73187908004128,
+                20.67144593449675,
+                51.093193689927276,
+                29.148500801074402,
+                42.05965860762921,
+                28.989344246577698,
+                42.616176630781446
+              ],
+              "central_requested_raw_norm": [
+                36.316521478662494,
+                45.55935087041913,
+                26.731861767296223,
+                20.671450359414685,
+                51.0931979130046,
+                29.1484965399335,
+                42.05966370246347,
+                28.989341227795776,
+                42.616176691291905
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.38147820321499776,
+                0.059141101231289836,
+                0.05956420535072602,
+                0.06025658067735959,
+                0.05275599417597158,
+                0.05974493580446374,
+                0.05877205072303101,
+                0.05949911703427419,
+                0.05948938779167571
+              ],
+              "coordinate_error_max": 15.021176433893395,
+              "realized_coordinate_error_max": 15.02117585911943,
+              "maximum_PCA64_complement_error": 0.00003310043216320224,
+              "ray": {
+                "alpha_min": 0.9334054090179933,
+                "alpha_max": 0.9556896984736767,
+                "alpha_mean": 0.9487274601645445,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 6.889422365929931e-11,
+                "central_alpha": [
+                  0.9510135014713086,
+                  0.950690446888089,
+                  0.9512415006576731,
+                  0.9461409673618704,
+                  0.9501803061301501,
+                  0.9512625734171962,
+                  0.9507530107922406,
+                  0.9512314837649711,
+                  0.9507925424233434
+                ],
+                "recipient_points": 189
+              }
+            },
+            "graph_matched_dose": {
+              "mean_target_hellinger2": 0.015458022337406873,
+              "mean_path_forecast_H3_MSE": 0.12124375219984462,
+              "mean_path_forecast_H6_MSE": 0.6807115942133553,
+              "central_forecast_H1_H6_MSE": [
+                0.08957060075010315,
+                0.0895423732951135,
+                0.11870043650483181,
+                0.12197160886279085,
+                0.4089683637820395,
+                0.679695464221832
+              ],
+              "central_native_cost": [
+                0.30939042568206787,
+                0.30999767780303955,
+                0.31927233934402466,
+                0.361261785030365,
+                0.3250211775302887,
+                0.30812379717826843,
+                0.31236517429351807,
+                0.3110660910606384,
+                0.31237852573394775
+              ],
+              "central_spearman": 0.5499999999999999,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.7909622192382812,
+              "central_selected_block_distance_px": 31.482767131597303,
+              "central_selected_wrapped_angle_error_rad": 0.12350213527679443,
+              "central_realized_raw_norm": [
+                36.31652574622735,
+                45.55935357420629,
+                26.73186728222007,
+                20.67145212251363,
+                51.093196890050265,
+                29.14849344792569,
+                42.059660371445084,
+                28.989332982178077,
+                42.61618698607765
+              ],
+              "central_requested_raw_norm": [
+                36.316521478685836,
+                45.559350870413,
+                26.73186176729296,
+                20.671450359399778,
+                51.09319791298845,
+                29.148496539939305,
+                42.05966370248576,
+                28.989341227754007,
+                42.61617669132048
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.3816535288443443,
+                0.059523391017224946,
+                0.059701416365473554,
+                0.059803750149134194,
+                0.05899524382757344,
+                0.059813415496090934,
+                0.059419406221188596,
+                0.059762344320054346,
+                0.05952658081775582
+              ],
+              "coordinate_error_max": 3.7011585415304123e-13,
+              "realized_coordinate_error_max": 0.000026215107298113153,
+              "maximum_PCA64_complement_error": 0.00003258748866130645,
+              "ray": {
+                "alpha_min": 0.9341811502577428,
+                "alpha_max": 0.95538374833923,
+                "alpha_mean": 0.9450690284842556,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 9.262635103368666e-11,
+                "central_alpha": [
+                  0.9461495143408882,
+                  0.9458723056891785,
+                  0.9488104772576236,
+                  0.9504468660765752,
+                  0.9375022601477809,
+                  0.9504995313781848,
+                  0.9442452744616077,
+                  0.9496291360318168,
+                  0.9459804263104132
+                ],
+                "recipient_points": 189
+              }
+            },
+            "common_norm_sham": {
+              "mean_target_hellinger2": 0.021126226894557475,
+              "mean_path_forecast_H3_MSE": 0.12110743731091149,
+              "mean_path_forecast_H6_MSE": 0.6820300500528826,
+              "central_forecast_H1_H6_MSE": [
+                0.08957060075010315,
+                0.0895423732951135,
+                0.12126816972604204,
+                0.12350792127971862,
+                0.4175583010756653,
+                0.6814309523355604
+              ],
+              "central_native_cost": [
+                0.3115777373313904,
+                0.30942362546920776,
+                0.32329756021499634,
+                0.3734431266784668,
+                0.3210888206958771,
+                0.31036505103111267,
+                0.3149290978908539,
+                0.3141108751296997,
+                0.31434836983680725
+              ],
+              "central_spearman": 0.6833333333333333,
+              "central_selected_action": 1,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 33.13363134370566,
+              "central_selected_wrapped_angle_error_rad": 0.11840653419494629,
+              "central_realized_raw_norm": [
+                36.31651659922869,
+                45.559349538074706,
+                26.73186529942362,
+                20.671438790057135,
+                51.09319966377181,
+                29.14849937426923,
+                42.0596670601175,
+                28.989336998635064,
+                42.61616735804141
+              ],
+              "central_requested_raw_norm": [
+                36.31652147867788,
+                45.55935087039707,
+                26.73186176729692,
+                20.6714503594112,
+                51.09319791298976,
+                29.148496539932278,
+                42.05966370247952,
+                28.989341227775032,
+                42.616176691299586
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.3773686511584792,
+                0.1000423146166809,
+                0.058700121932997104,
+                0.045389478207683506,
+                0.11219596061803061,
+                0.06400532160034281,
+                0.09235601731157905,
+                0.06366118013469706,
+                0.09358324581011483
+              ],
+              "coordinate_error_max": 0,
+              "realized_coordinate_error_max": 0,
+              "maximum_PCA64_complement_error": 0.00003248890196694276
+            }
+          },
+          "matched_pair_realized_norm_error_max": 0.000016169579708957826,
+          "matched_graph_minus_RBF_H3_MSE": -0.00003563041410264978,
+          "matched_graph_minus_RBF_H6_MSE": 0.000013960191669659672,
+          "matched_graph_minus_RBF_progress_px": 0
+        },
+        "nonlinear_RBF_rank4": {
+          "methods": {
+            "rbf_same_coordinate": {
+              "mean_target_hellinger2": 0.01394928220543079,
+              "mean_path_forecast_H3_MSE": 0.12241760835009999,
+              "mean_path_forecast_H6_MSE": 0.6872313342311949,
+              "central_forecast_H1_H6_MSE": [
+                0.08957060075010315,
+                0.0895423732951135,
+                0.11571893463529458,
+                0.11976212061864798,
+                0.40214118232394563,
+                0.6778566917246799
+              ],
+              "central_native_cost": [
+                0.3080131709575653,
+                0.31122466921806335,
+                0.3164963126182556,
+                0.35057878494262695,
+                0.3259986937046051,
+                0.3066883981227875,
+                0.31083571910858154,
+                0.30891838669776917,
+                0.31131285429000854
+              ],
+              "central_spearman": 0.39999999999999997,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.7909622192382812,
+              "central_selected_block_distance_px": 31.482767131597303,
+              "central_selected_wrapped_angle_error_rad": 0.12350213527679443,
+              "central_realized_raw_norm": [
+                75.38381413098755,
+                96.73017998753964,
+                53.50740298988448,
+                43.63095664441704,
+                105.51425777300962,
+                57.712670955565876,
+                90.09032349452879,
+                57.472389942742154,
+                91.2698455106102
+              ],
+              "central_requested_raw_norm": [
+                75.38380580720634,
+                96.73018521940259,
+                53.50740468189843,
+                43.63096224522912,
+                105.51425811662556,
+                57.712667660556036,
+                90.09032641940928,
+                57.47239348916119,
+                91.2698485848155
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.4208534787315121,
+                0.10940908932457583,
+                0.11144027244309786,
+                0.11292884590534459,
+                0.0990105953533308,
+                0.11213721339062478,
+                0.1082494351680836,
+                0.11148635497131389,
+                0.10983661643518043
+              ],
+              "coordinate_error_max": 7.5282107401018346,
+              "realized_coordinate_error_max": 7.528212710579067,
+              "maximum_PCA64_complement_error": 0.00003386284224715652
+            },
+            "graph_same_coordinate": {
+              "mean_target_hellinger2": 0.014021717559080571,
+              "mean_path_forecast_H3_MSE": 0.12240595790386406,
+              "mean_path_forecast_H6_MSE": 0.6872503935846671,
+              "central_forecast_H1_H6_MSE": [
+                0.08957060075010315,
+                0.0895423732951135,
+                0.11559690328371175,
+                0.11965978766100896,
+                0.40145773686348285,
+                0.6778580806795654
+              ],
+              "central_native_cost": [
+                0.3079003095626831,
+                0.31137850880622864,
+                0.31638598442077637,
+                0.35070332884788513,
+                0.3276745080947876,
+                0.3066236972808838,
+                0.31066572666168213,
+                0.3088376820087433,
+                0.3112453520298004
+              ],
+              "central_spearman": 0.41666666666666663,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.7909622192382812,
+              "central_selected_block_distance_px": 31.482767131597303,
+              "central_selected_wrapped_angle_error_rad": 0.12350213527679443,
+              "central_realized_raw_norm": [
+                75.92473197214578,
+                97.39555303798826,
+                53.74380007044951,
+                43.5331008392797,
+                107.01506613202366,
+                57.87268889004073,
+                90.87529596217513,
+                57.6703531651195,
+                91.91632734345771
+              ],
+              "central_requested_raw_norm": [
+                75.92473023789371,
+                97.39554942261478,
+                53.743797305934564,
+                43.533103257134016,
+                107.01506941893044,
+                57.87269381563892,
+                90.87530059627856,
+                57.670347625966414,
+                91.91633677640533
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.42176899232257287,
+                0.11184127970632787,
+                0.11183492350781653,
+                0.11183567151643076,
+                0.11184128792802366,
+                0.11184113088852511,
+                0.11183976905592195,
+                0.11184596785311528,
+                0.11183972707324899
+              ],
+              "coordinate_error_max": 3.720566572506965e-13,
+              "realized_coordinate_error_max": 0.000026565994734619766,
+              "maximum_PCA64_complement_error": 0.000032732194851808893
+            },
+            "rbf_matched_dose": {
+              "mean_target_hellinger2": 0.014018334535649046,
+              "mean_path_forecast_H3_MSE": 0.12233931431810183,
+              "mean_path_forecast_H6_MSE": 0.6866229768244283,
+              "central_forecast_H1_H6_MSE": [
+                0.08957060075010315,
+                0.0895423732951135,
+                0.11598498759789974,
+                0.11995528633064875,
+                0.40283458884910345,
+                0.6780059443079754
+              ],
+              "central_native_cost": [
+                0.30812934041023254,
+                0.31106722354888916,
+                0.31675997376441956,
+                0.35161831974983215,
+                0.32580962777137756,
+                0.30679553747177124,
+                0.3109849691390991,
+                0.30911335349082947,
+                0.31139934062957764
+              ],
+              "central_spearman": 0.39999999999999997,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.7909622192382812,
+              "central_selected_block_distance_px": 31.482767131597303,
+              "central_selected_wrapped_angle_error_rad": 0.12350213527679443,
+              "central_realized_raw_norm": [
+                71.61462509951872,
+                91.89367992564686,
+                50.83203444185442,
+                41.35645562427293,
+                100.23855725970405,
+                54.82703093202798,
+                85.58581087636291,
+                54.59877431140221,
+                86.7063597208088
+              ],
+              "central_requested_raw_norm": [
+                71.61461551686287,
+                91.89367595844429,
+                50.83203444778065,
+                41.356448094302344,
+                100.23854521078974,
+                54.82703427755751,
+                85.58581009846012,
+                54.59877381469337,
+                86.70635615560103
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.4182082439331116,
+                0.10418061113363257,
+                0.10619419272816592,
+                0.10712252731359799,
+                0.09421855356679117,
+                0.10686744210084335,
+                0.10309117472278026,
+                0.10625087840182901,
+                0.10460294680131305
+              ],
+              "coordinate_error_max": 6.9532128189331575,
+              "realized_coordinate_error_max": 6.953207586787282,
+              "maximum_PCA64_complement_error": 0.00003366906266022429,
+              "ray": {
+                "alpha_min": 0.9367475308981312,
+                "alpha_max": 0.9554395708660905,
+                "alpha_mean": 0.9485354483578788,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 5.707079253625125e-11,
+                "central_alpha": [
+                  0.9521535546523552,
+                  0.9513739052809029,
+                  0.9525703627605964,
+                  0.9488003340161555,
+                  0.9505144953348719,
+                  0.952647589069116,
+                  0.9515142144891655,
+                  0.9526074946334546,
+                  0.9515653225978582
+                ],
+                "recipient_points": 189
+              }
+            },
+            "graph_matched_dose": {
+              "mean_target_hellinger2": 0.014046136062825098,
+              "mean_path_forecast_H3_MSE": 0.12234559478976223,
+              "mean_path_forecast_H6_MSE": 0.6866424258508357,
+              "central_forecast_H1_H6_MSE": [
+                0.08957060075010315,
+                0.0895423732951135,
+                0.11590746006353655,
+                0.11988702627690648,
+                0.40229272588629267,
+                0.6780385066084132
+              ],
+              "central_native_cost": [
+                0.30803683400154114,
+                0.3111792504787445,
+                0.3166784644126892,
+                0.35169440507888794,
+                0.32729867100715637,
+                0.3067396879196167,
+                0.310847669839859,
+                0.30905044078826904,
+                0.3113424479961395
+              ],
+              "central_spearman": 0.39999999999999997,
+              "central_selected_action": 5,
+              "central_selected_progress_delta_px": -0.7909622192382812,
+              "central_selected_block_distance_px": 31.482767131597303,
+              "central_selected_wrapped_angle_error_rad": 0.12350213527679443,
+              "central_realized_raw_norm": [
+                71.61461984779213,
+                91.89366854653152,
+                50.8320424444472,
+                41.35645339996112,
+                100.23855052597196,
+                54.82703424655843,
+                85.58580652968654,
+                54.59876562584752,
+                86.70636507612758
+              ],
+              "central_requested_raw_norm": [
+                71.61461551681924,
+                91.89367595846859,
+                50.83203444781946,
+                41.35644809426851,
+                100.23854521079552,
+                54.827034277562674,
+                85.5858100984439,
+                54.5987738147167,
+                86.70635615554
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.4187034543090376,
+                0.10570788935525097,
+                0.10610373508668065,
+                0.10633545106283747,
+                0.10484415982798827,
+                0.10628236870226214,
+                0.10553884312415804,
+                0.10621728305223226,
+                0.10571012961488065
+              ],
+              "coordinate_error_max": 3.019284940364965e-13,
+              "realized_coordinate_error_max": 0.000028006410180876443,
+              "maximum_PCA64_complement_error": 0.00003367722377989324,
+              "ray": {
+                "alpha_min": 0.9306587718408963,
+                "alpha_max": 0.9529307939728682,
+                "alpha_mean": 0.9444269847864516,
+                "observed_multiple_crossings": 0,
+                "crossings_max": 1,
+                "coordinate_norm_match_max_error": 6.501466032204917e-11,
+                "central_alpha": [
+                  0.9457909006167284,
+                  0.9451591322616224,
+                  0.9487553656187657,
+                  0.9508205338277236,
+                  0.937436139781525,
+                  0.9502970911159281,
+                  0.9436611358720626,
+                  0.9496718876133485,
+                  0.9451930458646558
+                ],
+                "recipient_points": 189
+              }
+            },
+            "common_norm_sham": {
+              "mean_target_hellinger2": 0.021113809663802385,
+              "mean_path_forecast_H3_MSE": 0.12107078383101302,
+              "mean_path_forecast_H6_MSE": 0.6820114433845204,
+              "central_forecast_H1_H6_MSE": [
+                0.08957060075010315,
+                0.0895423732951135,
+                0.1211141654746302,
+                0.12306218631978225,
+                0.4174787418019096,
+                0.6817352347132265
+              ],
+              "central_native_cost": [
+                0.3118131756782532,
+                0.30969053506851196,
+                0.3235808312892914,
+                0.37375402450561523,
+                0.3202899098396301,
+                0.3104732632637024,
+                0.31543201208114624,
+                0.31437912583351135,
+                0.31468719244003296
+              ],
+              "central_spearman": 0.6833333333333333,
+              "central_selected_action": 1,
+              "central_selected_progress_delta_px": 0,
+              "central_selected_block_distance_px": 33.13363134370566,
+              "central_selected_wrapped_angle_error_rad": 0.11840653419494629,
+              "central_realized_raw_norm": [
+                71.61461158491076,
+                91.89368457173842,
+                50.832036309966576,
+                41.35644194613721,
+                100.23854908756732,
+                54.82703155279334,
+                85.58581157487089,
+                54.598795519629306,
+                86.70635121472733
+              ],
+              "central_requested_raw_norm": [
+                71.61461551684603,
+                91.89367595843245,
+                50.83203444780351,
+                41.35644809427731,
+                100.23854521079427,
+                54.827034277528234,
+                85.58581009843881,
+                54.59877381470313,
+                86.70635615557472
+              ],
+              "central_outside_box_count": 0,
+              "central_nearest_donor_standardized_distance": [
+                0.3407049841070548,
+                0.20178700079512235,
+                0.11162124461759826,
+                0.09081128109756587,
+                0.2201133184178375,
+                0.12039234695846744,
+                0.18793427593359974,
+                0.11989645861432116,
+                0.1904000541809572
+              ],
+              "coordinate_error_max": 0,
+              "realized_coordinate_error_max": 0,
+              "maximum_PCA64_complement_error": 0.00003188858367852987
+            }
+          },
+          "matched_pair_realized_norm_error_max": 0.000018260595453511996,
+          "matched_graph_minus_RBF_H3_MSE": -0.00007752753436318649,
+          "matched_graph_minus_RBF_H6_MSE": 0.00003256230043779951,
+          "matched_graph_minus_RBF_progress_px": 0
+        }
+      },
+      "goal_coverage": {
+        "complete": true,
+        "episode": 3,
+        "source_input_sha256": "db4e8fc98d8174bc827e718e04ec9c495bb90488ff5e93d52fb736a76bd06831",
+        "experiment_summary_sha256": "a824eb4c4970547c068ed2f5abb4c97f79ab70934c976864f9976e613f74d22a",
+        "verified_goal_coverage_source_sha256": "08456343ea3628271f6dda88fe1925d7c64f61bbb273580c738c2007d4e12898",
+        "computed_vs_reference_maxabs": 1.1102230246251565e-16,
+        "goal_block_pose": [
+          183.2915496826172,
+          316.1080322265625,
+          1.4353927373886108
+        ],
+        "goal_aligned_coverage_original9": [
+          0.2423353573437876,
+          0.20758268755385195,
+          0.2849185210706501,
+          0.2110443802041487,
+          0.24854709556148982,
+          0.22598422918397099,
+          0.2620503724687662,
+          0.2852041851519574,
+          0.20829520667160353
+        ],
+        "native_selected_coverage": 0.20758268755385195,
+        "rows": [
+          {
+            "control_parent": "native",
+            "method": "native",
+            "selected_index": 1,
+            "goal_aligned_coverage": 0.20758268755385195,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "rbf_same_coordinate",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.22598422918397099,
+            "delta_vs_native": 0.018401541630119034
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "graph_same_coordinate",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.22598422918397099,
+            "delta_vs_native": 0.018401541630119034
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "rbf_matched_dose",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.22598422918397099,
+            "delta_vs_native": 0.018401541630119034
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "graph_matched_dose",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.22598422918397099,
+            "delta_vs_native": 0.018401541630119034
+          },
+          {
+            "control_parent": "linear_rank4",
+            "method": "common_norm_sham",
+            "selected_index": 1,
+            "goal_aligned_coverage": 0.20758268755385195,
+            "delta_vs_native": 0
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "rbf_same_coordinate",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.22598422918397099,
+            "delta_vs_native": 0.018401541630119034
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "graph_same_coordinate",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.22598422918397099,
+            "delta_vs_native": 0.018401541630119034
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "rbf_matched_dose",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.22598422918397099,
+            "delta_vs_native": 0.018401541630119034
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "graph_matched_dose",
+            "selected_index": 5,
+            "goal_aligned_coverage": 0.22598422918397099,
+            "delta_vs_native": 0.018401541630119034
+          },
+          {
+            "control_parent": "nonlinear_RBF_rank4",
+            "method": "common_norm_sham",
+            "selected_index": 1,
+            "goal_aligned_coverage": 0.20758268755385195,
+            "delta_vs_native": 0
+          }
+        ],
+        "scope": "Descriptive expert-goal polygon coverage; not original painted-default native reward, no refit or primary endpoint replacement",
+        "simulator_calls": 0,
+        "model_calls": 0,
+        "held_accessed": false
+      }
+    }
+  ],
+  "aggregate": {
+    "linear_rank4": {
+      "graph_selected_progress_delta_vs_native_px": [
+        -0.5750751495361328,
+        0,
+        0,
+        -0.7909622192382812
+      ],
+      "rbf_selected_progress_delta_vs_native_px": [
+        -0.5750751495361328,
+        0,
+        0,
+        -0.7909622192382812
+      ],
+      "mean_graph_selected_progress_delta_vs_native_px": -0.3415093421936035,
+      "graph_goal_coverage_delta_vs_native_pp": [
+        2.3684584213071735,
+        0,
+        0,
+        1.8401541630119034
+      ],
+      "mean_graph_goal_coverage_delta_vs_native_pp": 1.0521531460797693,
+      "graph_minus_RBF_selected_progress_px": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "graph_minus_RBF_goal_coverage_pp": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "graph_minus_RBF_central_H3_MSE": [
+        -0.00009655852570691903,
+        0.0004183288149487707,
+        -0.00013341219010166994,
+        -0.00003563041410264978
+      ],
+      "graph_minus_RBF_central_H6_MSE": [
+        -0.000025275387683237893,
+        0.00003078293324207393,
+        0.00009733177511475621,
+        0.000013960191669659672
+      ],
+      "maximum_native_pair_norm_error": 0.00002078605652400256
+    },
+    "nonlinear_RBF_rank4": {
+      "graph_selected_progress_delta_vs_native_px": [
+        -0.5750751495361328,
+        0,
+        -0.2269287109375,
+        -0.7909622192382812
+      ],
+      "rbf_selected_progress_delta_vs_native_px": [
+        -0.5750751495361328,
+        0,
+        -0.2269287109375,
+        -0.7909622192382812
+      ],
+      "mean_graph_selected_progress_delta_vs_native_px": -0.3982415199279785,
+      "graph_goal_coverage_delta_vs_native_pp": [
+        2.3684584213071735,
+        0,
+        -0.9240276454114404,
+        1.8401541630119034
+      ],
+      "mean_graph_goal_coverage_delta_vs_native_pp": 0.8211462347269092,
+      "graph_minus_RBF_selected_progress_px": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "graph_minus_RBF_goal_coverage_pp": [
+        0,
+        0,
+        0,
+        0
+      ],
+      "graph_minus_RBF_central_H3_MSE": [
+        -0.0005420302201435134,
+        0.00031017623696243113,
+        -0.0003346741310515655,
+        -0.00007752753436318649
+      ],
+      "graph_minus_RBF_central_H6_MSE": [
+        -0.00010560340930372558,
+        0.000022612685034478774,
+        0.0002728108327466894,
+        0.00003256230043779951
+      ],
+      "maximum_native_pair_norm_error": 0.000022325830229874555
+    }
+  },
+  "conclusion": "Coordinate correction removes retained-coordinate drift but gives no incremental selected-action or goal-coverage gain over RBF at matched dose. Shared coverage gains versus native exist; therefore the null is specific to coordinate correction, not universal absence of goal-related effects.",
+  "next_decision": "Do not promote graph decoder; no further GPU experiment. Preserve shared RBF/graph coverage gains as adaptive four-state evidence with conflicting combinedXY and mixed forecast metrics.",
+  "limitations": [
+    "Same-coordinate pair differs in raw norm; matched-dose pair changes per-recipient coordinate attenuation. Neither alone isolates all geometric mechanisms.",
+    "Both prior control paths reused without any new optimization; RBF-derived controls remain selected from the preceding exploratory pilot.",
+    "No raw delta normalization: first observed33point coordinate-ray bracket and40bisections preserve each anchored decoder surface; finite-grid crossing counts are not a monotonicity proof.",
+    "All solves feasible, no multiple observed crossings; native norm matching includes measured float32 rounding, not bitexact real-valued equality.",
+    "Goal-specific polygon coverage is a descriptive exact cached-endpoint join, distinct from native painted-default reward and unchanged combinedXY primary.",
+    "Four states are the experimental units, not840conditions or1512rayrecipientpoints perdecoder.",
+    "No new rollout success or held generalization claim; graph reencoding identity does not prove learned surface is the native manifold."
+  ],
+  "literature_motivation": [
+    {
+      "url": "https://arxiv.org/abs/2205.02304",
+      "scope": "Orthogonal nonlinear augmentation of linear coordinates in reduced-order models; not JEPA steering evidence"
+    },
+    {
+      "url": "https://arxiv.org/html/2509.00224v1",
+      "scope": "Kernel nonlinear augmentation construction; does not establish causal utility of this decoder"
+    }
+  ]
+}

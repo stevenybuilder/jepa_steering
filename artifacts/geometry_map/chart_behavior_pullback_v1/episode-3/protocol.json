@@ -1,0 +1,45 @@
+{
+  "complete": true,
+  "episode": 3,
+  "script_sha256": "d69f2f2cce7c502f2d317b70541d1d53bb57cbfda9f5b7406548dcabec17c4d6",
+  "chart_script_sha256": "f85155c0637cb3c70c6e5d2e089bb7d9b19c6d7fe1024b77a46fe88305db22db",
+  "source": {
+    "path": "near-dev-003.pt",
+    "sha256": "db4e8fc98d8174bc827e718e04ec9c495bb90488ff5e93d52fb736a76bd06831",
+    "bytes": 57458973
+  },
+  "chart_source": {
+    "path": "chart_inputs.pt",
+    "sha256": "aa71abedcd805b0c3cb12a53be469ab6eb31101c5f16ab9251c8b9d50225601d",
+    "bytes": 26663502
+  },
+  "target_source": {
+    "path": "FROZEN.pt",
+    "sha256": "dc95444db94f3541ceeaac86312870262a9fcbe3163ef50b2baeee1cb072dc1d",
+    "bytes": 27043509
+  },
+  "site": "P3/H3 newest256x400 residual",
+  "maps": [
+    "linear_rank4",
+    "nonlinear_RBF_rank4"
+  ],
+  "controls": 10,
+  "waypoints": 20,
+  "initial_control": "EXACT zeros shared4D for every waypoint and recipient",
+  "trust": "shared shift .5*donor-coordinate std*tanh(u); no projection of baseline into training box",
+  "chart": "144 unedited donor rows from this one seen state, PCA4 coordinates and RBF64 decoder; no future labels",
+  "behavior": "Frozen v2 20-waypoint target of analyst softmax over9 native goal costs, not native probability",
+  "optimizer": "LBFGS lr1 max_iter5 strong_wolfe50outer relative1e-3; at most85 optimization seconds/map; restore last accepted on cap",
+  "regularizer": "1e-3 mean squared tanh(u), dimensionless equal across maps",
+  "bounds_seconds": {
+    "map": 100,
+    "shared_per_state": 25,
+    "aggregate_four_states": 900
+  },
+  "endpoints": "Free within same bounded shift; not forced to donors or a train box",
+  "primary": "Frozen native-response model-target matching; physical truth only offline forecast/rank scoring",
+  "candidate_promoted": false,
+  "held_accessed": false,
+  "simulator_calls": 0,
+  "cem_calls": 0
+}

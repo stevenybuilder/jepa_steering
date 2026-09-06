@@ -1,0 +1,47 @@
+{
+  "version": 1,
+  "site": "predictor_block3",
+  "input": "all400 pooled residual channels",
+  "frames": [
+    "world",
+    "goal_relative",
+    "gripper_relative",
+    "goal_aligned"
+  ],
+  "time_targets": [
+    "observed_episode_raw_step"
+  ],
+  "time_not_in_activation_inputs": true,
+  "imagined_horizon_in_legacy_data": "constant1, not identifiable",
+  "models": [
+    "linear",
+    "rbf"
+  ],
+  "alphas_each": [
+    0.01,
+    1.0
+  ],
+  "linear_kernel": "standardized dot product / number_of_channels",
+  "rbf_gamma": "1/(2*number_of_channels)",
+  "pca": false,
+  "selection": "three leave-seed-out discovery folds; same inputs and2 candidates per family",
+  "candidate_selection": "frame with minimum discovery-CV linear world-space MSE",
+  "candidate_ranks": [
+    1,
+    2,
+    8
+  ],
+  "candidate_not_native_coordinate_proof": true,
+  "validation": "75 whole episodes, opened only after models and candidate frozen",
+  "confirmation_access": false,
+  "independent_unit": "whole trajectory, not transition or horizon",
+  "frame_inverse_uses_evaluation_anchors": true,
+  "object_frame": "not in legacy capture; do not invent wall pose or gripper orientation",
+  "limits": [
+    "same tuning budget does not mean equal statistical capacity",
+    "a nonlinear readout gain is not intrinsic-manifold identification",
+    "elapsed time can be inferred from task progress; not a native clock claim",
+    "pooled tokens may conceal spatially distributed nonlinear representations",
+    "held episode goals/poses are not automatically out-of-distribution"
+  ]
+}

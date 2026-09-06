@@ -1,0 +1,58 @@
+{
+  "causal_block": 3,
+  "complete": true,
+  "config": "vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+  "config_sha256": "37400233186d343e7a830ce820b75e86ad134bc26fa1adf43ebc3fd7ed4591c3",
+  "created_utc": "2026-09-05T17:55:39.554831+00:00",
+  "duration_seconds": 1508.9286292050965,
+  "episode_count": 3,
+  "episodes": [
+    1,
+    2,
+    3
+  ],
+  "model_provenance": {
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "config": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "loader": "official constructor/checkpoint; heads_cfg cleared",
+    "model_name": "jepa_wm_metaworld"
+  },
+  "outputs": [
+    {
+      "duration_seconds": 496.660440787673,
+      "environment_seed": 2026090501,
+      "episode": 1,
+      "ever_success": false,
+      "final_success": false,
+      "path": "episode-001.pt",
+      "planner_seed": 90501,
+      "replan_count": 7,
+      "sha256": "d893c4a126bb10846684bf187d6e3781a3614c4f18cb8fed48b4e88646bd0f2f"
+    },
+    {
+      "duration_seconds": 505.57944679958746,
+      "environment_seed": 2026090502,
+      "episode": 2,
+      "ever_success": true,
+      "final_success": true,
+      "path": "episode-002.pt",
+      "planner_seed": 90502,
+      "replan_count": 7,
+      "sha256": "1d0b9f04dfe42042f5e798f0d2bb337bbb223b3b2e11a90738f4692d3cea85ee"
+    },
+    {
+      "duration_seconds": 505.15462277829647,
+      "environment_seed": 2026090503,
+      "episode": 3,
+      "ever_success": true,
+      "final_success": true,
+      "path": "episode-003.pt",
+      "planner_seed": 90503,
+      "replan_count": 7,
+      "sha256": "8bf5cfe8aa9e86c7b97081051fffcfe1c44f9b01fd1025dff5958f523cc9ff08"
+    }
+  ],
+  "schema_version": 1,
+  "scope": "unsteered frozen JEPA-WM on-policy cache",
+  "task": "mw-reach-wall"
+}

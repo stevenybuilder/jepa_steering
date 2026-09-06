@@ -1,0 +1,98 @@
+{
+  "complete": true,
+  "verified_utc": "2026-09-06T02:52:24Z",
+  "task": "Reach-Wall qualitative action-path curvature replication on already-seen development",
+  "episodes": [
+    0,
+    1,
+    4,
+    7
+  ],
+  "model_only_paths": 32,
+  "independent_source_states": 4,
+  "simulator_calls": 0,
+  "cem_calls": 0,
+  "confirmation_access": false,
+  "source": {
+    "instance_id": 49766237,
+    "root": "/root/geometry-map-jepawm-reach-wall-v1/action-path-curvature-v1",
+    "results": "results-v2",
+    "outputs": 67,
+    "output_bytes": 7506536307,
+    "all_output_sha256_verified": true,
+    "done_sha256": "66b7602398cc9165f19fe168c2ca41339161b3bde10de83577aaa3057f0ba1e6"
+  },
+  "backup": {
+    "instance_id": 49987398,
+    "root": "/root/geometry-map-jepawm-reach-wall-v1/residual-search-v1/remote-backups/from-49766237/reach-action-path-curvature-v2-direct",
+    "transport_seconds": 614.3690144700231,
+    "source_tree_byte_identical": true,
+    "file_count": 467,
+    "total_bytes": 7561832786,
+    "tree_sha256": "fcea78b85445e9c186f19b156df2d8c50862e9dab7214024d607fdbed8df9b73"
+  },
+  "local": {
+    "compact_directory": "compact-v2",
+    "all_compact_report_sha256_verified": true,
+    "summary": "summary-v2.json",
+    "summary_sha256": "aa52cd71b1dce42a01c3836a09b86d58a5f0489b65315bb744164f8e7c515a70",
+    "full_tensors_copied_locally": false
+  },
+  "validation": {
+    "runner_math_and_contract_tests": 7,
+    "runner_tests_passed_locally_and_native_runtime": true,
+    "episode_aggregation_tests": 2,
+    "all_within_batch_native_midpoint_self_prefix_context_goal_exact": true,
+    "weights_unchanged": true,
+    "historical_single_vs_batch_visual_maxabs_descriptive_only": 0.00003600120544433594,
+    "action_roundtrip_maxabs": 0.0000019073486328125
+  },
+  "runtime": {
+    "successful_process_gpu_seconds": 174.82416509394534,
+    "successful_process_gpu_hours": 0.04856226808165148,
+    "authorized_process_gpu_seconds": 1800,
+    "source_python_pid120210_absent": true,
+    "source_gpu_compute_empty": true,
+    "copy_process_complete": true,
+    "assignment_released": true,
+    "instance_lease_retained": true
+  },
+  "preserved_attempts": {
+    "results_v1": "KeyError fresh_goal_sha256 on older receipt schema before any path evaluation; source and full backup preserved",
+    "partial_proxy_copy": "/root/geometry-map-jepawm-reach-wall-v1/residual-search-v1/remote-backups/from-49766237/reach-action-path-curvature-v1",
+    "proxy_copy_interruption": "Only /proc-validated own tar producer120351 stopped; partial replica retained; no source files deleted"
+  },
+  "primary_result": {
+    "site": "predictor block3 residual newest256 full-spatial",
+    "imagined_horizon": 3,
+    "radii": [
+      1,
+      4
+    ],
+    "raw_xyz_rms": [
+      0.05,
+      0.2
+    ],
+    "mean_max_chord_orthogonal_fraction": [
+      0.05920476008384932,
+      0.19910540963436993
+    ],
+    "mean_cubic_midpoint_l2": [
+      0.10798407158834634,
+      11.09281883787568
+    ],
+    "mean_local_chord_midpoint_l2": [
+      1.9901476333109367,
+      28.897585104760672
+    ],
+    "cubic_actual_future_improvement_vs_local_chord_percent_of_native_error": [
+      -0.008232251202047191,
+      -0.12028444244423321
+    ],
+    "cubic_worse_than_local_chord_actual_future_states_each_radius": [
+      4,
+      4
+    ],
+    "interpretation": "Native prediction restoration is distinct from actual encoded future accuracy; no useful steering or intrinsic-manifold claim"
+  }
+}

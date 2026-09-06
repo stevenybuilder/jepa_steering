@@ -1,0 +1,22 @@
+{
+  "status": "exploratory_round_authorized",
+  "objective": "Distinguish planner-objective mismatch, poor spatial/subspace localization, and attenuation of residual edits as causes of weak frozen JEPA-WM steering.",
+  "data": "The existing four previously examined Push development states and their 64 physically replayed fixed candidate plans; no confirmation episodes or new simulator rollouts.",
+  "experimental_unit": "A development state, not a candidate plan, patch, horizon, or arm.",
+  "branches": [
+    {"id": "objective_alignment_v1", "owner": "gpu_status_connections", "test": "Native predicted latent goal cost versus actual encoded-future goal cost versus recorded physical task coverage across every candidate and horizon.", "limits": "120 GPU process seconds and 180 CPU process seconds; prefer colocated cached-data analysis."},
+    {"id": "action_responsive_subspace_v1", "owner": "causal_runner_execute", "test": "Rank-four action-history-consequence visual subspace at H3, selected 64 of 256 patches, signed edits and norm-matched random subspace/patch controls; preserve all unedited components.", "limits": "600 aggregate process seconds; same predeclared configuration across up to all four states."},
+    {"id": "normalization_aware_subspace_v1", "owner": "causal_measurements", "test": "Rank-four P5/H3 residual subspace, raw-dose versus delivered-suffix-dose matching, signed edits and random subspace controls within a fixed raw-radius bound.", "limits": "600 aggregate process seconds; record infeasible target doses without relaxing bounds."}
+  ],
+  "primary_intervention_endpoint": "Change in recorded requested-goal coverage of the selected fixed candidate relative to the unedited selection, and specificity relative to matched controls.",
+  "secondary_endpoints": ["Actual-future prediction error", "Candidate cost contrasts and rank margins", "Combined agent/block XY distance", "Delivered edit norm and subspace/patch preservation", "Effects across imagined horizons"],
+  "continuation_rule": "For a tested operator to merit independent development replication: mean coverage improvement at least 0.01, strictly positive improvement in at least three of four states, and mean improvement exceeding every corresponding matched control. This is an exploratory allocation rule, not significance or confirmation. All signs/controls/results remain visible; incomplete four-state evaluation cannot pass this rule.",
+  "literature": {
+    "paper": "https://arxiv.org/pdf/2605.05115v1",
+    "inspected": ["Section 5", "Appendix A.3", "Appendix A.6", "Appendix A.8", "Limitations"],
+    "transfer": "Preserve the off-subspace residual and distinguish a selected linear subspace from a curved intrinsic chart within that subspace.",
+    "comparison_caveat": "Appendix A.6 preserves the off-PCA residual for manifold steering but describes full-residual replacement for linear steering. A JEPA curvature comparison should instead match subspace, endpoints, residual preservation, and dose.",
+    "world_model_caveat": "The paper's Mountain Car model is a GRU frame predictor, and its position distribution is derived from encoder-centroid distances; neither is an independent robotics task-success measurement."
+  },
+  "integrity": "Freeze model and original data; label-free geometry/dose fitting only; native/zero guards; preserve failures; no new rentals or lifecycle changes; separate worker roots; source and second-host verification. Individual branch protocols contain exact tensors, doses, seeds, hashes, and resource assignments."
+}

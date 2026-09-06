@@ -1,0 +1,296 @@
+{
+ "model": "armB_seed0",
+ "arm": "B",
+ "configs": {
+  "reference": {
+   "n": 3,
+   "n_success": 3,
+   "outcomes": {
+    "9": [
+     "success",
+     null,
+     128,
+     221.6,
+     12
+    ],
+    "10": [
+     "success",
+     null,
+     122,
+     208.1,
+     2
+    ],
+    "19": [
+     "success",
+     null,
+     138,
+     243.1,
+     2
+    ]
+   },
+   "spec": null
+  },
+  "compact_rolling3": {
+   "n": 1,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "failure",
+     "max_step",
+     null,
+     129.4,
+     827
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "rolling",
+    "ahead": 3,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "compact_dest": {
+   "n": 1,
+   "n_success": 1,
+   "outcomes": {
+    "9": [
+     "success",
+     null,
+     273,
+     220.2,
+     216
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "dest",
+    "ahead": null,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "compact_rolling6": {
+   "n": 1,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "failure",
+     "max_step",
+     null,
+     115.6,
+     788
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "rolling",
+    "ahead": 6,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "fixed_k6": {
+   "n": 3,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "failure",
+     "max_step",
+     null,
+     7.0,
+     618
+    ],
+    "10": [
+     "failure",
+     "max_step",
+     null,
+     7.2,
+     593
+    ],
+    "19": [
+     "failure",
+     "max_step",
+     null,
+     15.7,
+     866
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "fixed",
+    "ahead": 6,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "fixed_k10": {
+   "n": 3,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "failure",
+     "max_step",
+     null,
+     7.6,
+     800
+    ],
+    "10": [
+     "failure",
+     "max_step",
+     null,
+     4.4,
+     745
+    ],
+    "19": [
+     "failure",
+     "max_step",
+     null,
+     3.7,
+     438
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "fixed",
+    "ahead": 10,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "fixed_k20": {
+   "n": 3,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "failure",
+     "max_step",
+     null,
+     -2.7,
+     769
+    ],
+    "10": [
+     "failure",
+     "max_step",
+     null,
+     -1.8,
+     601
+    ],
+    "19": [
+     "failure",
+     "max_step",
+     null,
+     0.9,
+     337
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "fixed",
+    "ahead": 20,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "fixed_k40": {
+   "n": 3,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "descriptive_pass",
+     null,
+     null,
+     205.9,
+     133
+    ],
+    "10": [
+     "failure",
+     "max_step",
+     null,
+     125.9,
+     707
+    ],
+    "19": [
+     "descriptive_pass",
+     null,
+     null,
+     203.7,
+     389
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "fixed",
+    "ahead": 40,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "released_k10": {
+   "n": 3,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "diag_timeout",
+     null,
+     null,
+     8.6,
+     1238
+    ],
+    "10": [
+     "diag_timeout",
+     null,
+     null,
+     17.6,
+     1231
+    ],
+    "19": [
+     "diag_timeout",
+     null,
+     null,
+     30.0,
+     1294
+    ]
+   },
+   "spec": {
+    "kind": "released",
+    "goal": "fixed",
+    "ahead": 10,
+    "execute": 3,
+    "samples": 300,
+    "elites": 10,
+    "iters": 15,
+    "init_std": 0.1,
+    "tokens": "all"
+   }
+  }
+ }
+}

@@ -1,0 +1,119 @@
+{
+ "protocol": "cgs-modulation-operator-v0.1",
+ "block": 1,
+ "component": "all",
+ "rank": 1,
+ "rank_requested": 1,
+ "slices": [
+  "gate_msa"
+ ],
+ "gamma": [
+  1.0
+ ],
+ "gate_group": "hazard",
+ "solid_level": 3,
+ "gate": {
+  "solid": 0.9862067699432373,
+  "h0": 0.0,
+  "h0prime": 0.07473538815975189,
+  "ghost": 0.16116665303707123,
+  "separation_d": 17.347681045532227,
+  "gate_hf_mean": 0.037367694079875946
+ },
+ "selection": {
+  "shift_msa": {
+   "point": -0.00017942259756766337,
+   "ci_low": -0.00023610625353440506,
+   "ci_high": -0.00011558604446887445,
+   "n_clusters": 16,
+   "sign_flip_p": 0.0001999600079984003,
+   "solid_minus_h0_mean": -0.0009221334562978119,
+   "null_minus_h0_mean": -0.0007427108587301486,
+   "norm_delta_mean": 2.3886055946350098,
+   "p_maxt_fwer": 1.0
+  },
+  "scale_msa": {
+   "point": 0.00013439798487804763,
+   "ci_low": 5.087271725279914e-05,
+   "ci_high": 0.00022730469653802247,
+   "n_clusters": 16,
+   "sign_flip_p": 0.011397720455908818,
+   "solid_minus_h0_mean": -0.00015028251733977853,
+   "null_minus_h0_mean": -0.00028468050221782613,
+   "norm_delta_mean": 2.9168343544006348,
+   "p_maxt_fwer": 0.021956087824351298
+  },
+  "gate_msa": {
+   "point": 0.009234203043576597,
+   "ci_low": 0.008552128259832514,
+   "ci_high": 0.00981475663296127,
+   "n_clusters": 16,
+   "sign_flip_p": 0.0001999600079984003,
+   "solid_minus_h0_mean": 0.005913823500273396,
+   "null_minus_h0_mean": -0.0033203795433032,
+   "norm_delta_mean": 1.9747804403305054,
+   "p_maxt_fwer": 0.001996007984031936
+  },
+  "shift_mlp": {
+   "point": 0.0010766989742398772,
+   "ci_low": 0.0009424121810440854,
+   "ci_high": 0.0011932961746593748,
+   "n_clusters": 16,
+   "sign_flip_p": 0.0001999600079984003,
+   "solid_minus_h0_mean": 0.0014533748541626199,
+   "null_minus_h0_mean": 0.0003766758799227427,
+   "norm_delta_mean": 2.2135581970214844,
+   "p_maxt_fwer": 0.001996007984031936
+  },
+  "scale_mlp": {
+   "point": 6.561282347016546e-05,
+   "ci_low": 4.105409377709566e-05,
+   "ci_high": 8.64239621918797e-05,
+   "n_clusters": 16,
+   "sign_flip_p": 0.0003999200159968006,
+   "solid_minus_h0_mean": 0.00016700203904940368,
+   "null_minus_h0_mean": 0.00010138921557923823,
+   "norm_delta_mean": 2.1138792037963867,
+   "p_maxt_fwer": 0.001996007984031936
+  },
+  "gate_mlp": {
+   "point": 0.007188621506328811,
+   "ci_low": 0.006561302707285749,
+   "ci_high": 0.007734328616162438,
+   "n_clusters": 16,
+   "sign_flip_p": 0.0001999600079984003,
+   "solid_minus_h0_mean": 0.011929158704701473,
+   "null_minus_h0_mean": 0.004740537198372661,
+   "norm_delta_mean": 3.1686007976531982,
+   "p_maxt_fwer": 0.001996007984031936
+  }
+ },
+ "n_scenes": 16,
+ "scenes": [
+  "drive_seed000003",
+  "drive_seed000004",
+  "drive_seed000007",
+  "drive_seed000009",
+  "drive_seed000010",
+  "drive_seed000014",
+  "drive_seed000015",
+  "drive_seed000017",
+  "drive_seed000018",
+  "drive_seed000019",
+  "drive_seed000020",
+  "drive_seed000021",
+  "drive_seed000023",
+  "drive_seed000025",
+  "drive_seed000026",
+  "drive_seed000029"
+ ],
+ "fitted_on": "discovery scenes only (full-data export)",
+ "rule": "m' = m + s*beta*g_h(h_hazard) * sum_c gamma_c ((m - m_ref).u_c) u_c on the last-frame modulation; u_c = unit throttle-brake contrast of slice c",
+ "checkpoint": "/root/cgs-pilot/artifacts/drive_models/armB_seed0/jepa-latest.pth.tar",
+ "checkpoint_sha256": "9184b93d859f60ec5f0a67e654f986995c2195bb685327aaec49c574bed24864",
+ "step": 0,
+ "artifacts": [
+  "/root/cgs-pilot/artifacts/drive_factorial_merged/armB"
+ ],
+ "seeds_file": "/root/cgs-pilot/artifacts/drive_factorial_merged/discovery_seeds_common.txt"
+}

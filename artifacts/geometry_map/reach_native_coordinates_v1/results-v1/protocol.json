@@ -1,0 +1,48 @@
+{
+  "complete": false,
+  "episodes": [
+    0,
+    4,
+    7
+  ],
+  "rank": 3,
+  "block": 3,
+  "patch_horizon": 3,
+  "tokens": "all newest256,400 channels",
+  "doses": [
+    -1.0,
+    -0.5,
+    0.5,
+    1.0
+  ],
+  "residual_radius_fraction": 0.005,
+  "response_probe_fraction": 0.001,
+  "raw_action_probe_xyz_rms": 0.025,
+  "primary": "H3 native objective ranking versus matching actual15-step hand-goal distance; n3 states",
+  "secondary": [
+    "Full spatial actual-encoded H3 MSE",
+    "H1/H2 unchanged",
+    "Action tangent selectivity",
+    "Raw applied perturbation norms"
+  ],
+  "released_H6_cost_is_secondary_prefix_association_not_horizonmatched_truth": true,
+  "target": "Shared leave-one-initial-state-out PCA3/OLS actual-encoded H3 forecast residual; held state labels never enter edits",
+  "families": [
+    "train_pca",
+    "local_action_jacobian",
+    "local_action_jacobian_whitened"
+  ],
+  "whitening": "Geometric-mean singular sensitivity divided by singular value, floor1e-3 of maximum; fixed .01 relative ridge damping",
+  "rotation_null": "Orthogonal basis rotation and inverse preserve ridge patch; verified algebraically before reusing identical field",
+  "action_jacobian": "MODEL derivative to raw nominal commands, not measured simulator Jacobian; original clipping mismatch reported",
+  "conditions": 18,
+  "simulator_calls": 0,
+  "cem_calls": 0,
+  "held_data": false,
+  "script_sha256": "8f17a07a3bf8e2e1c2d08cfda2753885b3c077e1ada28a11be2d300e6afb221d",
+  "max_process_seconds": 900,
+  "literature": [
+    "https://arxiv.org/html/2608.18746v1",
+    "https://arxiv.org/abs/2608.12828"
+  ]
+}

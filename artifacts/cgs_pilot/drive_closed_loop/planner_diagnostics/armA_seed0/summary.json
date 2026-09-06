@@ -1,0 +1,272 @@
+{
+ "model": "armA_seed0",
+ "arm": "A",
+ "configs": {
+  "reference": {
+   "n": 3,
+   "n_success": 3,
+   "outcomes": {
+    "9": [
+     "success",
+     null,
+     128,
+     221.6,
+     12
+    ],
+    "10": [
+     "success",
+     null,
+     122,
+     208.1,
+     2
+    ],
+    "19": [
+     "success",
+     null,
+     138,
+     243.1,
+     2
+    ]
+   },
+   "spec": null
+  },
+  "compact_rolling3": {
+   "n": 1,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "failure",
+     "max_step",
+     null,
+     11.5,
+     828
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "rolling",
+    "ahead": 3,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "compact_dest": {
+   "n": 1,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "failure",
+     "max_step",
+     null,
+     3.5,
+     787
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "dest",
+    "ahead": null,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "fixed_k6": {
+   "n": 3,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "descriptive_pass",
+     null,
+     null,
+     19.8,
+     11
+    ],
+    "10": [
+     "descriptive_pass",
+     null,
+     null,
+     18.0,
+     34
+    ],
+    "19": [
+     "descriptive_pass",
+     null,
+     null,
+     20.0,
+     14
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "fixed",
+    "ahead": 6,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "fixed_k10": {
+   "n": 3,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "descriptive_pass",
+     null,
+     null,
+     32.7,
+     52
+    ],
+    "10": [
+     "descriptive_pass",
+     null,
+     null,
+     31.9,
+     217
+    ],
+    "19": [
+     "failure",
+     "max_step",
+     null,
+     18.7,
+     696
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "fixed",
+    "ahead": 10,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "fixed_k20": {
+   "n": 3,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "failure",
+     "max_step",
+     null,
+     -1.6,
+     792
+    ],
+    "10": [
+     "failure",
+     "max_step",
+     null,
+     0.7,
+     785
+    ],
+    "19": [
+     "failure",
+     "max_step",
+     null,
+     3.0,
+     587
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "fixed",
+    "ahead": 20,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "fixed_k40": {
+   "n": 3,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "failure",
+     "max_step",
+     null,
+     4.2,
+     618
+    ],
+    "10": [
+     "failure",
+     "max_step",
+     null,
+     2.7,
+     606
+    ],
+    "19": [
+     "failure",
+     "max_step",
+     null,
+     4.8,
+     755
+    ]
+   },
+   "spec": {
+    "kind": "compact",
+    "goal": "fixed",
+    "ahead": 40,
+    "execute": 1,
+    "samples": 32,
+    "elites": 6,
+    "iters": 3,
+    "init_std": 0.5,
+    "tokens": "hazard_corridor"
+   }
+  },
+  "released_k10": {
+   "n": 3,
+   "n_success": 0,
+   "outcomes": {
+    "9": [
+     "diag_timeout",
+     null,
+     null,
+     15.1,
+     1246
+    ],
+    "10": [
+     "diag_timeout",
+     null,
+     null,
+     22.2,
+     1214
+    ],
+    "19": [
+     "diag_timeout",
+     null,
+     null,
+     21.9,
+     1268
+    ]
+   },
+   "spec": {
+    "kind": "released",
+    "goal": "fixed",
+    "ahead": 10,
+    "execute": 3,
+    "samples": 300,
+    "elites": 10,
+    "iters": 15,
+    "init_std": 0.1,
+    "tokens": "all"
+   }
+  }
+ }
+}

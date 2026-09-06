@@ -1,0 +1,31 @@
+{
+  "episodes": [
+    0,
+    4,
+    7
+  ],
+  "held_data": false,
+  "candidate": "Frozen local_action_jacobian +1 from coordinate pilot; not chosen by HMM outcomes",
+  "fit": "LOO initial state; two diagonal Gaussian states, PCA3,20deterministic EM steps, Dirichlet1 transitions, variancefloor.05",
+  "emission_sequence": "Native imagined P3 pooled H1..H6 TRAIN; test routing uses H1/H2 only, physical and imagined time not conflated",
+  "regime_rule": "Higher TRAIN PC step-change norm gate.5; lower gate1; no labels fit this mapping",
+  "static": "TRAIN occupancy weighted gate; all treatments equal aggregate raw patch energy across5plans",
+  "success_rule": "HMM improves mean H3 rank correlation and forecast MSE plus TRAIN-action-subspace selectivity over static, with positive differences in at least2/3 excluded states; otherwise reject",
+  "controls": [
+    "unsteered",
+    "exact_self",
+    "static",
+    "hmm",
+    "memoryless",
+    "time_only_equals_static",
+    "static_sham",
+    "hmm_sham"
+  ],
+  "block": 3,
+  "horizon": 3,
+  "rank": 3,
+  "simulator_calls": 0,
+  "cem_calls": 0,
+  "script_sha256": "20208abf21e7aa031cdf92f390179c3a6a86b9ec3df1c8777d83521481277f38",
+  "max_process_seconds": 300
+}

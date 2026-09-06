@@ -1,0 +1,3149 @@
+{
+ "generated_by": "scripts/cgs_pilot/aggregate_drive_results.py",
+ "artifact_root": "artifacts/cgs_pilot",
+ "b_gate_thresholds": {
+  "max_interaction_nmse_median": 0.75,
+  "min_captured_fraction": 0.25,
+  "min_flip_rate": 0.25,
+  "spec_p": 0.05
+ },
+ "definitions": {
+  "captured_fraction": "max(0, 1 - median interaction NMSE) = model_captured_interaction_fraction (behavior_gate.py); signed version 1 - NMSE kept for cross-truth cells",
+  "rec_h1_minus_h0": "hazard specificity of recovered fraction, primary token group (driving: hazard_corridor), scene-level sign-flip p (min attainable 2e-4 at 5000 flips)",
+  "flip_rate_h1_vs_h0": "CEM brake/throttle ranking flip rate H1 vs H0 (T2a)",
+  "interaction_nmse_ci_of_mean": "the pooled ci_low/ci_high in cf_gate_*.json bracket the scene MEAN (scene-clustered bootstrap); the point estimate used by the gate is the MEDIAN",
+  "T1c_prime": "scene-level sign-flip test that the solid identity's interaction NMSE is below the ghost identity's (B-gate amendment T1c'); the T1c route was taken by every driving model because T1c already passed"
+ },
+ "egg_cells": [
+  {
+   "label": "JEPA-WM n=21",
+   "substrate": "JEPA-WM DROID (egg, wave 1 all)",
+   "n_scenes": 21,
+   "domain": "manipulation (RoboCasa egg)",
+   "interaction_nmse_median": 0.9550653151197538,
+   "captured_fraction": 0.04493468488024621,
+   "rec_h1_minus_h0": -0.01543235353459501,
+   "rec_h1_minus_h0_p": 0.07578484303139373,
+   "rec_h1_minus_h0prime": -0.030759838870549262,
+   "flip_rate_h1_vs_h0": 0.0,
+   "energy_gap_norm_h1_vs_h0": 0.05375615070806986,
+   "energy_gap_p": 0.11497700459908018,
+   "b_gate_verdict": "FAIL",
+   "sources": {
+    "b_gate": "artifacts/cgs_pilot/heldout_v1_merged_w1/behavior_gate_cf_gate_sonar_all.json",
+    "cf_gate": "artifacts/cgs_pilot/heldout_v1_merged_w1/cf_gate_sonar_all.json"
+   },
+   "rec_h1_median": 0.6310533880607054,
+   "rec_h0_median": 0.6399062224449276,
+   "interaction_cosine_median": 0.23699862723035917,
+   "validity_verdict": "PASS",
+   "validity_with_specificity": "FAIL",
+   "retrieval": {
+    "model_mean_cosine": 0.21860017534816817,
+    "baselines": {
+     "copy_delta_scene": 0.01624596761562163,
+     "knn_droid": -0.0020619653707903184,
+     "loso_ridge": -0.00125686944140832,
+     "persistence": 0.0
+    },
+    "passed": true,
+    "source": "artifacts/cgs_pilot/heldout_v1_merged_w1/retrieval_baseline_sonar.json"
+   }
+  },
+  {
+   "label": "JEPA-WM n=34",
+   "substrate": "JEPA-WM DROID (egg, wave 2 discovery)",
+   "n_scenes": 34,
+   "domain": "manipulation (RoboCasa egg)",
+   "interaction_nmse_median": 0.935177575832328,
+   "captured_fraction": 0.06482242416767203,
+   "rec_h1_minus_h0": -0.00882243328218921,
+   "rec_h1_minus_h0_p": 0.3137372525494901,
+   "rec_h1_minus_h0prime": -0.010006168816790348,
+   "flip_rate_h1_vs_h0": 0.0,
+   "energy_gap_norm_h1_vs_h0": -0.02839674134453327,
+   "energy_gap_p": 0.44571085782843434,
+   "b_gate_verdict": "FAIL",
+   "sources": {
+    "b_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2/behavior_gate_cf_gate_discovery.json",
+    "cf_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2/cf_gate_discovery.json"
+   },
+   "rec_h1_median": 0.6053994802218985,
+   "rec_h0_median": 0.6264416146233764,
+   "interaction_cosine_median": 0.28248114052753465,
+   "validity_verdict": "PASS",
+   "validity_with_specificity": "FAIL"
+  },
+  {
+   "label": "JEPA-WM n=66",
+   "substrate": "JEPA-WM DROID (egg, wave 2 all)",
+   "n_scenes": 66,
+   "domain": "manipulation (RoboCasa egg)",
+   "interaction_nmse_median": 0.9434988479572669,
+   "captured_fraction": 0.056501152042733094,
+   "rec_h1_minus_h0": -0.01234326243571418,
+   "rec_h1_minus_h0_p": 0.09298140371925614,
+   "rec_h1_minus_h0prime": -0.013499080529373812,
+   "flip_rate_h1_vs_h0": 0.0,
+   "energy_gap_norm_h1_vs_h0": 0.028143191579446603,
+   "energy_gap_p": 0.3093381323735253,
+   "b_gate_verdict": "FAIL",
+   "sources": {
+    "b_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2/behavior_gate_cf_gate_all.json",
+    "cf_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2/cf_gate_all.json"
+   },
+   "rec_h1_median": 0.6240567800844337,
+   "rec_h0_median": 0.6332550924154443,
+   "interaction_cosine_median": 0.2691840845564406,
+   "validity_verdict": "PASS",
+   "validity_with_specificity": "FAIL",
+   "retrieval": {
+    "model_mean_cosine": 0.25096678072979395,
+    "baselines": {
+     "copy_delta_scene": 0.035863852693026985,
+     "knn_droid": -0.0017756261264752686,
+     "loso_ridge": -9.683552591724995e-05,
+     "persistence": 0.0
+    },
+    "passed": true,
+    "source": "artifacts/cgs_pilot/heldout_v1_merged_w2/retrieval_baseline.json"
+   }
+  },
+  {
+   "label": "V-JEPA 2-AC n=34",
+   "substrate": "V-JEPA 2-AC DROID (egg, wave 2 discovery)",
+   "n_scenes": 34,
+   "domain": "manipulation (RoboCasa egg)",
+   "interaction_nmse_median": 1.0072488790889578,
+   "captured_fraction": 0.0,
+   "rec_h1_minus_h0": -0.010135218430663711,
+   "rec_h1_minus_h0_p": 0.16396720655868827,
+   "rec_h1_minus_h0prime": -0.004245590008578163,
+   "flip_rate_h1_vs_h0": 0.0,
+   "energy_gap_norm_h1_vs_h0": -0.060668557175204404,
+   "energy_gap_p": 0.013997200559888023,
+   "b_gate_verdict": "FAIL",
+   "sources": {
+    "b_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2_vj2ac/behavior_gate_vj2ac.json",
+    "cf_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2_vj2ac/cf_gate_discovery_vj2ac.json"
+   },
+   "rec_h1_median": 0.4914812639242956,
+   "rec_h0_median": 0.4996440080965659,
+   "interaction_cosine_median": 0.07263971150476776,
+   "validity_verdict": "FAIL",
+   "validity_with_specificity": "FAIL",
+   "retrieval": {
+    "model_mean_cosine": 0.06694695756521826,
+    "baselines": {
+     "copy_delta_scene": -0.006059241790654888,
+     "knn_droid": 0.0005986729278968485,
+     "loso_ridge": 0.002295895009242612,
+     "persistence": 0.0
+    },
+    "passed": true,
+    "source": "artifacts/cgs_pilot/heldout_v1_merged_w2_vj2ac/retrieval_baseline_vj2ac.json"
+   }
+  }
+ ],
+ "driving_models": [
+  {
+   "model": "armA_seed0",
+   "arm": "A",
+   "seed": 0,
+   "arm_description": "pedestrian solid / cone ghost",
+   "solid_identity": "pedestrian",
+   "ghost_identity": "cone",
+   "n_discovery_scenes": 54,
+   "split": {
+    "admitted": 120,
+    "discovery": [
+     3,
+     4,
+     7,
+     9,
+     10,
+     14,
+     15,
+     17,
+     18,
+     19,
+     20,
+     21,
+     23,
+     25,
+     26,
+     29,
+     33,
+     35,
+     36,
+     37,
+     44,
+     45,
+     46,
+     50,
+     52,
+     54,
+     57,
+     61,
+     63,
+     67,
+     68,
+     69,
+     72,
+     74,
+     76,
+     77,
+     78,
+     85,
+     87,
+     89,
+     91,
+     94,
+     97,
+     99,
+     101,
+     103,
+     107,
+     110,
+     111,
+     112,
+     115,
+     117,
+     118,
+     119
+    ],
+    "confirmation": [
+     0,
+     1,
+     2,
+     5,
+     6,
+     8,
+     11,
+     12,
+     13,
+     16,
+     22,
+     24,
+     27,
+     28,
+     30,
+     31,
+     32,
+     34,
+     38,
+     39,
+     40,
+     41,
+     42,
+     43,
+     47,
+     48,
+     49,
+     51,
+     53,
+     55,
+     56,
+     58,
+     59,
+     60,
+     62,
+     64,
+     65,
+     66,
+     70,
+     71,
+     73,
+     75,
+     79,
+     80,
+     81,
+     82,
+     83,
+     84,
+     86,
+     88,
+     90,
+     92,
+     93,
+     95,
+     96,
+     98,
+     100,
+     102,
+     104,
+     105,
+     106,
+     108,
+     109,
+     113,
+     114,
+     116
+    ],
+    "scope": "discovery scenes only (confirmation sealed)"
+   },
+   "primary": {
+    "level": 1,
+    "identity": "pedestrian",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.3147267153291625,
+    "captured_fraction": 0.6852732846708375,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.22922752465812,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.18567318210181047,
+    "T1c_ok": true,
+    "T1c_prime": null,
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.8888888888888888,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": -0.7615359107901966,
+    "energy_gap_p": 0.0001999600079984003,
+    "T2b_ok": true,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.3237071562010112,
+    "interaction_nmse_ci_of_mean": [
+     0.3111304950730996,
+     0.33721875126649725
+    ],
+    "interaction_cosine_median": 0.8288457092409689,
+    "interaction_cosine_ci_of_mean": [
+     0.8183546552518312,
+     0.8322401694635199
+    ],
+    "rec_h1_median": 0.8827492322748178,
+    "rec_h0_median": 0.6534602988153081,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 1.0,
+    "planner_delta_h1_minus_h0_mean": 9157.83338732134,
+    "token_group": "hazard_corridor"
+   },
+   "cross": {
+    "level": 3,
+    "identity": "cone",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.43298926883758754,
+    "captured_fraction": 0.5670107311624124,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.15750346300440582,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.1139491204480963,
+    "T1c_ok": true,
+    "T1c_prime": null,
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.8888888888888888,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": -15.460023488417196,
+    "energy_gap_p": 0.390625,
+    "T2b_ok": false,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.4085649369800278,
+    "interaction_nmse_ci_of_mean": [
+     0.3957535555759014,
+     0.42105860061012096
+    ],
+    "interaction_cosine_median": 0.7539414091452932,
+    "interaction_cosine_ci_of_mean": [
+     0.7615943449653451,
+     0.7777501697688131
+    ],
+    "rec_h1_median": 0.8258534046209931,
+    "rec_h0_median": 0.6534602988153081,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 0.07407407407407407,
+    "planner_delta_h1_minus_h0_mean": 1467.472954390872,
+    "token_group": "hazard_corridor",
+    "ci_note": "pooled CI brackets the mean, not the median"
+   },
+   "sources": {
+    "primary_b_gate": "artifacts/cgs_pilot/drive_eval/armA_seed0/behavior_gate_discovery.json",
+    "cross_b_gate": "artifacts/cgs_pilot/drive_eval/armA_seed0/behavior_gate_discovery_level3.json",
+    "primary_cf_gate": "artifacts/cgs_pilot/drive_eval/armA_seed0/cf_gate_discovery.json",
+    "cross_cf_gate": "artifacts/cgs_pilot/drive_eval/armA_seed0/cf_gate_discovery_level3.json",
+    "summary": "artifacts/cgs_pilot/drive_eval/armA_seed0/summary.json",
+    "eval_scope": "artifacts/cgs_pilot/drive_eval/armA_seed0/EVAL_SCOPE.json"
+   },
+   "identity_contrast_fixed_labels": {
+    "definition": "pedestrian (level 1) minus cone (level 3); predicted: rec/delta > 0 and NMSE diff < 0 in arm A, reversed in arm B",
+    "rec_ped_minus_cone_mean": 0.07172406165371416,
+    "rec_ped_minus_cone_median": 0.07204252578714848,
+    "rec_ped_minus_cone_p": 0.0001999600079984003,
+    "planner_delta_ped_minus_cone_mean": 7690.360432930466,
+    "planner_delta_ped_minus_cone_p": 0.0001999600079984003,
+    "identity_interaction_cosine_median": 0.8790436934473793,
+    "flip_rate_ped_vs_cone": 0.0,
+    "nmse_ped_median": 0.3147267153291625,
+    "nmse_cone_median": 0.43298926883758754,
+    "nmse_ped_minus_cone_median_diff": -0.11826255350842502,
+    "solid_minus_ghost_nmse_median_diff": -0.11826255350842502,
+    "T1c_prime_scene_level": {
+     "diff_mean_solid_minus_ghost": null,
+     "p": null,
+     "ok": null,
+     "n": null
+    },
+    "source": "artifacts/cgs_pilot/drive_eval/armA_seed0/behavior_gate_discovery.json"
+   },
+   "retrieval": {
+    "model_mean_cosine": 0.8254610034230981,
+    "baselines": {
+     "copy_delta_scene": 0.9231892368901847,
+     "knn_droid": null,
+     "loso_ridge": -0.00016757487372825205,
+     "persistence": 0.0
+    },
+    "passed": false,
+    "per_baseline": {
+     "copy_delta_scene": false,
+     "knn_droid": null,
+     "loso_ridge": true,
+     "persistence": true
+    },
+    "deferred": [
+     "knn_droid"
+    ],
+    "source": "artifacts/cgs_pilot/drive_eval/armA_seed0/retrieval_baseline.json"
+   },
+   "contamination": {
+    "n_cells": 432,
+    "near_duplicate_context_cells": 384,
+    "cells_with_hazard_centroid_within_2px_of_another_scene": 432,
+    "fraction_stimuli_beyond_training_p95_frames": 0.004629629629629629,
+    "actions_identical_across_hazard": true,
+    "hazard_from_actions_at_chance": true,
+    "source": "artifacts/cgs_pilot/drive_eval/armA_seed0/contamination.json"
+   }
+  },
+  {
+   "model": "armA_seed1",
+   "arm": "A",
+   "seed": 1,
+   "arm_description": "pedestrian solid / cone ghost",
+   "solid_identity": "pedestrian",
+   "ghost_identity": "cone",
+   "n_discovery_scenes": 54,
+   "split": {
+    "admitted": 120,
+    "discovery": [
+     3,
+     4,
+     7,
+     9,
+     10,
+     14,
+     15,
+     17,
+     18,
+     19,
+     20,
+     21,
+     23,
+     25,
+     26,
+     29,
+     33,
+     35,
+     36,
+     37,
+     44,
+     45,
+     46,
+     50,
+     52,
+     54,
+     57,
+     61,
+     63,
+     67,
+     68,
+     69,
+     72,
+     74,
+     76,
+     77,
+     78,
+     85,
+     87,
+     89,
+     91,
+     94,
+     97,
+     99,
+     101,
+     103,
+     107,
+     110,
+     111,
+     112,
+     115,
+     117,
+     118,
+     119
+    ],
+    "confirmation": [
+     0,
+     1,
+     2,
+     5,
+     6,
+     8,
+     11,
+     12,
+     13,
+     16,
+     22,
+     24,
+     27,
+     28,
+     30,
+     31,
+     32,
+     34,
+     38,
+     39,
+     40,
+     41,
+     42,
+     43,
+     47,
+     48,
+     49,
+     51,
+     53,
+     55,
+     56,
+     58,
+     59,
+     60,
+     62,
+     64,
+     65,
+     66,
+     70,
+     71,
+     73,
+     75,
+     79,
+     80,
+     81,
+     82,
+     83,
+     84,
+     86,
+     88,
+     90,
+     92,
+     93,
+     95,
+     96,
+     98,
+     100,
+     102,
+     104,
+     105,
+     106,
+     108,
+     109,
+     113,
+     114,
+     116
+    ],
+    "scope": "discovery scenes only (confirmation sealed)"
+   },
+   "primary": {
+    "level": 1,
+    "identity": "pedestrian",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.3696575977178996,
+    "captured_fraction": 0.6303424022821005,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.21144466070800352,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.13856628505569882,
+    "T1c_ok": true,
+    "T1c_prime": {
+     "n": 54,
+     "nmse_primary_median": 0.3696575977178996,
+     "nmse_cross_median": 0.41436281360173477,
+     "diff_mean": -0.015446618176237333,
+     "p": 0.0007999600019999,
+     "ok": true
+    },
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.9259259259259259,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": -0.5918782888187408,
+    "energy_gap_p": 0.0001999600079984003,
+    "T2b_ok": false,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.3741044345454742,
+    "interaction_nmse_ci_of_mean": [
+     0.3669181831856287,
+     0.3811470108726626
+    ],
+    "interaction_cosine_median": 0.7954450248653756,
+    "interaction_cosine_ci_of_mean": [
+     0.7875474520187864,
+     0.7965683082993371
+    ],
+    "rec_h1_median": 0.7949795045782184,
+    "rec_h0_median": 0.5899659603426248,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 1.0,
+    "planner_delta_h1_minus_h0_mean": 7793.404336798455,
+    "token_group": "hazard_corridor"
+   },
+   "cross": {
+    "level": 3,
+    "identity": "cone",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.41436281360173477,
+    "captured_fraction": 0.5856371863982652,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.17264563368169464,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.09976725802938989,
+    "T1c_ok": true,
+    "T1c_prime": null,
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.9259259259259259,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": -16.906400477543798,
+    "energy_gap_p": 0.375,
+    "T2b_ok": false,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.38955105272171164,
+    "interaction_nmse_ci_of_mean": [
+     0.3763469572638874,
+     0.4025873531375553
+    ],
+    "interaction_cosine_median": 0.7652709778123735,
+    "interaction_cosine_ci_of_mean": [
+     0.7724942113984844,
+     0.789127539246749
+    ],
+    "rec_h1_median": 0.7757020608984035,
+    "rec_h0_median": 0.5899659603426248,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 0.07407407407407407,
+    "planner_delta_h1_minus_h0_mean": 1538.6206498290019,
+    "token_group": "hazard_corridor",
+    "ci_note": "pooled CI brackets the mean, not the median"
+   },
+   "sources": {
+    "primary_b_gate": "artifacts/cgs_pilot/drive_eval/armA_seed1/behavior_gate_discovery.json",
+    "cross_b_gate": "artifacts/cgs_pilot/drive_eval/armA_seed1/behavior_gate_discovery_level3.json",
+    "primary_cf_gate": "artifacts/cgs_pilot/drive_eval/armA_seed1/cf_gate_discovery.json",
+    "cross_cf_gate": "artifacts/cgs_pilot/drive_eval/armA_seed1/cf_gate_discovery_level3.json",
+    "summary": "artifacts/cgs_pilot/drive_eval/armA_seed1/summary.json",
+    "eval_scope": "artifacts/cgs_pilot/drive_eval/armA_seed1/EVAL_SCOPE.json"
+   },
+   "identity_contrast_fixed_labels": {
+    "definition": "pedestrian (level 1) minus cone (level 3); predicted: rec/delta > 0 and NMSE diff < 0 in arm A, reversed in arm B",
+    "rec_ped_minus_cone_mean": 0.038799027026308906,
+    "rec_ped_minus_cone_median": 0.030701370675046413,
+    "rec_ped_minus_cone_p": 0.0001999600079984003,
+    "planner_delta_ped_minus_cone_mean": 6254.783686969454,
+    "planner_delta_ped_minus_cone_p": 0.0001999600079984003,
+    "identity_interaction_cosine_median": 0.8519527892335701,
+    "flip_rate_ped_vs_cone": 0.0,
+    "nmse_ped_median": 0.3696575977178996,
+    "nmse_cone_median": 0.41436281360173477,
+    "nmse_ped_minus_cone_median_diff": -0.04470521588383519,
+    "solid_minus_ghost_nmse_median_diff": -0.04470521588383519,
+    "T1c_prime_scene_level": {
+     "diff_mean_solid_minus_ghost": -0.015446618176237333,
+     "p": 0.0007999600019999,
+     "ok": true,
+     "n": 54
+    },
+    "source": "artifacts/cgs_pilot/drive_eval/armA_seed1/behavior_gate_discovery.json"
+   },
+   "retrieval": {
+    "model_mean_cosine": 0.7920054057614236,
+    "baselines": {
+     "copy_delta_scene": 0.9231892368901847,
+     "knn_droid": null,
+     "loso_ridge": -0.00016757487372825205,
+     "persistence": 0.0
+    },
+    "passed": false,
+    "per_baseline": {
+     "copy_delta_scene": false,
+     "knn_droid": null,
+     "loso_ridge": true,
+     "persistence": true
+    },
+    "deferred": [
+     "knn_droid"
+    ],
+    "source": "artifacts/cgs_pilot/drive_eval/armA_seed1/retrieval_baseline.json"
+   },
+   "contamination": {
+    "n_cells": 432,
+    "near_duplicate_context_cells": 384,
+    "cells_with_hazard_centroid_within_2px_of_another_scene": 432,
+    "fraction_stimuli_beyond_training_p95_frames": 0.004629629629629629,
+    "actions_identical_across_hazard": true,
+    "hazard_from_actions_at_chance": true,
+    "source": "artifacts/cgs_pilot/drive_eval/armA_seed1/contamination.json"
+   }
+  },
+  {
+   "model": "armA_seed2",
+   "arm": "A",
+   "seed": 2,
+   "arm_description": "pedestrian solid / cone ghost",
+   "solid_identity": "pedestrian",
+   "ghost_identity": "cone",
+   "n_discovery_scenes": 54,
+   "split": {
+    "admitted": 120,
+    "discovery": [
+     3,
+     4,
+     7,
+     9,
+     10,
+     14,
+     15,
+     17,
+     18,
+     19,
+     20,
+     21,
+     23,
+     25,
+     26,
+     29,
+     33,
+     35,
+     36,
+     37,
+     44,
+     45,
+     46,
+     50,
+     52,
+     54,
+     57,
+     61,
+     63,
+     67,
+     68,
+     69,
+     72,
+     74,
+     76,
+     77,
+     78,
+     85,
+     87,
+     89,
+     91,
+     94,
+     97,
+     99,
+     101,
+     103,
+     107,
+     110,
+     111,
+     112,
+     115,
+     117,
+     118,
+     119
+    ],
+    "confirmation": [
+     0,
+     1,
+     2,
+     5,
+     6,
+     8,
+     11,
+     12,
+     13,
+     16,
+     22,
+     24,
+     27,
+     28,
+     30,
+     31,
+     32,
+     34,
+     38,
+     39,
+     40,
+     41,
+     42,
+     43,
+     47,
+     48,
+     49,
+     51,
+     53,
+     55,
+     56,
+     58,
+     59,
+     60,
+     62,
+     64,
+     65,
+     66,
+     70,
+     71,
+     73,
+     75,
+     79,
+     80,
+     81,
+     82,
+     83,
+     84,
+     86,
+     88,
+     90,
+     92,
+     93,
+     95,
+     96,
+     98,
+     100,
+     102,
+     104,
+     105,
+     106,
+     108,
+     109,
+     113,
+     114,
+     116
+    ],
+    "scope": "discovery scenes only (confirmation sealed)"
+   },
+   "primary": {
+    "level": 1,
+    "identity": "pedestrian",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.3266206772039165,
+    "captured_fraction": 0.6733793227960835,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.2030715821278831,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.14840793036268798,
+    "T1c_ok": true,
+    "T1c_prime": {
+     "n": 54,
+     "nmse_primary_median": 0.3266206772039165,
+     "nmse_cross_median": 0.44357932634167885,
+     "diff_mean": -0.09332572399983714,
+     "p": 4.999750012499375e-05,
+     "ok": true
+    },
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.8888888888888888,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": -0.7474115067158124,
+    "energy_gap_p": 0.0001999600079984003,
+    "T2b_ok": false,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.3256628557820853,
+    "interaction_nmse_ci_of_mean": [
+     0.31642666723048285,
+     0.3358592381733053
+    ],
+    "interaction_cosine_median": 0.8217471377514701,
+    "interaction_cosine_ci_of_mean": [
+     0.8176167606613479,
+     0.8285251049251198
+    ],
+    "rec_h1_median": 0.8809314329558533,
+    "rec_h0_median": 0.6736324527978933,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 1.0,
+    "planner_delta_h1_minus_h0_mean": 8723.137135639785,
+    "token_group": "hazard_corridor"
+   },
+   "cross": {
+    "level": 3,
+    "identity": "cone",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.44357932634167885,
+    "captured_fraction": 0.5564206736583212,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.17161606155033407,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.116952409785139,
+    "T1c_ok": true,
+    "T1c_prime": null,
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.8888888888888888,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": -14.966290457822835,
+    "energy_gap_p": 0.359375,
+    "T2b_ok": false,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.4189885797819225,
+    "interaction_nmse_ci_of_mean": [
+     0.40633322192856863,
+     0.4311049185246272
+    ],
+    "interaction_cosine_median": 0.7495149027503845,
+    "interaction_cosine_ci_of_mean": [
+     0.7579567662426382,
+     0.7740914551297422
+    ],
+    "rec_h1_median": 0.857886392358509,
+    "rec_h0_median": 0.6736324527978933,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 0.07407407407407407,
+    "planner_delta_h1_minus_h0_mean": 1617.8812807897107,
+    "token_group": "hazard_corridor",
+    "ci_note": "pooled CI brackets the mean, not the median"
+   },
+   "sources": {
+    "primary_b_gate": "artifacts/cgs_pilot/drive_eval/armA_seed2/behavior_gate_discovery.json",
+    "cross_b_gate": "artifacts/cgs_pilot/drive_eval/armA_seed2/behavior_gate_discovery_level3.json",
+    "primary_cf_gate": "artifacts/cgs_pilot/drive_eval/armA_seed2/cf_gate_discovery.json",
+    "cross_cf_gate": "artifacts/cgs_pilot/drive_eval/armA_seed2/cf_gate_discovery_level3.json",
+    "summary": "artifacts/cgs_pilot/drive_eval/armA_seed2/summary.json",
+    "eval_scope": "artifacts/cgs_pilot/drive_eval/armA_seed2/EVAL_SCOPE.json"
+   },
+   "identity_contrast_fixed_labels": {
+    "definition": "pedestrian (level 1) minus cone (level 3); predicted: rec/delta > 0 and NMSE diff < 0 in arm A, reversed in arm B",
+    "rec_ped_minus_cone_mean": 0.031455520577549,
+    "rec_ped_minus_cone_median": 0.028072724499471402,
+    "rec_ped_minus_cone_p": 0.0001999600079984003,
+    "planner_delta_ped_minus_cone_mean": 7105.255854850075,
+    "planner_delta_ped_minus_cone_p": 0.0001999600079984003,
+    "identity_interaction_cosine_median": 0.8820003733504447,
+    "flip_rate_ped_vs_cone": 0.0,
+    "nmse_ped_median": 0.3266206772039165,
+    "nmse_cone_median": 0.44357932634167885,
+    "nmse_ped_minus_cone_median_diff": -0.11695864913776233,
+    "solid_minus_ghost_nmse_median_diff": -0.11695864913776233,
+    "T1c_prime_scene_level": {
+     "diff_mean_solid_minus_ghost": -0.09332572399983714,
+     "p": 4.999750012499375e-05,
+     "ok": true,
+     "n": 54
+    },
+    "source": "artifacts/cgs_pilot/drive_eval/armA_seed2/behavior_gate_discovery.json"
+   },
+   "retrieval": {
+    "model_mean_cosine": 0.8232473271575315,
+    "baselines": {
+     "copy_delta_scene": 0.9231892368901847,
+     "knn_droid": null,
+     "loso_ridge": -0.00016757487372825205,
+     "persistence": 0.0
+    },
+    "passed": false,
+    "per_baseline": {
+     "copy_delta_scene": false,
+     "knn_droid": null,
+     "loso_ridge": true,
+     "persistence": true
+    },
+    "deferred": [
+     "knn_droid"
+    ],
+    "source": "artifacts/cgs_pilot/drive_eval/armA_seed2/retrieval_baseline.json"
+   },
+   "contamination": {
+    "n_cells": 432,
+    "near_duplicate_context_cells": 384,
+    "cells_with_hazard_centroid_within_2px_of_another_scene": 432,
+    "fraction_stimuli_beyond_training_p95_frames": 0.004629629629629629,
+    "actions_identical_across_hazard": true,
+    "hazard_from_actions_at_chance": true,
+    "source": "artifacts/cgs_pilot/drive_eval/armA_seed2/contamination.json"
+   }
+  },
+  {
+   "model": "armB_seed0",
+   "arm": "B",
+   "seed": 0,
+   "arm_description": "cone solid / pedestrian ghost",
+   "solid_identity": "cone",
+   "ghost_identity": "pedestrian",
+   "n_discovery_scenes": 54,
+   "split": {
+    "admitted": 120,
+    "discovery": [
+     3,
+     4,
+     7,
+     9,
+     10,
+     14,
+     15,
+     17,
+     18,
+     19,
+     20,
+     21,
+     23,
+     25,
+     26,
+     29,
+     33,
+     35,
+     36,
+     37,
+     44,
+     45,
+     46,
+     50,
+     52,
+     54,
+     57,
+     61,
+     63,
+     67,
+     68,
+     69,
+     72,
+     74,
+     76,
+     77,
+     78,
+     85,
+     87,
+     89,
+     91,
+     94,
+     97,
+     99,
+     101,
+     103,
+     107,
+     110,
+     111,
+     112,
+     115,
+     117,
+     118,
+     119
+    ],
+    "confirmation": [
+     0,
+     1,
+     2,
+     5,
+     6,
+     8,
+     11,
+     12,
+     13,
+     16,
+     22,
+     24,
+     27,
+     28,
+     30,
+     31,
+     32,
+     34,
+     38,
+     39,
+     40,
+     41,
+     42,
+     43,
+     47,
+     48,
+     49,
+     51,
+     53,
+     55,
+     56,
+     58,
+     59,
+     60,
+     62,
+     64,
+     65,
+     66,
+     70,
+     71,
+     73,
+     75,
+     79,
+     80,
+     81,
+     82,
+     83,
+     84,
+     86,
+     88,
+     90,
+     92,
+     93,
+     95,
+     96,
+     98,
+     100,
+     102,
+     104,
+     105,
+     106,
+     108,
+     109,
+     113,
+     114,
+     116
+    ],
+    "scope": "discovery scenes only (confirmation sealed)"
+   },
+   "primary": {
+    "level": 3,
+    "identity": "cone",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.4505953685333149,
+    "captured_fraction": 0.5494046314666852,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.1684920701730897,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.08760795356205228,
+    "T1c_ok": true,
+    "T1c_prime": null,
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.8888888888888888,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": -0.5554807619444273,
+    "energy_gap_p": 0.0001999600079984003,
+    "T2b_ok": true,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.4890601405286011,
+    "interaction_nmse_ci_of_mean": [
+     0.46710113348473703,
+     0.5151090518334548
+    ],
+    "interaction_cosine_median": 0.7425558130681861,
+    "interaction_cosine_ci_of_mean": [
+     0.7119234153543483,
+     0.7356499576954086
+    ],
+    "rec_h1_median": 0.739959765499171,
+    "rec_h0_median": 0.6000641054230846,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 1.0,
+    "planner_delta_h1_minus_h0_mean": 3520.7002955359194,
+    "token_group": "hazard_corridor",
+    "ci_note": "pooled CI brackets the mean, not the median"
+   },
+   "cross": {
+    "level": 1,
+    "identity": "pedestrian",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.540864362942318,
+    "captured_fraction": 0.459135637057682,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.20590044642634855,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.12501632981531113,
+    "T1c_ok": true,
+    "T1c_prime": null,
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.8888888888888888,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": 52.920503818269694,
+    "energy_gap_p": 0.125,
+    "T2b_ok": false,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.5130775933519387,
+    "interaction_nmse_ci_of_mean": [
+     0.4904024378233273,
+     0.5356081769785089
+    ],
+    "interaction_cosine_median": 0.70180509887719,
+    "interaction_cosine_ci_of_mean": [
+     0.7068454369047862,
+     0.732654416956192
+    ],
+    "rec_h1_median": 0.818716647546182,
+    "rec_h0_median": 0.6000641054230846,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 0.0,
+    "planner_delta_h1_minus_h0_mean": 1695.7387150578584,
+    "token_group": "hazard_corridor",
+    "ci_note": "pooled CI brackets the mean, not the median"
+   },
+   "sources": {
+    "primary_b_gate": "artifacts/cgs_pilot/drive_eval/armB_seed0/behavior_gate_discovery.json",
+    "cross_b_gate": "artifacts/cgs_pilot/drive_eval/armB_seed0/behavior_gate_discovery_level1.json",
+    "primary_cf_gate": "artifacts/cgs_pilot/drive_eval/armB_seed0/cf_gate_discovery.json",
+    "cross_cf_gate": "artifacts/cgs_pilot/drive_eval/armB_seed0/cf_gate_discovery_level1.json",
+    "summary": "artifacts/cgs_pilot/drive_eval/armB_seed0/summary.json",
+    "eval_scope": "artifacts/cgs_pilot/drive_eval/armB_seed0/EVAL_SCOPE.json"
+   },
+   "identity_contrast_fixed_labels": {
+    "definition": "pedestrian (level 1) minus cone (level 3); predicted: rec/delta > 0 and NMSE diff < 0 in arm A, reversed in arm B",
+    "rec_ped_minus_cone_mean": 0.037408376253258845,
+    "rec_ped_minus_cone_median": 0.04494148683722876,
+    "rec_ped_minus_cone_p": 0.0001999600079984003,
+    "planner_delta_ped_minus_cone_mean": -1824.9615804780597,
+    "planner_delta_ped_minus_cone_p": 0.0001999600079984003,
+    "identity_interaction_cosine_median": 0.8175519326273173,
+    "flip_rate_ped_vs_cone": 0.0,
+    "nmse_ped_median": 0.540864362942318,
+    "nmse_cone_median": 0.4505953685333149,
+    "nmse_ped_minus_cone_median_diff": 0.0902689944090031,
+    "solid_minus_ghost_nmse_median_diff": -0.0902689944090031,
+    "T1c_prime_scene_level": {
+     "diff_mean_solid_minus_ghost": null,
+     "p": null,
+     "ok": null,
+     "n": null
+    },
+    "source": "artifacts/cgs_pilot/drive_eval/armB_seed0/behavior_gate_discovery_level1.json"
+   },
+   "retrieval": {
+    "model_mean_cosine": 0.719671319705663,
+    "baselines": {
+     "copy_delta_scene": 0.9257849487417523,
+     "knn_droid": null,
+     "loso_ridge": -0.0004222516410502749,
+     "persistence": 0.0
+    },
+    "passed": false,
+    "per_baseline": {
+     "copy_delta_scene": false,
+     "knn_droid": null,
+     "loso_ridge": true,
+     "persistence": true
+    },
+    "deferred": [
+     "knn_droid"
+    ],
+    "source": "artifacts/cgs_pilot/drive_eval/armB_seed0/retrieval_baseline.json"
+   },
+   "contamination": {
+    "n_cells": 432,
+    "near_duplicate_context_cells": 384,
+    "cells_with_hazard_centroid_within_2px_of_another_scene": 432,
+    "fraction_stimuli_beyond_training_p95_frames": 0.004629629629629629,
+    "actions_identical_across_hazard": true,
+    "hazard_from_actions_at_chance": true,
+    "source": "artifacts/cgs_pilot/drive_eval/armB_seed0/contamination.json"
+   }
+  },
+  {
+   "model": "armB_seed1",
+   "arm": "B",
+   "seed": 1,
+   "arm_description": "cone solid / pedestrian ghost",
+   "solid_identity": "cone",
+   "ghost_identity": "pedestrian",
+   "n_discovery_scenes": 54,
+   "split": {
+    "admitted": 120,
+    "discovery": [
+     3,
+     4,
+     7,
+     9,
+     10,
+     14,
+     15,
+     17,
+     18,
+     19,
+     20,
+     21,
+     23,
+     25,
+     26,
+     29,
+     33,
+     35,
+     36,
+     37,
+     44,
+     45,
+     46,
+     50,
+     52,
+     54,
+     57,
+     61,
+     63,
+     67,
+     68,
+     69,
+     72,
+     74,
+     76,
+     77,
+     78,
+     85,
+     87,
+     89,
+     91,
+     94,
+     97,
+     99,
+     101,
+     103,
+     107,
+     110,
+     111,
+     112,
+     115,
+     117,
+     118,
+     119
+    ],
+    "confirmation": [
+     0,
+     1,
+     2,
+     5,
+     6,
+     8,
+     11,
+     12,
+     13,
+     16,
+     22,
+     24,
+     27,
+     28,
+     30,
+     31,
+     32,
+     34,
+     38,
+     39,
+     40,
+     41,
+     42,
+     43,
+     47,
+     48,
+     49,
+     51,
+     53,
+     55,
+     56,
+     58,
+     59,
+     60,
+     62,
+     64,
+     65,
+     66,
+     70,
+     71,
+     73,
+     75,
+     79,
+     80,
+     81,
+     82,
+     83,
+     84,
+     86,
+     88,
+     90,
+     92,
+     93,
+     95,
+     96,
+     98,
+     100,
+     102,
+     104,
+     105,
+     106,
+     108,
+     109,
+     113,
+     114,
+     116
+    ],
+    "scope": "discovery scenes only (confirmation sealed)"
+   },
+   "primary": {
+    "level": 3,
+    "identity": "cone",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.49559611648307095,
+    "captured_fraction": 0.5044038835169291,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.16141096024267473,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.037808344232431415,
+    "T1c_ok": true,
+    "T1c_prime": {
+     "n": 54,
+     "nmse_primary_median": 0.49559611648307095,
+     "nmse_cross_median": 0.6301219350947707,
+     "diff_mean": -0.08432820734947429,
+     "p": 9.99950002499875e-05,
+     "ok": true
+    },
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.8888888888888888,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": -0.49751250972749894,
+    "energy_gap_p": 0.0001999600079984003,
+    "T2b_ok": false,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.5056522429629632,
+    "interaction_nmse_ci_of_mean": [
+     0.49324034109063414,
+     0.5203771029766429
+    ],
+    "interaction_cosine_median": 0.7114235619537675,
+    "interaction_cosine_ci_of_mean": [
+     0.7020538698541693,
+     0.7158009124483105
+    ],
+    "rec_h1_median": 0.6858976392244257,
+    "rec_h0_median": 0.5699296613513133,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 1.0,
+    "planner_delta_h1_minus_h0_mean": 3299.9347370048304,
+    "token_group": "hazard_corridor"
+   },
+   "cross": {
+    "level": 1,
+    "identity": "pedestrian",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.6301219350947707,
+    "captured_fraction": 0.36987806490522934,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.22053608963090102,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.09693347362065768,
+    "T1c_ok": true,
+    "T1c_prime": null,
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.8888888888888888,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": 56.458696965361206,
+    "energy_gap_p": 0.125,
+    "T2b_ok": false,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.5899804503124374,
+    "interaction_nmse_ci_of_mean": [
+     0.5643927986644627,
+     0.6153185490330653
+    ],
+    "interaction_cosine_median": 0.6559549744204847,
+    "interaction_cosine_ci_of_mean": [
+     0.6652939433894155,
+     0.6939755746948758
+    ],
+    "rec_h1_median": 0.7995426487911808,
+    "rec_h0_median": 0.5699296613513133,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 0.0,
+    "planner_delta_h1_minus_h0_mean": 1501.9745412276725,
+    "token_group": "hazard_corridor",
+    "ci_note": "pooled CI brackets the mean, not the median"
+   },
+   "sources": {
+    "primary_b_gate": "artifacts/cgs_pilot/drive_eval/armB_seed1/behavior_gate_discovery.json",
+    "cross_b_gate": "artifacts/cgs_pilot/drive_eval/armB_seed1/behavior_gate_discovery_level1.json",
+    "primary_cf_gate": "artifacts/cgs_pilot/drive_eval/armB_seed1/cf_gate_discovery.json",
+    "cross_cf_gate": "artifacts/cgs_pilot/drive_eval/armB_seed1/cf_gate_discovery_level1.json",
+    "summary": "artifacts/cgs_pilot/drive_eval/armB_seed1/summary.json",
+    "eval_scope": "artifacts/cgs_pilot/drive_eval/armB_seed1/EVAL_SCOPE.json"
+   },
+   "identity_contrast_fixed_labels": {
+    "definition": "pedestrian (level 1) minus cone (level 3); predicted: rec/delta > 0 and NMSE diff < 0 in arm A, reversed in arm B",
+    "rec_ped_minus_cone_mean": 0.059125129388226276,
+    "rec_ped_minus_cone_median": 0.07835970956075256,
+    "rec_ped_minus_cone_p": 0.0001999600079984003,
+    "planner_delta_ped_minus_cone_mean": -1797.9601957771567,
+    "planner_delta_ped_minus_cone_p": 0.0001999600079984003,
+    "identity_interaction_cosine_median": 0.788063298264241,
+    "flip_rate_ped_vs_cone": 0.0,
+    "nmse_ped_median": 0.6301219350947707,
+    "nmse_cone_median": 0.49559611648307095,
+    "nmse_ped_minus_cone_median_diff": 0.1345258186116997,
+    "solid_minus_ghost_nmse_median_diff": -0.1345258186116997,
+    "T1c_prime_scene_level": {
+     "diff_mean_solid_minus_ghost": -0.08432820734947429,
+     "p": 9.99950002499875e-05,
+     "ok": true,
+     "n": 54
+    },
+    "source": "artifacts/cgs_pilot/drive_eval/armB_seed1/behavior_gate_discovery_level1.json"
+   },
+   "retrieval": {
+    "model_mean_cosine": 0.6796695390546995,
+    "baselines": {
+     "copy_delta_scene": 0.9257849487417523,
+     "knn_droid": null,
+     "loso_ridge": -0.0004222516410502749,
+     "persistence": 0.0
+    },
+    "passed": false,
+    "per_baseline": {
+     "copy_delta_scene": false,
+     "knn_droid": null,
+     "loso_ridge": true,
+     "persistence": true
+    },
+    "deferred": [
+     "knn_droid"
+    ],
+    "source": "artifacts/cgs_pilot/drive_eval/armB_seed1/retrieval_baseline.json"
+   },
+   "contamination": {
+    "n_cells": 432,
+    "near_duplicate_context_cells": 384,
+    "cells_with_hazard_centroid_within_2px_of_another_scene": 432,
+    "fraction_stimuli_beyond_training_p95_frames": 0.004629629629629629,
+    "actions_identical_across_hazard": true,
+    "hazard_from_actions_at_chance": true,
+    "source": "artifacts/cgs_pilot/drive_eval/armB_seed1/contamination.json"
+   }
+  },
+  {
+   "model": "armB_seed2",
+   "arm": "B",
+   "seed": 2,
+   "arm_description": "cone solid / pedestrian ghost",
+   "solid_identity": "cone",
+   "ghost_identity": "pedestrian",
+   "n_discovery_scenes": 54,
+   "split": {
+    "admitted": 120,
+    "discovery": [
+     3,
+     4,
+     7,
+     9,
+     10,
+     14,
+     15,
+     17,
+     18,
+     19,
+     20,
+     21,
+     23,
+     25,
+     26,
+     29,
+     33,
+     35,
+     36,
+     37,
+     44,
+     45,
+     46,
+     50,
+     52,
+     54,
+     57,
+     61,
+     63,
+     67,
+     68,
+     69,
+     72,
+     74,
+     76,
+     77,
+     78,
+     85,
+     87,
+     89,
+     91,
+     94,
+     97,
+     99,
+     101,
+     103,
+     107,
+     110,
+     111,
+     112,
+     115,
+     117,
+     118,
+     119
+    ],
+    "confirmation": [
+     0,
+     1,
+     2,
+     5,
+     6,
+     8,
+     11,
+     12,
+     13,
+     16,
+     22,
+     24,
+     27,
+     28,
+     30,
+     31,
+     32,
+     34,
+     38,
+     39,
+     40,
+     41,
+     42,
+     43,
+     47,
+     48,
+     49,
+     51,
+     53,
+     55,
+     56,
+     58,
+     59,
+     60,
+     62,
+     64,
+     65,
+     66,
+     70,
+     71,
+     73,
+     75,
+     79,
+     80,
+     81,
+     82,
+     83,
+     84,
+     86,
+     88,
+     90,
+     92,
+     93,
+     95,
+     96,
+     98,
+     100,
+     102,
+     104,
+     105,
+     106,
+     108,
+     109,
+     113,
+     114,
+     116
+    ],
+    "scope": "discovery scenes only (confirmation sealed)"
+   },
+   "primary": {
+    "level": 3,
+    "identity": "cone",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.47165364687836475,
+    "captured_fraction": 0.5283463531216352,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.10178104982092916,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.0278395027673183,
+    "T1c_ok": true,
+    "T1c_prime": {
+     "n": 54,
+     "nmse_primary_median": 0.47165364687836475,
+     "nmse_cross_median": 0.611045013458404,
+     "diff_mean": -0.08289930879672171,
+     "p": 9.99950002499875e-05,
+     "ok": true
+    },
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.8888888888888888,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": -0.4498123340091379,
+    "energy_gap_p": 0.0001999600079984003,
+    "T2b_ok": true,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.48687549081259646,
+    "interaction_nmse_ci_of_mean": [
+     0.4759873025314015,
+     0.49971202940825193
+    ],
+    "interaction_cosine_median": 0.7306860419568604,
+    "interaction_cosine_ci_of_mean": [
+     0.7150762053936923,
+     0.7286643278129739
+    ],
+    "rec_h1_median": 0.6835589537763228,
+    "rec_h0_median": 0.6146077723945795,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 1.0,
+    "planner_delta_h1_minus_h0_mean": 3014.333340867768,
+    "token_group": "hazard_corridor",
+    "ci_note": "pooled CI brackets the mean, not the median"
+   },
+   "cross": {
+    "level": 1,
+    "identity": "pedestrian",
+    "n_scenes": 54,
+    "interaction_nmse_median": 0.611045013458404,
+    "captured_fraction": 0.388954986541596,
+    "T1b_ok": true,
+    "rec_h1_minus_h0": 0.20771097005676661,
+    "rec_h1_minus_h0_p": 0.0001999600079984003,
+    "rec_h1_minus_h0prime": 0.13376942300315572,
+    "T1c_ok": true,
+    "T1c_prime": null,
+    "t1c_route": "T1c",
+    "flip_rate_h1_vs_h0": 0.8888888888888888,
+    "T2a_ok": true,
+    "energy_gap_norm_h1_vs_h0": 50.25054644157142,
+    "energy_gap_p": 0.125,
+    "T2b_ok": false,
+    "b_gate_verdict": "PASS_PLANNER",
+    "interaction_nmse_mean": 0.5697747996093182,
+    "interaction_nmse_ci_of_mean": [
+     0.5438091337837284,
+     0.5953054205477551
+    ],
+    "interaction_cosine_median": 0.6602745453549861,
+    "interaction_cosine_ci_of_mean": [
+     0.670357582011292,
+     0.7001610791633301
+    ],
+    "rec_h1_median": 0.8308628230175793,
+    "rec_h0_median": 0.6146077723945795,
+    "validity_verdict": "PASS",
+    "validity_with_specificity": "PASS",
+    "fraction_h1_prediction_closer_to_contact_future": 0.0,
+    "planner_delta_h1_minus_h0_mean": 1568.0268512941516,
+    "token_group": "hazard_corridor",
+    "ci_note": "pooled CI brackets the mean, not the median"
+   },
+   "sources": {
+    "primary_b_gate": "artifacts/cgs_pilot/drive_eval/armB_seed2/behavior_gate_discovery.json",
+    "cross_b_gate": "artifacts/cgs_pilot/drive_eval/armB_seed2/behavior_gate_discovery_level1.json",
+    "primary_cf_gate": "artifacts/cgs_pilot/drive_eval/armB_seed2/cf_gate_discovery.json",
+    "cross_cf_gate": "artifacts/cgs_pilot/drive_eval/armB_seed2/cf_gate_discovery_level1.json",
+    "summary": "artifacts/cgs_pilot/drive_eval/armB_seed2/summary.json",
+    "eval_scope": "artifacts/cgs_pilot/drive_eval/armB_seed2/EVAL_SCOPE.json"
+   },
+   "identity_contrast_fixed_labels": {
+    "definition": "pedestrian (level 1) minus cone (level 3); predicted: rec/delta > 0 and NMSE diff < 0 in arm A, reversed in arm B",
+    "rec_ped_minus_cone_mean": 0.10592992023583742,
+    "rec_ped_minus_cone_median": 0.12842855537402587,
+    "rec_ped_minus_cone_p": 0.0001999600079984003,
+    "planner_delta_ped_minus_cone_mean": -1446.306489573615,
+    "planner_delta_ped_minus_cone_p": 0.0001999600079984003,
+    "identity_interaction_cosine_median": 0.8023546519925644,
+    "flip_rate_ped_vs_cone": 0.0,
+    "nmse_ped_median": 0.611045013458404,
+    "nmse_cone_median": 0.47165364687836475,
+    "nmse_ped_minus_cone_median_diff": 0.13939136658003926,
+    "solid_minus_ghost_nmse_median_diff": -0.13939136658003926,
+    "T1c_prime_scene_level": {
+     "diff_mean_solid_minus_ghost": -0.08289930879672171,
+     "p": 9.99950002499875e-05,
+     "ok": true,
+     "n": 54
+    },
+    "source": "artifacts/cgs_pilot/drive_eval/armB_seed2/behavior_gate_discovery_level1.json"
+   },
+   "retrieval": {
+    "model_mean_cosine": 0.68511529548097,
+    "baselines": {
+     "copy_delta_scene": 0.9257849487417523,
+     "knn_droid": null,
+     "loso_ridge": -0.0004222516410502749,
+     "persistence": 0.0
+    },
+    "passed": false,
+    "per_baseline": {
+     "copy_delta_scene": false,
+     "knn_droid": null,
+     "loso_ridge": true,
+     "persistence": true
+    },
+    "deferred": [
+     "knn_droid"
+    ],
+    "source": "artifacts/cgs_pilot/drive_eval/armB_seed2/retrieval_baseline.json"
+   },
+   "contamination": {
+    "n_cells": 432,
+    "near_duplicate_context_cells": 384,
+    "cells_with_hazard_centroid_within_2px_of_another_scene": 432,
+    "fraction_stimuli_beyond_training_p95_frames": 0.004629629629629629,
+    "actions_identical_across_hazard": true,
+    "hazard_from_actions_at_chance": true,
+    "source": "artifacts/cgs_pilot/drive_eval/armB_seed2/contamination.json"
+   }
+  }
+ ],
+ "cross_truth_cells": [
+  {
+   "cell": "armA_seed0_on_armB",
+   "model_arm": "A",
+   "model_seed": 0,
+   "truth_arm": "B",
+   "levels": {
+    "level1": {
+     "identity": "pedestrian",
+     "n": 54,
+     "interaction_nmse_median": 3.3109706559804426,
+     "interaction_nmse_ci_of_mean": [
+      3.295251397765352,
+      3.3331740144280317
+     ],
+     "captured_fraction_signed": -2.3109706559804426,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.13886240735131808,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "validity_verdict": "PASS",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": null
+    },
+    "level3": {
+     "identity": "cone",
+     "n": 54,
+     "interaction_nmse_median": 1.0547312962923527,
+     "interaction_nmse_ci_of_mean": [
+      1.0808541490268666,
+      1.1287069535706118
+     ],
+     "captured_fraction_signed": -0.05473129629235274,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.4247053385051817,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "validity_verdict": "FAIL",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": "T1c_prime"
+    }
+   },
+   "own_truth_reference": {
+    "level1": {
+     "interaction_nmse_median": 0.3147267153291625,
+     "captured_fraction": 0.6852732846708375,
+     "rec_h1_minus_h0": 0.22922752465812,
+     "flip_rate_h1_vs_h0": 0.8888888888888888
+    },
+    "level3": {
+     "interaction_nmse_median": 0.43298926883758754,
+     "captured_fraction": 0.5670107311624124,
+     "rec_h1_minus_h0": 0.15750346300440582,
+     "flip_rate_h1_vs_h0": 0.8888888888888888
+    }
+   },
+   "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armA_seed0_on_armB/crosstruth_summary.json"
+  },
+  {
+   "cell": "armA_seed1_on_armB",
+   "model_arm": "A",
+   "model_seed": 1,
+   "truth_arm": "B",
+   "levels": {
+    "level1": {
+     "identity": "pedestrian",
+     "n": 54,
+     "interaction_nmse_median": 2.895729000678547,
+     "interaction_nmse_ci_of_mean": [
+      2.884555234218937,
+      2.9139650040527725
+     ],
+     "captured_fraction_signed": -1.8957290006785472,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.0667066409050957,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.9259259259259259,
+     "validity_verdict": "PASS",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": null
+    },
+    "level3": {
+     "identity": "cone",
+     "n": 54,
+     "interaction_nmse_median": 1.0238704640391851,
+     "interaction_nmse_ci_of_mean": [
+      1.0466170097833565,
+      1.090389043225353
+     ],
+     "captured_fraction_signed": -0.023870464039185135,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.3682890524366498,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.9259259259259259,
+     "validity_verdict": "FAIL",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": "T1c_prime"
+    }
+   },
+   "own_truth_reference": {
+    "level1": {
+     "interaction_nmse_median": 0.3696575977178996,
+     "captured_fraction": 0.6303424022821005,
+     "rec_h1_minus_h0": 0.21144466070800352,
+     "flip_rate_h1_vs_h0": 0.9259259259259259
+    },
+    "level3": {
+     "interaction_nmse_median": 0.41436281360173477,
+     "captured_fraction": 0.5856371863982652,
+     "rec_h1_minus_h0": 0.17264563368169464,
+     "flip_rate_h1_vs_h0": 0.9259259259259259
+    }
+   },
+   "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armA_seed1_on_armB/crosstruth_summary.json"
+  },
+  {
+   "cell": "armA_seed2_on_armB",
+   "model_arm": "A",
+   "model_seed": 2,
+   "truth_arm": "B",
+   "levels": {
+    "level1": {
+     "identity": "pedestrian",
+     "n": 54,
+     "interaction_nmse_median": 3.2410315633130273,
+     "interaction_nmse_ci_of_mean": [
+      3.2129138866109836,
+      3.2443347140520227
+     ],
+     "captured_fraction_signed": -2.2410315633130273,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.15133049543254207,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "validity_verdict": "PASS",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": null
+    },
+    "level3": {
+     "identity": "cone",
+     "n": 54,
+     "interaction_nmse_median": 1.0745701912944239,
+     "interaction_nmse_ci_of_mean": [
+      1.1041976608469017,
+      1.156913255863715
+     ],
+     "captured_fraction_signed": -0.07457019129442388,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.43433545647568017,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "validity_verdict": "FAIL",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": "T1c_prime"
+    }
+   },
+   "own_truth_reference": {
+    "level1": {
+     "interaction_nmse_median": 0.3266206772039165,
+     "captured_fraction": 0.6733793227960835,
+     "rec_h1_minus_h0": 0.2030715821278831,
+     "flip_rate_h1_vs_h0": 0.8888888888888888
+    },
+    "level3": {
+     "interaction_nmse_median": 0.44357932634167885,
+     "captured_fraction": 0.5564206736583212,
+     "rec_h1_minus_h0": 0.17161606155033407,
+     "flip_rate_h1_vs_h0": 0.8888888888888888
+    }
+   },
+   "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armA_seed2_on_armB/crosstruth_summary.json"
+  },
+  {
+   "cell": "armB_seed0_on_armA",
+   "model_arm": "B",
+   "model_seed": 0,
+   "truth_arm": "A",
+   "levels": {
+    "level1": {
+     "identity": "pedestrian",
+     "n": 54,
+     "interaction_nmse_median": 1.079547857795124,
+     "interaction_nmse_ci_of_mean": [
+      1.0709286170115977,
+      1.0835755837510317
+     ],
+     "captured_fraction_signed": -0.07954785779512408,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.4581168435753452,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "validity_verdict": "FAIL",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": "T1c_prime"
+    },
+    "level3": {
+     "identity": "cone",
+     "n": 54,
+     "interaction_nmse_median": 1.608664576720992,
+     "interaction_nmse_ci_of_mean": [
+      1.6297584118698734,
+      1.6821680560614216
+     ],
+     "captured_fraction_signed": -0.608664576720992,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.15057790863443343,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "validity_verdict": "FAIL",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": null
+    }
+   },
+   "own_truth_reference": {
+    "level1": {
+     "interaction_nmse_median": 0.540864362942318,
+     "captured_fraction": 0.459135637057682,
+     "rec_h1_minus_h0": 0.20590044642634855,
+     "flip_rate_h1_vs_h0": 0.8888888888888888
+    },
+    "level3": {
+     "interaction_nmse_median": 0.4505953685333149,
+     "captured_fraction": 0.5494046314666852,
+     "rec_h1_minus_h0": 0.1684920701730897,
+     "flip_rate_h1_vs_h0": 0.8888888888888888
+    }
+   },
+   "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armB_seed0_on_armA/crosstruth_summary.json"
+  },
+  {
+   "cell": "armB_seed1_on_armA",
+   "model_arm": "B",
+   "model_seed": 1,
+   "truth_arm": "A",
+   "levels": {
+    "level1": {
+     "identity": "pedestrian",
+     "n": 54,
+     "interaction_nmse_median": 1.0914386894130426,
+     "interaction_nmse_ci_of_mean": [
+      1.0778263544731783,
+      1.0911037866829383
+     ],
+     "captured_fraction_signed": -0.09143868941304256,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.42500120198748675,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "validity_verdict": "FAIL",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": "T1c_prime"
+    },
+    "level3": {
+     "identity": "cone",
+     "n": 54,
+     "interaction_nmse_median": 1.5196404485847257,
+     "interaction_nmse_ci_of_mean": [
+      1.5514241658666565,
+      1.601412095621578
+     ],
+     "captured_fraction_signed": -0.5196404485847257,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.1366644867617644,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "validity_verdict": "FAIL",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": null
+    }
+   },
+   "own_truth_reference": {
+    "level1": {
+     "interaction_nmse_median": 0.6301219350947707,
+     "captured_fraction": 0.36987806490522934,
+     "rec_h1_minus_h0": 0.22053608963090102,
+     "flip_rate_h1_vs_h0": 0.8888888888888888
+    },
+    "level3": {
+     "interaction_nmse_median": 0.49559611648307095,
+     "captured_fraction": 0.5044038835169291,
+     "rec_h1_minus_h0": 0.16141096024267473,
+     "flip_rate_h1_vs_h0": 0.8888888888888888
+    }
+   },
+   "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armB_seed1_on_armA/crosstruth_summary.json"
+  },
+  {
+   "cell": "armB_seed2_on_armA",
+   "model_arm": "B",
+   "model_seed": 2,
+   "truth_arm": "A",
+   "levels": {
+    "level1": {
+     "identity": "pedestrian",
+     "n": 54,
+     "interaction_nmse_median": 1.0841180511969402,
+     "interaction_nmse_ci_of_mean": [
+      1.0697893076211054,
+      1.084247151713346
+     ],
+     "captured_fraction_signed": -0.08411805119694016,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.4652079474985602,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "validity_verdict": "FAIL",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": "T1c_prime"
+    },
+    "level3": {
+     "identity": "cone",
+     "n": 54,
+     "interaction_nmse_median": 1.4584350744825811,
+     "interaction_nmse_ci_of_mean": [
+      1.4789570428735133,
+      1.5233734848002871
+     ],
+     "captured_fraction_signed": -0.45843507448258114,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.1606789049105193,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "validity_verdict": "FAIL",
+     "validity_with_specificity": "FAIL",
+     "b_gate_verdict": "FAIL",
+     "b_gate_verdict_crossgate": "FAIL",
+     "b_gate_route_crossgate": null
+    }
+   },
+   "own_truth_reference": {
+    "level1": {
+     "interaction_nmse_median": 0.611045013458404,
+     "captured_fraction": 0.388954986541596,
+     "rec_h1_minus_h0": 0.20771097005676661,
+     "flip_rate_h1_vs_h0": 0.8888888888888888
+    },
+    "level3": {
+     "interaction_nmse_median": 0.47165364687836475,
+     "captured_fraction": 0.5283463531216352,
+     "rec_h1_minus_h0": 0.10178104982092916,
+     "flip_rate_h1_vs_h0": 0.8888888888888888
+    }
+   },
+   "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armB_seed2_on_armA/crosstruth_summary.json"
+  }
+ ],
+ "table_R2": {
+  "model_armA|truth_armA|level1": {
+   "model_arm": "A",
+   "truth_arm": "A",
+   "level": 1,
+   "identity": "pedestrian",
+   "truth_kind": "own",
+   "solid_in_truth": true,
+   "per_seed": {
+    "0": {
+     "interaction_nmse_median": 0.3147267153291625,
+     "captured_fraction_signed": 0.6852732846708375,
+     "captured_fraction": 0.6852732846708375,
+     "rec_h1_minus_h0": 0.22922752465812,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armA_seed0/behavior_gate_discovery.json"
+    },
+    "1": {
+     "interaction_nmse_median": 0.3696575977178996,
+     "captured_fraction_signed": 0.6303424022821005,
+     "captured_fraction": 0.6303424022821005,
+     "rec_h1_minus_h0": 0.21144466070800352,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.9259259259259259,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armA_seed1/behavior_gate_discovery.json"
+    },
+    "2": {
+     "interaction_nmse_median": 0.3266206772039165,
+     "captured_fraction_signed": 0.6733793227960835,
+     "captured_fraction": 0.6733793227960835,
+     "rec_h1_minus_h0": 0.2030715821278831,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armA_seed2/behavior_gate_discovery.json"
+    }
+   },
+   "pooled": {
+    "interaction_nmse_median": {
+     "mean": 0.33700166341699284,
+     "sd": 0.028899379164064695,
+     "n_seeds": 3
+    },
+    "captured_fraction_signed": {
+     "mean": 0.6629983365830071,
+     "sd": 0.028899379164064664,
+     "n_seeds": 3
+    },
+    "captured_fraction": {
+     "mean": 0.6629983365830071,
+     "sd": 0.028899379164064664,
+     "n_seeds": 3
+    },
+    "rec_h1_minus_h0": {
+     "mean": 0.21458125583133555,
+     "sd": 0.013357095647521825,
+     "n_seeds": 3
+    },
+    "flip_rate_h1_vs_h0": {
+     "mean": 0.9012345679012346,
+     "sd": 0.021383343303319504,
+     "n_seeds": 3
+    },
+    "b_gate_pass_count": 3,
+    "n_seeds": 3
+   }
+  },
+  "model_armA|truth_armA|level3": {
+   "model_arm": "A",
+   "truth_arm": "A",
+   "level": 3,
+   "identity": "cone",
+   "truth_kind": "own",
+   "solid_in_truth": false,
+   "per_seed": {
+    "0": {
+     "interaction_nmse_median": 0.43298926883758754,
+     "captured_fraction_signed": 0.5670107311624124,
+     "captured_fraction": 0.5670107311624124,
+     "rec_h1_minus_h0": 0.15750346300440582,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armA_seed0/behavior_gate_discovery_level3.json"
+    },
+    "1": {
+     "interaction_nmse_median": 0.41436281360173477,
+     "captured_fraction_signed": 0.5856371863982652,
+     "captured_fraction": 0.5856371863982652,
+     "rec_h1_minus_h0": 0.17264563368169464,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.9259259259259259,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armA_seed1/behavior_gate_discovery_level3.json"
+    },
+    "2": {
+     "interaction_nmse_median": 0.44357932634167885,
+     "captured_fraction_signed": 0.5564206736583212,
+     "captured_fraction": 0.5564206736583212,
+     "rec_h1_minus_h0": 0.17161606155033407,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armA_seed2/behavior_gate_discovery_level3.json"
+    }
+   },
+   "pooled": {
+    "interaction_nmse_median": {
+     "mean": 0.43031046959366703,
+     "sd": 0.014791319353348787,
+     "n_seeds": 3
+    },
+    "captured_fraction_signed": {
+     "mean": 0.569689530406333,
+     "sd": 0.014791319353348792,
+     "n_seeds": 3
+    },
+    "captured_fraction": {
+     "mean": 0.569689530406333,
+     "sd": 0.014791319353348792,
+     "n_seeds": 3
+    },
+    "rec_h1_minus_h0": {
+     "mean": 0.16725505274547817,
+     "sd": 0.008460799699322712,
+     "n_seeds": 3
+    },
+    "flip_rate_h1_vs_h0": {
+     "mean": 0.9012345679012346,
+     "sd": 0.021383343303319504,
+     "n_seeds": 3
+    },
+    "b_gate_pass_count": 3,
+    "n_seeds": 3
+   }
+  },
+  "model_armA|truth_armB|level1": {
+   "model_arm": "A",
+   "truth_arm": "B",
+   "level": 1,
+   "identity": "pedestrian",
+   "truth_kind": "cross",
+   "solid_in_truth": false,
+   "per_seed": {
+    "0": {
+     "interaction_nmse_median": 3.3109706559804426,
+     "captured_fraction_signed": -2.3109706559804426,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.13886240735131808,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armA_seed0_on_armB/crosstruth_summary.json"
+    },
+    "1": {
+     "interaction_nmse_median": 2.895729000678547,
+     "captured_fraction_signed": -1.8957290006785472,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.0667066409050957,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.9259259259259259,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armA_seed1_on_armB/crosstruth_summary.json"
+    },
+    "2": {
+     "interaction_nmse_median": 3.2410315633130273,
+     "captured_fraction_signed": -2.2410315633130273,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.15133049543254207,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armA_seed2_on_armB/crosstruth_summary.json"
+    }
+   },
+   "pooled": {
+    "interaction_nmse_median": {
+     "mean": 3.149243739990672,
+     "sd": 0.22231770387703362,
+     "n_seeds": 3
+    },
+    "captured_fraction_signed": {
+     "mean": -2.149243739990672,
+     "sd": 0.22231770387703362,
+     "n_seeds": 3
+    },
+    "captured_fraction": {
+     "mean": 0.0,
+     "sd": 0.0,
+     "n_seeds": 3
+    },
+    "rec_h1_minus_h0": {
+     "mean": -0.11896651456298528,
+     "sd": 0.045685710032287184,
+     "n_seeds": 3
+    },
+    "flip_rate_h1_vs_h0": {
+     "mean": 0.9012345679012346,
+     "sd": 0.021383343303319504,
+     "n_seeds": 3
+    },
+    "b_gate_pass_count": 0,
+    "n_seeds": 3
+   }
+  },
+  "model_armA|truth_armB|level3": {
+   "model_arm": "A",
+   "truth_arm": "B",
+   "level": 3,
+   "identity": "cone",
+   "truth_kind": "cross",
+   "solid_in_truth": true,
+   "per_seed": {
+    "0": {
+     "interaction_nmse_median": 1.0547312962923527,
+     "captured_fraction_signed": -0.05473129629235274,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.4247053385051817,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armA_seed0_on_armB/crosstruth_summary.json"
+    },
+    "1": {
+     "interaction_nmse_median": 1.0238704640391851,
+     "captured_fraction_signed": -0.023870464039185135,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.3682890524366498,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.9259259259259259,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armA_seed1_on_armB/crosstruth_summary.json"
+    },
+    "2": {
+     "interaction_nmse_median": 1.0745701912944239,
+     "captured_fraction_signed": -0.07457019129442388,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.43433545647568017,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armA_seed2_on_armB/crosstruth_summary.json"
+    }
+   },
+   "pooled": {
+    "interaction_nmse_median": {
+     "mean": 1.051057317208654,
+     "sd": 0.025548760785398028,
+     "n_seeds": 3
+    },
+    "captured_fraction_signed": {
+     "mean": -0.05105731720865392,
+     "sd": 0.025548760785398028,
+     "n_seeds": 3
+    },
+    "captured_fraction": {
+     "mean": 0.0,
+     "sd": 0.0,
+     "n_seeds": 3
+    },
+    "rec_h1_minus_h0": {
+     "mean": -0.40910994913917054,
+     "sd": 0.035678340750794915,
+     "n_seeds": 3
+    },
+    "flip_rate_h1_vs_h0": {
+     "mean": 0.9012345679012346,
+     "sd": 0.021383343303319504,
+     "n_seeds": 3
+    },
+    "b_gate_pass_count": 0,
+    "n_seeds": 3
+   }
+  },
+  "model_armB|truth_armA|level1": {
+   "model_arm": "B",
+   "truth_arm": "A",
+   "level": 1,
+   "identity": "pedestrian",
+   "truth_kind": "cross",
+   "solid_in_truth": true,
+   "per_seed": {
+    "0": {
+     "interaction_nmse_median": 1.079547857795124,
+     "captured_fraction_signed": -0.07954785779512408,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.4581168435753452,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armB_seed0_on_armA/crosstruth_summary.json"
+    },
+    "1": {
+     "interaction_nmse_median": 1.0914386894130426,
+     "captured_fraction_signed": -0.09143868941304256,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.42500120198748675,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armB_seed1_on_armA/crosstruth_summary.json"
+    },
+    "2": {
+     "interaction_nmse_median": 1.0841180511969402,
+     "captured_fraction_signed": -0.08411805119694016,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.4652079474985602,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armB_seed2_on_armA/crosstruth_summary.json"
+    }
+   },
+   "pooled": {
+    "interaction_nmse_median": {
+     "mean": 1.0850348661350357,
+     "sd": 0.0059981981764908945,
+     "n_seeds": 3
+    },
+    "captured_fraction_signed": {
+     "mean": -0.0850348661350356,
+     "sd": 0.0059981981764908945,
+     "n_seeds": 3
+    },
+    "captured_fraction": {
+     "mean": 0.0,
+     "sd": 0.0,
+     "n_seeds": 3
+    },
+    "rec_h1_minus_h0": {
+     "mean": -0.4494419976871307,
+     "sd": 0.021461251350661268,
+     "n_seeds": 3
+    },
+    "flip_rate_h1_vs_h0": {
+     "mean": 0.8888888888888888,
+     "sd": 0.0,
+     "n_seeds": 3
+    },
+    "b_gate_pass_count": 0,
+    "n_seeds": 3
+   }
+  },
+  "model_armB|truth_armA|level3": {
+   "model_arm": "B",
+   "truth_arm": "A",
+   "level": 3,
+   "identity": "cone",
+   "truth_kind": "cross",
+   "solid_in_truth": false,
+   "per_seed": {
+    "0": {
+     "interaction_nmse_median": 1.608664576720992,
+     "captured_fraction_signed": -0.608664576720992,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.15057790863443343,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armB_seed0_on_armA/crosstruth_summary.json"
+    },
+    "1": {
+     "interaction_nmse_median": 1.5196404485847257,
+     "captured_fraction_signed": -0.5196404485847257,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.1366644867617644,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armB_seed1_on_armA/crosstruth_summary.json"
+    },
+    "2": {
+     "interaction_nmse_median": 1.4584350744825811,
+     "captured_fraction_signed": -0.45843507448258114,
+     "captured_fraction": 0.0,
+     "rec_h1_minus_h0": -0.1606789049105193,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "FAIL",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval_crosstruth/armB_seed2_on_armA/crosstruth_summary.json"
+    }
+   },
+   "pooled": {
+    "interaction_nmse_median": {
+     "mean": 1.5289133665960997,
+     "sd": 0.0755428096646823,
+     "n_seeds": 3
+    },
+    "captured_fraction_signed": {
+     "mean": -0.5289133665960996,
+     "sd": 0.0755428096646823,
+     "n_seeds": 3
+    },
+    "captured_fraction": {
+     "mean": 0.0,
+     "sd": 0.0,
+     "n_seeds": 3
+    },
+    "rec_h1_minus_h0": {
+     "mean": -0.14930710010223905,
+     "sd": 0.01205754060743466,
+     "n_seeds": 3
+    },
+    "flip_rate_h1_vs_h0": {
+     "mean": 0.8888888888888888,
+     "sd": 0.0,
+     "n_seeds": 3
+    },
+    "b_gate_pass_count": 0,
+    "n_seeds": 3
+   }
+  },
+  "model_armB|truth_armB|level1": {
+   "model_arm": "B",
+   "truth_arm": "B",
+   "level": 1,
+   "identity": "pedestrian",
+   "truth_kind": "own",
+   "solid_in_truth": false,
+   "per_seed": {
+    "0": {
+     "interaction_nmse_median": 0.540864362942318,
+     "captured_fraction_signed": 0.459135637057682,
+     "captured_fraction": 0.459135637057682,
+     "rec_h1_minus_h0": 0.20590044642634855,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armB_seed0/behavior_gate_discovery_level1.json"
+    },
+    "1": {
+     "interaction_nmse_median": 0.6301219350947707,
+     "captured_fraction_signed": 0.36987806490522934,
+     "captured_fraction": 0.36987806490522934,
+     "rec_h1_minus_h0": 0.22053608963090102,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armB_seed1/behavior_gate_discovery_level1.json"
+    },
+    "2": {
+     "interaction_nmse_median": 0.611045013458404,
+     "captured_fraction_signed": 0.388954986541596,
+     "captured_fraction": 0.388954986541596,
+     "rec_h1_minus_h0": 0.20771097005676661,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armB_seed2/behavior_gate_discovery_level1.json"
+    }
+   },
+   "pooled": {
+    "interaction_nmse_median": {
+     "mean": 0.5940104371651642,
+     "sd": 0.047003841744640715,
+     "n_seeds": 3
+    },
+    "captured_fraction_signed": {
+     "mean": 0.4059895628348358,
+     "sd": 0.047003841744640715,
+     "n_seeds": 3
+    },
+    "captured_fraction": {
+     "mean": 0.4059895628348358,
+     "sd": 0.047003841744640715,
+     "n_seeds": 3
+    },
+    "rec_h1_minus_h0": {
+     "mean": 0.21138250203800538,
+     "sd": 0.007978760763407125,
+     "n_seeds": 3
+    },
+    "flip_rate_h1_vs_h0": {
+     "mean": 0.8888888888888888,
+     "sd": 0.0,
+     "n_seeds": 3
+    },
+    "b_gate_pass_count": 3,
+    "n_seeds": 3
+   }
+  },
+  "model_armB|truth_armB|level3": {
+   "model_arm": "B",
+   "truth_arm": "B",
+   "level": 3,
+   "identity": "cone",
+   "truth_kind": "own",
+   "solid_in_truth": true,
+   "per_seed": {
+    "0": {
+     "interaction_nmse_median": 0.4505953685333149,
+     "captured_fraction_signed": 0.5494046314666852,
+     "captured_fraction": 0.5494046314666852,
+     "rec_h1_minus_h0": 0.1684920701730897,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armB_seed0/behavior_gate_discovery.json"
+    },
+    "1": {
+     "interaction_nmse_median": 0.49559611648307095,
+     "captured_fraction_signed": 0.5044038835169291,
+     "captured_fraction": 0.5044038835169291,
+     "rec_h1_minus_h0": 0.16141096024267473,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armB_seed1/behavior_gate_discovery.json"
+    },
+    "2": {
+     "interaction_nmse_median": 0.47165364687836475,
+     "captured_fraction_signed": 0.5283463531216352,
+     "captured_fraction": 0.5283463531216352,
+     "rec_h1_minus_h0": 0.10178104982092916,
+     "rec_h1_minus_h0_p": 0.0001999600079984003,
+     "flip_rate_h1_vs_h0": 0.8888888888888888,
+     "b_gate_verdict": "PASS_PLANNER",
+     "n": 54,
+     "source": "artifacts/cgs_pilot/drive_eval/armB_seed2/behavior_gate_discovery.json"
+    }
+   },
+   "pooled": {
+    "interaction_nmse_median": {
+     "mean": 0.4726150439649168,
+     "sd": 0.022515773188542552,
+     "n_seeds": 3
+    },
+    "captured_fraction_signed": {
+     "mean": 0.5273849560350832,
+     "sd": 0.022515773188542552,
+     "n_seeds": 3
+    },
+    "captured_fraction": {
+     "mean": 0.5273849560350832,
+     "sd": 0.022515773188542552,
+     "n_seeds": 3
+    },
+    "rec_h1_minus_h0": {
+     "mean": 0.14389469341223118,
+     "sd": 0.03664293604315935,
+     "n_seeds": 3
+    },
+    "flip_rate_h1_vs_h0": {
+     "mean": 0.8888888888888888,
+     "sd": 0.0,
+     "n_seeds": 3
+    },
+    "b_gate_pass_count": 3,
+    "n_seeds": 3
+   }
+  }
+ },
+ "seed_replication": {
+  "per_arm": {
+   "A": {
+    "n_seeds_evaluated": 3,
+    "seeds": [
+     0,
+     1,
+     2
+    ],
+    "primary_b_gate_pass": 3,
+    "primary_b_gate_pass_planner": 3,
+    "cross_identity_b_gate_pass": 3,
+    "solid_nmse_below_ghost_nmse": 3,
+    "T1c_prime_scene_level_p_below_0.05": 2,
+    "T1c_prime_p_values": {
+     "0": null,
+     "1": 0.0007999600019999,
+     "2": 4.999750012499375e-05
+    },
+    "cross_truth_cells_evaluated": 3,
+    "cross_truth_b_gate_fail_both_levels": 3
+   },
+   "B": {
+    "n_seeds_evaluated": 3,
+    "seeds": [
+     0,
+     1,
+     2
+    ],
+    "primary_b_gate_pass": 3,
+    "primary_b_gate_pass_planner": 3,
+    "cross_identity_b_gate_pass": 3,
+    "solid_nmse_below_ghost_nmse": 3,
+    "T1c_prime_scene_level_p_below_0.05": 2,
+    "T1c_prime_p_values": {
+     "0": null,
+     "1": 9.99950002499875e-05,
+     "2": 9.99950002499875e-05
+    },
+    "cross_truth_cells_evaluated": 3,
+    "cross_truth_b_gate_fail_both_levels": 3
+   }
+  },
+  "paired_seed_sign_test": {
+   "definition": "per paired seed s: DD_s = (NMSE_ped - NMSE_cone)[arm A, seed s] - (NMSE_ped - NMSE_cone)[arm B, seed s] on discovery-scene medians; predicted DD_s < 0 (pedestrian better captured in A, cone better captured in B); exact one-sided sign test over seed pairs",
+   "pairs": {
+    "0": {
+     "armA_nmse_ped_minus_cone": -0.11826255350842502,
+     "armB_nmse_cone_minus_ped": -0.0902689944090031,
+     "armB_nmse_ped_minus_cone": 0.0902689944090031,
+     "double_dissociation_DD": -0.20853154791742812,
+     "predicted_sign": "negative",
+     "armA_source": "artifacts/cgs_pilot/drive_eval/armA_seed0/behavior_gate_discovery.json",
+     "armB_source": "artifacts/cgs_pilot/drive_eval/armB_seed0/behavior_gate_discovery.json"
+    },
+    "1": {
+     "armA_nmse_ped_minus_cone": -0.04470521588383519,
+     "armB_nmse_cone_minus_ped": -0.1345258186116997,
+     "armB_nmse_ped_minus_cone": 0.1345258186116997,
+     "double_dissociation_DD": -0.1792310344955349,
+     "predicted_sign": "negative",
+     "armA_source": "artifacts/cgs_pilot/drive_eval/armA_seed1/behavior_gate_discovery.json",
+     "armB_source": "artifacts/cgs_pilot/drive_eval/armB_seed1/behavior_gate_discovery.json"
+    },
+    "2": {
+     "armA_nmse_ped_minus_cone": -0.11695864913776233,
+     "armB_nmse_cone_minus_ped": -0.13939136658003926,
+     "armB_nmse_ped_minus_cone": 0.13939136658003926,
+     "double_dissociation_DD": -0.2563500157178016,
+     "predicted_sign": "negative",
+     "armA_source": "artifacts/cgs_pilot/drive_eval/armA_seed2/behavior_gate_discovery.json",
+     "armB_source": "artifacts/cgs_pilot/drive_eval/armB_seed2/behavior_gate_discovery.json"
+    }
+   },
+   "n_pairs": 3,
+   "n_pairs_in_predicted_direction": 3,
+   "p_one_sided": 0.125,
+   "min_attainable_p_with_3_pairs": 0.125,
+   "armA_seeds_ped_better": 3,
+   "armB_seeds_cone_better": 3
+  },
+  "all_models_solid_better_than_ghost": {
+   "definition": "count of trained models (both arms, all seeds) whose solid-identity interaction NMSE median is below its ghost-identity NMSE median; models of the same seed share initialisation/clips across arms, so this is a descriptive tally, not an independent-unit test",
+   "count": 6,
+   "n_models": 6,
+   "p_one_sided_if_independent": 0.015625
+  }
+ },
+ "table_R3": [
+  {
+   "substrate": "JEPA-WM n=21",
+   "domain": "egg (released checkpoint, zero-shot)",
+   "n_scenes": 21,
+   "n_seeds": 1,
+   "identity": "on-path egg (H1)",
+   "captured_fraction": {
+    "mean": 0.04493468488024621,
+    "sd": null,
+    "n_seeds": 1
+   },
+   "rec_h1_minus_h0": {
+    "mean": -0.01543235353459501,
+    "sd": null,
+    "n_seeds": 1,
+    "p": [
+     0.07578484303139373
+    ]
+   },
+   "flip_rate_h1_vs_h0": {
+    "mean": 0.0,
+    "sd": null,
+    "n_seeds": 1
+   },
+   "b_gate": {
+    "verdicts": [
+     "FAIL"
+    ],
+    "pass_count": 0,
+    "n": 1
+   },
+   "sources": {
+    "b_gate": "artifacts/cgs_pilot/heldout_v1_merged_w1/behavior_gate_cf_gate_sonar_all.json",
+    "cf_gate": "artifacts/cgs_pilot/heldout_v1_merged_w1/cf_gate_sonar_all.json"
+   }
+  },
+  {
+   "substrate": "JEPA-WM n=34",
+   "domain": "egg (released checkpoint, zero-shot)",
+   "n_scenes": 34,
+   "n_seeds": 1,
+   "identity": "on-path egg (H1)",
+   "captured_fraction": {
+    "mean": 0.06482242416767203,
+    "sd": null,
+    "n_seeds": 1
+   },
+   "rec_h1_minus_h0": {
+    "mean": -0.00882243328218921,
+    "sd": null,
+    "n_seeds": 1,
+    "p": [
+     0.3137372525494901
+    ]
+   },
+   "flip_rate_h1_vs_h0": {
+    "mean": 0.0,
+    "sd": null,
+    "n_seeds": 1
+   },
+   "b_gate": {
+    "verdicts": [
+     "FAIL"
+    ],
+    "pass_count": 0,
+    "n": 1
+   },
+   "sources": {
+    "b_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2/behavior_gate_cf_gate_discovery.json",
+    "cf_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2/cf_gate_discovery.json"
+   }
+  },
+  {
+   "substrate": "JEPA-WM n=66",
+   "domain": "egg (released checkpoint, zero-shot)",
+   "n_scenes": 66,
+   "n_seeds": 1,
+   "identity": "on-path egg (H1)",
+   "captured_fraction": {
+    "mean": 0.056501152042733094,
+    "sd": null,
+    "n_seeds": 1
+   },
+   "rec_h1_minus_h0": {
+    "mean": -0.01234326243571418,
+    "sd": null,
+    "n_seeds": 1,
+    "p": [
+     0.09298140371925614
+    ]
+   },
+   "flip_rate_h1_vs_h0": {
+    "mean": 0.0,
+    "sd": null,
+    "n_seeds": 1
+   },
+   "b_gate": {
+    "verdicts": [
+     "FAIL"
+    ],
+    "pass_count": 0,
+    "n": 1
+   },
+   "sources": {
+    "b_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2/behavior_gate_cf_gate_all.json",
+    "cf_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2/cf_gate_all.json"
+   }
+  },
+  {
+   "substrate": "V-JEPA 2-AC n=34",
+   "domain": "egg (released checkpoint, zero-shot)",
+   "n_scenes": 34,
+   "n_seeds": 1,
+   "identity": "on-path egg (H1)",
+   "captured_fraction": {
+    "mean": 0.0,
+    "sd": null,
+    "n_seeds": 1
+   },
+   "rec_h1_minus_h0": {
+    "mean": -0.010135218430663711,
+    "sd": null,
+    "n_seeds": 1,
+    "p": [
+     0.16396720655868827
+    ]
+   },
+   "flip_rate_h1_vs_h0": {
+    "mean": 0.0,
+    "sd": null,
+    "n_seeds": 1
+   },
+   "b_gate": {
+    "verdicts": [
+     "FAIL"
+    ],
+    "pass_count": 0,
+    "n": 1
+   },
+   "sources": {
+    "b_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2_vj2ac/behavior_gate_vj2ac.json",
+    "cf_gate": "artifacts/cgs_pilot/heldout_v1_merged_w2_vj2ac/cf_gate_discovery_vj2ac.json"
+   }
+  },
+  {
+   "substrate": "Driving arm A (pedestrian solid / cone ghost)",
+   "domain": "driving (trained predictor, MetaDrive)",
+   "n_scenes": 54,
+   "n_seeds": 3,
+   "identity": "pedestrian in lane (solid identity, level 1)",
+   "captured_fraction": {
+    "mean": 0.6629983365830071,
+    "sd": 0.028899379164064664,
+    "n_seeds": 3
+   },
+   "rec_h1_minus_h0": {
+    "mean": 0.21458125583133555,
+    "sd": 0.013357095647521825,
+    "n_seeds": 3,
+    "p": [
+     0.0001999600079984003,
+     0.0001999600079984003,
+     0.0001999600079984003
+    ]
+   },
+   "flip_rate_h1_vs_h0": {
+    "mean": 0.9012345679012346,
+    "sd": 0.021383343303319504,
+    "n_seeds": 3
+   },
+   "b_gate": {
+    "verdicts": [
+     "PASS_PLANNER",
+     "PASS_PLANNER",
+     "PASS_PLANNER"
+    ],
+    "pass_count": 3,
+    "n": 3
+   },
+   "sources": [
+    "artifacts/cgs_pilot/drive_eval/armA_seed0/behavior_gate_discovery.json",
+    "artifacts/cgs_pilot/drive_eval/armA_seed1/behavior_gate_discovery.json",
+    "artifacts/cgs_pilot/drive_eval/armA_seed2/behavior_gate_discovery.json"
+   ]
+  },
+  {
+   "substrate": "Driving arm A (pedestrian solid / cone ghost)",
+   "domain": "driving (trained predictor, MetaDrive)",
+   "n_scenes": 54,
+   "n_seeds": 3,
+   "identity": "cone in lane (ghost identity, level 3)",
+   "captured_fraction": {
+    "mean": 0.569689530406333,
+    "sd": 0.014791319353348792,
+    "n_seeds": 3
+   },
+   "rec_h1_minus_h0": {
+    "mean": 0.16725505274547817,
+    "sd": 0.008460799699322712,
+    "n_seeds": 3,
+    "p": [
+     0.0001999600079984003,
+     0.0001999600079984003,
+     0.0001999600079984003
+    ]
+   },
+   "flip_rate_h1_vs_h0": {
+    "mean": 0.9012345679012346,
+    "sd": 0.021383343303319504,
+    "n_seeds": 3
+   },
+   "b_gate": {
+    "verdicts": [
+     "PASS_PLANNER",
+     "PASS_PLANNER",
+     "PASS_PLANNER"
+    ],
+    "pass_count": 3,
+    "n": 3
+   },
+   "sources": [
+    "artifacts/cgs_pilot/drive_eval/armA_seed0/behavior_gate_discovery_level3.json",
+    "artifacts/cgs_pilot/drive_eval/armA_seed1/behavior_gate_discovery_level3.json",
+    "artifacts/cgs_pilot/drive_eval/armA_seed2/behavior_gate_discovery_level3.json"
+   ]
+  },
+  {
+   "substrate": "Driving arm B (cone solid / pedestrian ghost)",
+   "domain": "driving (trained predictor, MetaDrive)",
+   "n_scenes": 54,
+   "n_seeds": 3,
+   "identity": "cone in lane (solid identity, level 3)",
+   "captured_fraction": {
+    "mean": 0.5273849560350832,
+    "sd": 0.022515773188542552,
+    "n_seeds": 3
+   },
+   "rec_h1_minus_h0": {
+    "mean": 0.14389469341223118,
+    "sd": 0.03664293604315935,
+    "n_seeds": 3,
+    "p": [
+     0.0001999600079984003,
+     0.0001999600079984003,
+     0.0001999600079984003
+    ]
+   },
+   "flip_rate_h1_vs_h0": {
+    "mean": 0.8888888888888888,
+    "sd": 0.0,
+    "n_seeds": 3
+   },
+   "b_gate": {
+    "verdicts": [
+     "PASS_PLANNER",
+     "PASS_PLANNER",
+     "PASS_PLANNER"
+    ],
+    "pass_count": 3,
+    "n": 3
+   },
+   "sources": [
+    "artifacts/cgs_pilot/drive_eval/armB_seed0/behavior_gate_discovery.json",
+    "artifacts/cgs_pilot/drive_eval/armB_seed1/behavior_gate_discovery.json",
+    "artifacts/cgs_pilot/drive_eval/armB_seed2/behavior_gate_discovery.json"
+   ]
+  },
+  {
+   "substrate": "Driving arm B (cone solid / pedestrian ghost)",
+   "domain": "driving (trained predictor, MetaDrive)",
+   "n_scenes": 54,
+   "n_seeds": 3,
+   "identity": "pedestrian in lane (ghost identity, level 1)",
+   "captured_fraction": {
+    "mean": 0.4059895628348358,
+    "sd": 0.047003841744640715,
+    "n_seeds": 3
+   },
+   "rec_h1_minus_h0": {
+    "mean": 0.21138250203800538,
+    "sd": 0.007978760763407125,
+    "n_seeds": 3,
+    "p": [
+     0.0001999600079984003,
+     0.0001999600079984003,
+     0.0001999600079984003
+    ]
+   },
+   "flip_rate_h1_vs_h0": {
+    "mean": 0.8888888888888888,
+    "sd": 0.0,
+    "n_seeds": 3
+   },
+   "b_gate": {
+    "verdicts": [
+     "PASS_PLANNER",
+     "PASS_PLANNER",
+     "PASS_PLANNER"
+    ],
+    "pass_count": 3,
+    "n": 3
+   },
+   "sources": [
+    "artifacts/cgs_pilot/drive_eval/armB_seed0/behavior_gate_discovery_level1.json",
+    "artifacts/cgs_pilot/drive_eval/armB_seed1/behavior_gate_discovery_level1.json",
+    "artifacts/cgs_pilot/drive_eval/armB_seed2/behavior_gate_discovery_level1.json"
+   ]
+  }
+ ],
+ "notes": [
+  "[ci_of_mean] JEPA-WM driving arm A seed 0 (cross-identity level 3) level 3 n=54: interaction NMSE median 0.4330 lies outside the pooled CI [0.3958, 0.4211] (CI is of the scene mean 0.4086); tables label CIs as CI-of-mean (x8 occurrences; first instance shown)",
+  "[retrieval_copy_delta] driving model armA_seed0: retrieval control NOT passed (failing baselines ['copy_delta_scene']: {'copy_delta_scene': 0.923} vs model 0.825); the other-scene copy-delta baseline is high because the driving stimulus is stereotyped (hazard always 9.0 m ahead), so the control cannot discriminate copying here (x6 occurrences; first instance shown)",
+  "[t2b_sign] T2b sign convention: level 1 energy gap normalised -0.592 (p 2.0e-04) is reported T2b_ok=False by behavior_gate.py (requires > 0) although planner_currency.py defines gap < 0 as 'H1 prediction closer to the contact future' (fraction closer = 1.00); verdict unaffected because T2a passes (x3 occurrences; first instance shown)"
+ ]
+}

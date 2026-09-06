@@ -1,0 +1,52 @@
+{
+  "rank": 2,
+  "site": "predictor residual block3 newest256patches, pooled400",
+  "train_keys": [
+    "train-0202",
+    "train-0303",
+    "train-0404",
+    "train-0505",
+    "train-0606",
+    "train-0707",
+    "train-0808",
+    "train-0909",
+    "train-1010",
+    "train-1111",
+    "train-1212",
+    "train-1313",
+    "train-1414",
+    "train-1515",
+    "train-1616",
+    "train-1717"
+  ],
+  "development_keys": [
+    "train-1818",
+    "train-1919",
+    "train-2020",
+    "train-2121",
+    "official-dev-000",
+    "official-dev-001",
+    "official-dev-002",
+    "official-dev-003"
+  ],
+  "alpha": 100.0,
+  "readable_basis": "between-initialcondition candidate-mean nextphysical6D target",
+  "action_effect_basis": "within-sameinitialcondition/horizon candidate-centered nextphysical6D target",
+  "target": "agentXY,blockXY,sin(angle),cos(angle); training standardized equally",
+  "matching": "same400inputs,6targets, ridgealpha100, raworthonormal rank2, frozenradius/timing",
+  "residual_correction": "Horizon-specific P3\u2192actual-minus-native pooledvisual residual; runtimeusesP3 only",
+  "response_map": "Training linear P3\u2192nativepooledvisual surrogate, not exact causalJacobian; nativeeditedoutputerror is decisive",
+  "doses": [
+    0.001,
+    0.005
+  ],
+  "gates": [
+    "first",
+    "all"
+  ],
+  "no_development_fit": true,
+  "native_cost_arrays_include_initial_context": true,
+  "candidate_order_not_runtime_feature": true,
+  "reference_generates_goal": "candidate0 is knownfeasible goalgenerator; not unbiasedrandomcandidatepopulation",
+  "no_confirmation_or_heldstudy": true
+}

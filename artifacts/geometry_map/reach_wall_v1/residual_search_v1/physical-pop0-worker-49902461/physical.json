@@ -1,0 +1,557 @@
+{
+  "complete": true,
+  "model": {
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "config": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "loader": "official constructor/checkpoint; heads_cfg cleared",
+    "model_name": "jepa_wm_metaworld"
+  },
+  "parameters_sha256": "81b73f2c3271b6be45e65c87ce3ee85f1cf295dfb74fef0c72a373344e5f4a94",
+  "protocol": {
+    "broad_basis_sha256": "efe6976974107bd5284a871f6a87d622223e8f677e4cfbd8b86e2c3771a05042",
+    "candidates": [
+      {
+        "block": 3,
+        "dose": 1,
+        "family": "coordinate",
+        "head": null,
+        "id": "pilot-018",
+        "mask": "bottom",
+        "pulse": 1,
+        "rank": 8,
+        "sign": -1,
+        "site": "residual"
+      },
+      {
+        "block": 4,
+        "dose": 1,
+        "family": "branch_scale",
+        "head": 3,
+        "id": "broad0-067",
+        "mask": "all",
+        "pulse": 2,
+        "rank": 1,
+        "sign": -1,
+        "site": "attention_preproj"
+      },
+      {
+        "block": 1,
+        "dose": 1,
+        "family": "pca_gain",
+        "head": null,
+        "id": "broad0-126",
+        "mask": "center",
+        "pulse": 1,
+        "rank": 8,
+        "sign": 1,
+        "site": "residual"
+      }
+    ],
+    "candidates_sha256": "900becd0e2ed332ae0376a6273a888706985e872ae4be925ee08b6ce00d6819c",
+    "config_sha256": "37400233186d343e7a830ce820b75e86ad134bc26fa1adf43ebc3fd7ed4591c3",
+    "dose_policy": "broad base mappedcap then dose; matchedsham uses sameinput local semanticnorm duringadaptiveCEM, first300 actions exact",
+    "episodes": [
+      7
+    ],
+    "phase": "adaptive_development_nativeCEM15step",
+    "physical_steps": 15,
+    "script_sha256": "c71ab70bd0c12823b3da23987ecbcd2c5bf4f1ca61d55751130f613776aad923",
+    "selection": "Adaptive development only; no untouched confirmation"
+  },
+  "rows": [
+    {
+      "actual_hand_xyz_shift_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "arm": "unsteered",
+      "candidate": null,
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.17088258266448975,
+      "first300_argmin": 75,
+      "first300_rank_changes": 0,
+      "hand_goal_progress_m": 0.11168920993804932,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.17088258266448975,
+      "native_ever_success": false,
+      "native_info_success_recorded": true,
+      "native_reward_max": 4.382472515106201,
+      "native_reward_sum": 39.367462515830994,
+      "own_selected_plan_decoded_xyz": [
+        [
+          -0.005122268432714512,
+          0.6822180895318861,
+          0.19107961068164597
+        ],
+        [
+          0.017567227260442596,
+          0.7331792103592862,
+          0.18913909259158082
+        ],
+        [
+          0.014432659528247856,
+          0.7860836907531138,
+          0.17154917959019672
+        ],
+        [
+          0.004155958842298448,
+          0.8349311565345867,
+          0.14024263748131788
+        ],
+        [
+          0.007258799891898471,
+          0.8514565514784015,
+          0.11905349676565066
+        ],
+        [
+          -0.008163927683051308,
+          0.8702545834488941,
+          0.09569298813689399
+        ]
+      ],
+      "progress_vs_baseline_m": 0.0,
+      "raw_action_xyz_sum_change": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "same_first300_actions_exact": true,
+      "seconds_elapsed": 83.977930709254,
+      "sham": false
+    },
+    {
+      "actual_hand_xyz_shift_m": [
+        0.07629751414060593,
+        -0.011627614498138428,
+        -0.013699084520339966
+      ],
+      "arm": "pilot-018-edit",
+      "candidate": {
+        "block": 3,
+        "dose": 1,
+        "family": "coordinate",
+        "head": null,
+        "id": "pilot-018",
+        "mask": "bottom",
+        "pulse": 1,
+        "rank": 8,
+        "sign": -1,
+        "site": "residual"
+      },
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.19849400222301483,
+      "first300_argmin": 75,
+      "first300_rank_changes": 243,
+      "hand_goal_progress_m": 0.08407779037952423,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.19849400222301483,
+      "native_ever_success": false,
+      "native_info_success_recorded": true,
+      "native_reward_max": 3.1488702297210693,
+      "native_reward_sum": 33.74201548099518,
+      "own_selected_plan_decoded_xyz": [
+        [
+          -0.004020795191671626,
+          0.6719468210967803,
+          0.18645646973847224
+        ],
+        [
+          0.033217527448559554,
+          0.7054776047681445,
+          0.18494074152837797
+        ],
+        [
+          0.031203243404246933,
+          0.7480756272627596,
+          0.15987545221822466
+        ],
+        [
+          0.042880117139560726,
+          0.7961302331775975,
+          0.12151123585205875
+        ],
+        [
+          0.05072479574849246,
+          0.8194429639098502,
+          0.10171977902609938
+        ],
+        [
+          0.04541386826942563,
+          0.8412276291969217,
+          0.07980634307550963
+        ]
+      ],
+      "progress_vs_baseline_m": -0.027611419558525085,
+      "raw_action_xyz_sum_change": [
+        15.242531776428223,
+        -23.78916358947754,
+        -5.284969329833984
+      ],
+      "same_first300_actions_exact": true,
+      "seconds_elapsed": 168.20726273115724,
+      "sham": false
+    },
+    {
+      "actual_hand_xyz_shift_m": [
+        0.08036813139915466,
+        -0.023958146572113037,
+        -0.007374770939350128
+      ],
+      "arm": "pilot-018-sham",
+      "candidate": {
+        "block": 3,
+        "dose": 1,
+        "family": "coordinate",
+        "head": null,
+        "id": "pilot-018",
+        "mask": "bottom",
+        "pulse": 1,
+        "rank": 8,
+        "sign": -1,
+        "site": "residual"
+      },
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.2124910205602646,
+      "first300_argmin": 75,
+      "first300_rank_changes": 206,
+      "hand_goal_progress_m": 0.07008077204227448,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.2124910205602646,
+      "native_ever_success": false,
+      "native_info_success_recorded": true,
+      "native_reward_max": 2.7653021812438965,
+      "native_reward_sum": 32.31321394443512,
+      "own_selected_plan_decoded_xyz": [
+        [
+          -0.004453343677759884,
+          0.6678525958893108,
+          0.1783414374054726
+        ],
+        [
+          0.03549428697235421,
+          0.7070398573275063,
+          0.1813599150059811
+        ],
+        [
+          0.03833035704480734,
+          0.7521389467941644,
+          0.15487720099940097
+        ],
+        [
+          0.06034208291838727,
+          0.7956758475204209,
+          0.12164389302426848
+        ],
+        [
+          0.07022214472251215,
+          0.8212443977057206,
+          0.09749337578911868
+        ],
+        [
+          0.04681946461438286,
+          0.8423780192489136,
+          0.07686905423884247
+        ]
+      ],
+      "progress_vs_baseline_m": -0.04160843789577484,
+      "raw_action_xyz_sum_change": [
+        16.289432525634766,
+        -22.92251205444336,
+        -3.489105224609375
+      ],
+      "same_first300_actions_exact": true,
+      "seconds_elapsed": 253.43460197700188,
+      "sham": true
+    },
+    {
+      "actual_hand_xyz_shift_m": [
+        0.0006033964455127716,
+        0.000939786434173584,
+        0.008777126669883728
+      ],
+      "arm": "broad0-067-edit",
+      "candidate": {
+        "block": 4,
+        "dose": 1,
+        "family": "branch_scale",
+        "head": 3,
+        "id": "broad0-067",
+        "mask": "all",
+        "pulse": 2,
+        "rank": 1,
+        "sign": -1,
+        "site": "attention_preproj"
+      },
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.17347879707813263,
+      "first300_argmin": 75,
+      "first300_rank_changes": 229,
+      "hand_goal_progress_m": 0.10909299552440643,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.17347879707813263,
+      "native_ever_success": false,
+      "native_info_success_recorded": true,
+      "native_reward_max": 4.361460208892822,
+      "native_reward_sum": 39.7054603099823,
+      "own_selected_plan_decoded_xyz": [
+        [
+          0.005040778874740138,
+          0.6817710207705576,
+          0.1933748894694177
+        ],
+        [
+          0.026924152166076437,
+          0.7398204695103919,
+          0.1967755819386894
+        ],
+        [
+          0.013317669221669451,
+          0.8007889319614073,
+          0.17838276475798143
+        ],
+        [
+          0.0003844103311594835,
+          0.8408970654813879,
+          0.1395822535581751
+        ],
+        [
+          0.008074665225683637,
+          0.8593608672028673,
+          0.11570871227514458
+        ],
+        [
+          -0.0162333554472691,
+          0.8722337437620186,
+          0.09754489435387864
+        ]
+      ],
+      "progress_vs_baseline_m": -0.0025962144136428833,
+      "raw_action_xyz_sum_change": [
+        0.6632177829742432,
+        -3.3581619262695312,
+        2.489163398742676
+      ],
+      "same_first300_actions_exact": true,
+      "seconds_elapsed": 338.9856644673273,
+      "sham": false
+    },
+    {
+      "actual_hand_xyz_shift_m": [
+        0.031137555837631226,
+        -0.0015295147895812988,
+        0.016204282641410828
+      ],
+      "arm": "broad0-067-sham",
+      "candidate": {
+        "block": 4,
+        "dose": 1,
+        "family": "branch_scale",
+        "head": 3,
+        "id": "broad0-067",
+        "mask": "all",
+        "pulse": 2,
+        "rank": 1,
+        "sign": -1,
+        "site": "attention_preproj"
+      },
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.1838349997997284,
+      "first300_argmin": 75,
+      "first300_rank_changes": 212,
+      "hand_goal_progress_m": 0.09873679280281067,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.1838349997997284,
+      "native_ever_success": false,
+      "native_info_success_recorded": true,
+      "native_reward_max": 3.965139389038086,
+      "native_reward_sum": 36.76360464096069,
+      "own_selected_plan_decoded_xyz": [
+        [
+          -0.0058007276684054225,
+          0.6831265546613934,
+          0.19467706093788797
+        ],
+        [
+          0.03413135023032118,
+          0.7408278325166973,
+          0.19803837670258737
+        ],
+        [
+          0.018983034689161852,
+          0.7959130974493687,
+          0.16775385727217523
+        ],
+        [
+          0.003876630937358517,
+          0.8395708838667011,
+          0.1393687446642088
+        ],
+        [
+          0.0052914360063651,
+          0.8597658223272844,
+          0.11722718980188568
+        ],
+        [
+          -0.013207132871332312,
+          0.8705895279342769,
+          0.09832807480545658
+        ]
+      ],
+      "progress_vs_baseline_m": -0.012952417135238647,
+      "raw_action_xyz_sum_change": [
+        3.6393425464630127,
+        -0.8103179931640625,
+        0.7304315567016602
+      ],
+      "same_first300_actions_exact": true,
+      "seconds_elapsed": 424.67087555816397,
+      "sham": true
+    },
+    {
+      "actual_hand_xyz_shift_m": [
+        0.03195969760417938,
+        -0.0009046196937561035,
+        0.021953433752059937
+      ],
+      "arm": "broad0-126-edit",
+      "candidate": {
+        "block": 1,
+        "dose": 1,
+        "family": "pca_gain",
+        "head": null,
+        "id": "broad0-126",
+        "mask": "center",
+        "pulse": 1,
+        "rank": 8,
+        "sign": 1,
+        "site": "residual"
+      },
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.18603242933750153,
+      "first300_argmin": 75,
+      "first300_rank_changes": 237,
+      "hand_goal_progress_m": 0.09653936326503754,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.18603242933750153,
+      "native_ever_success": false,
+      "native_info_success_recorded": true,
+      "native_reward_max": 3.9272871017456055,
+      "native_reward_sum": 37.04920148849487,
+      "own_selected_plan_decoded_xyz": [
+        [
+          0.0010207861443060256,
+          0.6806708578373635,
+          0.1932120678036552
+        ],
+        [
+          0.027763822641307646,
+          0.7376173548364715,
+          0.1928658143318152
+        ],
+        [
+          0.013507259844300196,
+          0.8002195258423271,
+          0.1609905192132094
+        ],
+        [
+          0.015343188813529626,
+          0.833874787484398,
+          0.13427280527901364
+        ],
+        [
+          0.013244017003399236,
+          0.8581550216119398,
+          0.11452764005894203
+        ],
+        [
+          -0.012050377011081814,
+          0.8687909809958964,
+          0.09787891843357938
+        ]
+      ],
+      "progress_vs_baseline_m": -0.01514984667301178,
+      "raw_action_xyz_sum_change": [
+        3.828749418258667,
+        -2.504253387451172,
+        2.730607032775879
+      ],
+      "same_first300_actions_exact": true,
+      "seconds_elapsed": 510.18464882439,
+      "sham": false
+    },
+    {
+      "actual_hand_xyz_shift_m": [
+        0.07937094569206238,
+        -0.03587263822555542,
+        -0.01532108336687088
+      ],
+      "arm": "broad0-126-sham",
+      "candidate": {
+        "block": 1,
+        "dose": 1,
+        "family": "pca_gain",
+        "head": null,
+        "id": "broad0-126",
+        "mask": "center",
+        "pulse": 1,
+        "rank": 8,
+        "sign": 1,
+        "site": "residual"
+      },
+      "episode": 7,
+      "final_hand_goal_distance_m": 0.22054870426654816,
+      "first300_argmin": 75,
+      "first300_rank_changes": 201,
+      "hand_goal_progress_m": 0.062023088335990906,
+      "initial_hand_goal_distance_m": 0.28257179260253906,
+      "minimum_hand_goal_distance_m": 0.22054870426654816,
+      "native_ever_success": false,
+      "native_info_success_recorded": true,
+      "native_reward_max": 2.518738269805908,
+      "native_reward_sum": 29.744168281555176,
+      "own_selected_plan_decoded_xyz": [
+        [
+          -0.00782027366537704,
+          0.663226254322156,
+          0.1695236190356385
+        ],
+        [
+          0.015584654825587855,
+          0.6926352460613029,
+          0.16135933866314767
+        ],
+        [
+          0.016106055738298847,
+          0.7456887646553254,
+          0.1492356243497201
+        ],
+        [
+          0.05442077807430424,
+          0.7805093911576295,
+          0.13050882494653798
+        ],
+        [
+          0.06858583358708537,
+          0.8086287531929084,
+          0.10561382964187292
+        ],
+        [
+          0.03192215466801964,
+          0.8383621076307013,
+          0.0791672971742132
+        ]
+      ],
+      "progress_vs_baseline_m": -0.04966612160205841,
+      "raw_action_xyz_sum_change": [
+        18.807044982910156,
+        -22.27287483215332,
+        -3.8527088165283203
+      ],
+      "same_first300_actions_exact": true,
+      "seconds_elapsed": 595.5774993402883,
+      "sham": true
+    }
+  ],
+  "seconds": 595.7155993534252
+}

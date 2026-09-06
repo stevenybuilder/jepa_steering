@@ -1,0 +1,168 @@
+{
+  "activation_support_scope": "first 300 candidates for identity and edited arms; unsteered reference has no hook",
+  "arms": [
+    "unsteered",
+    "identity",
+    "subspace_up",
+    "sham_up",
+    "subspace_down",
+    "sham_down"
+  ],
+  "bank_sha256": "c3fb2716122f3eb561a69aec7a716007804a6e2d901d7599169b7456efc5c33d",
+  "beta": 0.5,
+  "block": 3,
+  "candidate_sha256": "f4c295a148a22a9534cedd7d04b396f537bc8049842020886ba4f7fb0f1ca166",
+  "complete": true,
+  "counterfactual_model_steps": 1,
+  "counterfactual_raw_steps": 5,
+  "episode": 7,
+  "goal_replay": {
+    "encoded_goal_check": "exact at saved cache dtype (float16)",
+    "mode": "immutable_cached_raw",
+    "regenerated_goal_pixels_max_error": 9.0
+  },
+  "imagined_step": 0,
+  "model": {
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "config": "/root/geometry-map-jepawm-pusht-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "loader": "official constructor/checkpoint; heads_cfg cleared",
+    "model_name": "jepa_wm_metaworld"
+  },
+  "native_cem": {
+    "horizon": 6,
+    "iterations": 15,
+    "samples": 300
+  },
+  "not_yet_tested": [
+    "unrelated-site and time-shift controls",
+    "held-out confirmation",
+    "full-episode task success"
+  ],
+  "outputs": [
+    {
+      "path": "counterfactuals.pt",
+      "sha256": "e388dbb0d8507f24aa5d938afe245aa3df84a531c3077c43871468942a9e6055"
+    },
+    {
+      "path": "identity.pt",
+      "sha256": "bce8acc631a05ce889ea43989c070908de0c99d937aa2aae455331cb4e85dda7"
+    },
+    {
+      "path": "sham_down.pt",
+      "sha256": "9be297051cb466f16822d28a0f0a352fe9c962cb63f17741c83c4e46204f7aae"
+    },
+    {
+      "path": "sham_up.pt",
+      "sha256": "66db9c8fb422703681aed31612a41d77f240119d4a6a95f8ed89df72dcf466b6"
+    },
+    {
+      "path": "subspace_down.pt",
+      "sha256": "e093ff99bedc39b3c6dc087e4d4a4a32e42b52413974a2731ef50f564f0f1cc3"
+    },
+    {
+      "path": "subspace_up.pt",
+      "sha256": "fbfb709b900537886f781d99cfa1866c20599df6f190f22058612d8102168317"
+    },
+    {
+      "path": "unsteered.pt",
+      "sha256": "cc2388f0adbf50ebf01c09580b1771dcdbbe31ebaa57b1e067a5c692c26bc90d"
+    }
+  ],
+  "rank": 10,
+  "replan": 0,
+  "rows": [
+    {
+      "arm": "unsteered",
+      "candidate_cost_l2_change": 0.0,
+      "candidate_rank_changes": 0,
+      "chosen_raw_action_l2_change": 0.0,
+      "end_goal_distance": 0.17088258266448975,
+      "end_hand_l2_change": 0.0,
+      "episode": 7,
+      "first_candidate_argmin": 75,
+      "predicted_visual_pooled_l2_change": 0.0,
+      "replan": 0,
+      "seconds": 56.887329295277596,
+      "short_fork_success": false,
+      "steps": 15
+    },
+    {
+      "arm": "identity",
+      "candidate_cost_l2_change": 0.0,
+      "candidate_rank_changes": 0,
+      "chosen_raw_action_l2_change": 0.0,
+      "end_goal_distance": 0.17088258266448975,
+      "end_hand_l2_change": 0.0,
+      "episode": 7,
+      "first_candidate_argmin": 75,
+      "predicted_visual_pooled_l2_change": 0.0,
+      "replan": 0,
+      "seconds": 56.85074708703905,
+      "short_fork_success": false,
+      "steps": 15
+    },
+    {
+      "arm": "subspace_up",
+      "candidate_cost_l2_change": 0.03920532390475273,
+      "candidate_rank_changes": 216,
+      "chosen_raw_action_l2_change": 8.869220733642578,
+      "end_goal_distance": 0.18996648490428925,
+      "end_hand_l2_change": 0.05099012774196321,
+      "episode": 7,
+      "first_candidate_argmin": 75,
+      "predicted_visual_pooled_l2_change": 3.2369213104248047,
+      "replan": 0,
+      "seconds": 56.91984906885773,
+      "short_fork_success": false,
+      "steps": 15
+    },
+    {
+      "arm": "sham_up",
+      "candidate_cost_l2_change": 0.29298070073127747,
+      "candidate_rank_changes": 280,
+      "chosen_raw_action_l2_change": 12.509490013122559,
+      "end_goal_distance": 0.19692730903625488,
+      "end_hand_l2_change": 0.0770166934673793,
+      "episode": 7,
+      "first_candidate_argmin": 75,
+      "predicted_visual_pooled_l2_change": 16.859027862548828,
+      "replan": 0,
+      "seconds": 56.93469665199518,
+      "short_fork_success": false,
+      "steps": 15
+    },
+    {
+      "arm": "subspace_down",
+      "candidate_cost_l2_change": 0.035490382462739944,
+      "candidate_rank_changes": 177,
+      "chosen_raw_action_l2_change": 14.242812156677246,
+      "end_goal_distance": 0.21936948597431183,
+      "end_hand_l2_change": 0.07876108495561626,
+      "episode": 7,
+      "first_candidate_argmin": 75,
+      "predicted_visual_pooled_l2_change": 2.7846667766571045,
+      "replan": 0,
+      "seconds": 56.9136199709028,
+      "short_fork_success": false,
+      "steps": 15
+    },
+    {
+      "arm": "sham_down",
+      "candidate_cost_l2_change": 0.2247101366519928,
+      "candidate_rank_changes": 283,
+      "chosen_raw_action_l2_change": 8.498515129089355,
+      "end_goal_distance": 0.18490691483020782,
+      "end_hand_l2_change": 0.038771476432689495,
+      "episode": 7,
+      "first_candidate_argmin": 75,
+      "predicted_visual_pooled_l2_change": 14.875218391418457,
+      "replan": 0,
+      "seconds": 56.87779974984005,
+      "short_fork_success": false,
+      "steps": 15
+    }
+  ],
+  "same_start_rule": "original reset + saved action prefix; exact pixels and checked physics",
+  "script_sha256": "852c439ff07e07967f85399a2b100ce084874e02b90fefb749dc413230320bd5",
+  "status": "development_causal_diagnostic_not_steering_efficacy"
+}

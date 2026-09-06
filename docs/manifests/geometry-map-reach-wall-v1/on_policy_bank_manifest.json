@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "created_utc": "2026-09-05T17:45:00Z",
+  "frozen_before_bank_completion": true,
+  "model": "released frozen jepa_wm_metaworld",
+  "vendor_commit": "13cf1d9c7e476f53c17714d2e0f1dc239a883ce0",
+  "task": "mw-reach-wall",
+  "planner": "released JEPA-WM CEM configuration, H6, 300 candidates, 15 iterations, execute 3 model actions per replan",
+  "episode_count": 24,
+  "episode_ids": {
+    "first": 0,
+    "last": 23
+  },
+  "seed_rules": {
+    "environment_seed": "2026090500 + episode_id",
+    "planner_seed": "90500 + episode_id"
+  },
+  "splits": {
+    "operator_development_replay": {
+      "episodes": "0-11",
+      "allowed_use": "offline geometry transfer, planner replay, snapshot forks, and operator/dose selection",
+      "inferential_task_success": false
+    },
+    "held_closed_loop_evaluation": {
+      "episodes": "12-23",
+      "allowed_use": "precomputed unsteered arm and later paired sham/steered closed-loop evaluation",
+      "restriction": "do not tune layer, subspace, operator, or dose from these outcomes"
+    }
+  },
+  "primary_behavioral_endpoint": "final-step simulator success, matching the released evaluator",
+  "secondary_behavioral_endpoints": [
+    "ever entered success region",
+    "final state distance to expert goal",
+    "total reward"
+  ],
+  "preprocessing_contract": [
+    "raw visual and proprioceptive observations at every replan",
+    "current and goal encodings",
+    "planner RNG state immediately before CEM planning",
+    "chosen normalized and raw plans plus planner losses",
+    "MuJoCo qpos/qvel and MetaWorld task state for snapshot restoration",
+    "predictor-block-3 chosen-plan traces"
+  ]
+}

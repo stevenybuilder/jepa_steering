@@ -1,0 +1,134 @@
+{
+  "model_name": "vjepa2_ac_droid",
+  "load_s": 77.56817889213562,
+  "wrapper": "EncPredWM",
+  "enc_type": "vjepa",
+  "encoder_class": "VisionTransformer",
+  "encoder_patch_size": 16,
+  "encoder_embed_dim": 1408,
+  "encoder_depth": 40,
+  "encoder_params": 1012173952,
+  "encoder_dtype": "torch.float32",
+  "predictor_class": "VisionTransformerPredictorAC",
+  "predictor_params": 305205632,
+  "dup_image": true,
+  "batchify_video": true,
+  "normalize_reps": true,
+  "grid_size": 16,
+  "ctxt_window": 2,
+  "use_proprio": false,
+  "use_action": true,
+  "action_dim": 7,
+  "frames": {
+    "context": [
+      2,
+      256,
+      256,
+      3
+    ],
+    "future": [
+      3,
+      256,
+      256,
+      3
+    ],
+    "actions": [
+      3,
+      7
+    ],
+    "dtype": "uint8"
+  },
+  "encode": {
+    "z_ctx_shape": [
+      1,
+      1,
+      1,
+      16,
+      16,
+      1408
+    ],
+    "z_fut_shape": [
+      1,
+      3,
+      1,
+      16,
+      16,
+      1408
+    ],
+    "z_ctx_dtype": "torch.float32"
+  },
+  "unroll": {
+    "roll_shape": [
+      4,
+      1,
+      1,
+      16,
+      16,
+      1408
+    ],
+    "n_ctx": 1,
+    "T": 3,
+    "D": 1408
+  },
+  "grid_check": {
+    "tokens_per_frame": 256,
+    "expected": 256,
+    "ok": true,
+    "per_step_shapes": [
+      [
+        16,
+        16,
+        1408
+      ],
+      [
+        16,
+        16,
+        1408
+      ],
+      [
+        16,
+        16,
+        1408
+      ]
+    ]
+  },
+  "finite": {
+    "context": true,
+    "target": true,
+    "prediction": true,
+    "zero_prediction": true
+  },
+  "magnitudes": {
+    "context_rms": 0.9999994039535522,
+    "pred_step_rms": [
+      0.9999987483024597,
+      0.9999987483024597,
+      0.9999988079071045
+    ],
+    "pred_minus_zero_rms": [
+      0.1419544219970703,
+      0.2294515073299408,
+      0.2791043221950531
+    ],
+    "pred_minus_target_rms": [
+      0.6613658666610718,
+      0.6921623349189758,
+      0.7685907483100891
+    ],
+    "target_minus_context_rms": [
+      0.44089990854263306,
+      0.45886000990867615,
+      0.5100599527359009
+    ],
+    "steps_distinct_rms": [
+      0.17548713088035583,
+      0.21291057765483856
+    ]
+  },
+  "vram": {
+    "allocated_gb": 5.02725076675415,
+    "peak_allocated_gb": 5.087740898132324,
+    "reserved_gb": 5.15234375
+  },
+  "elapsed_s": 79.15146493911743
+}

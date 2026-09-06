@@ -1,0 +1,22 @@
+{
+  "status": "frozen_before_new_fit_or_development_scoring",
+  "objective": "Test whether candidate-conditioned correction of predictable terminal visual forecast error improves selected physical outcomes under the native unchanged visual+proprio goal objective.",
+  "site": "Native predicted terminal visual output, full256x384; mechanistic output-correction comparison, not an internal P3 residual edit or model weight update.",
+  "fit": "Exactly16 existing fit initial-state groups,7 actions each; all training rows retained. No development or confirmation target enters fitting.",
+  "development": "All4 existing expanded64-plan development banks, total256plans. Initial state is the independent unit; these are adaptively reused exploratory states.",
+  "features": "Current visual mean384, predicted terminal visual mean384, normalized60 action coordinates; fit standardization only.",
+  "families": ["linear", "rbf", "knn"],
+  "ridge": "0.1 times mean training kernel diagonal; no development tuning",
+  "rbf_bandwidth": "median positive TRAIN squared feature distance",
+  "knn": "8nearest training rows, at most2 from each training initialstate; exponential distance weights",
+  "output_edit_cap_fractions": [0.005, 0.02, 0.1],
+  "controls": ["exact no edit", "TRAIN mean residual only", "fixed seed permutation of TRAIN residual labels, test-edit norm matched", "fixed signed coordinate permutation of predicted residual, exact per-candidate norm matched"],
+  "native_objective": "Unchanged terminal visual squared error mean plus0.1proprio error; proprio unchanged. Exact noedit original scalar costs and argmins preserved.",
+  "primary": "Requested expert-goal polygon coverage of selected actual30-step physical outcome; this NEW experiment declares goal-matched coverage in advance and does not rewrite old4DXY-primary experiments.",
+  "secondary": ["joint4DXY goal distance", "full visual forecast MSE", "native reward against its different painted goal remains separately labelled"],
+  "promotion": "Mean coverage gain>=0.02 versus native AND each matched sham, positive coverage gain in>=3of4states versus native, no state harm>0.05coverage, and average forecastMSE<=1.05native. Then freeze one smallest-cap candidate for fresh development validation; no full held evaluation from these4states.",
+  "additional_prespecified_branch": "If correction fails, predict per-candidate visual error risk using identical TRAIN features and three fit families. Penalize nativecost by nonnegative predicted risk at strengths0.1,0.3,1 scaled from TRAIN median nativecost/error. Controls: within-state candidate-permutation penalty and TRAIN-scaled action-magnitude penalty. This is planner score intervention, reported separately.",
+  "resources": "Existing projectGPUs398/413/414 exclusively, <=1.5aggregate processGPUhours initial checkpoint; no new rentals; no other GPU use.",
+  "prohibited": ["held panels", "test-future-label runtime input", "hidden trial exclusion", "endpoint substitution", "best-seed-only reporting"],
+  "literature": ["https://arxiv.org/abs/2608.18669", "https://arxiv.org/abs/2609.03294", "https://arxiv.org/abs/2607.25337"]
+}

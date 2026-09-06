@@ -1,0 +1,5362 @@
+{
+ "protocol": "cgs-identity-contrast-geometry-v0.1",
+ "dump_a": "/root/cgs-pilot/artifacts/drive_identity_geometry/self_test/null/arm_A",
+ "dump_b": "/root/cgs-pilot/artifacts/drive_identity_geometry/self_test/null/arm_B",
+ "stimulus": "/root/cgs-pilot/artifacts/drive_identity_geometry/self_test/null/stimulus",
+ "arms": {
+  "A": "A: PED-solid / OBJ-ghost",
+  "B": "B: PED-ghost / OBJ-solid"
+ },
+ "domain": "driving",
+ "token_group_source": {
+  "domain": "driving",
+  "native_groups": [
+   "hazard",
+   "corridor",
+   "background",
+   "hazard_corridor",
+   "all"
+  ],
+  "aliases": {
+   "egg": "hazard",
+   "gripper": "(empty: no manipulator in the driving scene)",
+   "gripper_corridor": "corridor"
+  },
+  "masks": "hazard_mask (pedestrian or cone) and corridor_mask (ego-lane polygon ahead), [T,256,256] bool",
+  "primary_group": "hazard_corridor",
+  "region_groups": [
+   "hazard",
+   "corridor"
+  ]
+ },
+ "n_scenes": 16,
+ "scenes": [
+  "drive_seed000500",
+  "drive_seed000501",
+  "drive_seed000502",
+  "drive_seed000503",
+  "drive_seed000504",
+  "drive_seed000505",
+  "drive_seed000506",
+  "drive_seed000507",
+  "drive_seed000508",
+  "drive_seed000509",
+  "drive_seed000510",
+  "drive_seed000511",
+  "drive_seed000512",
+  "drive_seed000513",
+  "drive_seed000514",
+  "drive_seed000515"
+ ],
+ "n_cells": 128,
+ "alignment": {
+  "null_factor": "full",
+  "n_null_scenes": 16,
+  "n_cells_a": 128,
+  "n_cells_b": 128,
+  "n_common_cells": 128,
+  "n_scenes_dropped_incomplete": 0
+ },
+ "step": 0,
+ "groups": [
+  "corridor",
+  "hazard",
+  "hazard_corridor"
+ ],
+ "sites": [
+  "L03.mlp_out",
+  "L05.resid_post"
+ ],
+ "transport_levels": [
+  0,
+  2
+ ],
+ "definitions": {
+  "DiD(l)": "(h[l,1] - h[l,0]) - (h[0,1] - h[0,0]) on the group-pooled activations (mean over the scene-level union of the group's tokens); levels 0 sidewalk, 1 pedestrian in lane, 2 H0' mirror pose, 3 cone in lane; actions 0 brake, 1 throttle",
+  "fields": "D^A_ped = DiD(1) in arm A, D^A_cone = DiD(3) in arm A, D^B_ped, D^B_cone likewise (arm B coordinates)",
+  "template_shared": "tau_{-i} = mean over the other scenes of the four fields, arm B moved into arm A coordinates with fold i's transport (v_A = v_B W_i^T)",
+  "template_perarm": "tau^X_{-i} = mean over the other scenes of arm X's two fields",
+  "I": "I^X_i = r^X_ped,i - r^X_cone,i = D^X_ped,i - D^X_cone,i (template-invariant by construction)",
+  "I_perp_shared": "I with its component along unit(tau_{-i}) removed (arm B after transport into A coordinates)",
+  "I_perp_perarm": "I^X with its component along unit(tau^X_{-i}) removed, in the arm's own coordinates",
+  "transport": "orthogonal Procrustes W fitted LOSO on matched per-token rows of the hazard-free cells (levels 0,2) as in geometry_cross_arm.py; x_B ~= x_A W, row vectors map v_B = v_A W",
+  "prediction": "reversed assignment (consequence attached to the pedestrian in A and to the cone in B) -> I^A anti-aligned with T(I^B); within each arm I has a consistent direction",
+  "unit": "scene (pair_id); CIs = scene bootstrap of the mean; sign-flip p as in stats_utils; max-T = Westfall-Young over the sites of a group family with shared flips (cgs_stats.sign_flip_maxt)"
+ },
+ "transport_per_site": {
+  "L03.mlp_out": {
+   "n_rows": 6380,
+   "relative_residual_transported_full": 0.2060221485234204,
+   "relative_residual_raw_full": 1.4597722879719834,
+   "heldout_relative_residual_transported": 0.20704647542241245,
+   "heldout_relative_residual_raw": 1.4597594096353221
+  },
+  "L05.resid_post": {
+   "n_rows": 6380,
+   "relative_residual_transported_full": 0.20605526551328343,
+   "relative_residual_raw_full": 1.4597424742053953,
+   "heldout_relative_residual_transported": 0.20708220218096912,
+   "heldout_relative_residual_raw": 1.4597294484049406
+  }
+ },
+ "families": {
+  "corridor": {
+   "n_scenes": 16,
+   "n_sites": 2,
+   "scenes_note": "all sites share the same scenes",
+   "variants": {
+    "I": {
+     "within_A": {
+      "statistic": "s_i = I^A_i . unit(mean_{j != i} I^A_j); one-sided (> 0); LOSO mean refitted under every flip",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.2464121947871629,
+        "0.9": 2.136389657191737,
+        "0.95": 2.585477767033432,
+        "0.99": 3.528634904571563
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.03326695277254473,
+        "p_raw": 0.5094905094905094,
+        "p_maxt_fwer": 0.5534465534465535
+       },
+       "L05.resid_post": {
+        "t": 0.0427851092455614,
+        "p_raw": 0.4945054945054945,
+        "p_maxt_fwer": 0.5524475524475524
+       }
+      }
+     },
+     "within_B": {
+      "statistic": "same for I^B (own coordinates)",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.10339032641643212,
+        "0.9": 1.9602452746160877,
+        "0.95": 2.536517042621707,
+        "0.99": 3.7509271788548273
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.26382760796373217,
+        "p_raw": 0.41358641358641357,
+        "p_maxt_fwer": 0.46253746253746253
+       },
+       "L05.resid_post": {
+        "t": 0.08898934305861965,
+        "p_raw": 0.45554445554445555,
+        "p_maxt_fwer": 0.5034965034965035
+       }
+      }
+     },
+     "cross_anti_alignment": {
+      "statistic": "q_i = 0.5 [cos(I^A_i, T_i mean_{j != i} I^B_j) + cos(T_i I^B_i, mean_{j != i} I^A_j)]; tested as -q > 0 (anti-alignment)",
+      "null": "identity-relabel refit: ped <-> cone relabelling per scene, same flips in both arms, every LOSO mean refitted; max-T over the family's sites with shared flips",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.14230210676204968,
+        "0.9": 2.071484995895067,
+        "0.95": 2.6890842367358276,
+        "0.99": 3.717208050831086
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 2.513213732880325,
+        "p_raw": 0.054945054945054944,
+        "p_maxt_fwer": 0.06493506493506493
+       },
+       "L05.resid_post": {
+        "t": 2.1192246339611827,
+        "p_raw": 0.07492507492507493,
+        "p_maxt_fwer": 0.0999000999000999
+       }
+      }
+     }
+    },
+    "I_perp_shared": {
+     "within_A": {
+      "statistic": "s_i = I^A_i . unit(mean_{j != i} I^A_j); one-sided (> 0); LOSO mean refitted under every flip",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.24035268417674932,
+        "0.9": 2.1913205524294863,
+        "0.95": 2.606799074508782,
+        "0.99": 3.577392491679001
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.11473479062938391,
+        "p_raw": 0.48451548451548454,
+        "p_maxt_fwer": 0.5314685314685315
+       },
+       "L05.resid_post": {
+        "t": 0.10688446002255322,
+        "p_raw": 0.4785214785214785,
+        "p_maxt_fwer": 0.5374625374625375
+       }
+      }
+     },
+     "within_B": {
+      "statistic": "same for I^B (own coordinates)",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.11746004594491075,
+        "0.9": 1.9500955899495511,
+        "0.95": 2.5012320886282655,
+        "0.99": 3.807373719254853
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.18041894634684555,
+        "p_raw": 0.4305694305694306,
+        "p_maxt_fwer": 0.4805194805194805
+       },
+       "L05.resid_post": {
+        "t": 0.016400675656949627,
+        "p_raw": 0.4785214785214785,
+        "p_maxt_fwer": 0.5274725274725275
+       }
+      }
+     },
+     "cross_anti_alignment": {
+      "statistic": "q_i = 0.5 [cos(I^A_i, T_i mean_{j != i} I^B_j) + cos(T_i I^B_i, mean_{j != i} I^A_j)]; tested as -q > 0 (anti-alignment)",
+      "null": "identity-relabel refit: ped <-> cone relabelling per scene, same flips in both arms, every LOSO mean refitted; max-T over the family's sites with shared flips",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.15632046749760875,
+        "0.9": 2.051914243496439,
+        "0.95": 2.7364122799595303,
+        "0.99": 3.678933327790934
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 2.6679976334735547,
+        "p_raw": 0.04095904095904096,
+        "p_maxt_fwer": 0.052947052947052944
+       },
+       "L05.resid_post": {
+        "t": 2.259478398870359,
+        "p_raw": 0.06293706293706294,
+        "p_maxt_fwer": 0.08491508491508491
+       }
+      }
+     }
+    },
+    "I_perp_perarm": {
+     "within_A": {
+      "statistic": "s_i = I^A_i . unit(mean_{j != i} I^A_j); one-sided (> 0); LOSO mean refitted under every flip",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.23969977109326285,
+        "0.9": 2.192128702193858,
+        "0.95": 2.6200379337894413,
+        "0.99": 3.5771253827235054
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.11374833058617292,
+        "p_raw": 0.4835164835164835,
+        "p_maxt_fwer": 0.5324675324675324
+       },
+       "L05.resid_post": {
+        "t": 0.108061855021164,
+        "p_raw": 0.4785214785214785,
+        "p_maxt_fwer": 0.5374625374625375
+       }
+      }
+     },
+     "within_B": {
+      "statistic": "same for I^B (own coordinates)",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.11935912290485451,
+        "0.9": 1.9623312567604059,
+        "0.95": 2.512914983293876,
+        "0.99": 3.809200456315895
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.17117376127209308,
+        "p_raw": 0.4325674325674326,
+        "p_maxt_fwer": 0.4825174825174825
+       },
+       "L05.resid_post": {
+        "t": 0.007171410532217056,
+        "p_raw": 0.47952047952047955,
+        "p_maxt_fwer": 0.5284715284715285
+       }
+      }
+     },
+     "cross_anti_alignment": {
+      "statistic": "q_i = 0.5 [cos(I^A_i, T_i mean_{j != i} I^B_j) + cos(T_i I^B_i, mean_{j != i} I^A_j)]; tested as -q > 0 (anti-alignment)",
+      "null": "identity-relabel refit: ped <-> cone relabelling per scene, same flips in both arms, every LOSO mean refitted; max-T over the family's sites with shared flips",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.1528945456806033,
+        "0.9": 2.0521616389647206,
+        "0.95": 2.726205519569451,
+        "0.99": 3.683408305520851
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 2.6649408859951653,
+        "p_raw": 0.03996003996003996,
+        "p_maxt_fwer": 0.05194805194805195
+       },
+       "L05.resid_post": {
+        "t": 2.2555197654110355,
+        "p_raw": 0.06293706293706294,
+        "p_maxt_fwer": 0.08491508491508491
+       }
+      }
+     }
+    }
+   }
+  },
+  "hazard": {
+   "n_scenes": 16,
+   "n_sites": 2,
+   "scenes_note": "all sites share the same scenes",
+   "variants": {
+    "I": {
+     "within_A": {
+      "statistic": "s_i = I^A_i . unit(mean_{j != i} I^A_j); one-sided (> 0); LOSO mean refitted under every flip",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.14247676568283535,
+        "0.9": 2.0994552155595283,
+        "0.95": 2.9074149058298167,
+        "0.99": 3.925671058902774
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 1.5478928162633177,
+        "p_raw": 0.15384615384615385,
+        "p_maxt_fwer": 0.16683316683316685
+       },
+       "L05.resid_post": {
+        "t": 1.1858414827791806,
+        "p_raw": 0.21178821178821178,
+        "p_maxt_fwer": 0.23576423576423577
+       }
+      }
+     },
+     "within_B": {
+      "statistic": "same for I^B (own coordinates)",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.15366907034535032,
+        "0.9": 1.9114341303626556,
+        "0.95": 2.3925612182801066,
+        "0.99": 3.2202937259402065
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": -0.969000579827761,
+        "p_raw": 0.7362637362637363,
+        "p_maxt_fwer": 0.7682317682317682
+       },
+       "L05.resid_post": {
+        "t": -1.1508456996601073,
+        "p_raw": 0.7752247752247752,
+        "p_maxt_fwer": 0.8011988011988012
+       }
+      }
+     },
+     "cross_anti_alignment": {
+      "statistic": "q_i = 0.5 [cos(I^A_i, T_i mean_{j != i} I^B_j) + cos(T_i I^B_i, mean_{j != i} I^A_j)]; tested as -q > 0 (anti-alignment)",
+      "null": "identity-relabel refit: ped <-> cone relabelling per scene, same flips in both arms, every LOSO mean refitted; max-T over the family's sites with shared flips",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.18531108664914658,
+        "0.9": 2.2006234600885417,
+        "0.95": 2.689138526453763,
+        "0.99": 4.030749999489093
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.0058925589010834206,
+        "p_raw": 0.5134865134865135,
+        "p_maxt_fwer": 0.5514485514485514
+       },
+       "L05.resid_post": {
+        "t": 0.005155119124631086,
+        "p_raw": 0.5244755244755245,
+        "p_maxt_fwer": 0.5524475524475524
+       }
+      }
+     }
+    },
+    "I_perp_shared": {
+     "within_A": {
+      "statistic": "s_i = I^A_i . unit(mean_{j != i} I^A_j); one-sided (> 0); LOSO mean refitted under every flip",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.14822343077277422,
+        "0.9": 2.0937580085787038,
+        "0.95": 2.9348430619952746,
+        "0.99": 3.827526579896419
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 1.5350493960424088,
+        "p_raw": 0.14885114885114886,
+        "p_maxt_fwer": 0.16483516483516483
+       },
+       "L05.resid_post": {
+        "t": 1.139899235288502,
+        "p_raw": 0.2217782217782218,
+        "p_maxt_fwer": 0.24375624375624375
+       }
+      }
+     },
+     "within_B": {
+      "statistic": "same for I^B (own coordinates)",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.1620151655057056,
+        "0.9": 1.9263203630005334,
+        "0.95": 2.442646707996557,
+        "0.99": 3.311318236645355
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": -0.9028398653059696,
+        "p_raw": 0.7292707292707292,
+        "p_maxt_fwer": 0.7572427572427572
+       },
+       "L05.resid_post": {
+        "t": -1.0791228333297243,
+        "p_raw": 0.7602397602397603,
+        "p_maxt_fwer": 0.7892107892107892
+       }
+      }
+     },
+     "cross_anti_alignment": {
+      "statistic": "q_i = 0.5 [cos(I^A_i, T_i mean_{j != i} I^B_j) + cos(T_i I^B_i, mean_{j != i} I^A_j)]; tested as -q > 0 (anti-alignment)",
+      "null": "identity-relabel refit: ped <-> cone relabelling per scene, same flips in both arms, every LOSO mean refitted; max-T over the family's sites with shared flips",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.18272120212671084,
+        "0.9": 2.1872215408061666,
+        "0.95": 2.61236321640827,
+        "0.99": 4.000738990135772
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.005222309703150241,
+        "p_raw": 0.5084915084915085,
+        "p_maxt_fwer": 0.5494505494505495
+       },
+       "L05.resid_post": {
+        "t": 0.012862286868708054,
+        "p_raw": 0.5174825174825175,
+        "p_maxt_fwer": 0.5464535464535465
+       }
+      }
+     }
+    },
+    "I_perp_perarm": {
+     "within_A": {
+      "statistic": "s_i = I^A_i . unit(mean_{j != i} I^A_j); one-sided (> 0); LOSO mean refitted under every flip",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.14704100339507564,
+        "0.9": 2.096277814521846,
+        "0.95": 2.9326543369483433,
+        "0.99": 3.8243523881697246
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 1.5408815363124246,
+        "p_raw": 0.14685314685314685,
+        "p_maxt_fwer": 0.16383616383616384
+       },
+       "L05.resid_post": {
+        "t": 1.1450645172713994,
+        "p_raw": 0.2217782217782218,
+        "p_maxt_fwer": 0.24375624375624375
+       }
+      }
+     },
+     "within_B": {
+      "statistic": "same for I^B (own coordinates)",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.1607457911518954,
+        "0.9": 1.9241728234655981,
+        "0.95": 2.439772266133192,
+        "0.99": 3.309341209109223
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": -0.9020519354976226,
+        "p_raw": 0.7292707292707292,
+        "p_maxt_fwer": 0.7572427572427572
+       },
+       "L05.resid_post": {
+        "t": -1.0778409003130658,
+        "p_raw": 0.7592407592407593,
+        "p_maxt_fwer": 0.7892107892107892
+       }
+      }
+     },
+     "cross_anti_alignment": {
+      "statistic": "q_i = 0.5 [cos(I^A_i, T_i mean_{j != i} I^B_j) + cos(T_i I^B_i, mean_{j != i} I^A_j)]; tested as -q > 0 (anti-alignment)",
+      "null": "identity-relabel refit: ped <-> cone relabelling per scene, same flips in both arms, every LOSO mean refitted; max-T over the family's sites with shared flips",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.18293090292261088,
+        "0.9": 2.1839087335237046,
+        "0.95": 2.608663137893396,
+        "0.99": 3.9948047848525423
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": -7.024230616452491e-05,
+        "p_raw": 0.5114885114885115,
+        "p_maxt_fwer": 0.5514485514485514
+       },
+       "L05.resid_post": {
+        "t": 0.007778228470170278,
+        "p_raw": 0.5224775224775224,
+        "p_maxt_fwer": 0.5484515484515484
+       }
+      }
+     }
+    }
+   }
+  },
+  "hazard_corridor": {
+   "n_scenes": 16,
+   "n_sites": 2,
+   "scenes_note": "all sites share the same scenes",
+   "variants": {
+    "I": {
+     "within_A": {
+      "statistic": "s_i = I^A_i . unit(mean_{j != i} I^A_j); one-sided (> 0); LOSO mean refitted under every flip",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.18354472909008546,
+        "0.9": 2.007637721111187,
+        "0.95": 2.7733370335421874,
+        "0.99": 3.8492691703415085
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.8542845167491465,
+        "p_raw": 0.27372627372627373,
+        "p_maxt_fwer": 0.3016983016983017
+       },
+       "L05.resid_post": {
+        "t": 0.7202740206440034,
+        "p_raw": 0.3016983016983017,
+        "p_maxt_fwer": 0.33666333666333664
+       }
+      }
+     },
+     "within_B": {
+      "statistic": "same for I^B (own coordinates)",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.24215575525316796,
+        "0.9": 1.9903065082260745,
+        "0.95": 2.449040803528007,
+        "0.99": 3.2070875237106278
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": -0.6322162808800579,
+        "p_raw": 0.6783216783216783,
+        "p_maxt_fwer": 0.7122877122877123
+       },
+       "L05.resid_post": {
+        "t": -0.7706879548550831,
+        "p_raw": 0.7182817182817183,
+        "p_maxt_fwer": 0.7522477522477522
+       }
+      }
+     },
+     "cross_anti_alignment": {
+      "statistic": "q_i = 0.5 [cos(I^A_i, T_i mean_{j != i} I^B_j) + cos(T_i I^B_i, mean_{j != i} I^A_j)]; tested as -q > 0 (anti-alignment)",
+      "null": "identity-relabel refit: ped <-> cone relabelling per scene, same flips in both arms, every LOSO mean refitted; max-T over the family's sites with shared flips",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.24823963107040697,
+        "0.9": 2.253905118564578,
+        "0.95": 2.94855434703203,
+        "0.99": 4.14158510377975
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.6287366905921141,
+        "p_raw": 0.36663336663336665,
+        "p_maxt_fwer": 0.3996003996003996
+       },
+       "L05.resid_post": {
+        "t": 0.7781742326156839,
+        "p_raw": 0.3256743256743257,
+        "p_maxt_fwer": 0.35664335664335667
+       }
+      }
+     }
+    },
+    "I_perp_shared": {
+     "within_A": {
+      "statistic": "s_i = I^A_i . unit(mean_{j != i} I^A_j); one-sided (> 0); LOSO mean refitted under every flip",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.15617637590736178,
+        "0.9": 2.0354819660731036,
+        "0.95": 2.7596313735096363,
+        "0.99": 3.89231893111766
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.872544885576753,
+        "p_raw": 0.26573426573426573,
+        "p_maxt_fwer": 0.2997002997002997
+       },
+       "L05.resid_post": {
+        "t": 0.7393213694878198,
+        "p_raw": 0.2997002997002997,
+        "p_maxt_fwer": 0.33266733266733267
+       }
+      }
+     },
+     "within_B": {
+      "statistic": "same for I^B (own coordinates)",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.23083443733866665,
+        "0.9": 1.982447445853448,
+        "0.95": 2.470692487873945,
+        "0.99": 3.2475615771199213
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": -0.5986681267743278,
+        "p_raw": 0.6713286713286714,
+        "p_maxt_fwer": 0.7022977022977023
+       },
+       "L05.resid_post": {
+        "t": -0.7331625776961007,
+        "p_raw": 0.7132867132867133,
+        "p_maxt_fwer": 0.7442557442557443
+       }
+      }
+     },
+     "cross_anti_alignment": {
+      "statistic": "q_i = 0.5 [cos(I^A_i, T_i mean_{j != i} I^B_j) + cos(T_i I^B_i, mean_{j != i} I^A_j)]; tested as -q > 0 (anti-alignment)",
+      "null": "identity-relabel refit: ped <-> cone relabelling per scene, same flips in both arms, every LOSO mean refitted; max-T over the family's sites with shared flips",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.2544653175048103,
+        "0.9": 2.2303234457168823,
+        "0.95": 2.94086417730774,
+        "0.99": 4.12667244971085
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.6316549644191484,
+        "p_raw": 0.37162837162837165,
+        "p_maxt_fwer": 0.3986013986013986
+       },
+       "L05.resid_post": {
+        "t": 0.7785677858886557,
+        "p_raw": 0.3306693306693307,
+        "p_maxt_fwer": 0.36363636363636365
+       }
+      }
+     }
+    },
+    "I_perp_perarm": {
+     "within_A": {
+      "statistic": "s_i = I^A_i . unit(mean_{j != i} I^A_j); one-sided (> 0); LOSO mean refitted under every flip",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.15667223914948344,
+        "0.9": 2.0334822235107737,
+        "0.95": 2.7593843238735194,
+        "0.99": 3.895838104490685
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.8755269055837431,
+        "p_raw": 0.26573426573426573,
+        "p_maxt_fwer": 0.2987012987012987
+       },
+       "L05.resid_post": {
+        "t": 0.7400015497024053,
+        "p_raw": 0.2977022977022977,
+        "p_maxt_fwer": 0.3306693306693307
+       }
+      }
+     },
+     "within_B": {
+      "statistic": "same for I^B (own coordinates)",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.2314213124702339,
+        "0.9": 1.9832254137053993,
+        "0.95": 2.473044696134793,
+        "0.99": 3.2467078026298375
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": -0.5972157010260134,
+        "p_raw": 0.6713286713286714,
+        "p_maxt_fwer": 0.7022977022977023
+       },
+       "L05.resid_post": {
+        "t": -0.7318926016661063,
+        "p_raw": 0.7142857142857143,
+        "p_maxt_fwer": 0.7442557442557443
+       }
+      }
+     },
+     "cross_anti_alignment": {
+      "statistic": "q_i = 0.5 [cos(I^A_i, T_i mean_{j != i} I^B_j) + cos(T_i I^B_i, mean_{j != i} I^A_j)]; tested as -q > 0 (anti-alignment)",
+      "null": "identity-relabel refit: ped <-> cone relabelling per scene, same flips in both arms, every LOSO mean refitted; max-T over the family's sites with shared flips",
+      "maxt": {
+       "n_scenes": 16,
+       "n_perm": 1000,
+       "exact": false,
+       "n_sites": 2,
+       "maxt_null_quantiles": {
+        "0.5": 0.2543185237350022,
+        "0.9": 2.2313728708091967,
+        "0.95": 2.9262275187173254,
+        "0.99": 4.124822603952245
+       }
+      },
+      "sites": {
+       "L03.mlp_out": {
+        "t": 0.6280076731234304,
+        "p_raw": 0.3776223776223776,
+        "p_maxt_fwer": 0.4005994005994006
+       },
+       "L05.resid_post": {
+        "t": 0.7754772633149196,
+        "p_raw": 0.33166833166833165,
+        "p_maxt_fwer": 0.3646353646353646
+       }
+      }
+     }
+    }
+   }
+  }
+ },
+ "ranked_tables": {
+  "corridor": [
+   {
+    "site_id": "L03.mlp_out",
+    "n_scenes": 16,
+    "I": {
+     "cross_cos_mean": 0.0626120808227783,
+     "cross_cos_ci": [
+      -0.005997735996635079,
+      0.13208707712186005
+     ],
+     "cross_cos_p_signflip_neg": 0.9522095580883824,
+     "cross_cos_p_sceneperm_neg": 0.996003996003996,
+     "cross_cos_sceneperm_null_mean": -0.014883746695699617,
+     "cross_q_mean": -0.07160332716822271,
+     "cross_q_t": -2.513213732880325,
+     "cross_q_p_maxt": 0.06493506493506493,
+     "within_A_t": 0.03326695277254473,
+     "within_A_p_maxt": 0.5534465534465535,
+     "within_A_cos": 0.001156154043773637,
+     "within_B_t": 0.26382760796373217,
+     "within_B_p_maxt": 0.46253746253746253,
+     "within_B_cos": 0.005580564603809987,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_shared": {
+     "cross_cos_mean": 0.06459306972547459,
+     "cross_cos_ci": [
+      -0.0031948091431184154,
+      0.1359340153391527
+     ],
+     "cross_cos_p_signflip_neg": 0.9534093181363728,
+     "cross_cos_p_sceneperm_neg": 0.994005994005994,
+     "cross_cos_sceneperm_null_mean": -0.017441959283354368,
+     "cross_q_mean": -0.07452602497461511,
+     "cross_q_t": -2.6679976334735547,
+     "cross_q_p_maxt": 0.052947052947052944,
+     "within_A_t": 0.11473479062938391,
+     "within_A_p_maxt": 0.5314685314685315,
+     "within_A_cos": 0.004580865973287655,
+     "within_B_t": 0.18041894634684555,
+     "within_B_p_maxt": 0.4805194805194805,
+     "within_B_cos": 0.002825066558138806,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_perarm": {
+     "cross_cos_mean": 0.06457241067012781,
+     "cross_cos_ci": [
+      -0.0030415531769935945,
+      0.13583634087552202
+     ],
+     "cross_cos_p_signflip_neg": 0.9536092781443711,
+     "cross_cos_p_sceneperm_neg": 0.991008991008991,
+     "cross_cos_sceneperm_null_mean": -0.014441115492230037,
+     "cross_q_mean": -0.07443986866712261,
+     "cross_q_t": -2.6649408859951653,
+     "cross_q_p_maxt": 0.05194805194805195,
+     "within_A_t": 0.11374833058617292,
+     "within_A_p_maxt": 0.5324675324675324,
+     "within_A_cos": 0.004630964980913234,
+     "within_B_t": 0.17117376127209308,
+     "within_B_p_maxt": 0.4825174825174825,
+     "within_B_cos": 0.002535151441881968,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "template": {
+     "insample_mean_dir_fraction": 0.9382560328304878,
+     "insample_pc1_fraction": 0.9382843980392267,
+     "I_over_template_median_A": 0.24986106860702867,
+     "I_over_template_median_B": 0.24715862858883225,
+     "asym_A": 0.003622284045464648,
+     "asym_B": 0.009757981388020464,
+     "asym_pattern": false
+    },
+    "rank": {
+     "raw_hard_rank_all": 1,
+     "residual_shared_hard_rank_all": 19,
+     "raw_pc1_all": 0.9382843980392267,
+     "residual_shared_pc1_all": 0.23744274190776338,
+     "I_hard_rank_A": 10,
+     "I_hard_rank_B": 10
+    }
+   },
+   {
+    "site_id": "L05.resid_post",
+    "n_scenes": 16,
+    "I": {
+     "cross_cos_mean": 0.07883742885107498,
+     "cross_cos_ci": [
+      0.009534969010245725,
+      0.15061904059055997
+     ],
+     "cross_cos_p_signflip_neg": 0.9762047590481904,
+     "cross_cos_p_sceneperm_neg": 1.0,
+     "cross_cos_sceneperm_null_mean": -0.011087991679681147,
+     "cross_q_mean": -0.05906236884297507,
+     "cross_q_t": -2.1192246339611827,
+     "cross_q_p_maxt": 0.0999000999000999,
+     "within_A_t": 0.0427851092455614,
+     "within_A_p_maxt": 0.5524475524475524,
+     "within_A_cos": 0.004164956532183579,
+     "within_B_t": 0.08898934305861965,
+     "within_B_p_maxt": 0.5034965034965035,
+     "within_B_cos": -0.0012288175077773168,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_shared": {
+     "cross_cos_mean": 0.07971394560451889,
+     "cross_cos_ci": [
+      0.009210445415593618,
+      0.1545961708576123
+     ],
+     "cross_cos_p_signflip_neg": 0.9754049190161967,
+     "cross_cos_p_sceneperm_neg": 0.999000999000999,
+     "cross_cos_sceneperm_null_mean": -0.01337286481265414,
+     "cross_q_mean": -0.06200482860807184,
+     "cross_q_t": -2.259478398870359,
+     "cross_q_p_maxt": 0.08491508491508491,
+     "within_A_t": 0.10688446002255322,
+     "within_A_p_maxt": 0.5374625374625375,
+     "within_A_cos": 0.0071116810675800335,
+     "within_B_t": 0.016400675656949627,
+     "within_B_p_maxt": 0.5274725274725275,
+     "within_B_cos": -0.0039097779123248595,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_perarm": {
+     "cross_cos_mean": 0.07945948078547578,
+     "cross_cos_ci": [
+      0.009256704995552388,
+      0.1542395566272914
+     ],
+     "cross_cos_p_signflip_neg": 0.9754049190161967,
+     "cross_cos_p_sceneperm_neg": 0.994005994005994,
+     "cross_cos_sceneperm_null_mean": -0.01031058132905192,
+     "cross_q_mean": -0.06189210634554193,
+     "cross_q_t": -2.2555197654110355,
+     "cross_q_p_maxt": 0.08491508491508491,
+     "within_A_t": 0.108061855021164,
+     "within_A_p_maxt": 0.5374625374625375,
+     "within_A_cos": 0.007216783912334667,
+     "within_B_t": 0.007171410532217056,
+     "within_B_p_maxt": 0.5284715284715285,
+     "within_B_cos": -0.004222600820301722,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "template": {
+     "insample_mean_dir_fraction": 0.9374824969135699,
+     "insample_pc1_fraction": 0.9375121520442234,
+     "I_over_template_median_A": 0.24739236847776327,
+     "I_over_template_median_B": 0.25462704921887214,
+     "asym_A": 0.004297962670585409,
+     "asym_B": 0.009701229004779533,
+     "asym_pattern": false
+    },
+    "rank": {
+     "raw_hard_rank_all": 1,
+     "residual_shared_hard_rank_all": 19,
+     "raw_pc1_all": 0.9375121520442234,
+     "residual_shared_pc1_all": 0.23288910736844162,
+     "I_hard_rank_A": 10,
+     "I_hard_rank_B": 10
+    }
+   }
+  ],
+  "hazard": [
+   {
+    "site_id": "L03.mlp_out",
+    "n_scenes": 16,
+    "I": {
+     "cross_cos_mean": 0.11522639888991631,
+     "cross_cos_ci": [
+      0.06042048524861133,
+      0.17737319440380775
+     ],
+     "cross_cos_p_signflip_neg": 0.9998000399920016,
+     "cross_cos_p_sceneperm_neg": 0.999000999000999,
+     "cross_cos_sceneperm_null_mean": 0.005588631578439569,
+     "cross_q_mean": -0.0001749894261853348,
+     "cross_q_t": -0.0058925589010834206,
+     "cross_q_p_maxt": 0.5514485514485514,
+     "within_A_t": 1.5478928162633177,
+     "within_A_p_maxt": 0.16683316683316685,
+     "within_A_cos": 0.03656313023646178,
+     "within_B_t": -0.969000579827761,
+     "within_B_p_maxt": 0.7682317682317682,
+     "within_B_cos": -0.032179598479494684,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_shared": {
+     "cross_cos_mean": 0.11696324462953103,
+     "cross_cos_ci": [
+      0.05906005106049373,
+      0.1820149034447881
+     ],
+     "cross_cos_p_signflip_neg": 0.9998000399920016,
+     "cross_cos_p_sceneperm_neg": 0.999000999000999,
+     "cross_cos_sceneperm_null_mean": 0.004542873194757334,
+     "cross_q_mean": -0.00015713095061713287,
+     "cross_q_t": -0.005222309703150241,
+     "cross_q_p_maxt": 0.5494505494505495,
+     "within_A_t": 1.5350493960424088,
+     "within_A_p_maxt": 0.16483516483516483,
+     "within_A_cos": 0.03573590836921997,
+     "within_B_t": -0.9028398653059696,
+     "within_B_p_maxt": 0.7572427572427572,
+     "within_B_cos": -0.029609073497163813,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_perarm": {
+     "cross_cos_mean": 0.11691569555800149,
+     "cross_cos_ci": [
+      0.059046525605645536,
+      0.18205977430056994
+     ],
+     "cross_cos_p_signflip_neg": 0.9998000399920016,
+     "cross_cos_p_sceneperm_neg": 0.998001998001998,
+     "cross_cos_sceneperm_null_mean": 0.007744590915706045,
+     "cross_q_mean": 2.1134162926945282e-06,
+     "cross_q_t": 7.024230616452491e-05,
+     "cross_q_p_maxt": 0.5514485514485514,
+     "within_A_t": 1.5408815363124246,
+     "within_A_p_maxt": 0.16383616383616384,
+     "within_A_cos": 0.03590954942220402,
+     "within_B_t": -0.9020519354976226,
+     "within_B_p_maxt": 0.7572427572427572,
+     "within_B_cos": -0.02961966381710851,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "template": {
+     "insample_mean_dir_fraction": 0.972529413256316,
+     "insample_pc1_fraction": 0.97255554833415,
+     "I_over_template_median_A": 0.16358797830735916,
+     "I_over_template_median_B": 0.17436901753583114,
+     "asym_A": -0.005016981561141873,
+     "asym_B": 0.0005433453408884093,
+     "asym_pattern": false
+    },
+    "rank": {
+     "raw_hard_rank_all": 1,
+     "residual_shared_hard_rank_all": 15,
+     "raw_pc1_all": 0.97255554833415,
+     "residual_shared_pc1_all": 0.4118310176088112,
+     "I_hard_rank_A": 10,
+     "I_hard_rank_B": 10
+    }
+   },
+   {
+    "site_id": "L05.resid_post",
+    "n_scenes": 16,
+    "I": {
+     "cross_cos_mean": 0.12293604588374274,
+     "cross_cos_ci": [
+      0.06595546622778857,
+      0.1924476366109839
+     ],
+     "cross_cos_p_signflip_neg": 1.0,
+     "cross_cos_p_sceneperm_neg": 1.0,
+     "cross_cos_sceneperm_null_mean": 0.006518322973237659,
+     "cross_q_mean": -0.00015647281138455715,
+     "cross_q_t": -0.005155119124631086,
+     "cross_q_p_maxt": 0.5524475524475524,
+     "within_A_t": 1.1858414827791806,
+     "within_A_p_maxt": 0.23576423576423577,
+     "within_A_cos": 0.02847202906110389,
+     "within_B_t": -1.1508456996601073,
+     "within_B_p_maxt": 0.8011988011988012,
+     "within_B_cos": -0.04138331466463906,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_shared": {
+     "cross_cos_mean": 0.12555841358668107,
+     "cross_cos_ci": [
+      0.06669826892117607,
+      0.19807223557310621
+     ],
+     "cross_cos_p_signflip_neg": 0.9998000399920016,
+     "cross_cos_p_sceneperm_neg": 0.999000999000999,
+     "cross_cos_sceneperm_null_mean": 0.005338025801249243,
+     "cross_q_mean": -0.00039651634084138503,
+     "cross_q_t": -0.012862286868708054,
+     "cross_q_p_maxt": 0.5464535464535465,
+     "within_A_t": 1.139899235288502,
+     "within_A_p_maxt": 0.24375624375624375,
+     "within_A_cos": 0.027130808188510297,
+     "within_B_t": -1.0791228333297243,
+     "within_B_p_maxt": 0.7892107892107892,
+     "within_B_cos": -0.03843272899673443,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_perarm": {
+     "cross_cos_mean": 0.1254941455695986,
+     "cross_cos_ci": [
+      0.06674434036882403,
+      0.1980496151169614
+     ],
+     "cross_cos_p_signflip_neg": 0.9998000399920016,
+     "cross_cos_p_sceneperm_neg": 1.0,
+     "cross_cos_sceneperm_null_mean": 0.008406657197991158,
+     "cross_q_mean": -0.00023986435339581804,
+     "cross_q_t": -0.007778228470170278,
+     "cross_q_p_maxt": 0.5484515484515484,
+     "within_A_t": 1.1450645172713994,
+     "within_A_p_maxt": 0.24375624375624375,
+     "within_A_cos": 0.02728489075365199,
+     "within_B_t": -1.0778409003130658,
+     "within_B_p_maxt": 0.7892107892107892,
+     "within_B_cos": -0.038431857087930885,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "template": {
+     "insample_mean_dir_fraction": 0.9725220275631847,
+     "insample_pc1_fraction": 0.9725485219345853,
+     "I_over_template_median_A": 0.1618639181688226,
+     "I_over_template_median_B": 0.1714860143391697,
+     "asym_A": -0.0051965846010151836,
+     "asym_B": 0.0003703451823421607,
+     "asym_pattern": false
+    },
+    "rank": {
+     "raw_hard_rank_all": 1,
+     "residual_shared_hard_rank_all": 15,
+     "raw_pc1_all": 0.9725485219345853,
+     "residual_shared_pc1_all": 0.41317252977828517,
+     "I_hard_rank_A": 10,
+     "I_hard_rank_B": 10
+    }
+   }
+  ],
+  "hazard_corridor": [
+   {
+    "site_id": "L05.resid_post",
+    "n_scenes": 16,
+    "I": {
+     "cross_cos_mean": 0.16047975026147618,
+     "cross_cos_ci": [
+      0.09828676602450041,
+      0.24020577015047476
+     ],
+     "cross_cos_p_signflip_neg": 1.0,
+     "cross_cos_p_sceneperm_neg": 1.0,
+     "cross_cos_sceneperm_null_mean": 0.0023979577855739445,
+     "cross_q_mean": -0.02447215276298287,
+     "cross_q_t": -0.7781742326156839,
+     "cross_q_p_maxt": 0.35664335664335667,
+     "within_A_t": 0.7202740206440034,
+     "within_A_p_maxt": 0.33666333666333664,
+     "within_A_cos": 0.02080629216667583,
+     "within_B_t": -0.7706879548550831,
+     "within_B_p_maxt": 0.7522477522477522,
+     "within_B_cos": -0.032918185520585,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_shared": {
+     "cross_cos_mean": 0.16453098933610869,
+     "cross_cos_ci": [
+      0.10064986133843239,
+      0.2438947108337767
+     ],
+     "cross_cos_p_signflip_neg": 1.0,
+     "cross_cos_p_sceneperm_neg": 1.0,
+     "cross_cos_sceneperm_null_mean": 0.0013705718891660944,
+     "cross_q_mean": -0.024440922863234696,
+     "cross_q_t": -0.7785677858886557,
+     "cross_q_p_maxt": 0.36363636363636365,
+     "within_A_t": 0.7393213694878198,
+     "within_A_p_maxt": 0.33266733266733267,
+     "within_A_cos": 0.020899205176713037,
+     "within_B_t": -0.7331625776961007,
+     "within_B_p_maxt": 0.7442557442557443,
+     "within_B_cos": -0.03116729101451109,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_perarm": {
+     "cross_cos_mean": 0.1645233985427674,
+     "cross_cos_ci": [
+      0.10065610779178684,
+      0.24388320682735287
+     ],
+     "cross_cos_p_signflip_neg": 1.0,
+     "cross_cos_p_sceneperm_neg": 1.0,
+     "cross_cos_sceneperm_null_mean": 0.005325745373769728,
+     "cross_q_mean": -0.024330015508872656,
+     "cross_q_t": -0.7754772633149196,
+     "cross_q_p_maxt": 0.3646353646353646,
+     "within_A_t": 0.7400015497024053,
+     "within_A_p_maxt": 0.3306693306693307,
+     "within_A_cos": 0.02093613230567265,
+     "within_B_t": -0.7318926016661063,
+     "within_B_p_maxt": 0.7442557442557443,
+     "within_B_cos": -0.03111422014011904,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "template": {
+     "insample_mean_dir_fraction": 0.9758910668549721,
+     "insample_pc1_fraction": 0.975915600663453,
+     "I_over_template_median_A": 0.15643458375118258,
+     "I_over_template_median_B": 0.1641479538760936,
+     "asym_A": -0.0032181364458026577,
+     "asym_B": 0.0015865084718665228,
+     "asym_pattern": false
+    },
+    "rank": {
+     "raw_hard_rank_all": 1,
+     "residual_shared_hard_rank_all": 14,
+     "raw_pc1_all": 0.975915600663453,
+     "residual_shared_pc1_all": 0.4466276473197687,
+     "I_hard_rank_A": 10,
+     "I_hard_rank_B": 10
+    }
+   },
+   {
+    "site_id": "L03.mlp_out",
+    "n_scenes": 16,
+    "I": {
+     "cross_cos_mean": 0.1527799269100544,
+     "cross_cos_ci": [
+      0.09147583133488292,
+      0.22126045843570435
+     ],
+     "cross_cos_p_signflip_neg": 1.0,
+     "cross_cos_p_sceneperm_neg": 1.0,
+     "cross_cos_sceneperm_null_mean": 0.0025682826208746094,
+     "cross_q_mean": -0.020099154215311343,
+     "cross_q_t": -0.6287366905921141,
+     "cross_q_p_maxt": 0.3996003996003996,
+     "within_A_t": 0.8542845167491465,
+     "within_A_p_maxt": 0.3016983016983017,
+     "within_A_cos": 0.021883607018271675,
+     "within_B_t": -0.6322162808800579,
+     "within_B_p_maxt": 0.7122877122877123,
+     "within_B_cos": -0.02683595359104927,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_shared": {
+     "cross_cos_mean": 0.15684133734171207,
+     "cross_cos_ci": [
+      0.09557585973524974,
+      0.22575731141967673
+     ],
+     "cross_cos_p_signflip_neg": 1.0,
+     "cross_cos_p_sceneperm_neg": 1.0,
+     "cross_cos_sceneperm_null_mean": 0.0019179500059971653,
+     "cross_q_mean": -0.0201029921898358,
+     "cross_q_t": -0.6316549644191484,
+     "cross_q_p_maxt": 0.3986013986013986,
+     "within_A_t": 0.872544885576753,
+     "within_A_p_maxt": 0.2997002997002997,
+     "within_A_cos": 0.021681331555114938,
+     "within_B_t": -0.5986681267743278,
+     "within_B_p_maxt": 0.7022977022977023,
+     "within_B_cos": -0.025288896822815186,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "I_perp_perarm": {
+     "cross_cos_mean": 0.15685752437926548,
+     "cross_cos_ci": [
+      0.09566626146067073,
+      0.22574210343483767
+     ],
+     "cross_cos_p_signflip_neg": 1.0,
+     "cross_cos_p_sceneperm_neg": 1.0,
+     "cross_cos_sceneperm_null_mean": 0.0057310682031602314,
+     "cross_q_mean": -0.01996923197003851,
+     "cross_q_t": -0.6280076731234304,
+     "cross_q_p_maxt": 0.4005994005994006,
+     "within_A_t": 0.8755269055837431,
+     "within_A_p_maxt": 0.2987012987012987,
+     "within_A_cos": 0.021779268361655467,
+     "within_B_t": -0.5972157010260134,
+     "within_B_p_maxt": 0.7022977022977023,
+     "within_B_cos": -0.025233383591858206,
+     "detected": {
+      "within_A": false,
+      "within_B": false,
+      "anti_alignment": false,
+      "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+     }
+    },
+    "template": {
+     "insample_mean_dir_fraction": 0.9759940424969883,
+     "insample_pc1_fraction": 0.9760186228170686,
+     "I_over_template_median_A": 0.1555781399050015,
+     "I_over_template_median_B": 0.16109881305277107,
+     "asym_A": -0.0036428809263109752,
+     "asym_B": 0.0015055614365244137,
+     "asym_pattern": false
+    },
+    "rank": {
+     "raw_hard_rank_all": 1,
+     "residual_shared_hard_rank_all": 14,
+     "raw_pc1_all": 0.9760186228170686,
+     "residual_shared_pc1_all": 0.44815981624306045,
+     "I_hard_rank_A": 10,
+     "I_hard_rank_B": 10
+    }
+   }
+  ]
+ },
+ "summary": {
+  "corridor": {
+   "n_sites": 2,
+   "n_scenes": 16,
+   "variants": {
+    "I": {
+     "n_anti_alignment_detected": 0,
+     "n_within_A_detected": 0,
+     "n_within_B_detected": 0,
+     "cross_cos_mean_range": [
+      0.0626120808227783,
+      0.07883742885107498
+     ],
+     "sites_anti_aligned": []
+    },
+    "I_perp_shared": {
+     "n_anti_alignment_detected": 0,
+     "n_within_A_detected": 0,
+     "n_within_B_detected": 0,
+     "cross_cos_mean_range": [
+      0.06459306972547459,
+      0.07971394560451889
+     ],
+     "sites_anti_aligned": []
+    },
+    "I_perp_perarm": {
+     "n_anti_alignment_detected": 0,
+     "n_within_A_detected": 0,
+     "n_within_B_detected": 0,
+     "cross_cos_mean_range": [
+      0.06457241067012781,
+      0.07945948078547578
+     ],
+     "sites_anti_aligned": []
+    }
+   },
+   "template_insample_mean_dir_fraction_range": [
+    0.9374824969135699,
+    0.9382560328304878
+   ],
+   "I_over_template_median_A_range": [
+    0.24739236847776327,
+    0.24986106860702867
+   ],
+   "n_template_asymmetry_pattern": 0
+  },
+  "hazard": {
+   "n_sites": 2,
+   "n_scenes": 16,
+   "variants": {
+    "I": {
+     "n_anti_alignment_detected": 0,
+     "n_within_A_detected": 0,
+     "n_within_B_detected": 0,
+     "cross_cos_mean_range": [
+      0.11522639888991631,
+      0.12293604588374274
+     ],
+     "sites_anti_aligned": []
+    },
+    "I_perp_shared": {
+     "n_anti_alignment_detected": 0,
+     "n_within_A_detected": 0,
+     "n_within_B_detected": 0,
+     "cross_cos_mean_range": [
+      0.11696324462953103,
+      0.12555841358668107
+     ],
+     "sites_anti_aligned": []
+    },
+    "I_perp_perarm": {
+     "n_anti_alignment_detected": 0,
+     "n_within_A_detected": 0,
+     "n_within_B_detected": 0,
+     "cross_cos_mean_range": [
+      0.11691569555800149,
+      0.1254941455695986
+     ],
+     "sites_anti_aligned": []
+    }
+   },
+   "template_insample_mean_dir_fraction_range": [
+    0.9725220275631847,
+    0.972529413256316
+   ],
+   "I_over_template_median_A_range": [
+    0.1618639181688226,
+    0.16358797830735916
+   ],
+   "n_template_asymmetry_pattern": 0
+  },
+  "hazard_corridor": {
+   "n_sites": 2,
+   "n_scenes": 16,
+   "variants": {
+    "I": {
+     "n_anti_alignment_detected": 0,
+     "n_within_A_detected": 0,
+     "n_within_B_detected": 0,
+     "cross_cos_mean_range": [
+      0.1527799269100544,
+      0.16047975026147618
+     ],
+     "sites_anti_aligned": []
+    },
+    "I_perp_shared": {
+     "n_anti_alignment_detected": 0,
+     "n_within_A_detected": 0,
+     "n_within_B_detected": 0,
+     "cross_cos_mean_range": [
+      0.15684133734171207,
+      0.16453098933610869
+     ],
+     "sites_anti_aligned": []
+    },
+    "I_perp_perarm": {
+     "n_anti_alignment_detected": 0,
+     "n_within_A_detected": 0,
+     "n_within_B_detected": 0,
+     "cross_cos_mean_range": [
+      0.15685752437926548,
+      0.1645233985427674
+     ],
+     "sites_anti_aligned": []
+    }
+   },
+   "template_insample_mean_dir_fraction_range": [
+    0.9758910668549721,
+    0.9759940424969883
+   ],
+   "I_over_template_median_A_range": [
+    0.1555781399050015,
+    0.15643458375118258
+   ],
+   "n_template_asymmetry_pattern": 0
+  }
+ },
+ "entries": [
+  {
+   "site_id": "L03.mlp_out",
+   "step": 0,
+   "group": "corridor",
+   "scenes": [
+    "drive_seed000500",
+    "drive_seed000501",
+    "drive_seed000502",
+    "drive_seed000503",
+    "drive_seed000504",
+    "drive_seed000505",
+    "drive_seed000506",
+    "drive_seed000507",
+    "drive_seed000508",
+    "drive_seed000509",
+    "drive_seed000510",
+    "drive_seed000511",
+    "drive_seed000512",
+    "drive_seed000513",
+    "drive_seed000514",
+    "drive_seed000515"
+   ],
+   "analysis": {
+    "n_scenes": 16,
+    "d": 64,
+    "variants": {
+     "I": {
+      "within_A": {
+       "mean": 0.0010602565054304881,
+       "median": 0.011024625335034757,
+       "ci_low": -0.05936842618196724,
+       "ci_high": 0.06100356527776728,
+       "n": 16,
+       "sign_flip_p": 0.9736052789442111,
+       "t": 0.03326695277254473,
+       "mean_cosine_to_loso_mean": 0.001156154043773637,
+       "p_onesided_pos": 0.47490501899620075,
+       "p_raw_refit": 0.5094905094905094,
+       "p_maxt_fwer": 0.5534465534465535,
+       "t_family": 0.03326695277254473
+      },
+      "within_B": {
+       "mean": 0.0073940063132927605,
+       "median": 0.02844152651515644,
+       "ci_low": -0.050575704895341085,
+       "ci_high": 0.05419135205503965,
+       "n": 16,
+       "sign_flip_p": 0.7986402719456108,
+       "t": 0.26382760796373217,
+       "mean_cosine_to_loso_mean": 0.005580564603809987,
+       "p_onesided_pos": 0.41131773645270947,
+       "p_raw_refit": 0.41358641358641357,
+       "p_maxt_fwer": 0.46253746253746253,
+       "t_family": 0.26382760796373217
+      },
+      "cross_cosine": {
+       "mean": 0.0626120808227783,
+       "median": 0.055735054840467674,
+       "ci_low": -0.005997735996635079,
+       "ci_high": 0.13208707712186005,
+       "n": 16,
+       "sign_flip_p": 0.09978004399120176,
+       "t": 1.74607861279425,
+       "p_onesided_neg": 0.9522095580883824,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": -0.014883746695699617,
+        "null_sd": 0.031098729404578085,
+        "p_onesided_neg": 0.996003996003996,
+        "p_twosided": 0.008991008991008992,
+        "observed_minus_null_mean": 0.07749582751847792,
+        "shared_direction_alignment_offdiag_mean": -0.02061564026987502,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.07160332716822271,
+       "median": -0.0936604535574669,
+       "ci_low": -0.12540184546827016,
+       "ci_high": -0.019193238587301337,
+       "n": 16,
+       "sign_flip_p": 0.03459308138372325,
+       "t": -2.513213732880325,
+       "p_onesided_neg_naive": 0.016596680663867228,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.054945054945054944,
+       "p_maxt_fwer": 0.06493506493506493,
+       "t_neg_family": 2.513213732880325
+      },
+      "norm_A_median": 0.8566982795908471,
+      "norm_B_median": 0.8491434911605107,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_shared": {
+      "within_A": {
+       "mean": 0.0036743202669290223,
+       "median": 0.01095765104141285,
+       "ci_low": -0.05562669912116846,
+       "ci_high": 0.06452441232958106,
+       "n": 16,
+       "sign_flip_p": 0.9134173165366927,
+       "t": 0.11473479062938391,
+       "mean_cosine_to_loso_mean": 0.004580865973287655,
+       "p_onesided_pos": 0.4425114977004599,
+       "p_raw_refit": 0.48451548451548454,
+       "p_maxt_fwer": 0.5314685314685315,
+       "t_family": 0.11473479062938391
+      },
+      "within_B": {
+       "mean": 0.0051534877440067295,
+       "median": 0.0184885547945346,
+       "ci_low": -0.05342682864247659,
+       "ci_high": 0.05417312707412225,
+       "n": 16,
+       "sign_flip_p": 0.8628274345130974,
+       "t": 0.18041894634684555,
+       "mean_cosine_to_loso_mean": 0.002825066558138806,
+       "p_onesided_pos": 0.4423115376924615,
+       "p_raw_refit": 0.4305694305694306,
+       "p_maxt_fwer": 0.4805194805194805,
+       "t_family": 0.18041894634684555
+      },
+      "cross_cosine": {
+       "mean": 0.06459306972547459,
+       "median": 0.05069397779785642,
+       "ci_low": -0.0031948091431184154,
+       "ci_high": 0.1359340153391527,
+       "n": 16,
+       "sign_flip_p": 0.09538092381523695,
+       "t": 1.7744200119409128,
+       "p_onesided_neg": 0.9534093181363728,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": -0.017441959283354368,
+        "null_sd": 0.032577660488649726,
+        "p_onesided_neg": 0.994005994005994,
+        "p_twosided": 0.011988011988011988,
+        "observed_minus_null_mean": 0.08203502900882895,
+        "shared_direction_alignment_offdiag_mean": -0.02129552457130238,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.07452602497461511,
+       "median": -0.10074329634887057,
+       "ci_low": -0.1266098521227096,
+       "ci_high": -0.023249202199374888,
+       "n": 16,
+       "sign_flip_p": 0.026394721055788842,
+       "t": -2.6679976334735547,
+       "p_onesided_neg_naive": 0.011797640471905619,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.04095904095904096,
+       "p_maxt_fwer": 0.052947052947052944,
+       "t_neg_family": 2.6679976334735547
+      },
+      "norm_A_median": 0.8483543529861085,
+      "norm_B_median": 0.8480260742110188,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_perarm": {
+      "within_A": {
+       "mean": 0.003648966080304933,
+       "median": 0.010555018412214965,
+       "ci_low": -0.055463856442919214,
+       "ci_high": 0.06464624730230331,
+       "n": 16,
+       "sign_flip_p": 0.9140171965606879,
+       "t": 0.11374833058617292,
+       "mean_cosine_to_loso_mean": 0.004630964980913234,
+       "p_onesided_pos": 0.4427114577084583,
+       "p_raw_refit": 0.4835164835164835,
+       "p_maxt_fwer": 0.5324675324675324,
+       "t_family": 0.11374833058617292
+      },
+      "within_B": {
+       "mean": 0.004899453738887619,
+       "median": 0.018270542399941095,
+       "ci_low": -0.05362929702799008,
+       "ci_high": 0.05391973894172228,
+       "n": 16,
+       "sign_flip_p": 0.8704259148170366,
+       "t": 0.17117376127209308,
+       "mean_cosine_to_loso_mean": 0.002535151441881968,
+       "p_onesided_pos": 0.4465106978604279,
+       "p_raw_refit": 0.4325674325674326,
+       "p_maxt_fwer": 0.4825174825174825,
+       "t_family": 0.17117376127209308
+      },
+      "cross_cosine": {
+       "mean": 0.06457241067012781,
+       "median": 0.05114928336427141,
+       "ci_low": -0.0030415531769935945,
+       "ci_high": 0.13583634087552202,
+       "n": 16,
+       "sign_flip_p": 0.09458108378324336,
+       "t": 1.7774307453954086,
+       "p_onesided_neg": 0.9536092781443711,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": -0.014441115492230037,
+        "null_sd": 0.03404208603663426,
+        "p_onesided_neg": 0.991008991008991,
+        "p_twosided": 0.017982017982017984,
+        "observed_minus_null_mean": 0.07901352616235785,
+        "shared_direction_alignment_offdiag_mean": -0.021269684837180357,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.07443986866712261,
+       "median": -0.10055860127259192,
+       "ci_low": -0.12662290788120356,
+       "ci_high": -0.02317251391425934,
+       "n": 16,
+       "sign_flip_p": 0.026394721055788842,
+       "t": -2.6649408859951653,
+       "p_onesided_neg_naive": 0.011797640471905619,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.03996003996003996,
+       "p_maxt_fwer": 0.05194805194805195,
+       "t_neg_family": 2.6649408859951653
+      },
+      "norm_A_median": 0.8476970042412795,
+      "norm_B_median": 0.8483225031802308,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     }
+    },
+    "template": {
+     "definition": {
+      "shared": "LOSO mean over the other scenes of all four (arm x identity) DiD fields, arm B moved into arm A coordinates with the fold's hazard-free transport",
+      "perarm": "LOSO mean over the other scenes of the arm's two identity DiD fields (own coordinates)"
+     },
+     "identity_over_template": {
+      "shared": {
+       "A": {
+        "median": 0.24986106860702867,
+        "mean": 0.25558081771666863
+       },
+       "B": {
+        "median": 0.24715862858883225,
+        "mean": 0.2536115939868089
+       },
+       "A_perp": {
+        "median": 0.24806732035942228
+       },
+       "B_perp": {
+        "median": 0.24473077103750046
+       }
+      },
+      "perarm": {
+       "A": {
+        "median": 0.2495401813633838
+       },
+       "B": {
+        "median": 0.2468028386226967
+       }
+      },
+      "note": "||I_i|| / ||tau_{-i}|| per scene; I = DiD(ped) - DiD(cone); _perp = template direction projected off"
+     },
+     "residual_over_field_norm": {
+      "shared": {
+       "A_ped": 0.28848985163270635,
+       "A_cone": 0.28995181313757556,
+       "B_ped": 0.26885705214608935,
+       "B_cone": 0.27924002640069046
+      },
+      "perarm": {
+       "A_ped": 0.28706830454037946,
+       "A_cone": 0.2913062398146455,
+       "B_ped": 0.2692350767300488,
+       "B_cone": 0.2768528491444807
+      }
+     },
+     "residual_over_template_norm": {
+      "shared": {
+       "A_ped": 0.2986359707647164,
+       "A_cone": 0.28130061483548285,
+       "B_ped": 0.2819573104052936,
+       "B_cone": 0.2966549376390526
+      },
+      "perarm": {
+       "A_ped": 0.29674227678468246,
+       "A_cone": 0.2830616516959633,
+       "B_ped": 0.2826815226157905,
+       "B_cone": 0.3008827579589103
+      }
+     },
+     "heldout_energy_fraction_along_shared_template": {
+      "A_ped": 0.9290842672575401,
+      "B_ped": 0.9346755807228356,
+      "A_cone": 0.931359427335051,
+      "B_cone": 0.930931443822213
+     },
+     "insample": {
+      "mean_direction_fraction_all_fields": 0.9382560328304878,
+      "pc1_fraction_all_fields": 0.9382843980392267,
+      "mean_direction_fraction_per_field": {
+       "A_ped": 0.9362594059751858,
+       "A_cone": 0.9370637949027075,
+       "B_ped": 0.9411022519165996,
+       "B_cone": 0.9385943092878416
+      },
+      "template_norm_full": 3.4308209410779007
+     },
+     "template_amplitude": {
+      "shared": {
+       "A_ped": {
+        "mean": 1.001200751617524,
+        "median": 0.9820812873142826,
+        "ci_low": 0.9312167260198673,
+        "ci_high": 1.082598010313971,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 1.0042715593815166,
+        "median": 1.0112456332241095,
+        "ci_low": 0.9344720952863083,
+        "ci_high": 1.083882784959014,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 0.9975784675720595,
+        "median": 0.9618791690729456,
+        "ci_low": 0.932797839155094,
+        "ci_high": 1.0718044129930349,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 0.9945135779934962,
+        "median": 0.9947424009797741,
+        "ci_low": 0.9243805247622915,
+        "ci_high": 1.071639975249278,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      },
+      "perarm": {
+       "A_ped": {
+        "mean": 0.9996104395706502,
+        "median": 0.9804626539991079,
+        "ci_low": 0.9298840032188608,
+        "ci_high": 1.0805469534461691,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 1.002855431512924,
+        "median": 1.008941371376427,
+        "ci_low": 0.9325778765711752,
+        "ci_high": 1.0820544983834497,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 0.9957534318721557,
+        "median": 0.9615775610692496,
+        "ci_low": 0.9313008065537492,
+        "ci_high": 1.0697008999029298,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 0.9931083754738294,
+        "median": 0.9966371049549593,
+        "ci_low": 0.9232147666200416,
+        "ci_high": 1.0701903575771627,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      }
+     },
+     "template_amplitude_asymmetry": {
+      "shared": {
+       "A_ped_minus_cone": {
+        "mean": 0.003622284045464648,
+        "median": 0.0015282055249106995,
+        "ci_low": -0.010201111077603159,
+        "ci_high": 0.018087763284251414,
+        "n": 16,
+        "sign_flip_p": 0.6524695060987803
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.009757981388020464,
+        "median": 0.007232018343405362,
+        "ci_low": -0.0021588004466471084,
+        "ci_high": 0.02137349347784695,
+        "n": 16,
+        "sign_flip_p": 0.1803639272145571
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      },
+      "perarm": {
+       "A_ped_minus_cone": {
+        "mean": 0.003857007698494454,
+        "median": 0.0022076309032613966,
+        "ci_low": -0.010062443547331901,
+        "ci_high": 0.018652352739808878,
+        "n": 16,
+        "sign_flip_p": 0.6390721855628875
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.009747056039094265,
+        "median": 0.007897747891877731,
+        "ci_low": -0.001499131718369168,
+        "ci_high": 0.021282482039876455,
+        "n": 16,
+        "sign_flip_p": 0.16676664667066587
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      }
+     },
+     "template_norm_loso_median": {
+      "shared": 3.4346232140738713,
+      "A": 3.4412152194332872,
+      "B": 3.433994761123879
+     },
+     "h0prime_did_cosine_to_template": {
+      "A": {
+       "mean": 0.22411105440584217,
+       "median": 0.22128186270896127,
+       "ci_low": 0.1948409778529107,
+       "ci_high": 0.25949949480987045,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "B": {
+       "mean": 0.2289381943586875,
+       "median": 0.22287177199407648,
+       "ci_low": 0.19917704643900833,
+       "ci_high": 0.26320278608063713,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "note": "DiD of the level-2 mirror-pose (off-lane) cells against the shared template; ~0 if the template is in-lane x action"
+     }
+    },
+    "rank": {
+     "raw": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.9393044854344687,
+       "hard_rank": 1,
+       "quota": 0.025720930208317824,
+       "effective_dims": 1.6461395333323408,
+       "alpha": 0.24855088629409353
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9397002797823041,
+       "hard_rank": 1,
+       "quota": 0.025611344388976276,
+       "effective_dims": 1.6391260408944817,
+       "alpha": 0.2493756568705231
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.9440679591602723,
+       "hard_rank": 1,
+       "quota": 0.024515869936443564,
+       "effective_dims": 1.569015675932388,
+       "alpha": 0.2441323532779443
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9413578343744261,
+       "hard_rank": 1,
+       "quota": 0.02520552491655796,
+       "effective_dims": 1.6131535946597095,
+       "alpha": 0.24849308374471205
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.9382843980392267,
+       "hard_rank": 1,
+       "quota": 0.02644153966469104,
+       "effective_dims": 1.6922585385402265,
+       "alpha": 0.12528925764717347
+      }
+     },
+     "residual_shared": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.2691825056517534,
+       "hard_rank": 9,
+       "quota": 0.20774999029295235,
+       "effective_dims": 13.29599937874895,
+       "alpha": 2.704491704172207
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.2519605913151973,
+       "hard_rank": 9,
+       "quota": 0.20886931512019907,
+       "effective_dims": 13.36763616769274,
+       "alpha": 2.7700336896381716
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.2663095844904249,
+       "hard_rank": 9,
+       "quota": 0.209050508430819,
+       "effective_dims": 13.379232539572415,
+       "alpha": 2.8240520508122864
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.28872832568012957,
+       "hard_rank": 9,
+       "quota": 0.20793460593848068,
+       "effective_dims": 13.307814780062763,
+       "alpha": 2.756658431033284
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.23744274190776338,
+       "hard_rank": 19,
+       "quota": 0.5765898325372941,
+       "effective_dims": 36.901749282386824,
+       "alpha": 2.239132424602493
+      }
+     },
+     "residual_perarm": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.2764528558377281,
+       "hard_rank": 9,
+       "quota": 0.2040653206247506,
+       "effective_dims": 13.060180519984039,
+       "alpha": 2.710351144374832
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.25729826715035076,
+       "hard_rank": 9,
+       "quota": 0.20581991195277977,
+       "effective_dims": 13.172474364977905,
+       "alpha": 2.773646907256937
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.2732633911354639,
+       "hard_rank": 9,
+       "quota": 0.20451865634954805,
+       "effective_dims": 13.089194006371075,
+       "alpha": 2.8245842783689334
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.2953819069002484,
+       "hard_rank": 9,
+       "quota": 0.20456447370565797,
+       "effective_dims": 13.09212631716211,
+       "alpha": 2.760716021338301
+      }
+     },
+     "identity_contrast": {
+      "A": {
+       "n": 16,
+       "pc1_fraction": 0.13868355594101572,
+       "hard_rank": 10,
+       "quota": 0.21485062312483313,
+       "effective_dims": 13.75043987998932,
+       "alpha": 3.2145360685699105
+      },
+      "B": {
+       "n": 16,
+       "pc1_fraction": 0.13873718327880025,
+       "hard_rank": 10,
+       "quota": 0.21493010708928867,
+       "effective_dims": 13.755526853714475,
+       "alpha": 3.2383394373875416
+      },
+      "A_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.1381726966924083,
+       "hard_rank": 10,
+       "quota": 0.2148656320210356,
+       "effective_dims": 13.751400449346278,
+       "alpha": 3.2381664885754415
+      },
+      "B_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.13966276871113156,
+       "hard_rank": 10,
+       "quota": 0.21480380249174114,
+       "effective_dims": 13.747443359471433,
+       "alpha": 3.2566444168043414
+      }
+     },
+     "note": "uncentred spectrum of the per-scene rows; hard_rank = singular directions for 80 % energy; quota = conceptor tr(C)/d at 80 % retained energy (geometry_cross_arm.quota_for_capture); in-sample"
+    }
+   },
+   "status": "ok"
+  },
+  {
+   "site_id": "L03.mlp_out",
+   "step": 0,
+   "group": "hazard",
+   "scenes": [
+    "drive_seed000500",
+    "drive_seed000501",
+    "drive_seed000502",
+    "drive_seed000503",
+    "drive_seed000504",
+    "drive_seed000505",
+    "drive_seed000506",
+    "drive_seed000507",
+    "drive_seed000508",
+    "drive_seed000509",
+    "drive_seed000510",
+    "drive_seed000511",
+    "drive_seed000512",
+    "drive_seed000513",
+    "drive_seed000514",
+    "drive_seed000515"
+   ],
+   "analysis": {
+    "n_scenes": 16,
+    "d": 64,
+    "variants": {
+     "I": {
+      "within_A": {
+       "mean": 0.023345172576162764,
+       "median": 0.004933373122030096,
+       "ci_low": -0.0019265646072318774,
+       "ci_high": 0.05335578915104043,
+       "n": 16,
+       "sign_flip_p": 0.13697260547890422,
+       "t": 1.5478928162633177,
+       "mean_cosine_to_loso_mean": 0.03656313023646178,
+       "p_onesided_pos": 0.0661867626474705,
+       "p_raw_refit": 0.15384615384615385,
+       "p_maxt_fwer": 0.16683316683316685,
+       "t_family": 1.5478928162633177
+      },
+      "within_B": {
+       "mean": -0.02235374925052313,
+       "median": -0.007762935081407337,
+       "ci_low": -0.06782494612717199,
+       "ci_high": 0.020713671969696444,
+       "n": 16,
+       "sign_flip_p": 0.3753249350129974,
+       "t": -0.969000579827761,
+       "mean_cosine_to_loso_mean": -0.032179598479494684,
+       "p_onesided_pos": 0.8106378724255149,
+       "p_raw_refit": 0.7362637362637363,
+       "p_maxt_fwer": 0.7682317682317682,
+       "t_family": -0.969000579827761
+      },
+      "cross_cosine": {
+       "mean": 0.11522639888991631,
+       "median": 0.09401638334333774,
+       "ci_low": 0.06042048524861133,
+       "ci_high": 0.17737319440380775,
+       "n": 16,
+       "sign_flip_p": 0.0011997600479904018,
+       "t": 3.624953274494807,
+       "p_onesided_neg": 0.9998000399920016,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.005588631578439569,
+        "null_sd": 0.03943931629503025,
+        "p_onesided_neg": 0.999000999000999,
+        "p_twosided": 0.006993006993006993,
+        "observed_minus_null_mean": 0.10963776731147674,
+        "shared_direction_alignment_offdiag_mean": -0.0011579560671133211,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.0001749894261853348,
+       "median": 0.010395172274058853,
+       "ci_low": -0.05599799249868778,
+       "ci_high": 0.04950862717732219,
+       "n": 16,
+       "sign_flip_p": 0.9954009198160368,
+       "t": -0.0058925589010834206,
+       "p_onesided_neg_naive": 0.4973005398920216,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.5134865134865135,
+       "p_maxt_fwer": 0.5514485514485514,
+       "t_neg_family": 0.0058925589010834206
+      },
+      "norm_A_median": 0.5630929044267843,
+      "norm_B_median": 0.5927772122782493,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_shared": {
+      "within_A": {
+       "mean": 0.0227331253596523,
+       "median": 0.005815529407214983,
+       "ci_low": -0.002273952459991276,
+       "ci_high": 0.05177935320362428,
+       "n": 16,
+       "sign_flip_p": 0.14077184563087383,
+       "t": 1.5350493960424088,
+       "mean_cosine_to_loso_mean": 0.03573590836921997,
+       "p_onesided_pos": 0.06778644271145771,
+       "p_raw_refit": 0.14885114885114886,
+       "p_maxt_fwer": 0.16483516483516483,
+       "t_family": 1.5350493960424088
+      },
+      "within_B": {
+       "mean": -0.02074475002944199,
+       "median": -0.007452653549875659,
+       "ci_low": -0.06601652579789578,
+       "ci_high": 0.021955303665843168,
+       "n": 16,
+       "sign_flip_p": 0.40771845630873826,
+       "t": -0.9028398653059696,
+       "mean_cosine_to_loso_mean": -0.029609073497163813,
+       "p_onesided_pos": 0.7948410317936413,
+       "p_raw_refit": 0.7292707292707292,
+       "p_maxt_fwer": 0.7572427572427572,
+       "t_family": -0.9028398653059696
+      },
+      "cross_cosine": {
+       "mean": 0.11696324462953103,
+       "median": 0.10528448884333313,
+       "ci_low": 0.05906005106049373,
+       "ci_high": 0.1820149034447881,
+       "n": 16,
+       "sign_flip_p": 0.001799640071985603,
+       "t": 3.522161847631381,
+       "p_onesided_neg": 0.9998000399920016,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.004542873194757334,
+        "null_sd": 0.04076178686494417,
+        "p_onesided_neg": 0.999000999000999,
+        "p_twosided": 0.003996003996003996,
+        "observed_minus_null_mean": 0.1124203714347737,
+        "shared_direction_alignment_offdiag_mean": -0.0012224133479473852,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.00015713095061713287,
+       "median": 0.010205599355781445,
+       "ci_low": -0.05674180377650903,
+       "ci_high": 0.04917965347880788,
+       "n": 16,
+       "sign_flip_p": 0.9958008398320336,
+       "t": -0.005222309703150241,
+       "p_onesided_neg_naive": 0.4977004599080184,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.5084915084915085,
+       "p_maxt_fwer": 0.5494505494505495,
+       "t_neg_family": 0.005222309703150241
+      },
+      "norm_A_median": 0.5598487250893911,
+      "norm_B_median": 0.5894071644086702,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_perarm": {
+      "within_A": {
+       "mean": 0.022831718276938254,
+       "median": 0.005963088137176975,
+       "ci_low": -0.002143815853146579,
+       "ci_high": 0.051901528346405205,
+       "n": 16,
+       "sign_flip_p": 0.13937212557488501,
+       "t": 1.5408815363124246,
+       "mean_cosine_to_loso_mean": 0.03590954942220402,
+       "p_onesided_pos": 0.06778644271145771,
+       "p_raw_refit": 0.14685314685314685,
+       "p_maxt_fwer": 0.16383616383616384,
+       "t_family": 1.5408815363124246
+      },
+      "within_B": {
+       "mean": -0.02074527242902913,
+       "median": -0.00732867641450759,
+       "ci_low": -0.06613031564185762,
+       "ci_high": 0.021998935904003307,
+       "n": 16,
+       "sign_flip_p": 0.40751849630073983,
+       "t": -0.9020519354976226,
+       "mean_cosine_to_loso_mean": -0.02961966381710851,
+       "p_onesided_pos": 0.7950409918016397,
+       "p_raw_refit": 0.7292707292707292,
+       "p_maxt_fwer": 0.7572427572427572,
+       "t_family": -0.9020519354976226
+      },
+      "cross_cosine": {
+       "mean": 0.11691569555800149,
+       "median": 0.10515315430203342,
+       "ci_low": 0.059046525605645536,
+       "ci_high": 0.18205977430056994,
+       "n": 16,
+       "sign_flip_p": 0.001799640071985603,
+       "t": 3.520605754025255,
+       "p_onesided_neg": 0.9998000399920016,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.007744590915706045,
+        "null_sd": 0.04016383446967659,
+        "p_onesided_neg": 0.998001998001998,
+        "p_twosided": 0.006993006993006993,
+        "observed_minus_null_mean": 0.10917110464229544,
+        "shared_direction_alignment_offdiag_mean": -0.0011846860079878585,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": 2.1134162926945282e-06,
+       "median": 0.010385460002879258,
+       "ci_low": -0.05659476054130104,
+       "ci_high": 0.049297957314514265,
+       "n": 16,
+       "sign_flip_p": 0.9998000399920016,
+       "t": 7.024230616452491e-05,
+       "p_onesided_neg_naive": 0.500499900019996,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.5114885114885115,
+       "p_maxt_fwer": 0.5514485514485514,
+       "t_neg_family": -7.024230616452491e-05
+      },
+      "norm_A_median": 0.559763174986899,
+      "norm_B_median": 0.5893416816609085,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     }
+    },
+    "template": {
+     "definition": {
+      "shared": "LOSO mean over the other scenes of all four (arm x identity) DiD fields, arm B moved into arm A coordinates with the fold's hazard-free transport",
+      "perarm": "LOSO mean over the other scenes of the arm's two identity DiD fields (own coordinates)"
+     },
+     "identity_over_template": {
+      "shared": {
+       "A": {
+        "median": 0.16358797830735916,
+        "mean": 0.16414112153796517
+       },
+       "B": {
+        "median": 0.17436901753583114,
+        "mean": 0.17071564714707682
+       },
+       "A_perp": {
+        "median": 0.16280833068701628
+       },
+       "B_perp": {
+        "median": 0.17339560968906753
+       }
+      },
+      "perarm": {
+       "A": {
+        "median": 0.16381081910892092
+       },
+       "B": {
+        "median": 0.1738789087654616
+       }
+      },
+      "note": "||I_i|| / ||tau_{-i}|| per scene; I = DiD(ped) - DiD(cone); _perp = template direction projected off"
+     },
+     "residual_over_field_norm": {
+      "shared": {
+       "A_ped": 0.19943332659753854,
+       "A_cone": 0.20155417993100727,
+       "B_ped": 0.18711441963066838,
+       "B_cone": 0.20273592299275978
+      },
+      "perarm": {
+       "A_ped": 0.19782221899270752,
+       "A_cone": 0.20537626895863687,
+       "B_ped": 0.19285511893762547,
+       "B_cone": 0.2069488971241671
+      }
+     },
+     "residual_over_template_norm": {
+      "shared": {
+       "A_ped": 0.18651841587846768,
+       "A_cone": 0.19428778863221546,
+       "B_ped": 0.1822231526276632,
+       "B_cone": 0.18880547166781936
+      },
+      "perarm": {
+       "A_ped": 0.18704603116043805,
+       "A_cone": 0.19660681898738386,
+       "B_ped": 0.18192448620225415,
+       "B_cone": 0.19232098410481344
+      }
+     },
+     "heldout_energy_fraction_along_shared_template": {
+      "A_ped": 0.9692460024791553,
+      "B_ped": 0.9711762132515704,
+      "A_cone": 0.9691090032421594,
+      "B_cone": 0.9682550326840924
+     },
+     "insample": {
+      "mean_direction_fraction_all_fields": 0.972529413256316,
+      "pc1_fraction_all_fields": 0.97255554833415,
+      "mean_direction_fraction_per_field": {
+       "A_ped": 0.971888879529464,
+       "A_cone": 0.9720656219935865,
+       "B_ped": 0.9745065114788267,
+       "B_cone": 0.971652339831232
+      },
+      "template_norm_full": 3.432160223781809
+     },
+     "template_amplitude": {
+      "shared": {
+       "A_ped": {
+        "mean": 0.9957808923811527,
+        "median": 0.977778314537223,
+        "ci_low": 0.9329318266362573,
+        "ci_high": 1.067008363237326,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 1.0026055947206105,
+        "median": 0.9736309304414568,
+        "ci_low": 0.9332374807092985,
+        "ci_high": 1.0814787398641375,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 1.000797873942295,
+        "median": 0.9785878766128759,
+        "ci_low": 0.9365455687508426,
+        "ci_high": 1.0764075350515911,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 1.002062249379722,
+        "median": 0.9664132669012637,
+        "ci_low": 0.9333826403203418,
+        "ci_high": 1.0794390583872848,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      },
+      "perarm": {
+       "A_ped": {
+        "mean": 0.9972293042615176,
+        "median": 0.980326803703363,
+        "ci_low": 0.934307713198462,
+        "ci_high": 1.0684617232094207,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 0.9999193263014547,
+        "median": 0.9701782856379514,
+        "ci_low": 0.9309474600878138,
+        "ci_high": 1.0782825151262618,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 1.0021025852549832,
+        "median": 0.9808771152336119,
+        "ci_low": 0.937714583045944,
+        "ci_high": 1.0777542094179107,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 0.9995752764797486,
+        "median": 0.9636550754718012,
+        "ci_low": 0.9310468898319009,
+        "ci_high": 1.0765485034895494,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      }
+     },
+     "template_amplitude_asymmetry": {
+      "shared": {
+       "A_ped_minus_cone": {
+        "mean": -0.005016981561141873,
+        "median": -0.0056572657736813255,
+        "ci_low": -0.010811028823271913,
+        "ci_high": 0.002498416061592307,
+        "n": 16,
+        "sign_flip_p": 0.23295340931813638
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.0005433453408884093,
+        "median": 0.0023603765590933315,
+        "ci_low": -0.007780154999206674,
+        "ci_high": 0.007933039280009364,
+        "n": 16,
+        "sign_flip_p": 0.8948210357928414
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      },
+      "perarm": {
+       "A_ped_minus_cone": {
+        "mean": -0.00487328099346559,
+        "median": -0.005372242095868079,
+        "ci_low": -0.01062021747834758,
+        "ci_high": 0.002621872301847506,
+        "n": 16,
+        "sign_flip_p": 0.2439512097580484
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.00034404982170608027,
+        "median": 0.0014755879762728874,
+        "ci_low": -0.007842144449360652,
+        "ci_high": 0.007522963000634036,
+        "n": 16,
+        "sign_flip_p": 0.9332133573285343
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      }
+     },
+     "template_norm_loso_median": {
+      "shared": 3.4386978928268643,
+      "A": 3.4307221081747787,
+      "B": 3.4468497026532856
+     },
+     "h0prime_did_cosine_to_template": {
+      "A": {
+       "mean": 0.2605850418466041,
+       "median": 0.2532762379181588,
+       "ci_low": 0.2354891609112848,
+       "ci_high": 0.2838304272021298,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "B": {
+       "mean": 0.25553894292605167,
+       "median": 0.2578280092024419,
+       "ci_low": 0.23196567112408423,
+       "ci_high": 0.2775450567113556,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "note": "DiD of the level-2 mirror-pose (off-lane) cells against the shared template; ~0 if the template is in-lane x action"
+     }
+    },
+    "rank": {
+     "raw": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.9731056554040012,
+       "hard_rank": 1,
+       "quota": 0.018253117120626255,
+       "effective_dims": 1.1681994957200803,
+       "alpha": 0.2260602997355834
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.972946556978877,
+       "hard_rank": 1,
+       "quota": 0.018278650063398096,
+       "effective_dims": 1.1698336040574782,
+       "alpha": 0.22496231660133587
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.9751666926100033,
+       "hard_rank": 1,
+       "quota": 0.017889609851114777,
+       "effective_dims": 1.1449350304713457,
+       "alpha": 0.2233673692275489
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9726142551394849,
+       "hard_rank": 1,
+       "quota": 0.018345809720736204,
+       "effective_dims": 1.174131822127117,
+       "alpha": 0.2249155627505123
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.97255554833415,
+       "hard_rank": 1,
+       "quota": 0.018409774129705046,
+       "effective_dims": 1.178225544301123,
+       "alpha": 0.11274782537992216
+      }
+     },
+     "residual_shared": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.4310252459666478,
+       "hard_rank": 8,
+       "quota": 0.1948644913258433,
+       "effective_dims": 12.471327444853971,
+       "alpha": 3.603259171087108
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.4444395663046428,
+       "hard_rank": 7,
+       "quota": 0.1877810243632796,
+       "effective_dims": 12.017985559249894,
+       "alpha": 3.471797900682564
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.4307104711151285,
+       "hard_rank": 7,
+       "quota": 0.19297672984906328,
+       "effective_dims": 12.35051071034005,
+       "alpha": 3.6794607049285766
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.42280028427314875,
+       "hard_rank": 7,
+       "quota": 0.19224343880730332,
+       "effective_dims": 12.303580083667413,
+       "alpha": 3.5203639366962842
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.4118310176088112,
+       "hard_rank": 15,
+       "quota": 0.5011780854860582,
+       "effective_dims": 32.07539747110773,
+       "alpha": 2.8062705965958847
+      }
+     },
+     "residual_perarm": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.43729064136144774,
+       "hard_rank": 7,
+       "quota": 0.1922034403846462,
+       "effective_dims": 12.301020184617357,
+       "alpha": 3.597952899193156
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.4477469845983909,
+       "hard_rank": 7,
+       "quota": 0.18594282100802118,
+       "effective_dims": 11.900340544513355,
+       "alpha": 3.4641048852375014
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.43400504454342237,
+       "hard_rank": 7,
+       "quota": 0.19016499334899675,
+       "effective_dims": 12.170559574335792,
+       "alpha": 3.662100322584711
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.428989044634538,
+       "hard_rank": 7,
+       "quota": 0.18746849563896512,
+       "effective_dims": 11.997983720893767,
+       "alpha": 3.4942160510727347
+      }
+     },
+     "identity_contrast": {
+      "A": {
+       "n": 16,
+       "pc1_fraction": 0.13990829770066507,
+       "hard_rank": 10,
+       "quota": 0.2153665607874383,
+       "effective_dims": 13.78345989039605,
+       "alpha": 4.994078786539994
+      },
+      "B": {
+       "n": 16,
+       "pc1_fraction": 0.18837544514974752,
+       "hard_rank": 10,
+       "quota": 0.21225185388732487,
+       "effective_dims": 13.584118648788792,
+       "alpha": 4.758186285072096
+      },
+      "A_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.14124467908891442,
+       "hard_rank": 10,
+       "quota": 0.21530610491359176,
+       "effective_dims": 13.779590714469872,
+       "alpha": 5.016872076460126
+      },
+      "B_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.18705080534527707,
+       "hard_rank": 10,
+       "quota": 0.2122775206558935,
+       "effective_dims": 13.585761321977184,
+       "alpha": 4.783006330326512
+      }
+     },
+     "note": "uncentred spectrum of the per-scene rows; hard_rank = singular directions for 80 % energy; quota = conceptor tr(C)/d at 80 % retained energy (geometry_cross_arm.quota_for_capture); in-sample"
+    }
+   },
+   "status": "ok"
+  },
+  {
+   "site_id": "L03.mlp_out",
+   "step": 0,
+   "group": "hazard_corridor",
+   "scenes": [
+    "drive_seed000500",
+    "drive_seed000501",
+    "drive_seed000502",
+    "drive_seed000503",
+    "drive_seed000504",
+    "drive_seed000505",
+    "drive_seed000506",
+    "drive_seed000507",
+    "drive_seed000508",
+    "drive_seed000509",
+    "drive_seed000510",
+    "drive_seed000511",
+    "drive_seed000512",
+    "drive_seed000513",
+    "drive_seed000514",
+    "drive_seed000515"
+   ],
+   "analysis": {
+    "n_scenes": 16,
+    "d": 64,
+    "variants": {
+     "I": {
+      "within_A": {
+       "mean": 0.01316485131660592,
+       "median": -0.0077762688262976104,
+       "ci_low": -0.012293162483241506,
+       "ci_high": 0.041209451771561115,
+       "n": 16,
+       "sign_flip_p": 0.40471905618876225,
+       "t": 0.8542845167491465,
+       "mean_cosine_to_loso_mean": 0.021883607018271675,
+       "p_onesided_pos": 0.19456108778244352,
+       "p_raw_refit": 0.27372627372627373,
+       "p_maxt_fwer": 0.3016983016983017,
+       "t_family": 0.8542845167491465
+      },
+      "within_B": {
+       "mean": -0.015501733135950033,
+       "median": -0.02026486894323521,
+       "ci_low": -0.0710112223660912,
+       "ci_high": 0.02901178906809825,
+       "n": 16,
+       "sign_flip_p": 0.5438912217556489,
+       "t": -0.6322162808800579,
+       "mean_cosine_to_loso_mean": -0.02683595359104927,
+       "p_onesided_pos": 0.73125374925015,
+       "p_raw_refit": 0.6783216783216783,
+       "p_maxt_fwer": 0.7122877122877123,
+       "t_family": -0.6322162808800579
+      },
+      "cross_cosine": {
+       "mean": 0.1527799269100544,
+       "median": 0.13196353476810702,
+       "ci_low": 0.09147583133488292,
+       "ci_high": 0.22126045843570435,
+       "n": 16,
+       "sign_flip_p": 0.0003999200159968006,
+       "t": 4.331981317977529,
+       "p_onesided_neg": 1.0,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.0025682826208746094,
+        "null_sd": 0.041338020445016194,
+        "p_onesided_neg": 1.0,
+        "p_twosided": 0.000999000999000999,
+        "observed_minus_null_mean": 0.1502116442891798,
+        "shared_direction_alignment_offdiag_mean": -0.006278952785950887,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.020099154215311343,
+       "median": 0.027822069969384324,
+       "ci_low": -0.07546927726011181,
+       "ci_high": 0.038156619609712936,
+       "n": 16,
+       "sign_flip_p": 0.5352929414117177,
+       "t": -0.6287366905921141,
+       "p_onesided_neg_naive": 0.265746850629874,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.36663336663336665,
+       "p_maxt_fwer": 0.3996003996003996,
+       "t_neg_family": 0.6287366905921141
+      },
+      "norm_A_median": 0.535099487712559,
+      "norm_B_median": 0.549429877093584,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_shared": {
+      "within_A": {
+       "mean": 0.01317593828041978,
+       "median": -0.007184700001134704,
+       "ci_low": -0.011993334262085736,
+       "ci_high": 0.0409453668767425,
+       "n": 16,
+       "sign_flip_p": 0.39212157568486306,
+       "t": 0.872544885576753,
+       "mean_cosine_to_loso_mean": 0.021681331555114938,
+       "p_onesided_pos": 0.19196160767846432,
+       "p_raw_refit": 0.26573426573426573,
+       "p_maxt_fwer": 0.2997002997002997,
+       "t_family": 0.872544885576753
+      },
+      "within_B": {
+       "mean": -0.01463564304806668,
+       "median": -0.018495493314886553,
+       "ci_low": -0.07018759765415264,
+       "ci_high": 0.02951279585000499,
+       "n": 16,
+       "sign_flip_p": 0.5598880223955209,
+       "t": -0.5986681267743278,
+       "mean_cosine_to_loso_mean": -0.025288896822815186,
+       "p_onesided_pos": 0.7224555088982204,
+       "p_raw_refit": 0.6713286713286714,
+       "p_maxt_fwer": 0.7022977022977023,
+       "t_family": -0.5986681267743278
+      },
+      "cross_cosine": {
+       "mean": 0.15684133734171207,
+       "median": 0.13241248673777523,
+       "ci_low": 0.09557585973524974,
+       "ci_high": 0.22575731141967673,
+       "n": 16,
+       "sign_flip_p": 0.0003999200159968006,
+       "t": 4.383044924781568,
+       "p_onesided_neg": 1.0,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.0019179500059971653,
+        "null_sd": 0.0430360466389438,
+        "p_onesided_neg": 1.0,
+        "p_twosided": 0.000999000999000999,
+        "observed_minus_null_mean": 0.1549233873357149,
+        "shared_direction_alignment_offdiag_mean": -0.0063404337328714306,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.0201029921898358,
+       "median": 0.028961917107771296,
+       "ci_low": -0.0763690893577255,
+       "ci_high": 0.0389864386448995,
+       "n": 16,
+       "sign_flip_p": 0.5328934213157368,
+       "t": -0.6316549644191484,
+       "p_onesided_neg_naive": 0.26494701059788045,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.37162837162837165,
+       "p_maxt_fwer": 0.3986013986013986,
+       "t_neg_family": 0.6316549644191484
+      },
+      "norm_A_median": 0.5344756303543908,
+      "norm_B_median": 0.5464881268232521,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_perarm": {
+      "within_A": {
+       "mean": 0.013225836962220142,
+       "median": -0.0071372187635902855,
+       "ci_low": -0.011903896706762339,
+       "ci_high": 0.041004543384567896,
+       "n": 16,
+       "sign_flip_p": 0.39012197560487905,
+       "t": 0.8755269055837431,
+       "mean_cosine_to_loso_mean": 0.021779268361655467,
+       "p_onesided_pos": 0.1907618476304739,
+       "p_raw_refit": 0.26573426573426573,
+       "p_maxt_fwer": 0.2987012987012987,
+       "t_family": 0.8755269055837431
+      },
+      "within_B": {
+       "mean": -0.014606617677893334,
+       "median": -0.0186032782394083,
+       "ci_low": -0.07018092303355011,
+       "ci_high": 0.02956129941367805,
+       "n": 16,
+       "sign_flip_p": 0.5614877024595081,
+       "t": -0.5972157010260134,
+       "mean_cosine_to_loso_mean": -0.025233383591858206,
+       "p_onesided_pos": 0.7214557088582284,
+       "p_raw_refit": 0.6713286713286714,
+       "p_maxt_fwer": 0.7022977022977023,
+       "t_family": -0.5972157010260134
+      },
+      "cross_cosine": {
+       "mean": 0.15685752437926548,
+       "median": 0.13231330666591296,
+       "ci_low": 0.09566626146067073,
+       "ci_high": 0.22574210343483767,
+       "n": 16,
+       "sign_flip_p": 0.0003999200159968006,
+       "t": 4.385224208225105,
+       "p_onesided_neg": 1.0,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.0057310682031602314,
+        "null_sd": 0.04203923073870227,
+        "p_onesided_neg": 1.0,
+        "p_twosided": 0.000999000999000999,
+        "observed_minus_null_mean": 0.15112645617610523,
+        "shared_direction_alignment_offdiag_mean": -0.006307230713485604,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.01996923197003851,
+       "median": 0.028828729576185638,
+       "ci_low": -0.076237202999079,
+       "ci_high": 0.03912927227558353,
+       "n": 16,
+       "sign_flip_p": 0.5340931813637273,
+       "t": -0.6280076731234304,
+       "p_onesided_neg_naive": 0.265746850629874,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.3776223776223776,
+       "p_maxt_fwer": 0.4005994005994006,
+       "t_neg_family": 0.6280076731234304
+      },
+      "norm_A_median": 0.5344820592226536,
+      "norm_B_median": 0.54647148276737,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     }
+    },
+    "template": {
+     "definition": {
+      "shared": "LOSO mean over the other scenes of all four (arm x identity) DiD fields, arm B moved into arm A coordinates with the fold's hazard-free transport",
+      "perarm": "LOSO mean over the other scenes of the arm's two identity DiD fields (own coordinates)"
+     },
+     "identity_over_template": {
+      "shared": {
+       "A": {
+        "median": 0.1555781399050015,
+        "mean": 0.15304824617884583
+       },
+       "B": {
+        "median": 0.16109881305277107,
+        "mean": 0.1592692248447722
+       },
+       "A_perp": {
+        "median": 0.1553966355336206
+       },
+       "B_perp": {
+        "median": 0.16022109900016712
+       }
+      },
+      "perarm": {
+       "A": {
+        "median": 0.15560186777748058
+       },
+       "B": {
+        "median": 0.16092548450007815
+       }
+      },
+      "note": "||I_i|| / ||tau_{-i}|| per scene; I = DiD(ped) - DiD(cone); _perp = template direction projected off"
+     },
+     "residual_over_field_norm": {
+      "shared": {
+       "A_ped": 0.19051523204796653,
+       "A_cone": 0.1898071900435328,
+       "B_ped": 0.1908539707742491,
+       "B_cone": 0.19197896717418822
+      },
+      "perarm": {
+       "A_ped": 0.1891665713464472,
+       "A_cone": 0.1925877836602254,
+       "B_ped": 0.19136104068951224,
+       "B_cone": 0.19443825554260272
+      }
+     },
+     "residual_over_template_norm": {
+      "shared": {
+       "A_ped": 0.17812012798062,
+       "A_cone": 0.1839652156029559,
+       "B_ped": 0.17590260272593677,
+       "B_cone": 0.18053293529024678
+      },
+      "perarm": {
+       "A_ped": 0.1800331035034615,
+       "A_cone": 0.18476991409116994,
+       "B_ped": 0.17808072456307494,
+       "B_cone": 0.18254174284312752
+      }
+     },
+     "heldout_energy_fraction_along_shared_template": {
+      "A_ped": 0.9732967356028275,
+      "B_ped": 0.9741597983816472,
+      "A_cone": 0.9728107731302322,
+      "B_cone": 0.9727356220268877
+     },
+     "insample": {
+      "mean_direction_fraction_all_fields": 0.9759940424969883,
+      "pc1_fraction_all_fields": 0.9760186228170686,
+      "mean_direction_fraction_per_field": {
+       "A_ped": 0.9755537700104284,
+       "A_cone": 0.9754079499867874,
+       "B_ped": 0.9772259107391427,
+       "B_cone": 0.9757846813763591
+      },
+      "template_norm_full": 3.4305011659986833
+     },
+     "template_amplitude": {
+      "shared": {
+       "A_ped": {
+        "mean": 0.9974822134985801,
+        "median": 0.9759244097065749,
+        "ci_low": 0.9340358711458141,
+        "ci_high": 1.0713586528849566,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 1.0023344910344054,
+        "median": 0.9813664356280385,
+        "ci_low": 0.9319720503312202,
+        "ci_high": 1.0814899609146946,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 1.001125094424891,
+        "median": 0.9725935039654283,
+        "ci_low": 0.9369279466400959,
+        "ci_high": 1.076744449976363,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 1.0008289295978812,
+        "median": 0.9731020981114704,
+        "ci_low": 0.9315679295154266,
+        "ci_high": 1.0795749755191006,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      },
+      "perarm": {
+       "A_ped": {
+        "mean": 0.9980894522159779,
+        "median": 0.9775146275976891,
+        "ci_low": 0.9346276670363168,
+        "ci_high": 1.0718099508288443,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 1.0006391258634713,
+        "median": 0.9792012371413494,
+        "ci_low": 0.9305326161035219,
+        "ci_high": 1.0797350517455637,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 1.0016181117825922,
+        "median": 0.9738403877304911,
+        "ci_low": 0.9374710956775395,
+        "ci_high": 1.077078011619989,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 0.9993427470354073,
+        "median": 0.9721564012360802,
+        "ci_low": 0.9303679129208632,
+        "ci_high": 1.0779912916314267,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      }
+     },
+     "template_amplitude_asymmetry": {
+      "shared": {
+       "A_ped_minus_cone": {
+        "mean": -0.0036428809263109752,
+        "median": -0.005989915413338157,
+        "ci_low": -0.009906488299661006,
+        "ci_high": 0.0033136113347329303,
+        "n": 16,
+        "sign_flip_p": 0.3353329334133173
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.0015055614365244137,
+        "median": 0.0037119949924325117,
+        "ci_low": -0.0045455900065349076,
+        "ci_high": 0.008028871602613941,
+        "n": 16,
+        "sign_flip_p": 0.6620675864827035
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      },
+      "perarm": {
+       "A_ped_minus_cone": {
+        "mean": -0.0035286595666143518,
+        "median": -0.005748165465426881,
+        "ci_low": -0.00976850098816138,
+        "ci_high": 0.0034640320395247282,
+        "n": 16,
+        "sign_flip_p": 0.35232953409318135
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.0012963788280640834,
+        "median": 0.0036284328420036144,
+        "ci_low": -0.004757616935641107,
+        "ci_high": 0.007725962981964589,
+        "n": 16,
+        "sign_flip_p": 0.6980603879224155
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      }
+     },
+     "template_norm_loso_median": {
+      "shared": 3.4361864819763,
+      "A": 3.4325606292736155,
+      "B": 3.440351413607558
+     },
+     "h0prime_did_cosine_to_template": {
+      "A": {
+       "mean": 0.2625743224512341,
+       "median": 0.26353840087493663,
+       "ci_low": 0.24022609646019052,
+       "ci_high": 0.2833493040144124,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "B": {
+       "mean": 0.2623352421060754,
+       "median": 0.2723615313805483,
+       "ci_low": 0.23918018130081894,
+       "ci_high": 0.2864085069344488,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "note": "DiD of the level-2 mirror-pose (off-lane) cells against the shared template; ~0 if the template is in-lane x action"
+     }
+    },
+    "rank": {
+     "raw": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.9766081011350966,
+       "hard_rank": 1,
+       "quota": 0.017624562149036804,
+       "effective_dims": 1.1279719775383554,
+       "alpha": 0.22367650132566702
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9761729559618403,
+       "hard_rank": 1,
+       "quota": 0.017696692861662214,
+       "effective_dims": 1.1325883431463817,
+       "alpha": 0.22311460171203512
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.9778491255193331,
+       "hard_rank": 1,
+       "quota": 0.017418164791652407,
+       "effective_dims": 1.114762546665754,
+       "alpha": 0.22189384042537433
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9766553218736751,
+       "hard_rank": 1,
+       "quota": 0.017622345576854805,
+       "effective_dims": 1.1278301169187075,
+       "alpha": 0.2228041784301945
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.9760186228170686,
+       "hard_rank": 1,
+       "quota": 0.017771819264030594,
+       "effective_dims": 1.137396432897958,
+       "alpha": 0.11172622444749418
+      }
+     },
+     "residual_shared": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.46569003503390544,
+       "hard_rank": 7,
+       "quota": 0.1904694628100735,
+       "effective_dims": 12.190045619844703,
+       "alpha": 3.700079252908891
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.4657438434209553,
+       "hard_rank": 7,
+       "quota": 0.1827318483230841,
+       "effective_dims": 11.694838292677382,
+       "alpha": 3.5692426381400884
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.4669648636217598,
+       "hard_rank": 7,
+       "quota": 0.18956154775871098,
+       "effective_dims": 12.131939056557503,
+       "alpha": 3.736905447386452
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.4713225064896728,
+       "hard_rank": 7,
+       "quota": 0.18826007319957894,
+       "effective_dims": 12.048644684773052,
+       "alpha": 3.619824153582585
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.44815981624306045,
+       "hard_rank": 14,
+       "quota": 0.48261327345541416,
+       "effective_dims": 30.887249501146506,
+       "alpha": 2.851689212790461
+      }
+     },
+     "residual_perarm": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.4721624170257686,
+       "hard_rank": 7,
+       "quota": 0.18740882340226075,
+       "effective_dims": 11.994164697744688,
+       "alpha": 3.688236210914524
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.4693382402040747,
+       "hard_rank": 7,
+       "quota": 0.1808556026760018,
+       "effective_dims": 11.574758571264114,
+       "alpha": 3.5612685506626507
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.4704655042439132,
+       "hard_rank": 7,
+       "quota": 0.18618407742595855,
+       "effective_dims": 11.915780955261347,
+       "alpha": 3.7128258507911536
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.47804400493819094,
+       "hard_rank": 7,
+       "quota": 0.18347866171763844,
+       "effective_dims": 11.74263434992886,
+       "alpha": 3.5908473420747247
+      }
+     },
+     "identity_contrast": {
+      "A": {
+       "n": 16,
+       "pc1_fraction": 0.15890329835958175,
+       "hard_rank": 10,
+       "quota": 0.215067228598935,
+       "effective_dims": 13.76430263033184,
+       "alpha": 5.34944296226841
+      },
+      "B": {
+       "n": 16,
+       "pc1_fraction": 0.18609544372707404,
+       "hard_rank": 10,
+       "quota": 0.21256252299750883,
+       "effective_dims": 13.604001471840565,
+       "alpha": 5.121247280588098
+      },
+      "A_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.16027505955818513,
+       "hard_rank": 10,
+       "quota": 0.2149741483623809,
+       "effective_dims": 13.758345495192378,
+       "alpha": 5.37224834894236
+      },
+      "B_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.18622143403997948,
+       "hard_rank": 10,
+       "quota": 0.2125103628297709,
+       "effective_dims": 13.600663221105338,
+       "alpha": 5.138865013458364
+      }
+     },
+     "note": "uncentred spectrum of the per-scene rows; hard_rank = singular directions for 80 % energy; quota = conceptor tr(C)/d at 80 % retained energy (geometry_cross_arm.quota_for_capture); in-sample"
+    }
+   },
+   "status": "ok"
+  },
+  {
+   "site_id": "L05.resid_post",
+   "step": 0,
+   "group": "corridor",
+   "scenes": [
+    "drive_seed000500",
+    "drive_seed000501",
+    "drive_seed000502",
+    "drive_seed000503",
+    "drive_seed000504",
+    "drive_seed000505",
+    "drive_seed000506",
+    "drive_seed000507",
+    "drive_seed000508",
+    "drive_seed000509",
+    "drive_seed000510",
+    "drive_seed000511",
+    "drive_seed000512",
+    "drive_seed000513",
+    "drive_seed000514",
+    "drive_seed000515"
+   ],
+   "analysis": {
+    "n_scenes": 16,
+    "d": 64,
+    "variants": {
+     "I": {
+      "within_A": {
+       "mean": 0.0014098859663081928,
+       "median": 0.011052357117543756,
+       "ci_low": -0.06230575249984897,
+       "ci_high": 0.06543702602825872,
+       "n": 16,
+       "sign_flip_p": 0.966006798640272,
+       "t": 0.0427851092455614,
+       "mean_cosine_to_loso_mean": 0.004164956532183579,
+       "p_onesided_pos": 0.46790641871625677,
+       "p_raw_refit": 0.4945054945054945,
+       "p_maxt_fwer": 0.5524475524475524,
+       "t_family": 0.0427851092455614
+      },
+      "within_B": {
+       "mean": 0.0025879597874127226,
+       "median": 0.01598003363826473,
+       "ci_low": -0.05780634977921002,
+       "ci_high": 0.049662793758713415,
+       "n": 16,
+       "sign_flip_p": 0.9238152369526095,
+       "t": 0.08898934305861965,
+       "mean_cosine_to_loso_mean": -0.0012288175077773168,
+       "p_onesided_pos": 0.4761047790441912,
+       "p_raw_refit": 0.45554445554445555,
+       "p_maxt_fwer": 0.5034965034965035,
+       "t_family": 0.08898934305861965
+      },
+      "cross_cosine": {
+       "mean": 0.07883742885107498,
+       "median": 0.08239504402874509,
+       "ci_low": 0.009534969010245725,
+       "ci_high": 0.15061904059055997,
+       "n": 16,
+       "sign_flip_p": 0.04799040191961608,
+       "t": 2.218785520407265,
+       "p_onesided_neg": 0.9762047590481904,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": -0.011087991679681147,
+        "null_sd": 0.032174976000103286,
+        "p_onesided_neg": 1.0,
+        "p_twosided": 0.001998001998001998,
+        "observed_minus_null_mean": 0.08992542053075613,
+        "shared_direction_alignment_offdiag_mean": -0.016897060079951867,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.05906236884297507,
+       "median": -0.08334981132800084,
+       "ci_low": -0.11045260868348585,
+       "ci_high": -0.008503651882902905,
+       "n": 16,
+       "sign_flip_p": 0.060187962407518496,
+       "t": -2.1192246339611827,
+       "p_onesided_neg_naive": 0.027794441111777646,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.07492507492507493,
+       "p_maxt_fwer": 0.0999000999000999,
+       "t_neg_family": 2.1192246339611827
+      },
+      "norm_A_median": 0.8446806406919753,
+      "norm_B_median": 0.8759185971581861,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_shared": {
+      "within_A": {
+       "mean": 0.0035727664809360425,
+       "median": 0.013534684291901068,
+       "ci_low": -0.059892338490355,
+       "ci_high": 0.06898536373219932,
+       "n": 16,
+       "sign_flip_p": 0.909618076384723,
+       "t": 0.10688446002255322,
+       "mean_cosine_to_loso_mean": 0.0071116810675800335,
+       "p_onesided_pos": 0.4405118976204759,
+       "p_raw_refit": 0.4785214785214785,
+       "p_maxt_fwer": 0.5374625374625375,
+       "t_family": 0.10688446002255322
+      },
+      "within_B": {
+       "mean": 0.00047873287335662134,
+       "median": 0.010309726128734951,
+       "ci_low": -0.058573897271932025,
+       "ci_high": 0.04730048264672885,
+       "n": 16,
+       "sign_flip_p": 0.9842031593681264,
+       "t": 0.016400675656949627,
+       "mean_cosine_to_loso_mean": -0.0039097779123248595,
+       "p_onesided_pos": 0.5032993401319736,
+       "p_raw_refit": 0.4785214785214785,
+       "p_maxt_fwer": 0.5274725274725275,
+       "t_family": 0.016400675656949627
+      },
+      "cross_cosine": {
+       "mean": 0.07971394560451889,
+       "median": 0.08178815598959559,
+       "ci_low": 0.009210445415593618,
+       "ci_high": 0.1545961708576123,
+       "n": 16,
+       "sign_flip_p": 0.04979004199160168,
+       "t": 2.184189053305061,
+       "p_onesided_neg": 0.9754049190161967,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": -0.01337286481265414,
+        "null_sd": 0.0331595862186322,
+        "p_onesided_neg": 0.999000999000999,
+        "p_twosided": 0.003996003996003996,
+        "observed_minus_null_mean": 0.09308681041717302,
+        "shared_direction_alignment_offdiag_mean": -0.017600857042584184,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.06200482860807184,
+       "median": -0.08953853360881481,
+       "ci_low": -0.11315001679110182,
+       "ci_high": -0.010843747115317614,
+       "n": 16,
+       "sign_flip_p": 0.04879024195160968,
+       "t": -2.259478398870359,
+       "p_onesided_neg_naive": 0.023595280943811237,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.06293706293706294,
+       "p_maxt_fwer": 0.08491508491508491,
+       "t_neg_family": 2.259478398870359
+      },
+      "norm_A_median": 0.8434074315471998,
+      "norm_B_median": 0.8750777162625385,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_perarm": {
+      "within_A": {
+       "mean": 0.0036197230808255355,
+       "median": 0.013483499566766591,
+       "ci_low": -0.05998699709859165,
+       "ci_high": 0.06924003988252221,
+       "n": 16,
+       "sign_flip_p": 0.9098180363927214,
+       "t": 0.108061855021164,
+       "mean_cosine_to_loso_mean": 0.007216783912334667,
+       "p_onesided_pos": 0.4407118576284743,
+       "p_raw_refit": 0.4785214785214785,
+       "p_maxt_fwer": 0.5374625374625375,
+       "t_family": 0.108061855021164
+      },
+      "within_B": {
+       "mean": 0.00020973112109715,
+       "median": 0.009913533248337457,
+       "ci_low": -0.05914520624169497,
+       "ci_high": 0.04691908985787687,
+       "n": 16,
+       "sign_flip_p": 0.9936012797440512,
+       "t": 0.007171410532217056,
+       "mean_cosine_to_loso_mean": -0.004222600820301722,
+       "p_onesided_pos": 0.5080983803239352,
+       "p_raw_refit": 0.47952047952047955,
+       "p_maxt_fwer": 0.5284715284715285,
+       "t_family": 0.007171410532217056
+      },
+      "cross_cosine": {
+       "mean": 0.07945948078547578,
+       "median": 0.0822819430756144,
+       "ci_low": 0.009256704995552388,
+       "ci_high": 0.1542395566272914,
+       "n": 16,
+       "sign_flip_p": 0.04979004199160168,
+       "t": 2.1837368514735847,
+       "p_onesided_neg": 0.9754049190161967,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": -0.01031058132905192,
+        "null_sd": 0.034536462369899025,
+        "p_onesided_neg": 0.994005994005994,
+        "p_twosided": 0.012987012987012988,
+        "observed_minus_null_mean": 0.0897700621145277,
+        "shared_direction_alignment_offdiag_mean": -0.017569300223108496,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.06189210634554193,
+       "median": -0.08920725957651535,
+       "ci_low": -0.11327833017652893,
+       "ci_high": -0.010879582450473744,
+       "n": 16,
+       "sign_flip_p": 0.04859028194361128,
+       "t": -2.2555197654110355,
+       "p_onesided_neg_naive": 0.023595280943811237,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.06293706293706294,
+       "p_maxt_fwer": 0.08491508491508491,
+       "t_neg_family": 2.2555197654110355
+      },
+      "norm_A_median": 0.8435306981520461,
+      "norm_B_median": 0.8753482232752221,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     }
+    },
+    "template": {
+     "definition": {
+      "shared": "LOSO mean over the other scenes of all four (arm x identity) DiD fields, arm B moved into arm A coordinates with the fold's hazard-free transport",
+      "perarm": "LOSO mean over the other scenes of the arm's two identity DiD fields (own coordinates)"
+     },
+     "identity_over_template": {
+      "shared": {
+       "A": {
+        "median": 0.24739236847776327,
+        "mean": 0.2555999109429725
+       },
+       "B": {
+        "median": 0.25462704921887214,
+        "mean": 0.2566582182082943
+       },
+       "A_perp": {
+        "median": 0.24704994649952233
+       },
+       "B_perp": {
+        "median": 0.2543835619417856
+       }
+      },
+      "perarm": {
+       "A": {
+        "median": 0.24670560377136566
+       },
+       "B": {
+        "median": 0.25470549203251575
+       }
+      },
+      "note": "||I_i|| / ||tau_{-i}|| per scene; I = DiD(ped) - DiD(cone); _perp = template direction projected off"
+     },
+     "residual_over_field_norm": {
+      "shared": {
+       "A_ped": 0.2906641897424802,
+       "A_cone": 0.2841077964153447,
+       "B_ped": 0.2680586151798652,
+       "B_cone": 0.2836433121996197
+      },
+      "perarm": {
+       "A_ped": 0.28953234066927147,
+       "A_cone": 0.2883345583830734,
+       "B_ped": 0.26771526773090304,
+       "B_cone": 0.27999993617126273
+      }
+     },
+     "residual_over_template_norm": {
+      "shared": {
+       "A_ped": 0.29871514452400594,
+       "A_cone": 0.27527442626168164,
+       "B_ped": 0.29116251053847053,
+       "B_cone": 0.30276888853475237
+      },
+      "perarm": {
+       "A_ped": 0.29775979680217957,
+       "A_cone": 0.27542542162864864,
+       "B_ped": 0.2892503259419984,
+       "B_cone": 0.3029906124180808
+      }
+     },
+     "heldout_energy_fraction_along_shared_template": {
+      "A_ped": 0.9291991234839716,
+      "B_ped": 0.933122993880179,
+      "A_cone": 0.9314083343024795,
+      "B_cone": 0.9293977623748777
+     },
+     "insample": {
+      "mean_direction_fraction_all_fields": 0.9374824969135699,
+      "pc1_fraction_all_fields": 0.9375121520442234,
+      "mean_direction_fraction_per_field": {
+       "A_ped": 0.9360015814864049,
+       "A_cone": 0.9369216491616819,
+       "B_ped": 0.9397184210239846,
+       "B_cone": 0.9372825004199895
+      },
+      "template_norm_full": 3.4245564946143277
+     },
+     "template_amplitude": {
+      "shared": {
+       "A_ped": {
+        "mean": 1.0019701694074614,
+        "median": 0.9863273602409344,
+        "ci_low": 0.9338372010406305,
+        "ci_high": 1.0824712906409109,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 1.0036368984965285,
+        "median": 1.006122367314458,
+        "ci_low": 0.9348258364332751,
+        "ci_high": 1.08370099862643,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 0.9976722067368761,
+        "median": 0.9638413391047347,
+        "ci_low": 0.9352842181620418,
+        "ci_high": 1.0711205003648319,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 0.9939356694917489,
+        "median": 1.005123368261338,
+        "ci_low": 0.9246163207409162,
+        "ci_high": 1.0707093337488678,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      },
+      "perarm": {
+       "A_ped": {
+        "mean": 0.9998161581042958,
+        "median": 0.9840154321632797,
+        "ci_low": 0.9320705027545043,
+        "ci_high": 1.0796435055268399,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 1.002762196941013,
+        "median": 1.0041373924299708,
+        "ci_low": 0.9337229217584881,
+        "ci_high": 1.0823912245189435,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 0.9954119942913581,
+        "median": 0.9632042520752264,
+        "ci_low": 0.9335171257249945,
+        "ci_high": 1.0684046396365345,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 0.9930214506480087,
+        "median": 1.0055855797061088,
+        "ci_low": 0.9239691696390199,
+        "ci_high": 1.0700446282782556,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      }
+     },
+     "template_amplitude_asymmetry": {
+      "shared": {
+       "A_ped_minus_cone": {
+        "mean": 0.004297962670585409,
+        "median": 0.006694504099624075,
+        "ci_low": -0.008624995759961566,
+        "ci_high": 0.018280318551478828,
+        "n": 16,
+        "sign_flip_p": 0.5828834233153369
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.009701229004779533,
+        "median": 0.005771014829912846,
+        "ci_low": -0.003104180343802086,
+        "ci_high": 0.022051862733584175,
+        "n": 16,
+        "sign_flip_p": 0.1917616476704659
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      },
+      "perarm": {
+       "A_ped_minus_cone": {
+        "mean": 0.004404163812937742,
+        "median": 0.0069486078034106495,
+        "ci_low": -0.008725602541054115,
+        "ci_high": 0.018609760551154684,
+        "n": 16,
+        "sign_flip_p": 0.5792841431713657
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.0097407462930044,
+        "median": 0.005395581463203619,
+        "ci_low": -0.0027310817748114964,
+        "ci_high": 0.02180435018418255,
+        "n": 16,
+        "sign_flip_p": 0.1803639272145571
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      }
+     },
+     "template_norm_loso_median": {
+      "shared": 3.428515769555461,
+      "A": 3.436735173229046,
+      "B": 3.4248585830208347
+     },
+     "h0prime_did_cosine_to_template": {
+      "A": {
+       "mean": 0.2220076278463992,
+       "median": 0.21416905591237453,
+       "ci_low": 0.1974980089691708,
+       "ci_high": 0.2545904416605844,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "B": {
+       "mean": 0.22154129219107604,
+       "median": 0.20974163335301943,
+       "ci_low": 0.19036052275975007,
+       "ci_high": 0.25781101157305836,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "note": "DiD of the level-2 mirror-pose (off-lane) cells against the shared template; ~0 if the template is in-lane x action"
+     }
+    },
+    "rank": {
+     "raw": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.939030038003669,
+       "hard_rank": 1,
+       "quota": 0.025784096357800913,
+       "effective_dims": 1.6501821668992585,
+       "alpha": 0.24911953499787312
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9397297664154807,
+       "hard_rank": 1,
+       "quota": 0.025595301910959337,
+       "effective_dims": 1.6380993223013975,
+       "alpha": 0.24982850467595688
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.942792378376002,
+       "hard_rank": 1,
+       "quota": 0.024851448098939254,
+       "effective_dims": 1.5904926783321123,
+       "alpha": 0.24575030333891315
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9400073145354879,
+       "hard_rank": 1,
+       "quota": 0.025539159363139816,
+       "effective_dims": 1.6345061992409482,
+       "alpha": 0.2501840188843981
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.9375121520442234,
+       "hard_rank": 1,
+       "quota": 0.026665984419978438,
+       "effective_dims": 1.70662300287862,
+       "alpha": 0.1258816467481653
+      }
+     },
+     "residual_shared": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.2580784898768446,
+       "hard_rank": 9,
+       "quota": 0.2083218373931975,
+       "effective_dims": 13.33259759316464,
+       "alpha": 2.72157238665581
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.24551753841421067,
+       "hard_rank": 9,
+       "quota": 0.20908122472271007,
+       "effective_dims": 13.381198382253444,
+       "alpha": 2.787686766305668
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.2615693416659777,
+       "hard_rank": 9,
+       "quota": 0.2097624891096952,
+       "effective_dims": 13.424799303020492,
+       "alpha": 2.811673531072568
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.2889490966508252,
+       "hard_rank": 9,
+       "quota": 0.20690629899597135,
+       "effective_dims": 13.242003135742166,
+       "alpha": 2.7299547088036653
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.23288910736844162,
+       "hard_rank": 19,
+       "quota": 0.5755032485123975,
+       "effective_dims": 36.83220790479344,
+       "alpha": 2.2369478856242027
+      }
+     },
+     "residual_perarm": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.2649280236770938,
+       "hard_rank": 9,
+       "quota": 0.20440813921500828,
+       "effective_dims": 13.08212090976053,
+       "alpha": 2.725347367691787
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.25142297996600615,
+       "hard_rank": 9,
+       "quota": 0.20610187241366876,
+       "effective_dims": 13.1905198344748,
+       "alpha": 2.7958252834628436
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.26899030661921614,
+       "hard_rank": 9,
+       "quota": 0.2050160933957311,
+       "effective_dims": 13.12102997732679,
+       "alpha": 2.8130080121367684
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.2952817344837277,
+       "hard_rank": 9,
+       "quota": 0.20319273412349306,
+       "effective_dims": 13.004334983903556,
+       "alpha": 2.731540977161978
+      }
+     },
+     "identity_contrast": {
+      "A": {
+       "n": 16,
+       "pc1_fraction": 0.13478744283367575,
+       "hard_rank": 10,
+       "quota": 0.21531351060803072,
+       "effective_dims": 13.780064678913966,
+       "alpha": 3.2257736622544804
+      },
+      "B": {
+       "n": 16,
+       "pc1_fraction": 0.13946925672300092,
+       "hard_rank": 10,
+       "quota": 0.21437910158227913,
+       "effective_dims": 13.720262501265864,
+       "alpha": 3.20385630616339
+      },
+      "A_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.13531774386937212,
+       "hard_rank": 10,
+       "quota": 0.21518091011389767,
+       "effective_dims": 13.771578247289451,
+       "alpha": 3.2462302818330633
+      },
+      "B_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.14028260354166666,
+       "hard_rank": 10,
+       "quota": 0.2143222532338535,
+       "effective_dims": 13.716624206966625,
+       "alpha": 3.223565542864413
+      }
+     },
+     "note": "uncentred spectrum of the per-scene rows; hard_rank = singular directions for 80 % energy; quota = conceptor tr(C)/d at 80 % retained energy (geometry_cross_arm.quota_for_capture); in-sample"
+    }
+   },
+   "status": "ok"
+  },
+  {
+   "site_id": "L05.resid_post",
+   "step": 0,
+   "group": "hazard",
+   "scenes": [
+    "drive_seed000500",
+    "drive_seed000501",
+    "drive_seed000502",
+    "drive_seed000503",
+    "drive_seed000504",
+    "drive_seed000505",
+    "drive_seed000506",
+    "drive_seed000507",
+    "drive_seed000508",
+    "drive_seed000509",
+    "drive_seed000510",
+    "drive_seed000511",
+    "drive_seed000512",
+    "drive_seed000513",
+    "drive_seed000514",
+    "drive_seed000515"
+   ],
+   "analysis": {
+    "n_scenes": 16,
+    "d": 64,
+    "variants": {
+     "I": {
+      "within_A": {
+       "mean": 0.017674098717227173,
+       "median": 0.005904554335631907,
+       "ci_low": -0.008447790480788302,
+       "ci_high": 0.047790589722800834,
+       "n": 16,
+       "sign_flip_p": 0.24075184963007398,
+       "t": 1.1858414827791806,
+       "mean_cosine_to_loso_mean": 0.02847202906110389,
+       "p_onesided_pos": 0.11357728454309138,
+       "p_raw_refit": 0.21178821178821178,
+       "p_maxt_fwer": 0.23576423576423577,
+       "t_family": 1.1858414827791806
+      },
+      "within_B": {
+       "mean": -0.02816165341143358,
+       "median": -0.014368125611503786,
+       "ci_low": -0.08323528906366129,
+       "ci_high": 0.0158109466575869,
+       "n": 16,
+       "sign_flip_p": 0.29414117176564686,
+       "t": -1.1508456996601073,
+       "mean_cosine_to_loso_mean": -0.04138331466463906,
+       "p_onesided_pos": 0.8544291141771646,
+       "p_raw_refit": 0.7752247752247752,
+       "p_maxt_fwer": 0.8011988011988012,
+       "t_family": -1.1508456996601073
+      },
+      "cross_cosine": {
+       "mean": 0.12293604588374274,
+       "median": 0.09760652038796844,
+       "ci_low": 0.06595546622778857,
+       "ci_high": 0.1924476366109839,
+       "n": 16,
+       "sign_flip_p": 0.0007998400319936012,
+       "t": 3.7120351296725516,
+       "p_onesided_neg": 1.0,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.006518322973237659,
+        "null_sd": 0.038557128943093474,
+        "p_onesided_neg": 1.0,
+        "p_twosided": 0.002997002997002997,
+        "observed_minus_null_mean": 0.11641772291050508,
+        "shared_direction_alignment_offdiag_mean": -0.001100365476257665,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.00015647281138455715,
+       "median": 0.02452247917814767,
+       "ci_low": -0.060992719068911794,
+       "ci_high": 0.050532346920011434,
+       "n": 16,
+       "sign_flip_p": 0.996000799840032,
+       "t": -0.005155119124631086,
+       "p_onesided_neg_naive": 0.4991001799640072,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.5244755244755245,
+       "p_maxt_fwer": 0.5524475524475524,
+       "t_neg_family": 0.005155119124631086
+      },
+      "norm_A_median": 0.5564886135415978,
+      "norm_B_median": 0.5902864170029212,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_shared": {
+      "within_A": {
+       "mean": 0.01680722542888578,
+       "median": 0.01133079373605958,
+       "ci_low": -0.008584656214899943,
+       "ci_high": 0.0462841027009869,
+       "n": 16,
+       "sign_flip_p": 0.2595480903819236,
+       "t": 1.139899235288502,
+       "mean_cosine_to_loso_mean": 0.027130808188510297,
+       "p_onesided_pos": 0.12377524495100979,
+       "p_raw_refit": 0.2217782217782218,
+       "p_maxt_fwer": 0.24375624375624375,
+       "t_family": 1.139899235288502
+      },
+      "within_B": {
+       "mean": -0.02637885257261269,
+       "median": -0.012413610133479873,
+       "ci_low": -0.08155350026521467,
+       "ci_high": 0.017659579990921142,
+       "n": 16,
+       "sign_flip_p": 0.32693461307738453,
+       "t": -1.0791228333297243,
+       "mean_cosine_to_loso_mean": -0.03843272899673443,
+       "p_onesided_pos": 0.8358328334333134,
+       "p_raw_refit": 0.7602397602397603,
+       "p_maxt_fwer": 0.7892107892107892,
+       "t_family": -1.0791228333297243
+      },
+      "cross_cosine": {
+       "mean": 0.12555841358668107,
+       "median": 0.10844379984575589,
+       "ci_low": 0.06669826892117607,
+       "ci_high": 0.19807223557310621,
+       "n": 16,
+       "sign_flip_p": 0.0009998000399920016,
+       "t": 3.6251303675164666,
+       "p_onesided_neg": 0.9998000399920016,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.005338025801249243,
+        "null_sd": 0.04005110563736143,
+        "p_onesided_neg": 0.999000999000999,
+        "p_twosided": 0.002997002997002997,
+        "observed_minus_null_mean": 0.12022038778543183,
+        "shared_direction_alignment_offdiag_mean": -0.0011999204035390218,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.00039651634084138503,
+       "median": 0.024851291320533594,
+       "ci_low": -0.0624473315383912,
+       "ci_high": 0.05170377601201098,
+       "n": 16,
+       "sign_flip_p": 0.99000199960008,
+       "t": -0.012862286868708054,
+       "p_onesided_neg_naive": 0.4971005798840232,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.5174825174825175,
+       "p_maxt_fwer": 0.5464535464535465,
+       "t_neg_family": 0.012862286868708054
+      },
+      "norm_A_median": 0.5532434449912633,
+      "norm_B_median": 0.5850343314930693,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_perarm": {
+      "within_A": {
+       "mean": 0.016890569307366952,
+       "median": 0.011378107143019478,
+       "ci_low": -0.008467556549813033,
+       "ci_high": 0.04639505052646912,
+       "n": 16,
+       "sign_flip_p": 0.25834833033393323,
+       "t": 1.1450645172713994,
+       "mean_cosine_to_loso_mean": 0.02728489075365199,
+       "p_onesided_pos": 0.1235752849430114,
+       "p_raw_refit": 0.2217782217782218,
+       "p_maxt_fwer": 0.24375624375624375,
+       "t_family": 1.1450645172713994
+      },
+      "within_B": {
+       "mean": -0.026374008401016273,
+       "median": -0.012611737875114383,
+       "ci_low": -0.08160757701048059,
+       "ci_high": 0.01775129269547629,
+       "n": 16,
+       "sign_flip_p": 0.3265346930613877,
+       "t": -1.0778409003130658,
+       "mean_cosine_to_loso_mean": -0.038431857087930885,
+       "p_onesided_pos": 0.8356328734253149,
+       "p_raw_refit": 0.7592407592407593,
+       "p_maxt_fwer": 0.7892107892107892,
+       "t_family": -1.0778409003130658
+      },
+      "cross_cosine": {
+       "mean": 0.1254941455695986,
+       "median": 0.10819411837739742,
+       "ci_low": 0.06674434036882403,
+       "ci_high": 0.1980496151169614,
+       "n": 16,
+       "sign_flip_p": 0.0009998000399920016,
+       "t": 3.6225178093418315,
+       "p_onesided_neg": 0.9998000399920016,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.008406657197991158,
+        "null_sd": 0.0394837333299671,
+        "p_onesided_neg": 1.0,
+        "p_twosided": 0.001998001998001998,
+        "observed_minus_null_mean": 0.11708748837160743,
+        "shared_direction_alignment_offdiag_mean": -0.0011645498753355265,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.00023986435339581804,
+       "median": 0.02494026122503546,
+       "ci_low": -0.06223875838613738,
+       "ci_high": 0.05192396498877196,
+       "n": 16,
+       "sign_flip_p": 0.9936012797440512,
+       "t": -0.007778228470170278,
+       "p_onesided_neg_naive": 0.4989002199560088,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.5224775224775224,
+       "p_maxt_fwer": 0.5484515484515484,
+       "t_neg_family": 0.007778228470170278
+      },
+      "norm_A_median": 0.553135373437933,
+      "norm_B_median": 0.5849811693423896,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     }
+    },
+    "template": {
+     "definition": {
+      "shared": "LOSO mean over the other scenes of all four (arm x identity) DiD fields, arm B moved into arm A coordinates with the fold's hazard-free transport",
+      "perarm": "LOSO mean over the other scenes of the arm's two identity DiD fields (own coordinates)"
+     },
+     "identity_over_template": {
+      "shared": {
+       "A": {
+        "median": 0.1618639181688226,
+        "mean": 0.1642231130900046
+       },
+       "B": {
+        "median": 0.1714860143391697,
+        "mean": 0.17066204614870445
+       },
+       "A_perp": {
+        "median": 0.16091999723506512
+       },
+       "B_perp": {
+        "median": 0.1699604308166748
+       }
+      },
+      "perarm": {
+       "A": {
+        "median": 0.1620768460325423
+       },
+       "B": {
+        "median": 0.17115691578678388
+       }
+      },
+      "note": "||I_i|| / ||tau_{-i}|| per scene; I = DiD(ped) - DiD(cone); _perp = template direction projected off"
+     },
+     "residual_over_field_norm": {
+      "shared": {
+       "A_ped": 0.19757036225192193,
+       "A_cone": 0.20182310308755294,
+       "B_ped": 0.18808770305660222,
+       "B_cone": 0.20211125969972582
+      },
+      "perarm": {
+       "A_ped": 0.19619063416677085,
+       "A_cone": 0.20604595457121852,
+       "B_ped": 0.18928138692052368,
+       "B_cone": 0.2054144717776888
+      }
+     },
+     "residual_over_template_norm": {
+      "shared": {
+       "A_ped": 0.18567728026807748,
+       "A_cone": 0.19355875797659633,
+       "B_ped": 0.17938500091805068,
+       "B_cone": 0.1914966647646623
+      },
+      "perarm": {
+       "A_ped": 0.18672479565968833,
+       "A_cone": 0.1945188740765094,
+       "B_ped": 0.1852113483919196,
+       "B_cone": 0.1938901260742773
+      }
+     },
+     "heldout_energy_fraction_along_shared_template": {
+      "A_ped": 0.9690665962595386,
+      "B_ped": 0.9712865330173208,
+      "A_cone": 0.9691924725247225,
+      "B_cone": 0.9678443522076743
+     },
+     "insample": {
+      "mean_direction_fraction_all_fields": 0.9725220275631847,
+      "pc1_fraction_all_fields": 0.9725485219345853,
+      "mean_direction_fraction_per_field": {
+       "A_ped": 0.9719150139802635,
+       "A_cone": 0.972245169080391,
+       "B_ped": 0.9745554450448827,
+       "B_cone": 0.971372857564835
+      },
+      "template_norm_full": 3.431259618249172
+     },
+     "template_amplitude": {
+      "shared": {
+       "A_ped": {
+        "mean": 0.9964236044677359,
+        "median": 0.9768471750973504,
+        "ci_low": 0.9334192151842441,
+        "ci_high": 1.068735530732804,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 1.0017988947573726,
+        "median": 0.9698963895767494,
+        "ci_low": 0.9324408342117048,
+        "ci_high": 1.0802216460374716,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 1.0016201890687513,
+        "median": 0.9802285142705172,
+        "ci_low": 0.9369131734274881,
+        "ci_high": 1.0780227102228348,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 1.0014285495750304,
+        "median": 0.9615345142799071,
+        "ci_low": 0.9323363029226284,
+        "ci_high": 1.0782415704671147,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      },
+      "perarm": {
+       "A_ped": {
+        "mean": 0.9971495204240637,
+        "median": 0.9786752817455061,
+        "ci_low": 0.9340918749041632,
+        "ci_high": 1.0694642910945655,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 0.9998265766062014,
+        "median": 0.9669840878522986,
+        "ci_low": 0.9307886713352912,
+        "ci_high": 1.0778914241536084,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 1.0022210148892021,
+        "median": 0.9817840749461763,
+        "ci_low": 0.9374491400948008,
+        "ci_high": 1.0786226722246677,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 0.9996448548450573,
+        "median": 0.9597547737219214,
+        "ci_low": 0.9306584486987413,
+        "ci_high": 1.0761155718572535,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      }
+     },
+     "template_amplitude_asymmetry": {
+      "shared": {
+       "A_ped_minus_cone": {
+        "mean": -0.0051965846010151836,
+        "median": -0.006815115748081565,
+        "ci_low": -0.011290512433432447,
+        "ci_high": 0.0015331251102524265,
+        "n": 16,
+        "sign_flip_p": 0.19816036792641473
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.0003703451823421607,
+        "median": 0.0023192778889221735,
+        "ci_low": -0.00812960556954084,
+        "ci_high": 0.008544596405603613,
+        "n": 16,
+        "sign_flip_p": 0.9354129174165167
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      },
+      "perarm": {
+       "A_ped_minus_cone": {
+        "mean": -0.0050714944651383915,
+        "median": -0.006449477067880508,
+        "ci_low": -0.011175148848638764,
+        "ci_high": 0.0016997667926373482,
+        "n": 16,
+        "sign_flip_p": 0.21075784843031395
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.000181721761144075,
+        "median": 0.001734413670084871,
+        "ci_low": -0.008364269039231313,
+        "ci_high": 0.008347716305993548,
+        "n": 16,
+        "sign_flip_p": 0.9686062787442512
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      }
+     },
+     "template_norm_loso_median": {
+      "shared": 3.43800260371191,
+      "A": 3.4322693745104056,
+      "B": 3.4443149691800072
+     },
+     "h0prime_did_cosine_to_template": {
+      "A": {
+       "mean": 0.2600350937780562,
+       "median": 0.25477373806194725,
+       "ci_low": 0.23473262549017504,
+       "ci_high": 0.2817467047635455,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "B": {
+       "mean": 0.25082629368982545,
+       "median": 0.2527246941399731,
+       "ci_low": 0.22826189360944468,
+       "ci_high": 0.2734704943849624,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "note": "DiD of the level-2 mirror-pose (off-lane) cells against the shared template; ~0 if the template is in-lane x action"
+     }
+    },
+    "rank": {
+     "raw": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.9730216626548178,
+       "hard_rank": 1,
+       "quota": 0.018267917191427313,
+       "effective_dims": 1.169146700251348,
+       "alpha": 0.2260072624175727
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9730789169161869,
+       "hard_rank": 1,
+       "quota": 0.018254188345065155,
+       "effective_dims": 1.16826805408417,
+       "alpha": 0.22474388194393566
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.9751676758736636,
+       "hard_rank": 1,
+       "quota": 0.01788841238866133,
+       "effective_dims": 1.1448583928743252,
+       "alpha": 0.22361202230968574
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9723055772094488,
+       "hard_rank": 1,
+       "quota": 0.01840288292700077,
+       "effective_dims": 1.1777845073280493,
+       "alpha": 0.22531681889316835
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.9725485219345853,
+       "hard_rank": 1,
+       "quota": 0.0184108883510983,
+       "effective_dims": 1.1782968544702912,
+       "alpha": 0.11277384189441711
+      }
+     },
+     "residual_shared": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.43210560945715876,
+       "hard_rank": 7,
+       "quota": 0.19420974808132108,
+       "effective_dims": 12.429423877204549,
+       "alpha": 3.5834905399486923
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.4465631786828185,
+       "hard_rank": 7,
+       "quota": 0.18776091789880323,
+       "effective_dims": 12.016698745523406,
+       "alpha": 3.468808689510235
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.4331021496257825,
+       "hard_rank": 7,
+       "quota": 0.19212427738782428,
+       "effective_dims": 12.295953752820754,
+       "alpha": 3.6763416940483338
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.4226023115379381,
+       "hard_rank": 7,
+       "quota": 0.1926131852024368,
+       "effective_dims": 12.327243852955956,
+       "alpha": 3.5167203080138907
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.41317252977828517,
+       "hard_rank": 15,
+       "quota": 0.5032029450639199,
+       "effective_dims": 32.204988484090876,
+       "alpha": 2.8085568934667138
+      }
+     },
+     "residual_perarm": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.437649129904378,
+       "hard_rank": 7,
+       "quota": 0.1914643318587103,
+       "effective_dims": 12.25371723895746,
+       "alpha": 3.5744039694625456
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.44974513542860034,
+       "hard_rank": 7,
+       "quota": 0.1857631094051438,
+       "effective_dims": 11.888839001929203,
+       "alpha": 3.4590997077291274
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.43585729386093786,
+       "hard_rank": 7,
+       "quota": 0.1895941551543993,
+       "effective_dims": 12.134025929881556,
+       "alpha": 3.6597688759586102
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.4284424775473943,
+       "hard_rank": 7,
+       "quota": 0.18797947396970338,
+       "effective_dims": 12.030686334061016,
+       "alpha": 3.4914778546530645
+      }
+     },
+     "identity_contrast": {
+      "A": {
+       "n": 16,
+       "pc1_fraction": 0.1408742154831579,
+       "hard_rank": 10,
+       "quota": 0.2152949363257612,
+       "effective_dims": 13.778875924848716,
+       "alpha": 4.989330798848936
+      },
+      "B": {
+       "n": 16,
+       "pc1_fraction": 0.19144535019441478,
+       "hard_rank": 10,
+       "quota": 0.21111476731433504,
+       "effective_dims": 13.511345108117442,
+       "alpha": 4.748049098341313
+      },
+      "A_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.1421092760048513,
+       "hard_rank": 10,
+       "quota": 0.21513137638194377,
+       "effective_dims": 13.768408088444401,
+       "alpha": 5.008635047191551
+      },
+      "B_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.19053785062593706,
+       "hard_rank": 10,
+       "quota": 0.21106477403013185,
+       "effective_dims": 13.508145537928439,
+       "alpha": 4.7730270933555765
+      }
+     },
+     "note": "uncentred spectrum of the per-scene rows; hard_rank = singular directions for 80 % energy; quota = conceptor tr(C)/d at 80 % retained energy (geometry_cross_arm.quota_for_capture); in-sample"
+    }
+   },
+   "status": "ok"
+  },
+  {
+   "site_id": "L05.resid_post",
+   "step": 0,
+   "group": "hazard_corridor",
+   "scenes": [
+    "drive_seed000500",
+    "drive_seed000501",
+    "drive_seed000502",
+    "drive_seed000503",
+    "drive_seed000504",
+    "drive_seed000505",
+    "drive_seed000506",
+    "drive_seed000507",
+    "drive_seed000508",
+    "drive_seed000509",
+    "drive_seed000510",
+    "drive_seed000511",
+    "drive_seed000512",
+    "drive_seed000513",
+    "drive_seed000514",
+    "drive_seed000515"
+   ],
+   "analysis": {
+    "n_scenes": 16,
+    "d": 64,
+    "variants": {
+     "I": {
+      "within_A": {
+       "mean": 0.011849801501692778,
+       "median": -2.778549559506613e-05,
+       "ci_low": -0.01623599573512928,
+       "ci_high": 0.041432116973606194,
+       "n": 16,
+       "sign_flip_p": 0.49190161967606477,
+       "t": 0.7202740206440034,
+       "mean_cosine_to_loso_mean": 0.02080629216667583,
+       "p_onesided_pos": 0.2403519296140772,
+       "p_raw_refit": 0.3016983016983017,
+       "p_maxt_fwer": 0.33666333666333664,
+       "t_family": 0.7202740206440034
+      },
+      "within_B": {
+       "mean": -0.01934660576321581,
+       "median": -0.020375330883497543,
+       "ci_low": -0.07797172721254676,
+       "ci_high": 0.02585364202693908,
+       "n": 16,
+       "sign_flip_p": 0.4647070585882823,
+       "t": -0.7706879548550831,
+       "mean_cosine_to_loso_mean": -0.032918185520585,
+       "p_onesided_pos": 0.7688462307538493,
+       "p_raw_refit": 0.7182817182817183,
+       "p_maxt_fwer": 0.7522477522477522,
+       "t_family": -0.7706879548550831
+      },
+      "cross_cosine": {
+       "mean": 0.16047975026147618,
+       "median": 0.1283674993652258,
+       "ci_low": 0.09828676602450041,
+       "ci_high": 0.24020577015047476,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003,
+       "t": 4.555136889156749,
+       "p_onesided_neg": 1.0,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.0023979577855739445,
+        "null_sd": 0.04034876569524575,
+        "p_onesided_neg": 1.0,
+        "p_twosided": 0.000999000999000999,
+        "observed_minus_null_mean": 0.15808179247590223,
+        "shared_direction_alignment_offdiag_mean": -0.00728209911883351,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.02447215276298287,
+       "median": 0.0007179005110930937,
+       "ci_low": -0.08299896995419752,
+       "ci_high": 0.03131811931197116,
+       "n": 16,
+       "sign_flip_p": 0.44571085782843434,
+       "t": -0.7781742326156839,
+       "p_onesided_neg_naive": 0.21855628874225155,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.3256743256743257,
+       "p_maxt_fwer": 0.35664335664335667,
+       "t_neg_family": 0.7781742326156839
+      },
+      "norm_A_median": 0.5359296061031625,
+      "norm_B_median": 0.5634127281437993,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_shared": {
+      "within_A": {
+       "mean": 0.011990362224047143,
+       "median": 0.0020700766377468108,
+       "ci_low": -0.016173908445156995,
+       "ci_high": 0.041346010918876346,
+       "n": 16,
+       "sign_flip_p": 0.48050389922015596,
+       "t": 0.7393213694878198,
+       "mean_cosine_to_loso_mean": 0.020899205176713037,
+       "p_onesided_pos": 0.23635272945410918,
+       "p_raw_refit": 0.2997002997002997,
+       "p_maxt_fwer": 0.33266733266733267,
+       "t_family": 0.7393213694878198
+      },
+      "within_B": {
+       "mean": -0.018350468830178702,
+       "median": -0.018005323305554304,
+       "ci_low": -0.07712100729989933,
+       "ci_high": 0.026504083140431293,
+       "n": 16,
+       "sign_flip_p": 0.48670265946810637,
+       "t": -0.7331625776961007,
+       "mean_cosine_to_loso_mean": -0.03116729101451109,
+       "p_onesided_pos": 0.75624875024995,
+       "p_raw_refit": 0.7132867132867133,
+       "p_maxt_fwer": 0.7442557442557443,
+       "t_family": -0.7331625776961007
+      },
+      "cross_cosine": {
+       "mean": 0.16453098933610869,
+       "median": 0.1329796044349883,
+       "ci_low": 0.10064986133843239,
+       "ci_high": 0.2438947108337767,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003,
+       "t": 4.609926761495592,
+       "p_onesided_neg": 1.0,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.0013705718891660944,
+        "null_sd": 0.04259364564942015,
+        "p_onesided_neg": 1.0,
+        "p_twosided": 0.000999000999000999,
+        "observed_minus_null_mean": 0.1631604174469426,
+        "shared_direction_alignment_offdiag_mean": -0.007288807795301933,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.024440922863234696,
+       "median": 0.003976781573365364,
+       "ci_low": -0.08385268238691401,
+       "ci_high": 0.031794487349482745,
+       "n": 16,
+       "sign_flip_p": 0.44671065786842634,
+       "t": -0.7785677858886557,
+       "p_onesided_neg_naive": 0.21875624875024996,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.3306693306693307,
+       "p_maxt_fwer": 0.36363636363636365,
+       "t_neg_family": 0.7785677858886557
+      },
+      "norm_A_median": 0.5321757675827307,
+      "norm_B_median": 0.5590551772690292,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     },
+     "I_perp_perarm": {
+      "within_A": {
+       "mean": 0.012006405688929647,
+       "median": 0.002060740459793789,
+       "ci_low": -0.01616792105160178,
+       "ci_high": 0.04136844172832676,
+       "n": 16,
+       "sign_flip_p": 0.4797040591881624,
+       "t": 0.7400015497024053,
+       "mean_cosine_to_loso_mean": 0.02093613230567265,
+       "p_onesided_pos": 0.23615276944611077,
+       "p_raw_refit": 0.2977022977022977,
+       "p_maxt_fwer": 0.3306693306693307,
+       "t_family": 0.7400015497024053
+      },
+      "within_B": {
+       "mean": -0.018322864711238736,
+       "median": -0.018129662390837818,
+       "ci_low": -0.0771104597236328,
+       "ci_high": 0.026567558902353832,
+       "n": 16,
+       "sign_flip_p": 0.48830233953209357,
+       "t": -0.7318926016661063,
+       "mean_cosine_to_loso_mean": -0.03111422014011904,
+       "p_onesided_pos": 0.7558488302339532,
+       "p_raw_refit": 0.7142857142857143,
+       "p_maxt_fwer": 0.7442557442557443,
+       "t_family": -0.7318926016661063
+      },
+      "cross_cosine": {
+       "mean": 0.1645233985427674,
+       "median": 0.13294606779373153,
+       "ci_low": 0.10065610779178684,
+       "ci_high": 0.24388320682735287,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003,
+       "t": 4.6107138609624085,
+       "p_onesided_neg": 1.0,
+       "scene_permutation": {
+        "n_perm": 1000,
+        "null_mean": 0.005325745373769728,
+        "null_sd": 0.041601538418936865,
+        "p_onesided_neg": 1.0,
+        "p_twosided": 0.000999000999000999,
+        "observed_minus_null_mean": 0.15919765316899767,
+        "shared_direction_alignment_offdiag_mean": -0.007261547595816416,
+        "note": "the null's mean is the alignment a shared direction alone produces; observed - null_mean is the scene-specific part"
+       }
+      },
+      "cross_heldout_projection": {
+       "mean": -0.024330015508872656,
+       "median": 0.004151555864072886,
+       "ci_low": -0.08374458256490794,
+       "ci_high": 0.031918799122016735,
+       "n": 16,
+       "sign_flip_p": 0.4477104579084183,
+       "t": -0.7754772633149196,
+       "p_onesided_neg_naive": 0.21935612877424515,
+       "note": "registered p (identity-relabel refit null, max-T) is filled in from the family level",
+       "p_raw_relabel_refit": 0.33166833166833165,
+       "p_maxt_fwer": 0.3646353646353646,
+       "t_neg_family": 0.7754772633149196
+      },
+      "norm_A_median": 0.5322211680642666,
+      "norm_B_median": 0.5590892991947215,
+      "detected": {
+       "within_A": false,
+       "within_B": false,
+       "anti_alignment": false,
+       "rule": "within: max-T p < 0.05; anti_alignment: relabel-refit max-T p < 0.05 AND the per-scene cosine CI lies below 0 (descriptive flags, not decision thresholds)"
+      }
+     }
+    },
+    "template": {
+     "definition": {
+      "shared": "LOSO mean over the other scenes of all four (arm x identity) DiD fields, arm B moved into arm A coordinates with the fold's hazard-free transport",
+      "perarm": "LOSO mean over the other scenes of the arm's two identity DiD fields (own coordinates)"
+     },
+     "identity_over_template": {
+      "shared": {
+       "A": {
+        "median": 0.15643458375118258,
+        "mean": 0.1534441453519128
+       },
+       "B": {
+        "median": 0.1641479538760936,
+        "mean": 0.15952803305459667
+       },
+       "A_perp": {
+        "median": 0.15533742369885528
+       },
+       "B_perp": {
+        "median": 0.1628557923554535
+       }
+      },
+      "perarm": {
+       "A": {
+        "median": 0.15651325526252635
+       },
+       "B": {
+        "median": 0.1641460476103237
+       }
+      },
+      "note": "||I_i|| / ||tau_{-i}|| per scene; I = DiD(ped) - DiD(cone); _perp = template direction projected off"
+     },
+     "residual_over_field_norm": {
+      "shared": {
+       "A_ped": 0.18779341088867288,
+       "A_cone": 0.19069580178577922,
+       "B_ped": 0.18562807132992507,
+       "B_cone": 0.19437675568537918
+      },
+      "perarm": {
+       "A_ped": 0.18736973374632304,
+       "A_cone": 0.19386712107359422,
+       "B_ped": 0.18514029696770593,
+       "B_cone": 0.19588173953722027
+      }
+     },
+     "residual_over_template_norm": {
+      "shared": {
+       "A_ped": 0.1803317897536192,
+       "A_cone": 0.18487763390381792,
+       "B_ped": 0.17546126095568182,
+       "B_cone": 0.18209836811946112
+      },
+      "perarm": {
+       "A_ped": 0.18205590993050672,
+       "A_cone": 0.18610997213793246,
+       "B_ped": 0.1785971127024547,
+       "B_cone": 0.18340741988888898
+      }
+     },
+     "heldout_energy_fraction_along_shared_template": {
+      "A_ped": 0.9730581940108963,
+      "B_ped": 0.9742322201204741,
+      "A_cone": 0.9726083262200592,
+      "B_cone": 0.9723503412921186
+     },
+     "insample": {
+      "mean_direction_fraction_all_fields": 0.9758910668549721,
+      "pc1_fraction_all_fields": 0.975915600663453,
+      "mean_direction_fraction_per_field": {
+       "A_ped": 0.9755290583267187,
+       "A_cone": 0.9753132339109581,
+       "B_ped": 0.9772106492301965,
+       "B_cone": 0.9755116639026183
+      },
+      "template_norm_full": 3.4288434689100016
+     },
+     "template_amplitude": {
+      "shared": {
+       "A_ped": {
+        "mean": 0.998667849723948,
+        "median": 0.977127174079085,
+        "ci_low": 0.9348329441321621,
+        "ci_high": 1.0724811521027413,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 1.001373337272836,
+        "median": 0.9764312591285303,
+        "ci_low": 0.9305230970726712,
+        "ci_high": 1.0798170634494808,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 1.0018859861697507,
+        "median": 0.9751725082198587,
+        "ci_low": 0.9380825353597575,
+        "ci_high": 1.0776816727399579,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 0.9997868288009695,
+        "median": 0.9737538604368648,
+        "ci_low": 0.9301182847861733,
+        "ci_high": 1.0781539002685332,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      },
+      "perarm": {
+       "A_ped": {
+        "mean": 0.9982880181644121,
+        "median": 0.97776707531594,
+        "ci_low": 0.9344869559272553,
+        "ci_high": 1.0718852705117219,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_ped": {
+        "mean": 1.0006777156369313,
+        "median": 0.9751128343793104,
+        "ci_low": 0.9299589790408606,
+        "ci_high": 1.079143889508455,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "A_cone": {
+        "mean": 1.001406781814569,
+        "median": 0.9754593669224713,
+        "ci_low": 0.9376728321096716,
+        "ci_high": 1.0769553501744038,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       },
+       "B_cone": {
+        "mean": 0.9992717479023017,
+        "median": 0.9736405620415685,
+        "ci_low": 0.9297546325936012,
+        "ci_high": 1.0775186619283832,
+        "n": 16,
+        "sign_flip_p": 0.0001999600079984003
+       }
+      }
+     },
+     "template_amplitude_asymmetry": {
+      "shared": {
+       "A_ped_minus_cone": {
+        "mean": -0.0032181364458026577,
+        "median": -0.0060889368235376735,
+        "ci_low": -0.009035097935622809,
+        "ci_high": 0.0030859862763546867,
+        "n": 16,
+        "sign_flip_p": 0.3633273345330934
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.0015865084718665228,
+        "median": 0.0018293044074383276,
+        "ci_low": -0.004948658059148986,
+        "ci_high": 0.008299455697541688,
+        "n": 16,
+        "sign_flip_p": 0.6616676664667066
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      },
+      "perarm": {
+       "A_ped_minus_cone": {
+        "mean": -0.0031187636501570502,
+        "median": -0.0061020454682390885,
+        "ci_low": -0.008896021816009049,
+        "ci_high": 0.003200422422726888,
+        "n": 16,
+        "sign_flip_p": 0.3769246150769846
+       },
+       "B_ped_minus_cone": {
+        "mean": 0.0014059677346296264,
+        "median": 0.0016224012764314358,
+        "ci_low": -0.005081822541975567,
+        "ci_high": 0.00810683427370937,
+        "n": 16,
+        "sign_flip_p": 0.6992601479704059
+       },
+       "prediction": "A > 0 (solid pedestrian carries more template), B < 0 (solid cone)",
+       "pattern_consistent": false
+      }
+     },
+     "template_norm_loso_median": {
+      "shared": 3.4347968536922844,
+      "A": 3.4340261927529507,
+      "B": 3.4361468735656673
+     },
+     "h0prime_did_cosine_to_template": {
+      "A": {
+       "mean": 0.2629243341233439,
+       "median": 0.26331819671353407,
+       "ci_low": 0.24133684278103484,
+       "ci_high": 0.28062334928141325,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "B": {
+       "mean": 0.256306555165841,
+       "median": 0.26436646723387724,
+       "ci_low": 0.2337370415219674,
+       "ci_high": 0.2794631189021668,
+       "n": 16,
+       "sign_flip_p": 0.0001999600079984003
+      },
+      "note": "DiD of the level-2 mirror-pose (off-lane) cells against the shared template; ~0 if the template is in-lane x action"
+     }
+    },
+    "rank": {
+     "raw": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.9764874825339805,
+       "hard_rank": 1,
+       "quota": 0.017644930166744333,
+       "effective_dims": 1.1292755306716373,
+       "alpha": 0.22359107352047064
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9760394180913387,
+       "hard_rank": 1,
+       "quota": 0.0177189369375699,
+       "effective_dims": 1.1340119640044737,
+       "alpha": 0.22313529435476306
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.9778145064136796,
+       "hard_rank": 1,
+       "quota": 0.01742419979946809,
+       "effective_dims": 1.1151487871659578,
+       "alpha": 0.22223801476401067
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.9763268395333876,
+       "hard_rank": 1,
+       "quota": 0.017681146408724015,
+       "effective_dims": 1.131593370158337,
+       "alpha": 0.22335533698707952
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.975915600663453,
+       "hard_rank": 1,
+       "quota": 0.017790273686938446,
+       "effective_dims": 1.1385775159640605,
+       "alpha": 0.11181244535679562
+      }
+     },
+     "residual_shared": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.4622384191285018,
+       "hard_rank": 7,
+       "quota": 0.18992879919062558,
+       "effective_dims": 12.155443148200037,
+       "alpha": 3.6871880364962126
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.4631448567671019,
+       "hard_rank": 6,
+       "quota": 0.18274814982767268,
+       "effective_dims": 11.695881588971051,
+       "alpha": 3.563220526656893
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.46715972829205377,
+       "hard_rank": 7,
+       "quota": 0.1895208738855164,
+       "effective_dims": 12.129335928673049,
+       "alpha": 3.742927068865775
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.46942899830560725,
+       "hard_rank": 7,
+       "quota": 0.18907006419103617,
+       "effective_dims": 12.100484108226315,
+       "alpha": 3.626686341283298
+      },
+      "all_four_fields": {
+       "n": 64,
+       "pc1_fraction": 0.4466276473197687,
+       "hard_rank": 14,
+       "quota": 0.48485984417199957,
+       "effective_dims": 31.031030027007972,
+       "alpha": 2.85784741525841
+      }
+     },
+     "residual_perarm": {
+      "A_ped": {
+       "n": 16,
+       "pc1_fraction": 0.467825834575265,
+       "hard_rank": 7,
+       "quota": 0.18663431018331864,
+       "effective_dims": 11.944595851732393,
+       "alpha": 3.669839633425792
+      },
+      "A_cone": {
+       "n": 16,
+       "pc1_fraction": 0.466531114183294,
+       "hard_rank": 6,
+       "quota": 0.18084337693480507,
+       "effective_dims": 11.573976123827524,
+       "alpha": 3.554273336019431
+      },
+      "B_ped": {
+       "n": 16,
+       "pc1_fraction": 0.4703746780511085,
+       "hard_rank": 7,
+       "quota": 0.18605384435661698,
+       "effective_dims": 11.907446038823487,
+       "alpha": 3.7169354381005215
+      },
+      "B_cone": {
+       "n": 16,
+       "pc1_fraction": 0.47537254000139495,
+       "hard_rank": 7,
+       "quota": 0.18450113037231886,
+       "effective_dims": 11.808072343828407,
+       "alpha": 3.5981928878304528
+      }
+     },
+     "identity_contrast": {
+      "A": {
+       "n": 16,
+       "pc1_fraction": 0.15696384965655602,
+       "hard_rank": 10,
+       "quota": 0.2152460032629144,
+       "effective_dims": 13.775744208826522,
+       "alpha": 5.34356973329813
+      },
+      "B": {
+       "n": 16,
+       "pc1_fraction": 0.1866636098382597,
+       "hard_rank": 10,
+       "quota": 0.21187135690019937,
+       "effective_dims": 13.55976684161276,
+       "alpha": 5.110844664832665
+      },
+      "A_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.158233203756306,
+       "hard_rank": 10,
+       "quota": 0.21514258994479735,
+       "effective_dims": 13.76912575646703,
+       "alpha": 5.3635239942550506
+      },
+      "B_perp_shared": {
+       "n": 16,
+       "pc1_fraction": 0.1870642838242842,
+       "hard_rank": 10,
+       "quota": 0.21173540009931804,
+       "effective_dims": 13.551065606356355,
+       "alpha": 5.129066345093822
+      }
+     },
+     "note": "uncentred spectrum of the per-scene rows; hard_rank = singular directions for 80 % energy; quota = conceptor tr(C)/d at 80 % retained energy (geometry_cross_arm.quota_for_capture); in-sample"
+    }
+   },
+   "status": "ok"
+  }
+ ],
+ "runtime_s": 9.335007905960083,
+ "interpretation_scope": "descriptive/associational; template-projected; causal claims remain with patching. Everything is fitted on discovery scenes only (LOSO for every held-out score, the hazard-free Procrustes transport included); the identity-contrast vector I = DiD(ped) - DiD(cone) is algebraically invariant to subtracting one template vector from both identities, so the template removal changes its magnitude bookkeeping and the I_perp variant, not I itself; anti-alignment of I^A with the transported I^B is a geometric consequence of the reversed assignment and does not by itself show that either arm USES that direction.",
+ "self_test": {
+  "planted": false,
+  "checks": {
+   "no_anti_alignment": true,
+   "cosine_band": true,
+   "within_band": true
+  },
+  "passed": true,
+  "n_sites": 6,
+  "n_groups": 3,
+  "counts": {
+   "I": {
+    "anti_alignment": [
+     0,
+     6
+    ],
+    "within_A": [
+     0,
+     6
+    ],
+    "within_B": [
+     0,
+     6
+    ]
+   },
+   "I_perp_shared": {
+    "anti_alignment": [
+     0,
+     6
+    ],
+    "within_A": [
+     0,
+     6
+    ],
+    "within_B": [
+     0,
+     6
+    ]
+   },
+   "I_perp_perarm": {
+    "anti_alignment": [
+     0,
+     6
+    ],
+    "within_A": [
+     0,
+     6
+    ],
+    "within_B": [
+     0,
+     6
+    ]
+   }
+  },
+  "max_abs_cross_cos_mean": {
+   "I": 0.16047975026147618,
+   "I_perp_shared": 0.16453098933610869,
+   "I_perp_perarm": 0.1645233985427674
+  },
+  "max_abs_within_cos_mean_I": 0.04138331466463906,
+  "identity_over_template_max_median": 0.25462704921887214,
+  "template_fraction_range": [
+   0.9374824969135699,
+   0.9759940424969883
+  ]
+ }
+}

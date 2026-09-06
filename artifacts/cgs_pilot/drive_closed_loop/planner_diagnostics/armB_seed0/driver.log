@@ -1,0 +1,33 @@
+[2026-09-03T17:57:59Z] planner diagnostics armB_seed0 seeds [9, 10, 19] configs compact_rolling3,compact_dest,compact_rolling6,compact_rolling10,released_cem_dest (hazard-free only)
+  seed 9 reference always_throttle: arrive_dest env step 128, progress 221.6 m, 44 frames, wall 11.6s
+  seed 9 compact_rolling3: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=129.4 m replans=332 wall=827s replay_ok=True
+  seed 9 compact_dest: outcome=success reason=None arrive_step=273 env_steps=271 progress=220.2 m replans=91 wall=216s replay_ok=True
+  seed 9 compact_rolling6: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=115.6 m replans=332 wall=788s replay_ok=True
+[2026-09-03T18:36:50Z] planner diagnostics armB_seed0 seeds [9, 10, 19] configs fixed_k10,fixed_k20 (hazard-free only)
+  seed 9 reference always_throttle: arrive_dest env step 128, progress 221.6 m, 44 frames, wall 10.5s
+  seed 9 fixed_k10: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=7.6 m replans=332 wall=800s replay_ok=True | k=10 target=31.7 m passed=False pass_step=None artefact=0/332 margin_mean=-0.388
+  seed 9 fixed_k20: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=-2.7 m replans=332 wall=769s replay_ok=True | k=20 target=77.4 m passed=False pass_step=None artefact=0/332 margin_mean=-0.275
+  seed 10 reference always_throttle: arrive_dest env step 122, progress 208.1 m, 42 frames, wall 2.2s
+  seed 10 fixed_k10: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=4.4 m replans=332 wall=745s replay_ok=True | k=10 target=31.7 m passed=False pass_step=None artefact=0/332 margin_mean=-0.372
+  seed 10 fixed_k20: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=-1.8 m replans=332 wall=601s replay_ok=True | k=20 target=77.3 m passed=False pass_step=None artefact=0/332 margin_mean=-0.256
+  seed 19 reference always_throttle: arrive_dest env step 138, progress 243.1 m, 47 frames, wall 2.5s
+  seed 19 fixed_k10: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=3.7 m replans=332 wall=438s replay_ok=True | k=10 target=31.6 m passed=False pass_step=None artefact=0/332 margin_mean=-0.388
+  seed 19 fixed_k20: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=0.9 m replans=332 wall=337s replay_ok=True | k=20 target=77.0 m passed=False pass_step=None artefact=0/332 margin_mean=-0.310
+[2026-09-03T19:38:53Z] DIAG_DONE armB_seed0
+[2026-09-03T19:38:55Z] planner diagnostics armB_seed0 seeds [9, 10, 19] configs fixed_k6,fixed_k40,released_k10 (hazard-free only)
+  seed 9 reference always_throttle: arrive_dest env step 128, progress 221.6 m, 44 frames, wall 11.1s
+  seed 9 fixed_k6: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=7.0 m replans=332 wall=618s replay_ok=True | k=6 target=17.4 m passed=False pass_step=None artefact=0/332 margin_mean=-0.430
+  seed 9 fixed_k40: outcome=descriptive_pass reason=None arrive_step=None env_steps=207 progress=205.9 m replans=69 wall=133s replay_ok=True | k=40 target=203.8 m passed=True pass_step=207 artefact=69/69 margin_mean=+0.036
+  seed 9 released_k10: outcome=diag_timeout reason=None arrive_step=None env_steps=153 progress=8.6 m replans=17 wall=1238s replay_ok=True | k=10 target=31.7 m passed=False pass_step=None artefact=0/17 margin_mean=-0.582
+  seed 10 reference always_throttle: arrive_dest env step 122, progress 208.1 m, 42 frames, wall 4.0s
+  seed 10 fixed_k6: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=7.2 m replans=332 wall=593s replay_ok=True | k=6 target=17.4 m passed=False pass_step=None artefact=0/332 margin_mean=-0.416
+  seed 10 fixed_k40: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=125.9 m replans=332 wall=707s replay_ok=True | k=40 target=203.6 m passed=False pass_step=None artefact=49/332 margin_mean=+0.034
+  seed 10 released_k10: outcome=diag_timeout reason=None arrive_step=None env_steps=144 progress=17.6 m replans=16 wall=1231s replay_ok=True | k=10 target=31.7 m passed=False pass_step=None artefact=0/16 margin_mean=-0.587
+  seed 19 reference always_throttle: arrive_dest env step 138, progress 243.1 m, 47 frames, wall 2.6s
+  seed 19 fixed_k6: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=15.7 m replans=332 wall=866s replay_ok=True | k=6 target=17.3 m passed=False pass_step=None artefact=0/332 margin_mean=-0.424
+  seed 19 fixed_k40: outcome=descriptive_pass reason=None arrive_step=None env_steps=489 progress=203.7 m replans=163 wall=389s replay_ok=True | k=40 target=203.0 m passed=True pass_step=489 artefact=149/163 margin_mean=+0.035
+  seed 19 released_k10: outcome=diag_timeout reason=None arrive_step=None env_steps=234 progress=30.0 m replans=26 wall=1294s replay_ok=True | k=10 target=31.6 m passed=False pass_step=None artefact=0/26 margin_mean=-0.596
+[2026-09-03T21:37:22Z] DIAG_DONE armB_seed0
+[2026-09-03T21:37:24Z] planner diagnostics armB_seed0 seeds [9, 10, 19] configs compact_rolling6,compact_rolling10,released_cem_dest (hazard-free only)
+  seed 9 reference always_throttle: arrive_dest env step 128, progress 221.6 m, 44 frames, wall 13.8s
+  seed 9 compact_rolling10: outcome=failure reason=max_step arrive_step=None env_steps=995 progress=124.3 m replans=332 wall=1124s replay_ok=True

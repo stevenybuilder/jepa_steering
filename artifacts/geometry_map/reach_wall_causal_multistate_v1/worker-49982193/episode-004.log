@@ -1,0 +1,174 @@
+Gym has been unmaintained since 2022 and does not support NumPy 2.0 amongst other critical functionality.
+Please upgrade to Gymnasium, the maintained drop-in replacement of Gym, or contact the authors of your software and request that they upgrade.
+See the migration guide at https://gymnasium.farama.org/introduction/migration_guide/ for additional information.
+/opt/conda/lib/python3.11/site-packages/pygame/pkgdata.py:25: DeprecationWarning: pkg_resources is deprecated as an API. See https://setuptools.pypa.io/en/latest/pkg_resources.html
+  from pkg_resources import resource_stream, resource_exists
+[WARNING ][2026-09-05 20:34:29][Cluster utils       ][_build_dataset_paths     ] JEPAWM_DSET environment variable not set. Dataset paths will need to be provided manually or set the environment variable. See README.md for setup instructions.
+[WARNING ][2026-09-05 20:34:29][src.utils.yaml_utils][replace_var              ] Environment variable 'JEPAWM_LOGS' not found at folder. Keeping original placeholder: ${JEPAWM_LOGS}
+[WARNING ][2026-09-05 20:34:29][src.utils.yaml_utils][replace_var              ] Environment variable 'JEPAWM_CKPT' not found at checkpoint_folder. Keeping original placeholder: ${JEPAWM_CKPT}
+[INFO    ][2026-09-05 20:34:30][httpx               ][_send_single_request     ] HTTP Request: HEAD https://huggingface.co/facebook/jepa-wms/resolve/main/jepa_wm_metaworld.pth.tar "HTTP/1.1 302 Found"
+Using cache found in /root/.cache/torch/hub/facebookresearch_dinov2_main
+[INFO    ][2026-09-05 20:34:32][dinov2              ][__init__                 ] using MLP layer as FFN
+[INFO    ][2026-09-05 20:34:33][root                ][init_video_model         ] Encoder: DinoEncoder(
+  (base_model): DinoVisionTransformer(
+    (patch_embed): PatchEmbed(
+      (proj): Conv2d(3, 384, kernel_size=(14, 14), stride=(14, 14))
+      (norm): Identity()
+    )
+    (blocks): ModuleList(
+      (0-11): 12 x NestedTensorBlock(
+        (norm1): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+        (attn): MemEffAttention(
+          (qkv): Linear(in_features=384, out_features=1152, bias=True)
+          (proj): Linear(in_features=384, out_features=384, bias=True)
+          (proj_drop): Dropout(p=0.0, inplace=False)
+        )
+        (ls1): LayerScale()
+        (drop_path1): Identity()
+        (norm2): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+        (mlp): Mlp(
+          (fc1): Linear(in_features=384, out_features=1536, bias=True)
+          (act): GELU(approximate='none')
+          (fc2): Linear(in_features=1536, out_features=384, bias=True)
+          (drop): Dropout(p=0.0, inplace=False)
+        )
+        (ls2): LayerScale()
+        (drop_path2): Identity()
+      )
+    )
+    (norm): LayerNorm((384,), eps=1e-06, elementwise_affine=True)
+    (head): Identity()
+  )
+)
+[INFO    ][2026-09-05 20:34:33][root                ][init_video_model         ] 🧠 Encoder: DinoEncoder (22,056,576 params, frozen=True)
+[INFO    ][2026-09-05 20:34:33][app.plan_common.models.AdaLN_vit][__init__                 ] 🔧 Initialized 6 AdaLN blocks (scale_factor=10)
+[INFO    ][2026-09-05 20:34:33][root                ][init_video_model         ] Predictor: VisionTransformerAdaLN(
+  (predictor_embed): Linear(in_features=384, out_features=384, bias=True)
+  (action_encoder): Linear(in_features=20, out_features=400, bias=True)
+  (predictor_blocks): ModuleList(
+    (0-5): 6 x FWAdaLNBlock(
+      (norm1): LayerNorm((400,), eps=1e-06, elementwise_affine=True)
+      (attn): RoPEAttention(
+        (qkv): Linear(in_features=400, out_features=1200, bias=True)
+        (attn_drop): Dropout(p=0.0, inplace=False)
+        (proj): Linear(in_features=400, out_features=400, bias=True)
+        (proj_drop): Dropout(p=0.0, inplace=False)
+      )
+      (drop_path): Identity()
+      (norm2): LayerNorm((400,), eps=1e-06, elementwise_affine=True)
+      (mlp): MLP(
+        (fc1): Linear(in_features=400, out_features=1600, bias=True)
+        (act): GELU(approximate='none')
+        (fc2): Linear(in_features=1600, out_features=400, bias=True)
+        (drop): Dropout(p=0.0, inplace=False)
+      )
+      (adaLN_modulation): Sequential(
+        (0): SiLU()
+        (1): Linear(in_features=400, out_features=2400, bias=True)
+      )
+    )
+  )
+  (predictor_norm): LayerNorm((400,), eps=1e-06, elementwise_affine=True)
+  (predictor_proj): Linear(in_features=384, out_features=384, bias=True)
+)
+[INFO    ][2026-09-05 20:34:33][root                ][init_video_model         ] 🔮 Predictor: VisionTransformerAdaLN (17,630,480 params)
+[INFO    ][2026-09-05 20:34:33][root                ][fetch_checkpoint         ] Loading checkpoint from local path: /root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar
+[INFO    ][2026-09-05 20:34:33][root                ][load_checkpoint_state_dict] loaded pretrained predictor from epoch 50 with msg: <All keys matched successfully>
+[INFO    ][2026-09-05 20:34:33][root                ][load_checkpoint_state_dict] loaded pretrained proprio encoder from epoch 50 with msg: <All keys matched successfully>
+[INFO    ][2026-09-05 20:34:34][root                ][__init__                 ] 📉 Loss weights: L2=1.0
+[INFO    ][2026-09-05 20:34:34][OpenGL.platform.ctypesloader][_loadLibraryPosix        ] Failed to load library ( 'libOpenGL.so.0' ): libOpenGL.so.0: cannot open shared object file: No such file or directory
+[INFO    ][2026-09-05 20:34:34][OpenGL.acceleratesupport][<module>                 ] No OpenGL_accelerate module loaded: No module named 'OpenGL_accelerate'
+[INFO    ][2026-09-05 20:34:34][OpenGL.platform.ctypesloader][_loadLibraryPosix        ] Failed to load library ( 'libOpenGL.so.0' ): libOpenGL.so.0: cannot open shared object file: No such file or directory
+[INFO    ][2026-09-05 20:34:34][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:34:34][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:34:34][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:34:34][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+/opt/conda/lib/python3.11/site-packages/metaworld/policies/policy.py:49: UserWarning: Constant(s) may be too high. Environments clip response to [-1, 1]
+  warnings.warn(
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+{"event": "replay_verified", "checks": {"pixels": 0.0, "proprio": 0.0, "goal_pixels": 0.0, "goal_proprio": 0.0, "qpos": 0.0, "qvel": 0.0, "act": 0.0, "mocap_pos": 0.0, "mocap_quat": 0.0, "userdata": 0.0, "time": 0.0, "task._last_rand_vec": 0.0, "task._target_pos": 0.0, "task.obj_init_pos": 0.0, "task.hand_init_pos": 0.0, "task.seeded_rand_vec": 0.0, "task._freeze_rand_vec": 0.0}}
+[INFO    ][2026-09-05 20:34:35][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:34:35][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:34:35][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:34:36][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+[INFO    ][2026-09-05 20:34:36][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+[INFO    ][2026-09-05 20:34:36][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:34:36][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:34:36][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:34:36][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+[INFO    ][2026-09-05 20:34:37][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+[INFO    ][2026-09-05 20:34:37][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:34:37][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:34:37][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:34:37][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+[INFO    ][2026-09-05 20:34:38][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+[INFO    ][2026-09-05 20:34:38][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:34:38][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:34:38][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:34:38][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+[INFO    ][2026-09-05 20:34:38][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+[INFO    ][2026-09-05 20:34:39][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:34:39][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:34:39][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:34:39][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+[INFO    ][2026-09-05 20:34:39][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+[INFO    ][2026-09-05 20:34:39][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:34:39][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:34:39][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:34:39][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+[INFO    ][2026-09-05 20:34:40][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+{"event": "six_same_state_counterfactuals_complete"}
+[INFO    ][2026-09-05 20:34:40][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:34:40][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:34:40][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:34:40][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+{"event": "native_cem_started", "arm": "unsteered"}
+[INFO    ][2026-09-05 20:35:29][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+{"event": "arm_complete", "arm": "unsteered", "episode": 4, "replan": 0, "first_candidate_argmin": 105, "candidate_rank_changes": 0, "candidate_cost_l2_change": 0.0, "predicted_visual_pooled_l2_change": 0.0, "chosen_raw_action_l2_change": 0.0, "end_hand_l2_change": 0.0, "end_goal_distance": 0.19363901019096375, "short_fork_success": false, "steps": 15, "seconds": 49.7116473930073}
+[INFO    ][2026-09-05 20:35:30][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:35:30][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:35:30][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:35:30][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+{"event": "native_cem_started", "arm": "identity"}
+[INFO    ][2026-09-05 20:36:19][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+{"event": "arm_complete", "arm": "identity", "episode": 4, "replan": 0, "first_candidate_argmin": 105, "candidate_rank_changes": 0, "candidate_cost_l2_change": 0.0, "predicted_visual_pooled_l2_change": 0.0, "chosen_raw_action_l2_change": 0.0, "end_hand_l2_change": 0.0, "end_goal_distance": 0.19363901019096375, "short_fork_success": false, "steps": 15, "seconds": 49.77427282201825}
+[INFO    ][2026-09-05 20:36:20][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:36:20][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:36:20][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:36:20][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+{"event": "native_cem_started", "arm": "subspace_up"}
+[INFO    ][2026-09-05 20:37:09][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+{"event": "arm_complete", "arm": "subspace_up", "episode": 4, "replan": 0, "first_candidate_argmin": 105, "candidate_rank_changes": 209, "candidate_cost_l2_change": 0.04265916347503662, "predicted_visual_pooled_l2_change": 3.474590539932251, "chosen_raw_action_l2_change": 7.360408306121826, "end_hand_l2_change": 0.011183058601052434, "end_goal_distance": 0.18891006708145142, "short_fork_success": false, "steps": 15, "seconds": 49.80534322501626}
+[INFO    ][2026-09-05 20:37:10][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:37:10][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:37:10][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:37:10][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+{"event": "native_cem_started", "arm": "sham_up"}
+[INFO    ][2026-09-05 20:37:59][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+{"event": "arm_complete", "arm": "sham_up", "episode": 4, "replan": 0, "first_candidate_argmin": 188, "candidate_rank_changes": 275, "candidate_cost_l2_change": 0.24436689913272858, "predicted_visual_pooled_l2_change": 15.305383682250977, "chosen_raw_action_l2_change": 8.889970779418945, "end_hand_l2_change": 0.010982427651478801, "end_goal_distance": 0.1973562091588974, "short_fork_success": false, "steps": 15, "seconds": 49.78502483502962}
+[INFO    ][2026-09-05 20:37:59][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:37:59][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:37:59][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:38:00][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+{"event": "native_cem_started", "arm": "subspace_down"}
+[INFO    ][2026-09-05 20:38:49][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+{"event": "arm_complete", "arm": "subspace_down", "episode": 4, "replan": 0, "first_candidate_argmin": 105, "candidate_rank_changes": 189, "candidate_cost_l2_change": 0.03503941744565964, "predicted_visual_pooled_l2_change": 2.540088415145874, "chosen_raw_action_l2_change": 8.45245361328125, "end_hand_l2_change": 0.005653282601842084, "end_goal_distance": 0.19160965085029602, "short_fork_success": false, "steps": 15, "seconds": 49.80390131700551}
+[INFO    ][2026-09-05 20:38:49][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+[INFO    ][2026-09-05 20:38:49][evals.simu_env_planning.planning.gc_agent][__init__                 ] 🏗️  Initializing GC_Agent with WorldModel
+[INFO    ][2026-09-05 20:38:49][evals.simu_env_planning.planning.plan_evaluator][get_goal_state_mw        ] Creating expert env ...
+[INFO    ][2026-09-05 20:38:49][evals.simu_env_planning.envs.metaworld][make_env                 ] No env_cls so env initialized with seed 1 and env_id='reach-wall-v3-goal-observable'
+{"event": "replay_start_errors", "pixels": 0.0, "proprio": 0.0, "qpos": 0.0, "goal_pixels": 0.0}
+{"event": "native_cem_started", "arm": "sham_down"}
+[INFO    ][2026-09-05 20:39:39][evals.simu_env_planning.envs.metaworld][render                   ] Reinitializing render MetaworldWrapper
+{"event": "arm_complete", "arm": "sham_down", "episode": 4, "replan": 0, "first_candidate_argmin": 188, "candidate_rank_changes": 291, "candidate_cost_l2_change": 0.273782879114151, "predicted_visual_pooled_l2_change": 19.791574478149414, "chosen_raw_action_l2_change": 9.070863723754883, "end_hand_l2_change": 0.011253797868364935, "end_goal_distance": 0.19806592166423798, "short_fork_success": false, "steps": 15, "seconds": 49.793031572015025}

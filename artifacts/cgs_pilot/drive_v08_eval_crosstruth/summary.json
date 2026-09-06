@@ -1,0 +1,560 @@
+{
+ "design": "model arm x truth arm x primary hazard level; discovery scenes only; own-truth cells from artifacts/drive_eval (main run), cross-truth cells from this script",
+ "metrics": {
+  "interaction_nmse_median": "pooled.interaction_nmse.median of the gate",
+  "captured_fraction": "1 - interaction NMSE median (main-run definition)",
+  "rec_h1_minus_h0": "primary token group (hazard_corridor) pooled mean, with scene-level sign-flip p",
+  "flip_rate_h1_vs_h0": "CEM ranking flip rate H1 vs H0",
+  "n": "discovery scenes"
+ },
+ "prediction": "cross-truth cells fail at both levels (level 1: predicted collision absent from the truth; level 3: predicted pass-through where the truth collides); own-truth cells pass",
+ "seeds": [
+  "0",
+  "1",
+  "2"
+ ],
+ "arms": [
+  "A",
+  "B"
+ ],
+ "n_cross_cells_done": 12,
+ "n_cross_cells_total": 12,
+ "table": {
+  "model_armA": {
+   "truth_armA": {
+    "level1": {
+     "truth_kind": "own",
+     "pooled": {
+      "n_seeds": 3,
+      "n_scenes": [
+       31,
+       31,
+       31
+      ],
+      "interaction_nmse_median_mean": 0.4345964990706217,
+      "interaction_nmse_median_median": 0.44498845638099754,
+      "captured_fraction_mean": 0.5654035009293782,
+      "rec_h1_minus_h0_mean": 0.26089515159165083,
+      "rec_h1_minus_h0_p": [
+       0.0001999600079984003,
+       0.0001999600079984003,
+       0.0001999600079984003
+      ],
+      "flip_rate_h1_vs_h0_mean": 0.8817204301075269,
+      "b_gate_verdicts": [
+       "PASS_PLANNER",
+       "PASS_PLANNER",
+       "PASS_PLANNER"
+      ]
+     },
+     "per_seed": {
+      "0": {
+       "n": 31,
+       "interaction_nmse_median": 0.44498845638099754,
+       "captured_fraction": 0.5550115436190024,
+       "rec_h1_minus_h0": 0.2490458286993143,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armA_seed0"
+      },
+      "1": {
+       "n": 31,
+       "interaction_nmse_median": 0.3961939527179308,
+       "captured_fraction": 0.6038060472820692,
+       "rec_h1_minus_h0": 0.3158610381531995,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.9032258064516129,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armA_seed1"
+      },
+      "2": {
+       "n": 31,
+       "interaction_nmse_median": 0.4626070881129369,
+       "captured_fraction": 0.5373929118870631,
+       "rec_h1_minus_h0": 0.21777858792243873,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armA_seed2"
+      }
+     }
+    },
+    "level3": {
+     "truth_kind": "own",
+     "pooled": {
+      "n_seeds": 3,
+      "n_scenes": [
+       31,
+       31,
+       31
+      ],
+      "interaction_nmse_median_mean": 0.3439432931141307,
+      "interaction_nmse_median_median": 0.3517322551384245,
+      "captured_fraction_mean": 0.6560567068858693,
+      "rec_h1_minus_h0_mean": 0.1809682616513745,
+      "rec_h1_minus_h0_p": [
+       0.0001999600079984003,
+       0.0001999600079984003,
+       0.0001999600079984003
+      ],
+      "flip_rate_h1_vs_h0_mean": 0.8279569892473119,
+      "b_gate_verdicts": [
+       "PASS_PLANNER",
+       "PASS_PLANNER",
+       "PASS_PLANNER"
+      ]
+     },
+     "per_seed": {
+      "0": {
+       "n": 31,
+       "interaction_nmse_median": 0.3517322551384245,
+       "captured_fraction": 0.6482677448615755,
+       "rec_h1_minus_h0": 0.17628039728410363,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armA_seed0"
+      },
+      "1": {
+       "n": 31,
+       "interaction_nmse_median": 0.31353768247629454,
+       "captured_fraction": 0.6864623175237055,
+       "rec_h1_minus_h0": 0.19591235918235428,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.7419354838709677,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armA_seed1"
+      },
+      "2": {
+       "n": 31,
+       "interaction_nmse_median": 0.36655994172767303,
+       "captured_fraction": 0.633440058272327,
+       "rec_h1_minus_h0": 0.17071202848766562,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armA_seed2"
+      }
+     }
+    }
+   },
+   "truth_armB": {
+    "level1": {
+     "truth_kind": "cross",
+     "pooled": {
+      "n_seeds": 3,
+      "n_scenes": [
+       31,
+       31,
+       31
+      ],
+      "interaction_nmse_median_mean": 3.1043044290720085,
+      "interaction_nmse_median_median": 3.1073587985974584,
+      "captured_fraction_mean": -2.1043044290720085,
+      "rec_h1_minus_h0_mean": -0.07663893804875216,
+      "rec_h1_minus_h0_p": [
+       0.0011997600479904018,
+       0.5046990601879624,
+       0.0001999600079984003
+      ],
+      "flip_rate_h1_vs_h0_mean": 0.8817204301075269,
+      "b_gate_verdicts": [
+       "FAIL",
+       "FAIL",
+       "FAIL"
+      ]
+     },
+     "per_seed": {
+      "0": {
+       "n": 31,
+       "interaction_nmse_median": 3.133044929497392,
+       "captured_fraction": -2.133044929497392,
+       "rec_h1_minus_h0": -0.09127229030250544,
+       "rec_h1_minus_h0_p": 0.0011997600479904018,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armA_seed0_on_armB"
+      },
+      "1": {
+       "n": 31,
+       "interaction_nmse_median": 3.0725095591211753,
+       "captured_fraction": -2.0725095591211753,
+       "rec_h1_minus_h0": -0.017444238559050786,
+       "rec_h1_minus_h0_p": 0.5046990601879624,
+       "flip_rate_h1_vs_h0": 0.9032258064516129,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armA_seed1_on_armB"
+      },
+      "2": {
+       "n": 31,
+       "interaction_nmse_median": 3.1073587985974584,
+       "captured_fraction": -2.1073587985974584,
+       "rec_h1_minus_h0": -0.12120028528470024,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armA_seed2_on_armB"
+      }
+     }
+    },
+    "level3": {
+     "truth_kind": "cross",
+     "pooled": {
+      "n_seeds": 3,
+      "n_scenes": [
+       31,
+       31,
+       31
+      ],
+      "interaction_nmse_median_mean": 1.1081373280487004,
+      "interaction_nmse_median_median": 1.112032813635104,
+      "captured_fraction_mean": -0.10813732804870042,
+      "rec_h1_minus_h0_mean": -0.3467650247703684,
+      "rec_h1_minus_h0_p": [
+       0.0001999600079984003,
+       0.0001999600079984003,
+       0.0001999600079984003
+      ],
+      "flip_rate_h1_vs_h0_mean": 0.8279569892473119,
+      "b_gate_verdicts": [
+       "FAIL",
+       "FAIL",
+       "FAIL"
+      ]
+     },
+     "per_seed": {
+      "0": {
+       "n": 31,
+       "interaction_nmse_median": 1.112032813635104,
+       "captured_fraction": -0.11203281363510409,
+       "rec_h1_minus_h0": -0.35650599258885113,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "FAIL",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armA_seed0_on_armB"
+      },
+      "1": {
+       "n": 31,
+       "interaction_nmse_median": 1.072057507817795,
+       "captured_fraction": -0.07205750781779496,
+       "rec_h1_minus_h0": -0.3034711066160842,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.7419354838709677,
+       "gate_verdict": "FAIL",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armA_seed1_on_armB"
+      },
+      "2": {
+       "n": 31,
+       "interaction_nmse_median": 1.1403216626932022,
+       "captured_fraction": -0.14032166269320223,
+       "rec_h1_minus_h0": -0.38031797510617005,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "FAIL",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armA_seed2_on_armB"
+      }
+     }
+    }
+   }
+  },
+  "model_armB": {
+   "truth_armA": {
+    "level1": {
+     "truth_kind": "cross",
+     "pooled": {
+      "n_seeds": 3,
+      "n_scenes": [
+       31,
+       31,
+       31
+      ],
+      "interaction_nmse_median_mean": 1.033673014337796,
+      "interaction_nmse_median_median": 1.0361907365104364,
+      "captured_fraction_mean": -0.033673014337795903,
+      "rec_h1_minus_h0_mean": -0.3681379125734159,
+      "rec_h1_minus_h0_p": [
+       0.0001999600079984003,
+       0.0001999600079984003,
+       0.0001999600079984003
+      ],
+      "flip_rate_h1_vs_h0_mean": 0.8064516129032259,
+      "b_gate_verdicts": [
+       "FAIL",
+       "FAIL",
+       "FAIL"
+      ]
+     },
+     "per_seed": {
+      "0": {
+       "n": 31,
+       "interaction_nmse_median": 1.0361907365104364,
+       "captured_fraction": -0.03619073651043636,
+       "rec_h1_minus_h0": -0.37471869523400847,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8064516129032258,
+       "gate_verdict": "FAIL",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armB_seed0_on_armA"
+      },
+      "1": {
+       "n": 31,
+       "interaction_nmse_median": 1.0416986526404148,
+       "captured_fraction": -0.041698652640414835,
+       "rec_h1_minus_h0": -0.33989291911613156,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8387096774193549,
+       "gate_verdict": "FAIL",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armB_seed1_on_armA"
+      },
+      "2": {
+       "n": 31,
+       "interaction_nmse_median": 1.0231296538625365,
+       "captured_fraction": -0.023129653862536514,
+       "rec_h1_minus_h0": -0.3898021233701077,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.7741935483870968,
+       "gate_verdict": "FAIL",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armB_seed2_on_armA"
+      }
+     }
+    },
+    "level3": {
+     "truth_kind": "cross",
+     "pooled": {
+      "n_seeds": 3,
+      "n_scenes": [
+       31,
+       31,
+       31
+      ],
+      "interaction_nmse_median_mean": 1.8371481324149936,
+      "interaction_nmse_median_median": 1.854002422199879,
+      "captured_fraction_mean": -0.8371481324149936,
+      "rec_h1_minus_h0_mean": -0.06793959008215958,
+      "rec_h1_minus_h0_p": [
+       0.0001999600079984003,
+       0.0001999600079984003,
+       0.0001999600079984003
+      ],
+      "flip_rate_h1_vs_h0_mean": 0.8709677419354839,
+      "b_gate_verdicts": [
+       "FAIL",
+       "FAIL",
+       "FAIL"
+      ]
+     },
+     "per_seed": {
+      "0": {
+       "n": 31,
+       "interaction_nmse_median": 1.8864651599485536,
+       "captured_fraction": -0.8864651599485536,
+       "rec_h1_minus_h0": -0.07212599562950753,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "FAIL",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armB_seed0_on_armA"
+      },
+      "1": {
+       "n": 31,
+       "interaction_nmse_median": 1.854002422199879,
+       "captured_fraction": -0.854002422199879,
+       "rec_h1_minus_h0": -0.05141522297636462,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "FAIL",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armB_seed1_on_armA"
+      },
+      "2": {
+       "n": 31,
+       "interaction_nmse_median": 1.7709768150965481,
+       "captured_fraction": -0.7709768150965481,
+       "rec_h1_minus_h0": -0.0802775516406066,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "FAIL",
+       "verdict_with_specificity": "FAIL",
+       "b_gate_verdict": "FAIL",
+       "b_gate_verdict_crossgate": "FAIL",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval_crosstruth/armB_seed2_on_armA"
+      }
+     }
+    }
+   },
+   "truth_armB": {
+    "level1": {
+     "truth_kind": "own",
+     "pooled": {
+      "n_seeds": 3,
+      "n_scenes": [
+       31,
+       31,
+       31
+      ],
+      "interaction_nmse_median_mean": 0.49710759619053063,
+      "interaction_nmse_median_median": 0.47310862176780527,
+      "captured_fraction_mean": 0.5028924038094693,
+      "rec_h1_minus_h0_mean": 0.2170021581473857,
+      "rec_h1_minus_h0_p": [
+       0.0001999600079984003,
+       0.0001999600079984003,
+       0.0001999600079984003
+      ],
+      "flip_rate_h1_vs_h0_mean": 0.8064516129032259,
+      "b_gate_verdicts": [
+       "PASS_PLANNER",
+       "PASS_PLANNER",
+       "PASS_PLANNER"
+      ]
+     },
+     "per_seed": {
+      "0": {
+       "n": 31,
+       "interaction_nmse_median": 0.43531733338966044,
+       "captured_fraction": 0.5646826666103395,
+       "rec_h1_minus_h0": 0.1959802700402174,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8064516129032258,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armB_seed0"
+      },
+      "1": {
+       "n": 31,
+       "interaction_nmse_median": 0.5828968334141262,
+       "captured_fraction": 0.41710316658587376,
+       "rec_h1_minus_h0": 0.26101555364900364,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8387096774193549,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armB_seed1"
+      },
+      "2": {
+       "n": 31,
+       "interaction_nmse_median": 0.47310862176780527,
+       "captured_fraction": 0.5268913782321947,
+       "rec_h1_minus_h0": 0.19401065075293608,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.7741935483870968,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armB_seed2"
+      }
+     }
+    },
+    "level3": {
+     "truth_kind": "own",
+     "pooled": {
+      "n_seeds": 3,
+      "n_scenes": [
+       31,
+       31,
+       31
+      ],
+      "interaction_nmse_median_mean": 0.4887415187118613,
+      "interaction_nmse_median_median": 0.48401208127843753,
+      "captured_fraction_mean": 0.5112584812881388,
+      "rec_h1_minus_h0_mean": 0.24259195069728523,
+      "rec_h1_minus_h0_p": [
+       0.0001999600079984003,
+       0.0001999600079984003,
+       0.0001999600079984003
+      ],
+      "flip_rate_h1_vs_h0_mean": 0.8709677419354839,
+      "b_gate_verdicts": [
+       "PASS_PLANNER",
+       "PASS_PLANNER",
+       "PASS_PLANNER"
+      ]
+     },
+     "per_seed": {
+      "0": {
+       "n": 31,
+       "interaction_nmse_median": 0.47644259721357224,
+       "captured_fraction": 0.5235574027864278,
+       "rec_h1_minus_h0": 0.2468365850293696,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armB_seed0"
+      },
+      "1": {
+       "n": 31,
+       "interaction_nmse_median": 0.48401208127843753,
+       "captured_fraction": 0.5159879187215625,
+       "rec_h1_minus_h0": 0.2707925965135001,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armB_seed1"
+      },
+      "2": {
+       "n": 31,
+       "interaction_nmse_median": 0.5057698776435741,
+       "captured_fraction": 0.49423012235642594,
+       "rec_h1_minus_h0": 0.210146670548986,
+       "rec_h1_minus_h0_p": 0.0001999600079984003,
+       "flip_rate_h1_vs_h0": 0.8709677419354839,
+       "gate_verdict": "PASS",
+       "verdict_with_specificity": "PASS",
+       "b_gate_verdict": "PASS_PLANNER",
+       "source": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armB_seed2"
+      }
+     }
+    }
+   }
+  }
+ }
+}

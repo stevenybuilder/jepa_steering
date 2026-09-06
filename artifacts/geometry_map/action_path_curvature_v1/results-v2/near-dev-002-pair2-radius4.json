@@ -1,0 +1,3076 @@
+{
+  "complete": true,
+  "source": {
+    "key": "near-dev-002",
+    "split": "development_external",
+    "source_path": "/root/geometry-map-jepawm-pusht-v1/action-consequence-diagnostics-v1/head-spatial-mean-v1/inputs/bank-v2/near-dev-002.pt",
+    "source_sha256": "de830b324f56acb699135ddb7814a2591c18af00f58199321118f2ca02b6ae05",
+    "fullprecision_goal_restored_exact": true,
+    "fresh_goal_encoding_difference": {
+      "visual": 0.0,
+      "proprio": 0.0
+    },
+    "historical_single_vs_batch_visual_maxabs": 2.193450927734375e-05,
+    "native_repeat_and_capture_exact": true,
+    "batch_shape": 7,
+    "actual_central_future_observed": true,
+    "other_new_path_futures_observed": false,
+    "context_raw_step": 0,
+    "raw_offsets": [
+      5,
+      10,
+      15,
+      20,
+      25,
+      30
+    ]
+  },
+  "path": {
+    "pair": 2,
+    "radius": 4,
+    "raw_delta_l2": 0.0774596706032753,
+    "raw_delta_rms": 0.009999999776482582,
+    "antithetic_rounding_maxabs": 1.4901161193847656e-08,
+    "antithetic_tolerance": 4.76837158203125e-07,
+    "clipping_applied": false,
+    "native_denormalized_raw_maxabs": 2.9802322387695312e-08,
+    "normalized_affine_path_maxabs": 2.384185791015625e-07,
+    "normalized_affine_roundoff_tolerance": 2.5790125164348865e-06
+  },
+  "rows": [
+    {
+      "block": 1,
+      "intervention_horizon": 1,
+      "geometry": {
+        "sample_t": [
+          -1,
+          -0.5,
+          0,
+          0.5,
+          1
+        ],
+        "path_length": 412.4297268540733,
+        "chord_length": 408.73219602903197,
+        "path_chord_ratio": 1.0090463410050983,
+        "chord_orthogonal_distance": [
+          0.0,
+          18.415224137135354,
+          24.397100458217025,
+          18.155079154480465,
+          7.965039638435348e-13
+        ],
+        "max_orthogonal_fraction_of_chord": 0.05968969583322013,
+        "chord_coordinate_fraction": [
+          0.0,
+          0.25274729374949345,
+          0.508129167807359,
+          0.759161407443695,
+          0.999999999999998
+        ],
+        "backtracking_segments": 0,
+        "successive_segment_angle_radians": [
+          0.12281492213899048,
+          0.1200763245658712,
+          0.12555895900953296
+        ],
+        "normal_second_difference": [
+          51.429838337867274,
+          49.77334409337494,
+          50.91371561247529
+        ],
+        "finite_sample_path_curvature": [
+          0.0011760812172593716,
+          0.0011613411835409658,
+          0.0012413835784970035
+        ],
+        "degenerate_endpoint_chord": false,
+        "metric": "Raw full-spatial Euclidean; no pooling, PCA, whitening, or fitted readout",
+        "limitations": "A sampled action-response path, not proof of a manifold, semantic coordinate, or useful control"
+      },
+      "self_patch_exact": true,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 24.62231738481063,
+          "midpoint_relative_l2_error": 0.0021796833706002163,
+          "estimate_l2_norm": 11302.944601083993,
+          "actual_midpoint_l2_norm": 11296.281706287651,
+          "estimate_offset_from_noncentral_mean": 9.173924461334488,
+          "maximum_sample_offset_from_noncentral_mean": 205.7839541669161,
+          "estimate_offset_over_sample_radius": 0.044580368272510246,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            6.306549767032266e-05,
+            3.1818708521313965e-05,
+            3.09910683427006e-05,
+            4.136060306336731e-05,
+            4.761947275255807e-05,
+            6.99628799338825e-05
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 4.7469704441027716e-05,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10158330947160721,
+            0.09057445079088211,
+            0.11161879450082779,
+            0.12489327043294907,
+            0.11618805676698685,
+            0.1159609779715538
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            -0.00038745999336242676,
+            -0.0011588260531425476,
+            -0.0006315559148788452,
+            -0.00021319836378097534,
+            -0.0004436299204826355,
+            -0.0005142092704772949
+          ],
+          "actual_future_mse_delta_after_patch": -0.0005581465666182339,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0031611919403076,
+            0.7490805983543396,
+            0.5395731925964355,
+            0.33937400579452515,
+            0.1589227020740509,
+            0.08943046629428864
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 6.283651349762462,
+          "midpoint_relative_l2_error": 0.0005562583789199329,
+          "estimate_l2_norm": 11298.001805124204,
+          "actual_midpoint_l2_norm": 11296.281706287651,
+          "estimate_offset_from_noncentral_mean": 9.173940289195105,
+          "maximum_sample_offset_from_noncentral_mean": 205.7839541669161,
+          "estimate_offset_over_sample_radius": 0.04458044518745087,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            3.967184056818951e-06,
+            1.9204167074349243e-06,
+            1.9241826976212906e-06,
+            2.637954821693711e-06,
+            3.038516979358974e-06,
+            4.416765932546696e-06
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 2.984170350828208e-06,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10185863822698593,
+            0.09144700318574905,
+            0.11208987981081009,
+            0.1250481754541397,
+            0.11651212722063065,
+            0.11633371561765671
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            -0.00011213123798370361,
+            -0.00028627365827560425,
+            -0.0001604706048965454,
+            -5.829334259033203e-05,
+            -0.00011955946683883667,
+            -0.00014147162437438965
+          ],
+          "actual_future_mse_delta_after_patch": -0.0001463666558265686,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0047401189804077,
+            0.7487332820892334,
+            0.539486289024353,
+            0.33935731649398804,
+            0.15921884775161743,
+            0.08955509215593338
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 15.4502577966379,
+          "midpoint_relative_l2_error": 0.0013677295058991043,
+          "estimate_l2_norm": 11300.46976709209,
+          "actual_midpoint_l2_norm": 11296.281706287651,
+          "estimate_offset_from_noncentral_mean": 0.0003476553964172266,
+          "maximum_sample_offset_from_noncentral_mean": 205.7839541669161,
+          "estimate_offset_over_sample_radius": 1.689419361313445e-06,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            2.4563836632296443e-05,
+            1.2176733434898779e-05,
+            1.2044467439409345e-05,
+            1.6277201211778447e-05,
+            1.8748736692941748e-05,
+            2.7391926778363995e-05
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 1.853381581895519e-05,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.1017056331038475,
+            0.09101326018571854,
+            0.11185222864151001,
+            0.12496645003557205,
+            0.11634323745965958,
+            0.1161370649933815
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            -0.00026513636112213135,
+            -0.0007200166583061218,
+            -0.00039812177419662476,
+            -0.0001400187611579895,
+            -0.000288449227809906,
+            -0.00033812224864959717
+          ],
+          "actual_future_mse_delta_after_patch": -0.0003583108482416719,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0039799213409424,
+            0.7488993406295776,
+            0.5395258069038391,
+            0.33935990929603577,
+            0.15906445682048798,
+            0.08948004245758057
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 0.4232520300539957,
+          "midpoint_relative_l2_error": 3.746826088963489e-05,
+          "estimate_l2_norm": 11296.360380720307,
+          "actual_midpoint_l2_norm": 11296.281706287651,
+          "estimate_offset_from_noncentral_mean": 15.28987488418031,
+          "maximum_sample_offset_from_noncentral_mean": 205.7839541669161,
+          "estimate_offset_over_sample_radius": 0.07430061758740597,
+          "coordinate_box_overshoot_l2": 0.8856005520828325,
+          "coordinate_box_overshoot_fraction": 0.024716796875,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            1.8571853388493764e-08,
+            1.3176660873526203e-09,
+            2.6962312937861554e-10,
+            2.0189716565255367e-10,
+            2.408865051872766e-10,
+            3.861401198790304e-10
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 3.498010991975775e-09,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197702795267105,
+            0.09173326939344406,
+            0.11225108057260513,
+            0.12510748207569122,
+            0.11663264036178589,
+            0.11647647619247437
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            6.258487701416016e-06,
+            -7.450580596923828e-09,
+            7.301568984985352e-07,
+            1.0132789611816406e-06,
+            9.5367431640625e-07,
+            1.2889504432678223e-06
+          ],
+          "actual_future_mse_delta_after_patch": 1.7061829566955566e-06,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052149295806885,
+            0.7486312389373779,
+            0.5394645929336548,
+            0.33936166763305664,
+            0.1593286097049713,
+            0.08961890637874603
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 24.397223855894524,
+          "midpoint_relative_l2_error": 0.0021597570324680135,
+          "estimate_l2_norm": 11301.263342898585,
+          "actual_midpoint_l2_norm": 11296.281706287651,
+          "estimate_offset_from_noncentral_mean": 9.3162981128966,
+          "maximum_sample_offset_from_noncentral_mean": 205.7839541669161,
+          "estimate_offset_over_sample_radius": 0.04527222810258538,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            8.602892194176093e-05,
+            6.441195000661537e-05,
+            5.770603092969395e-05,
+            6.786233279854059e-05,
+            7.743659080006182e-05,
+            0.00012499165313784033
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 7.973957690410316e-05,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10144337266683578,
+            0.09001687169075012,
+            0.11143099516630173,
+            0.12482836097478867,
+            0.11613926291465759,
+            0.11590097099542618
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            -0.0005273967981338501,
+            -0.0017164051532745361,
+            -0.0008193552494049072,
+            -0.00027810782194137573,
+            -0.0004924237728118896,
+            -0.0005742162466049194
+          ],
+          "actual_future_mse_delta_after_patch": -0.0007346508209593594,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0021649599075317,
+            0.7493067979812622,
+            0.5396068096160889,
+            0.33935779333114624,
+            0.1587597131729126,
+            0.08949046581983566
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 48.64322987815914,
+          "midpoint_relative_l2_error": 0.0043061275508987805,
+          "estimate_l2_norm": 11306.21618754549,
+          "actual_midpoint_l2_norm": 11296.281706287651,
+          "estimate_offset_from_noncentral_mean": 33.402106817560735,
+          "maximum_sample_offset_from_noncentral_mean": 205.7839541669161,
+          "estimate_offset_over_sample_radius": 0.1623163815312224,
+          "coordinate_box_overshoot_l2": 5.8702980360337405,
+          "coordinate_box_overshoot_fraction": 0.050595703125,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0003538433229550719,
+            0.00027760863304138184,
+            0.00024076497356873006,
+            0.00026927757426165044,
+            0.00030670108390040696,
+            0.0004993001348339021
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.00032458259374834597,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.1011894941329956,
+            0.08828085660934448,
+            0.11068450659513474,
+            0.12463653087615967,
+            0.11578881740570068,
+            0.11557038873434067
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            -0.0007812753319740295,
+            -0.0034524202346801758,
+            -0.0015658438205718994,
+            -0.00046993792057037354,
+            -0.0008428692817687988,
+            -0.0009047985076904297
+          ],
+          "actual_future_mse_delta_after_patch": -0.0013361908495426178,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            0.9986574649810791,
+            0.7501469850540161,
+            0.5399008989334106,
+            0.33947107195854187,
+            0.15833668410778046,
+            0.08972873538732529
+          ]
+        }
+      ]
+    },
+    {
+      "block": 1,
+      "intervention_horizon": 3,
+      "geometry": {
+        "sample_t": [
+          -1,
+          -0.5,
+          0,
+          0.5,
+          1
+        ],
+        "path_length": 481.87358095228916,
+        "chord_length": 414.240773816126,
+        "path_chord_ratio": 1.1632693143968105,
+        "chord_orthogonal_distance": [
+          0.0,
+          63.774991583708854,
+          89.82957668105892,
+          75.99958350642582,
+          3.1253382073193447e-12
+        ],
+        "max_orthogonal_fraction_of_chord": 0.21685353629851187,
+        "chord_coordinate_fraction": [
+          0.0,
+          0.22653804960420657,
+          0.48008305667217105,
+          0.763708223050623,
+          1.0000000000000075
+        ],
+        "backtracking_segments": 0,
+        "successive_segment_angle_radians": [
+          0.601792069425143,
+          0.6105285981591527,
+          0.8009243513601718
+        ],
+        "normal_second_difference": [
+          270.85296868388036,
+          292.84395509869205,
+          394.9267275295026
+        ],
+        "finite_sample_path_curvature": [
+          0.005687963353898392,
+          0.005383669381420234,
+          0.007252492256610949
+        ],
+        "degenerate_endpoint_chord": false,
+        "metric": "Raw full-spatial Euclidean; no pooling, PCA, whitening, or fitted readout",
+        "limitations": "A sampled action-response path, not proof of a manifold, semantic coordinate, or useful control"
+      },
+      "self_patch_exact": true,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 90.20766033183612,
+          "midpoint_relative_l2_error": 0.008333453516889413,
+          "estimate_l2_norm": 10822.254674496251,
+          "actual_midpoint_l2_norm": 10824.763124797208,
+          "estimate_offset_from_noncentral_mean": 30.43641076595869,
+          "maximum_sample_offset_from_noncentral_mean": 210.3417539787878,
+          "estimate_offset_over_sample_radius": 0.14469980491380752,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0006772637716494501,
+            0.0002165257465094328,
+            0.0002106696047121659,
+            0.0003530696558300406
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.00036438219831325114,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.10986968874931335,
+            0.12473232299089432,
+            0.11653170734643936,
+            0.11610542982816696
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.00238066166639328,
+            -0.0003741458058357239,
+            -9.997934103012085e-05,
+            -0.00036975741386413574
+          ],
+          "actual_future_mse_delta_after_patch": -0.0008061360567808151,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5412648320198059,
+            0.3398265242576599,
+            0.15930867195129395,
+            0.09126025438308716
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 37.38069508873434,
+          "midpoint_relative_l2_error": 0.0034532575593366286,
+          "estimate_l2_norm": 10822.105957197497,
+          "actual_midpoint_l2_norm": 10824.763124797208,
+          "estimate_offset_from_noncentral_mean": 30.436411259590507,
+          "maximum_sample_offset_from_noncentral_mean": 210.3417539787878,
+          "estimate_offset_over_sample_radius": 0.14469980726061601,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.00012764720304403454,
+            3.271464447607286e-05,
+            3.254102557548322e-05,
+            7.216354424599558e-05
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 6.626659887842834e-05,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11138524860143661,
+            0.12484798580408096,
+            0.11646351218223572,
+            0.11615826934576035
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.0008651018142700195,
+            -0.00025848299264907837,
+            -0.00016817450523376465,
+            -0.00031691789627075195
+          ],
+          "actual_future_mse_delta_after_patch": -0.0004021693021059036,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5404219627380371,
+            0.3395508825778961,
+            0.15917067229747772,
+            0.09014205634593964
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 61.97574964059205,
+          "midpoint_relative_l2_error": 0.005725367744871841,
+          "estimate_l2_norm": 10822.137539460999,
+          "actual_midpoint_l2_norm": 10824.763124797208,
+          "estimate_offset_from_noncentral_mean": 0.0003327130535672245,
+          "maximum_sample_offset_from_noncentral_mean": 210.3417539787878,
+          "estimate_offset_over_sample_radius": 1.5817736957769088e-06,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.00034146293182857335,
+            9.85718215815723e-05,
+            9.66731968219392e-05,
+            0.00017904548440128565
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0001789383532013744,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11055440455675125,
+            0.12478373199701309,
+            0.11648651212453842,
+            0.11611839383840561
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.0016959458589553833,
+            -0.00032273679971694946,
+            -0.0001451745629310608,
+            -0.0003567934036254883
+          ],
+          "actual_future_mse_delta_after_patch": -0.0006301626563072205,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.540693461894989,
+            0.3396608233451843,
+            0.15920153260231018,
+            0.09063830971717834
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 28.240093247971256,
+          "midpoint_relative_l2_error": 0.0026088416829444763,
+          "estimate_l2_norm": 10822.132511789332,
+          "actual_midpoint_l2_norm": 10824.763124797208,
+          "estimate_offset_from_noncentral_mean": 50.72734844854577,
+          "maximum_sample_offset_from_noncentral_mean": 210.3417539787878,
+          "estimate_offset_over_sample_radius": 0.24116632807797844,
+          "coordinate_box_overshoot_l2": 5.285251672427864,
+          "coordinate_box_overshoot_fraction": 0.08375,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            5.643544136546552e-05,
+            1.500613143434748e-05,
+            1.5077274838404264e-05,
+            3.527221633703448e-05
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 3.044776531169191e-05,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11201801896095276,
+            0.12489724159240723,
+            0.11645729094743729,
+            0.11619752645492554
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.00023233145475387573,
+            -0.00020922720432281494,
+            -0.00017439574003219604,
+            -0.0002776607871055603
+          ],
+          "actual_future_mse_delta_after_patch": -0.00022340379655361176,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5404123067855835,
+            0.3395056128501892,
+            0.1591881662607193,
+            0.08987041562795639
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 90.0012872385014,
+          "midpoint_relative_l2_error": 0.008314388610714981,
+          "estimate_l2_norm": 10822.466791027256,
+          "actual_midpoint_l2_norm": 10824.763124797208,
+          "estimate_offset_from_noncentral_mean": 30.46619489626946,
+          "maximum_sample_offset_from_noncentral_mean": 210.3417539787878,
+          "estimate_offset_over_sample_radius": 0.14484140366796536,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0006239992217160761,
+            0.00020564526494126767,
+            0.00019976032490376383,
+            0.00029926319257356226
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.00033216699375770986,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.10984975844621658,
+            0.12476668506860733,
+            0.11647701263427734,
+            0.11600259691476822
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.0024005919694900513,
+            -0.0003397837281227112,
+            -0.00015467405319213867,
+            -0.0004725903272628784
+          ],
+          "actual_future_mse_delta_after_patch": -0.0008419100195169449,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5412200093269348,
+            0.33994990587234497,
+            0.15949903428554535,
+            0.09115130454301834
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 169.00757310566436,
+          "midpoint_relative_l2_error": 0.015613050480384583,
+          "estimate_l2_norm": 10823.409088960783,
+          "actual_midpoint_l2_norm": 10824.763124797208,
+          "estimate_offset_from_noncentral_mean": 111.55139904217165,
+          "maximum_sample_offset_from_noncentral_mean": 210.3417539787878,
+          "estimate_offset_over_sample_radius": 0.5303340726797457,
+          "coordinate_box_overshoot_l2": 33.71623302809443,
+          "coordinate_box_overshoot_fraction": 0.247705078125,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0019486338132992387,
+            0.0008144169114530087,
+            0.0007870171102695167,
+            0.00105770374648273
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0011519428808242083,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.10870037227869034,
+            0.12479957938194275,
+            0.11673804372549057,
+            0.11602244526147842
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.0035499781370162964,
+            -0.0003068894147872925,
+            0.00010635703802108765,
+            -0.00045274198055267334
+          ],
+          "actual_future_mse_delta_after_patch": -0.0010508131235837936,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.544079065322876,
+            0.3409005105495453,
+            0.16042354702949524,
+            0.09329620748758316
+          ]
+        }
+      ]
+    },
+    {
+      "block": 1,
+      "intervention_horizon": 6,
+      "geometry": {
+        "sample_t": [
+          -1,
+          -0.5,
+          0,
+          0.5,
+          1
+        ],
+        "path_length": 715.0589690469485,
+        "chord_length": 578.0423164097224,
+        "path_chord_ratio": 1.2370356784400318,
+        "chord_orthogonal_distance": [
+          0.0,
+          143.35288251275068,
+          152.6966099415398,
+          94.34815547498545,
+          1.3873060946577845e-11
+        ],
+        "max_orthogonal_fraction_of_chord": 0.26416164631328976,
+        "chord_coordinate_fraction": [
+          0.0,
+          0.27053629175521743,
+          0.5560696275628844,
+          0.7914728118669365,
+          0.999999999999976
+        ],
+        "backtracking_segments": 0,
+        "successive_segment_angle_radians": [
+          0.958135048236948,
+          0.8029212730282799,
+          0.633840134736539
+        ],
+        "normal_second_difference": [
+          736.1499008658188,
+          543.1429823460858,
+          391.4518218496678
+        ],
+        "finite_sample_path_curvature": [
+          0.005813179511851865,
+          0.005231722555548905,
+          0.0043901849038188515
+        ],
+        "degenerate_endpoint_chord": false,
+        "metric": "Raw full-spatial Euclidean; no pooling, PCA, whitening, or fitted readout",
+        "limitations": "A sampled action-response path, not proof of a manifold, semantic coordinate, or useful control"
+      },
+      "self_patch_exact": true,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 156.09836688394898,
+          "midpoint_relative_l2_error": 0.013316015930077285,
+          "estimate_l2_norm": 11696.91418684937,
+          "actual_midpoint_l2_norm": 11722.602894411151,
+          "estimate_offset_from_noncentral_mean": 54.225255432077624,
+          "maximum_sample_offset_from_noncentral_mean": 302.74317464389577,
+          "estimate_offset_over_sample_radius": 0.1791130567876899,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.004749900661408901
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.004749900661408901,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11774878948926926
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0012736022472381592
+          ],
+          "actual_future_mse_delta_after_patch": 0.0012736022472381592,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09778522700071335
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 69.51467739809094,
+          "midpoint_relative_l2_error": 0.005929969480688683,
+          "estimate_l2_norm": 11723.888364178685,
+          "actual_midpoint_l2_norm": 11722.602894411151,
+          "estimate_offset_from_noncentral_mean": 54.225242975879006,
+          "maximum_sample_offset_from_noncentral_mean": 302.74317464389577,
+          "estimate_offset_over_sample_radius": 0.17911301564324913,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.001446469104848802
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.001446469104848802,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11639222502708435
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -8.296221494674683e-05
+          ],
+          "actual_future_mse_delta_after_patch": -8.296221494674683e-05,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.0925571396946907
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 107.97739129344484,
+          "midpoint_relative_l2_error": 0.00921104231423927,
+          "estimate_l2_norm": 11710.28348333323,
+          "actual_midpoint_l2_norm": 11722.602894411151,
+          "estimate_offset_from_noncentral_mean": 0.00033118655053585515,
+          "maximum_sample_offset_from_noncentral_mean": 302.74317464389577,
+          "estimate_offset_over_sample_radius": 1.0939521623416155e-06,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0028873810078948736
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0028873810078948736,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11704331636428833
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0005681291222572327
+          ],
+          "actual_future_mse_delta_after_patch": 0.0005681291222572327,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09497634321451187
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 59.56644169118614,
+          "midpoint_relative_l2_error": 0.0050813323822122254,
+          "estimate_l2_norm": 11733.088793149012,
+          "actual_midpoint_l2_norm": 11722.602894411151,
+          "estimate_offset_from_noncentral_mean": 90.37543783612024,
+          "maximum_sample_offset_from_noncentral_mean": 302.74317464389577,
+          "estimate_offset_over_sample_radius": 0.2985218013335069,
+          "coordinate_box_overshoot_l2": 10.354097211330282,
+          "coordinate_box_overshoot_fraction": 0.128310546875,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0007739386637695134
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0007739386637695134,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11607193201780319
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.0004032552242279053
+          ],
+          "actual_future_mse_delta_after_patch": -0.0004032552242279053,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09122715145349503
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 152.93382412007625,
+          "midpoint_relative_l2_error": 0.013046063702540732,
+          "estimate_l2_norm": 11697.081482451264,
+          "actual_midpoint_l2_norm": 11722.602894411151,
+          "estimate_offset_from_noncentral_mean": 55.52596362633059,
+          "maximum_sample_offset_from_noncentral_mean": 302.74317464389577,
+          "estimate_offset_over_sample_radius": 0.18340946477701264,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0033888278994709253
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0033888278994709253,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11757057160139084
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0010953843593597412
+          ],
+          "actual_future_mse_delta_after_patch": 0.0010953843593597412,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09606292098760605
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 289.6653964528422,
+          "midpoint_relative_l2_error": 0.024709989672254663,
+          "estimate_l2_norm": 11662.70697356573,
+          "actual_midpoint_l2_norm": 11722.602894411151,
+          "estimate_offset_from_noncentral_mean": 196.6602168265523,
+          "maximum_sample_offset_from_noncentral_mean": 302.74317464389577,
+          "estimate_offset_over_sample_radius": 0.6495942214316658,
+          "coordinate_box_overshoot_l2": 63.54025622822604,
+          "coordinate_box_overshoot_fraction": 0.322783203125,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008418709971010685
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.008418709971010685,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.12035389989614487
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0038787126541137695
+          ],
+          "actual_future_mse_delta_after_patch": 0.0038787126541137695,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.1033257320523262
+          ]
+        }
+      ]
+    },
+    {
+      "block": 3,
+      "intervention_horizon": 1,
+      "geometry": {
+        "sample_t": [
+          -1,
+          -0.5,
+          0,
+          0.5,
+          1
+        ],
+        "path_length": 862.8614789833716,
+        "chord_length": 818.7278335368865,
+        "path_chord_ratio": 1.053905148498285,
+        "chord_orthogonal_distance": [
+          0.0,
+          93.42978869857232,
+          117.57510872731548,
+          83.83352846543404,
+          1.705701817273159e-11
+        ],
+        "max_orthogonal_fraction_of_chord": 0.14360707418409555,
+        "chord_coordinate_fraction": [
+          0.0,
+          0.24811123573523564,
+          0.5072545017652439,
+          0.762734143622782,
+          1.0000000000000209
+        ],
+        "backtracking_segments": 0,
+        "successive_segment_angle_radians": [
+          0.35461554639929477,
+          0.2960871367011645,
+          0.2801099214820528
+        ],
+        "normal_second_difference": [
+          309.2459708213241,
+          252.34019040582413,
+          236.95855234715734
+        ],
+        "finite_sample_path_curvature": [
+          0.001659928276115095,
+          0.0014101624555323733,
+          0.0013419696371112172
+        ],
+        "degenerate_endpoint_chord": false,
+        "metric": "Raw full-spatial Euclidean; no pooling, PCA, whitening, or fitted readout",
+        "limitations": "A sampled action-response path, not proof of a manifold, semantic coordinate, or useful control"
+      },
+      "self_patch_exact": true,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 117.72503460126563,
+          "midpoint_relative_l2_error": 0.007525841794875867,
+          "estimate_l2_norm": 15639.919235181114,
+          "actual_midpoint_l2_norm": 15642.772969453235,
+          "estimate_offset_from_noncentral_mean": 43.42613622602567,
+          "maximum_sample_offset_from_noncentral_mean": 413.86241841199046,
+          "estimate_offset_over_sample_radius": 0.10492891911436122,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0007144678966142237,
+            0.00032724227639846504,
+            0.00015417511167470366,
+            0.00018809788161888719,
+            0.00020271931134629995,
+            0.00026592769427224994
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.00030877170502208173,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10099685937166214,
+            0.08864829689264297,
+            0.1108236014842987,
+            0.12469392269849777,
+            0.11565006524324417,
+            0.11535712331533432
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            -0.0009739100933074951,
+            -0.0030849799513816833,
+            -0.0014267489314079285,
+            -0.0004125460982322693,
+            -0.0009816214442253113,
+            -0.0011180639266967773
+          ],
+          "actual_future_mse_delta_after_patch": -0.0013329783687368035,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0055910348892212,
+            0.7499269843101501,
+            0.5393847227096558,
+            0.3399304151535034,
+            0.15899913012981415,
+            0.08958420157432556
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 31.56066730431344,
+          "midpoint_relative_l2_error": 0.0020175877618338013,
+          "estimate_l2_norm": 15641.711886060026,
+          "actual_midpoint_l2_norm": 15642.772969453235,
+          "estimate_offset_from_noncentral_mean": 43.42613272195032,
+          "maximum_sample_offset_from_noncentral_mean": 413.86241841199046,
+          "estimate_offset_over_sample_radius": 0.1049289106475974,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            5.28875389136374e-05,
+            2.2748987248633057e-05,
+            1.036965932144085e-05,
+            1.1762753274524584e-05,
+            1.2787134437530767e-05,
+            1.8056520275422372e-05
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 2.143543133570347e-05,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10150635987520218,
+            0.09088153392076492,
+            0.11191273480653763,
+            0.12496858090162277,
+            0.11636517196893692,
+            0.11616072803735733
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            -0.00046440958976745605,
+            -0.0008517429232597351,
+            -0.00033761560916900635,
+            -0.0001378878951072693,
+            -0.00026651471853256226,
+            -0.0003144592046737671
+          ],
+          "actual_future_mse_delta_after_patch": -0.00039543831371702254,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0055099725723267,
+            0.7489801645278931,
+            0.5394263863563538,
+            0.33942481875419617,
+            0.1591561883687973,
+            0.08953965455293655
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 74.44327003500364,
+          "midpoint_relative_l2_error": 0.004758956112217083,
+          "estimate_l2_norm": 15640.755315582754,
+          "actual_midpoint_l2_norm": 15642.772969453235,
+          "estimate_offset_from_noncentral_mean": 0.00040496960442951125,
+          "maximum_sample_offset_from_noncentral_mean": 413.86241841199046,
+          "estimate_offset_over_sample_radius": 9.78512632249622e-07,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0002893905038945377,
+            0.00012954320118296891,
+            6.217075133463368e-05,
+            7.613428897457197e-05,
+            8.189294749172404e-05,
+            0.0001082637973013334
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.000124565907754004,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.1010708436369896,
+            0.08973268419504166,
+            0.11133647710084915,
+            0.12480548769235611,
+            0.11596859246492386,
+            0.11571060866117477
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            -0.0008999258279800415,
+            -0.0020005926489830017,
+            -0.0009138733148574829,
+            -0.0003009811043739319,
+            -0.0006630942225456238,
+            -0.0007645785808563232
+          ],
+          "actual_future_mse_delta_after_patch": -0.0009238409693352878,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0057941675186157,
+            0.7494257688522339,
+            0.539381742477417,
+            0.33966076374053955,
+            0.1590496301651001,
+            0.08951824903488159
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 7.807565327135967,
+          "midpoint_relative_l2_error": 0.0004991164509248046,
+          "estimate_l2_norm": 15642.416539982525,
+          "actual_midpoint_l2_norm": 15642.772969453235,
+          "estimate_offset_from_noncentral_mean": 72.37688453673532,
+          "maximum_sample_offset_from_noncentral_mean": 413.86241841199046,
+          "estimate_offset_over_sample_radius": 0.17488150969215524,
+          "coordinate_box_overshoot_l2": 7.079152963218076,
+          "coordinate_box_overshoot_fraction": 0.049853515625,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            3.0677890663355356e-06,
+            5.4172977570488e-07,
+            3.9753081182425376e-07,
+            4.724834354874474e-07,
+            5.462090939545305e-07,
+            9.065827839549456e-07
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 9.88720785244368e-07,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10200194269418716,
+            0.09168323874473572,
+            0.11235561966896057,
+            0.12511664628982544,
+            0.11669556051492691,
+            0.11654012650251389
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            3.11732292175293e-05,
+            -5.003809928894043e-05,
+            0.00010526925325393677,
+            1.017749309539795e-05,
+            6.387382745742798e-05,
+            6.493926048278809e-05
+          ],
+          "actual_future_mse_delta_after_patch": 3.756582736968994e-05,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0051100254058838,
+            0.7487288117408752,
+            0.5394939184188843,
+            0.3392772674560547,
+            0.15925301611423492,
+            0.08960814774036407
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 117.57511681922523,
+          "midpoint_relative_l2_error": 0.00751625795815247,
+          "estimate_l2_norm": 15639.968417210359,
+          "actual_midpoint_l2_norm": 15642.772969453235,
+          "estimate_offset_from_noncentral_mean": 43.52689192613833,
+          "maximum_sample_offset_from_noncentral_mean": 413.86241841199046,
+          "estimate_offset_over_sample_radius": 0.1051723712753457,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0007444932125508785,
+            0.00041391770355403423,
+            0.00021146396466065198,
+            0.00023847036936786026,
+            0.00025853572878986597,
+            0.00035973804187960923
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.00037110314588062465,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10086353868246078,
+            0.08813861757516861,
+            0.11067160964012146,
+            0.12465568631887436,
+            0.11563807725906372,
+            0.11534679681062698
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            -0.00110723078250885,
+            -0.0035946592688560486,
+            -0.0015787407755851746,
+            -0.0004507824778556824,
+            -0.0009936094284057617,
+            -0.0011283904314041138
+          ],
+          "actual_future_mse_delta_after_patch": -0.0014755688607692719,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0047568082809448,
+            0.7501847147941589,
+            0.5394518375396729,
+            0.33993738889694214,
+            0.15886443853378296,
+            0.08969727903604507
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 233.1039512809288,
+          "midpoint_relative_l2_error": 0.014901702641605015,
+          "estimate_l2_norm": 15638.375204667862,
+          "actual_midpoint_l2_norm": 15642.772969453235,
+          "estimate_offset_from_noncentral_mean": 159.06401921767775,
+          "maximum_sample_offset_from_noncentral_mean": 413.86241841199046,
+          "estimate_offset_over_sample_radius": 0.3843403318136831,
+          "coordinate_box_overshoot_l2": 37.13952181712562,
+          "coordinate_box_overshoot_fraction": 0.10001953125,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0029132093768566847,
+            0.0016806572675704956,
+            0.0008305622613988817,
+            0.0009308852604590356,
+            0.001017657807096839,
+            0.0013692431384697556
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0014570358907803893,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10233696550130844,
+            0.08514822274446487,
+            0.10918108373880386,
+            0.12456343322992325,
+            0.11498960107564926,
+            0.11468950659036636
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.00036619603633880615,
+            -0.006585054099559784,
+            -0.003069266676902771,
+            -0.0005430355668067932,
+            -0.001642085611820221,
+            -0.0017856806516647339
+          ],
+          "actual_future_mse_delta_after_patch": -0.002209821017459035,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0003809928894043,
+            0.7519633769989014,
+            0.5397177934646606,
+            0.3411782681941986,
+            0.15918436646461487,
+            0.09062378853559494
+          ]
+        }
+      ]
+    },
+    {
+      "block": 3,
+      "intervention_horizon": 3,
+      "geometry": {
+        "sample_t": [
+          -1,
+          -0.5,
+          0,
+          0.5,
+          1
+        ],
+        "path_length": 848.788591678581,
+        "chord_length": 754.8596189976087,
+        "path_chord_ratio": 1.1244323716848204,
+        "chord_orthogonal_distance": [
+          0.0,
+          111.60707476147316,
+          151.9348283067791,
+          116.46063061831582,
+          1.1480137861778757e-11
+        ],
+        "max_orthogonal_fraction_of_chord": 0.20127560738847844,
+        "chord_coordinate_fraction": [
+          0.0,
+          0.24082738999829775,
+          0.5009948532851899,
+          0.7774917288095442,
+          1.0000000000000153
+        ],
+        "backtracking_segments": 0,
+        "successive_segment_angle_radians": [
+          0.5170965580645753,
+          0.5286732155994204,
+          0.6310888517890169
+        ],
+        "normal_second_difference": [
+          431.0789063050143,
+          449.98114950360883,
+          529.2814481615013
+        ],
+        "finite_sample_path_curvature": [
+          0.0025952209285312103,
+          0.0025986072777964163,
+          0.0032083275816491984
+        ],
+        "degenerate_endpoint_chord": false,
+        "metric": "Raw full-spatial Euclidean; no pooling, PCA, whitening, or fitted readout",
+        "limitations": "A sampled action-response path, not proof of a manifold, semantic coordinate, or useful control"
+      },
+      "self_patch_exact": true,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 151.93669321863754,
+          "midpoint_relative_l2_error": 0.009770790129763979,
+          "estimate_l2_norm": 15552.534470370874,
+          "actual_midpoint_l2_norm": 15550.092797081468,
+          "estimate_offset_from_noncentral_mean": 51.94847964149366,
+          "maximum_sample_offset_from_noncentral_mean": 384.3976101249543,
+          "estimate_offset_over_sample_radius": 0.13514256663720414,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0010757948039099574,
+            0.0003435934486333281,
+            0.00033387340954504907,
+            0.0004725654434878379
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.000556456798221916,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11159896105527878,
+            0.12474662810564041,
+            0.11657660454511642,
+            0.11603718996047974
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.0006513893604278564,
+            -0.0003598406910896301,
+            -5.508214235305786e-05,
+            -0.0004379972815513611
+          ],
+          "actual_future_mse_delta_after_patch": -0.0003760773688554764,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5468459129333496,
+            0.3406367301940918,
+            0.1600305736064911,
+            0.09176819771528244
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 56.75221783848102,
+          "midpoint_relative_l2_error": 0.0036496385313618583,
+          "estimate_l2_norm": 15553.230739380539,
+          "actual_midpoint_l2_norm": 15550.092797081468,
+          "estimate_offset_from_noncentral_mean": 51.948468042671486,
+          "maximum_sample_offset_from_noncentral_mean": 384.3976101249543,
+          "estimate_offset_over_sample_radius": 0.13514253646318156,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0001358138251816854,
+            3.158271647407673e-05,
+            3.080042006331496e-05,
+            5.20460307598114e-05
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 6.256074993871152e-05,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11146899312734604,
+            0.12492286413908005,
+            0.11636337637901306,
+            0.11600960046052933
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.0007813572883605957,
+            -0.0001836046576499939,
+            -0.0002683103084564209,
+            -0.00046558678150177
+          ],
+          "actual_future_mse_delta_after_patch": -0.00042471475899219513,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.541749119758606,
+            0.3399222195148468,
+            0.15949144959449768,
+            0.09015161544084549
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 102.24550348815369,
+          "midpoint_relative_l2_error": 0.0065752342974662965,
+          "estimate_l2_norm": 15552.795831122296,
+          "actual_midpoint_l2_norm": 15550.092797081468,
+          "estimate_offset_from_noncentral_mean": 0.0003908768486192089,
+          "maximum_sample_offset_from_noncentral_mean": 384.3976101249543,
+          "estimate_offset_over_sample_radius": 1.0168555639358643e-06,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.00048499132390134037,
+            0.00014037653454579413,
+            0.00013768473581876606,
+            0.00020356598543003201
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.00024165464856196195,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11137988418340683,
+            0.12479177862405777,
+            0.11641576141119003,
+            0.11594915390014648
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.0008704662322998047,
+            -0.00031469017267227173,
+            -0.00021592527627944946,
+            -0.000526033341884613
+          ],
+          "actual_future_mse_delta_after_patch": -0.00048177875578403473,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5441626906394958,
+            0.3402492105960846,
+            0.15970677137374878,
+            0.09085962921380997
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 37.37763785398234,
+          "midpoint_relative_l2_error": 0.0024036922699906716,
+          "estimate_l2_norm": 15553.617037121696,
+          "actual_midpoint_l2_norm": 15550.092797081468,
+          "estimate_offset_from_noncentral_mean": 86.58078500355175,
+          "maximum_sample_offset_from_noncentral_mean": 384.3976101249543,
+          "estimate_offset_over_sample_radius": 0.22523757360355945,
+          "coordinate_box_overshoot_l2": 8.766490067583344,
+          "coordinate_box_overshoot_fraction": 0.079482421875,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            4.146797800785862e-05,
+            8.493231689499225e-06,
+            7.314419690374052e-06,
+            1.3234025573183317e-05
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 1.762741339916829e-05,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11168233305215836,
+            0.12504757940769196,
+            0.11638641357421875,
+            0.11612840741872787
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.0005680173635482788,
+            -5.888938903808594e-05,
+            -0.0002452731132507324,
+            -0.00034677982330322266
+          ],
+          "actual_future_mse_delta_after_patch": -0.00030473992228507996,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5402371287345886,
+            0.3397308886051178,
+            0.15940335392951965,
+            0.08977793157100677
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 152.17062937635868,
+          "midpoint_relative_l2_error": 0.009785834165884782,
+          "estimate_l2_norm": 15552.30029249584,
+          "actual_midpoint_l2_norm": 15550.092797081468,
+          "estimate_offset_from_noncentral_mean": 52.15257707142025,
+          "maximum_sample_offset_from_noncentral_mean": 384.3976101249543,
+          "estimate_offset_over_sample_radius": 0.1356735205884013,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0011557451216503978,
+            0.00035134158679284155,
+            0.0003423430898692459,
+            0.0005696621956303716
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0006047729984857142,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11146453768014908,
+            0.1246522068977356,
+            0.11662674695253372,
+            0.11618126183748245
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.0007858127355575562,
+            -0.0004542618989944458,
+            -4.939734935760498e-06,
+            -0.000293925404548645
+          ],
+          "actual_future_mse_delta_after_patch": -0.00038473494350910187,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5465962886810303,
+            0.34043416380882263,
+            0.1596822887659073,
+            0.09198054671287537
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 288.31482252802846,
+          "midpoint_relative_l2_error": 0.018541035496723278,
+          "estimate_l2_norm": 15552.211941745645,
+          "actual_midpoint_l2_norm": 15550.092797081468,
+          "estimate_offset_from_noncentral_mean": 190.14278432769797,
+          "maximum_sample_offset_from_noncentral_mean": 384.3976101249543,
+          "estimate_offset_over_sample_radius": 0.49465131759245107,
+          "coordinate_box_overshoot_l2": 55.0215219034232,
+          "coordinate_box_overshoot_fraction": 0.214482421875,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.004053676500916481,
+            0.0014252675464376807,
+            0.0013405517674982548,
+            0.002094494178891182
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.00222849752753973,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11358536034822464,
+            0.12483086436986923,
+            0.11760332435369492,
+            0.11735692620277405
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0013350099325180054,
+            -0.0002756044268608093,
+            0.0009716376662254333,
+            0.0008817389607429504
+          ],
+          "actual_future_mse_delta_after_patch": 0.000728195533156395,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5552705526351929,
+            0.34138691425323486,
+            0.16072534024715424,
+            0.09630779176950455
+          ]
+        }
+      ]
+    },
+    {
+      "block": 3,
+      "intervention_horizon": 6,
+      "geometry": {
+        "sample_t": [
+          -1,
+          -0.5,
+          0,
+          0.5,
+          1
+        ],
+        "path_length": 1320.6605083581169,
+        "chord_length": 1051.5723883798178,
+        "path_chord_ratio": 1.2558911996471203,
+        "chord_orthogonal_distance": [
+          0.0,
+          223.79256246794176,
+          302.54388490922145,
+          221.29471040201847,
+          1.4778076333290382e-11
+        ],
+        "max_orthogonal_fraction_of_chord": 0.2877061895618597,
+        "chord_coordinate_fraction": [
+          0.0,
+          0.24070201947026376,
+          0.5366159633423057,
+          0.7942614815146078,
+          0.9999999999999859
+        ],
+        "backtracking_segments": 0,
+        "successive_segment_angle_radians": [
+          0.7863736009213896,
+          0.8207496863549376,
+          0.8355531327954274
+        ],
+        "normal_second_difference": [
+          1061.5263688080931,
+          1070.8947635448642,
+          1018.2134616487853
+        ],
+        "finite_sample_path_curvature": [
+          0.0025893627677071322,
+          0.002807652924035696,
+          0.0030950956535718247
+        ],
+        "degenerate_endpoint_chord": false,
+        "metric": "Raw full-spatial Euclidean; no pooling, PCA, whitening, or fitted readout",
+        "limitations": "A sampled action-response path, not proof of a manifold, semantic coordinate, or useful control"
+      },
+      "self_patch_exact": true,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 304.98424188558215,
+          "midpoint_relative_l2_error": 0.019556561796383688,
+          "estimate_l2_norm": 15622.35147494412,
+          "actual_midpoint_l2_norm": 15594.98264884058,
+          "estimate_offset_from_noncentral_mean": 99.02345924981707,
+          "maximum_sample_offset_from_noncentral_mean": 543.9875609844407,
+          "estimate_offset_over_sample_radius": 0.18203258006601616,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.006075018551200628
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.006075018551200628,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11755729466676712
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.001082107424736023
+          ],
+          "actual_future_mse_delta_after_patch": 0.001082107424736023,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09826836735010147
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 135.39139345959595,
+          "midpoint_relative_l2_error": 0.008681727739508689,
+          "estimate_l2_norm": 15613.985081886112,
+          "actual_midpoint_l2_norm": 15594.98264884058,
+          "estimate_offset_from_noncentral_mean": 99.023448803615,
+          "maximum_sample_offset_from_noncentral_mean": 543.9875609844407,
+          "estimate_offset_over_sample_radius": 0.18203256086299976,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0010820695897564292
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0010820695897564292,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.1156517043709755
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.000823482871055603
+          ],
+          "actual_future_mse_delta_after_patch": -0.000823482871055603,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09094062447547913
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 214.16690622744707,
+          "midpoint_relative_l2_error": 0.013733064733058197,
+          "estimate_l2_norm": 15617.85493365398,
+          "actual_midpoint_l2_norm": 15594.98264884058,
+          "estimate_offset_from_noncentral_mean": 0.00039691535551856843,
+          "maximum_sample_offset_from_noncentral_mean": 543.9875609844407,
+          "estimate_offset_over_sample_radius": 7.29640499132518e-07,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0031830526422709227
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0031830526422709227,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11669223755598068
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.00021705031394958496
+          ],
+          "actual_future_mse_delta_after_patch": 0.00021705031394958496,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09451144933700562
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 104.25081738742361,
+          "midpoint_relative_l2_error": 0.006684894734087711,
+          "estimate_l2_norm": 15611.753650804783,
+          "actual_midpoint_l2_norm": 15594.98264884058,
+          "estimate_offset_from_noncentral_mean": 165.03909125325796,
+          "maximum_sample_offset_from_noncentral_mean": 543.9875609844407,
+          "estimate_offset_over_sample_radius": 0.30338761966282984,
+          "coordinate_box_overshoot_l2": 19.354683481427184,
+          "coordinate_box_overshoot_fraction": 0.117060546875,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0006804834119975567
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0006804834119975567,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.1162107065320015
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.00026448071002960205
+          ],
+          "actual_future_mse_delta_after_patch": -0.00026448071002960205,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09077928960323334
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 302.86731431926427,
+          "midpoint_relative_l2_error": 0.01942081765264299,
+          "estimate_l2_norm": 15622.30834013536,
+          "actual_midpoint_l2_norm": 15594.98264884058,
+          "estimate_offset_from_noncentral_mean": 99.77897306398658,
+          "maximum_sample_offset_from_noncentral_mean": 543.9875609844407,
+          "estimate_offset_over_sample_radius": 0.18342142398149522,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0060828677378594875
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0060828677378594875,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11755850911140442
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0010833218693733215
+          ],
+          "actual_future_mse_delta_after_patch": 0.0010833218693733215,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09829816967248917
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 557.5351857171744,
+          "midpoint_relative_l2_error": 0.035750933378475076,
+          "estimate_l2_norm": 15637.277335993518,
+          "actual_midpoint_l2_norm": 15594.98264884058,
+          "estimate_offset_from_noncentral_mean": 361.8428810899806,
+          "maximum_sample_offset_from_noncentral_mean": 543.9875609844407,
+          "estimate_offset_over_sample_radius": 0.6651675645582089,
+          "coordinate_box_overshoot_l2": 129.34912734131706,
+          "coordinate_box_overshoot_fraction": 0.285556640625,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.017574597150087357
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.017574597150087357,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.12215522676706314
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0056800395250320435
+          ],
+          "actual_future_mse_delta_after_patch": 0.0056800395250320435,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.11057928204536438
+          ]
+        }
+      ]
+    },
+    {
+      "block": 5,
+      "intervention_horizon": 1,
+      "geometry": {
+        "sample_t": [
+          -1,
+          -0.5,
+          0,
+          0.5,
+          1
+        ],
+        "path_length": 6316.299236024985,
+        "chord_length": 5379.084757689425,
+        "path_chord_ratio": 1.1742330750590624,
+        "chord_orthogonal_distance": [
+          0.0,
+          1200.0665890717873,
+          1210.3139892688268,
+          852.469061336607,
+          4.911997313468825e-11
+        ],
+        "max_orthogonal_fraction_of_chord": 0.22500370300703623,
+        "chord_coordinate_fraction": [
+          0.0,
+          0.22790022497983212,
+          0.48356314649206317,
+          0.7571882862216022,
+          0.9999999999999909
+        ],
+        "backtracking_segments": 0,
+        "successive_segment_angle_radians": [
+          0.918247536165723,
+          0.4406695412548423,
+          0.475894940714953
+        ],
+        "normal_second_difference": [
+          5635.7637648243035,
+          2656.927748140892,
+          2939.7740636913754
+        ],
+        "finite_sample_path_curvature": [
+          0.0006847228574132834,
+          0.000301689542612084,
+          0.00032017026630468153
+        ],
+        "degenerate_endpoint_chord": false,
+        "metric": "Raw full-spatial Euclidean; no pooling, PCA, whitening, or fitted readout",
+        "limitations": "A sampled action-response path, not proof of a manifold, semantic coordinate, or useful control"
+      },
+      "self_patch_exact": true,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 1213.5390982226054,
+          "midpoint_relative_l2_error": 0.02071938762244461,
+          "estimate_l2_norm": 58401.289101951064,
+          "actual_midpoint_l2_norm": 58570.22033354015,
+          "estimate_offset_from_noncentral_mean": 476.9189796150208,
+          "maximum_sample_offset_from_noncentral_mean": 2751.17325153839,
+          "estimate_offset_over_sample_radius": 0.17335112550557807,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0029620686545968056,
+            0.0019295010715723038,
+            0.0012250575236976147,
+            0.0010534417815506458,
+            0.0010947838891297579,
+            0.001534158713184297
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0016331685474142432,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10651353746652603,
+            0.08501600474119186,
+            0.10971000790596008,
+            0.12492460757493973,
+            0.11579956859350204,
+            0.11559402942657471
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0045427680015563965,
+            -0.006717272102832794,
+            -0.0025403425097465515,
+            -0.00018186122179031372,
+            -0.0008321180939674377,
+            -0.0008811578154563904
+          ],
+          "actual_future_mse_delta_after_patch": -0.001101663918234408,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            0.9880516529083252,
+            0.753746747970581,
+            0.5398950576782227,
+            0.3413819968700409,
+            0.15925940871238708,
+            0.09143215417861938
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 334.36541291296476,
+          "midpoint_relative_l2_error": 0.005708795545054333,
+          "estimate_l2_norm": 58522.82725110833,
+          "actual_midpoint_l2_norm": 58570.22033354015,
+          "estimate_offset_from_noncentral_mean": 476.9190096745988,
+          "maximum_sample_offset_from_noncentral_mean": 2751.17325153839,
+          "estimate_offset_over_sample_radius": 0.17335113643167224,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0002059660037048161,
+            0.00016569416038691998,
+            9.917642455548048e-05,
+            6.92722896928899e-05,
+            7.291833026101813e-05,
+            0.00014495592040475458
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.00012633051665034145,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10217227786779404,
+            0.08947563916444778,
+            0.11167443543672562,
+            0.12492772191762924,
+            0.11645809561014175,
+            0.11626231670379639
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.00020150840282440186,
+            -0.0022576376795768738,
+            -0.0005759149789810181,
+            -0.00017874687910079956,
+            -0.00017359107732772827,
+            -0.0002128705382347107
+          ],
+          "actual_future_mse_delta_after_patch": -0.0005328754778020084,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0022529363632202,
+            0.7503604292869568,
+            0.5395119190216064,
+            0.33942797780036926,
+            0.1587502360343933,
+            0.0897347703576088
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 751.5231239341784,
+          "midpoint_relative_l2_error": 0.01283114729045709,
+          "estimate_l2_norm": 58460.144310980286,
+          "actual_midpoint_l2_norm": 58570.22033354015,
+          "estimate_offset_from_noncentral_mean": 0.0016148608036865451,
+          "maximum_sample_offset_from_noncentral_mean": 2751.17325153839,
+          "estimate_offset_over_sample_radius": 5.869716866371661e-07,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0011169068748131394,
+            0.0008217363501898944,
+            0.0005181647720746696,
+            0.00045557180419564247,
+            0.00047223109868355095,
+            0.0006949121598154306
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0006799204857088625,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10387881845235825,
+            0.08699333667755127,
+            0.11042303591966629,
+            0.12482241541147232,
+            0.11593258380889893,
+            0.11569908261299133
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0019080489873886108,
+            -0.004739940166473389,
+            -0.0018273144960403442,
+            -0.00028405338525772095,
+            -0.0006991028785705566,
+            -0.0007761046290397644
+          ],
+          "actual_future_mse_delta_after_patch": -0.001069744466803968,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            0.9947519302368164,
+            0.7520445585250854,
+            0.5395233035087585,
+            0.34042203426361084,
+            0.1589156985282898,
+            0.09036628156900406
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 250.06642055707192,
+          "midpoint_relative_l2_error": 0.004269514765917173,
+          "estimate_l2_norm": 58566.73624001631,
+          "actual_midpoint_l2_norm": 58570.22033354015,
+          "estimate_offset_from_noncentral_mean": 794.8650219275927,
+          "maximum_sample_offset_from_noncentral_mean": 2751.17325153839,
+          "estimate_offset_over_sample_radius": 0.28891856282883066,
+          "coordinate_box_overshoot_l2": 93.07303972931224,
+          "coordinate_box_overshoot_fraction": 0.102216796875,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.00011304749205010012,
+            1.4827208360657096e-05,
+            1.5476622138521634e-05,
+            1.4823167475697119e-05,
+            1.6491127098561265e-05,
+            3.4971581044374034e-05
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 3.4939530451083556e-05,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10154542326927185,
+            0.09142351150512695,
+            0.11284118890762329,
+            0.12520070374011993,
+            0.11712044477462769,
+            0.11700397729873657
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            -0.0004253461956977844,
+            -0.0003097653388977051,
+            0.0005908384919166565,
+            9.423494338989258e-05,
+            0.0004887580871582031,
+            0.0005287900567054749
+          ],
+          "actual_future_mse_delta_after_patch": 0.000161251678946428,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0076910257339478,
+            0.7493045330047607,
+            0.5397551655769348,
+            0.3388373553752899,
+            0.15884464979171753,
+            0.0896601602435112
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 1210.8183065154656,
+          "midpoint_relative_l2_error": 0.020672934122839423,
+          "estimate_l2_norm": 58389.99056314548,
+          "actual_midpoint_l2_norm": 58570.22033354015,
+          "estimate_offset_from_noncentral_mean": 477.66789793044614,
+          "maximum_sample_offset_from_noncentral_mean": 2751.17325153839,
+          "estimate_offset_over_sample_radius": 0.1736233433002977,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.002926549641415477,
+            0.0016827802173793316,
+            0.0010320692090317607,
+            0.0009367503807879984,
+            0.0009662765078246593,
+            0.0013041269266977906
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0014747587265446782,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10665950924158096,
+            0.0855492427945137,
+            0.10974083095788956,
+            0.12493310123682022,
+            0.11572795361280441,
+            0.11547376960515976
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.004688739776611328,
+            -0.006184034049510956,
+            -0.0025095194578170776,
+            -0.00017336755990982056,
+            -0.0009037330746650696,
+            -0.0010014176368713379
+          ],
+          "actual_future_mse_delta_after_patch": -0.0010138886282220483,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            0.9890231490135193,
+            0.7534348964691162,
+            0.5396338701248169,
+            0.3413839638233185,
+            0.15939582884311676,
+            0.09104838222265244
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 2469.57059430796,
+          "midpoint_relative_l2_error": 0.04216427017423672,
+          "estimate_l2_norm": 58240.437643208475,
+          "actual_midpoint_l2_norm": 58570.22033354015,
+          "estimate_offset_from_noncentral_mean": 1747.4762275956991,
+          "maximum_sample_offset_from_noncentral_mean": 2751.17325153839,
+          "estimate_offset_over_sample_radius": 0.6351749118738895,
+          "coordinate_box_overshoot_l2": 549.5682374931845,
+          "coordinate_box_overshoot_fraction": 0.274833984375,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.012377162463963032,
+            0.00570435868576169,
+            0.0032393019646406174,
+            0.0024140365421772003,
+            0.0025144813116639853,
+            0.0034615357872098684
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.004951812792569399,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.11837144941091537,
+            0.08267519623041153,
+            0.10968183726072311,
+            0.12526749074459076,
+            0.11609505861997604,
+            0.11600782722234726
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.01640067994594574,
+            -0.009058080613613129,
+            -0.0025685131549835205,
+            0.00016102194786071777,
+            -0.0005366280674934387,
+            -0.0004673600196838379
+          ],
+          "actual_future_mse_delta_after_patch": 0.0006551866536028683,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            0.9760951399803162,
+            0.7572512626647949,
+            0.5412129163742065,
+            0.3427480161190033,
+            0.15999014675617218,
+            0.09410837292671204
+          ]
+        }
+      ]
+    },
+    {
+      "block": 5,
+      "intervention_horizon": 3,
+      "geometry": {
+        "sample_t": [
+          -1,
+          -0.5,
+          0,
+          0.5,
+          1
+        ],
+        "path_length": 6556.057783346929,
+        "chord_length": 5381.459676230125,
+        "path_chord_ratio": 1.2182675663825924,
+        "chord_orthogonal_distance": [
+          0.0,
+          1266.0583704009596,
+          1530.6537843328113,
+          997.1025032386391,
+          9.367032876370118e-11
+        ],
+        "max_orthogonal_fraction_of_chord": 0.28443096788287753,
+        "chord_coordinate_fraction": [
+          0.0,
+          0.1869831650199726,
+          0.4343700337567231,
+          0.7471604496284446,
+          0.9999999999999826
+        ],
+        "backtracking_segments": 0,
+        "successive_segment_angle_radians": [
+          0.8175375488506491,
+          0.6026617916638695,
+          0.49090199339198304
+        ],
+        "normal_second_difference": [
+          4818.739938642696,
+          3799.8148136051104,
+          3408.3023220202745
+        ],
+        "finite_sample_path_curvature": [
+          0.0006172319162204371,
+          0.0003934512985604916,
+          0.0002936086115648249
+        ],
+        "degenerate_endpoint_chord": false,
+        "metric": "Raw full-spatial Euclidean; no pooling, PCA, whitening, or fitted readout",
+        "limitations": "A sampled action-response path, not proof of a manifold, semantic coordinate, or useful control"
+      },
+      "self_patch_exact": true,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 1570.8725819967465,
+          "midpoint_relative_l2_error": 0.026215800323825054,
+          "estimate_l2_norm": 59625.05149218128,
+          "actual_midpoint_l2_norm": 59920.83257397751,
+          "estimate_offset_from_noncentral_mean": 544.8524820419682,
+          "maximum_sample_offset_from_noncentral_mean": 2830.846746699944,
+          "estimate_offset_over_sample_radius": 0.19246979112420312,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.005245605017989874,
+            0.0008515461231581867,
+            0.000712100591044873,
+            0.0010881985072046518
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.001974362414330244,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11858358234167099,
+            0.12611399590969086,
+            0.1181383952498436,
+            0.11775627732276917
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0063332319259643555,
+            0.0010075271129608154,
+            0.001506708562374115,
+            0.0012810900807380676
+          ],
+          "actual_future_mse_delta_after_patch": 0.0025321394205093384,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5551913380622864,
+            0.33955898880958557,
+            0.1593014895915985,
+            0.09333599358797073
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 518.7645599309577,
+          "midpoint_relative_l2_error": 0.008657499197637107,
+          "estimate_l2_norm": 59826.256517700145,
+          "actual_midpoint_l2_norm": 59920.83257397751,
+          "estimate_offset_from_noncentral_mean": 544.8524669570895,
+          "maximum_sample_offset_from_noncentral_mean": 2830.846746699944,
+          "estimate_offset_over_sample_radius": 0.19246978579545168,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0005977308028377593,
+            9.951211541192606e-05,
+            9.769149619387463e-05,
+            0.0001994900667341426
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.000248606113018468,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11261159181594849,
+            0.12528575956821442,
+            0.11700388044118881,
+            0.11666905879974365
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0003612414002418518,
+            0.000179290771484375,
+            0.00037219375371932983,
+            0.00019387155771255493
+          ],
+          "actual_future_mse_delta_after_patch": 0.0002766493707895279,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5440406799316406,
+            0.3393816351890564,
+            0.15882952511310577,
+            0.09046485275030136
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 1035.139811736309,
+          "midpoint_relative_l2_error": 0.017275123980601208,
+          "estimate_l2_norm": 59723.25343104352,
+          "actual_midpoint_l2_norm": 59920.83257397751,
+          "estimate_offset_from_noncentral_mean": 0.0016411633106133772,
+          "maximum_sample_offset_from_noncentral_mean": 2830.846746699944,
+          "estimate_offset_over_sample_radius": 5.797429029058395e-07,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.002304812427610159,
+            0.00035413444857113063,
+            0.0003123121277894825,
+            0.000531712721567601
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0008757429313845932,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11497407406568527,
+            0.1256915181875229,
+            0.11748885363340378,
+            0.11710713058710098
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0027237236499786377,
+            0.0005850493907928467,
+            0.0008571669459342957,
+            0.0006319433450698853
+          ],
+          "actual_future_mse_delta_after_patch": 0.0011994708329439163,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5490527153015137,
+            0.33955588936805725,
+            0.1589716523885727,
+            0.09165269136428833
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 253.04927723553627,
+          "midpoint_relative_l2_error": 0.004223060100560599,
+          "estimate_l2_norm": 59897.580263186755,
+          "actual_midpoint_l2_norm": 59920.83257397751,
+          "estimate_offset_from_noncentral_mean": 908.0874666950966,
+          "maximum_sample_offset_from_noncentral_mean": 2830.846746699944,
+          "estimate_offset_over_sample_radius": 0.3207829840148353,
+          "coordinate_box_overshoot_l2": 100.58740070939834,
+          "coordinate_box_overshoot_fraction": 0.116474609375,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0001307927304878831,
+            3.116978405159898e-05,
+            3.291545363026671e-05,
+            8.043397247092798e-05
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 6.882798334117979e-05,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11171486228704453,
+            0.1250290423631668,
+            0.11674972623586655,
+            0.11647044867277145
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            -0.0005354881286621094,
+            -7.742643356323242e-05,
+            0.00011803954839706421,
+            -4.738569259643555e-06
+          ],
+          "actual_future_mse_delta_after_patch": -0.00012490339577198029,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5413121581077576,
+            0.3391883671283722,
+            0.15880152583122253,
+            0.08988186717033386
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 1535.112494999991,
+          "midpoint_relative_l2_error": 0.02561901143654438,
+          "estimate_l2_norm": 59672.348002430495,
+          "actual_midpoint_l2_norm": 59920.83257397751,
+          "estimate_offset_from_noncentral_mean": 557.5123225144828,
+          "maximum_sample_offset_from_noncentral_mean": 2830.846746699944,
+          "estimate_offset_over_sample_radius": 0.19694189491691913,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.004842194262892008,
+            0.0009984903736039996,
+            0.0008623545872978866,
+            0.0009279854712076485
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.001907756202854216,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11904916167259216,
+            0.12664538621902466,
+            0.11823821067810059,
+            0.1174924373626709
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0067988112568855286,
+            0.0015389174222946167,
+            0.0016065239906311035,
+            0.001017250120639801
+          ],
+          "actual_future_mse_delta_after_patch": 0.0027403756976127625,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5564513206481934,
+            0.3403257727622986,
+            0.16071419417858124,
+            0.09277699887752533
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 2959.6502903408546,
+          "midpoint_relative_l2_error": 0.04939267635653939,
+          "estimate_l2_norm": 59480.824956821,
+          "actual_midpoint_l2_norm": 59920.83257397751,
+          "estimate_offset_from_noncentral_mean": 1976.7245988566947,
+          "maximum_sample_offset_from_noncentral_mean": 2830.846746699944,
+          "estimate_offset_over_sample_radius": 0.6982803294318418,
+          "coordinate_box_overshoot_l2": 627.4825685779709,
+          "coordinate_box_overshoot_fraction": 0.3134375,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.01797228679060936,
+            0.005638444796204567,
+            0.004495969507843256,
+            0.004577279556542635
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.00817099492996931,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.13492514193058014,
+            0.12985070049762726,
+            0.12238162755966187,
+            0.12129214406013489
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.022674791514873505,
+            0.004744231700897217,
+            0.005749940872192383,
+            0.00481695681810379
+          ],
+          "actual_future_mse_delta_after_patch": 0.009496480226516724,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5792123675346375,
+            0.3421022295951843,
+            0.16683505475521088,
+            0.10032516717910767
+          ]
+        }
+      ]
+    },
+    {
+      "block": 5,
+      "intervention_horizon": 6,
+      "geometry": {
+        "sample_t": [
+          -1,
+          -0.5,
+          0,
+          0.5,
+          1
+        ],
+        "path_length": 8943.327594174712,
+        "chord_length": 5817.390788929158,
+        "path_chord_ratio": 1.5373434446237304,
+        "chord_orthogonal_distance": [
+          0.0,
+          1409.0799760023924,
+          1908.6076943384614,
+          2154.8107005195398,
+          1.7371951614296302e-10
+        ],
+        "max_orthogonal_fraction_of_chord": 0.37040844920033106,
+        "chord_coordinate_fraction": [
+          0.0,
+          0.2790541325825676,
+          0.5203346807458102,
+          0.7588639121495684,
+          0.9999999999999701
+        ],
+        "backtracking_segments": 0,
+        "successive_segment_angle_radians": [
+          1.0650577628027849,
+          1.1083243349348053,
+          1.580224186731707
+        ],
+        "normal_second_difference": [
+          8421.311336472696,
+          8860.33953805657,
+          13503.070034075316
+        ],
+        "finite_sample_path_curvature": [
+          0.000657634791926645,
+          0.0006865659162247539,
+          0.0011814620320196503
+        ],
+        "degenerate_endpoint_chord": false,
+        "metric": "Raw full-spatial Euclidean; no pooling, PCA, whitening, or fitted readout",
+        "limitations": "A sampled action-response path, not proof of a manifold, semantic coordinate, or useful control"
+      },
+      "self_patch_exact": true,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 1912.2701114671124,
+          "midpoint_relative_l2_error": 0.035194569918221896,
+          "estimate_l2_norm": 54398.0760363971,
+          "actual_midpoint_l2_norm": 54334.23723916682,
+          "estimate_offset_from_noncentral_mean": 715.5336384736045,
+          "maximum_sample_offset_from_noncentral_mean": 3048.491960306895,
+          "estimate_offset_over_sample_radius": 0.23471724635992508,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.008056772872805595
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.008056772872805595,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.1160188615322113
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.0004563257098197937
+          ],
+          "actual_future_mse_delta_after_patch": -0.0004563257098197937,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.10184711217880249
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 1114.8110586281891,
+          "midpoint_relative_l2_error": 0.02051765360616083,
+          "estimate_l2_norm": 54310.95163367023,
+          "actual_midpoint_l2_norm": 54334.23723916682,
+          "estimate_offset_from_noncentral_mean": 715.5336243873454,
+          "maximum_sample_offset_from_noncentral_mean": 3048.491960306895,
+          "estimate_offset_over_sample_radius": 0.2347172417391948,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.002817613771185279
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.002817613771185279,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11663118004798889
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0001559928059577942
+          ],
+          "actual_future_mse_delta_after_patch": 0.0001559928059577942,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09737089276313782
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 1392.0495603096308,
+          "midpoint_relative_l2_error": 0.025620117830717836,
+          "estimate_l2_norm": 54349.82139353562,
+          "actual_midpoint_l2_norm": 54334.23723916682,
+          "estimate_offset_from_noncentral_mean": 0.0015672039683051228,
+          "maximum_sample_offset_from_noncentral_mean": 3048.491960306895,
+          "estimate_offset_over_sample_radius": 5.140915536963891e-07,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.004348429385572672
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.004348429385572672,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11523986607789993
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.0012353211641311646
+          ],
+          "actual_future_mse_delta_after_patch": -0.0012353211641311646,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09852346777915955
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 1161.1836428196912,
+          "midpoint_relative_l2_error": 0.02137112255222113,
+          "estimate_l2_norm": 54290.26262076437,
+          "actual_midpoint_l2_norm": 54334.23723916682,
+          "estimate_offset_from_noncentral_mean": 1192.556041036899,
+          "maximum_sample_offset_from_noncentral_mean": 3048.491960306895,
+          "estimate_offset_over_sample_radius": 0.3911954030270242,
+          "coordinate_box_overshoot_l2": 132.34377372402082,
+          "coordinate_box_overshoot_fraction": 0.102255859375,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0030158658046275377
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.0030158658046275377,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.1187734380364418
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0022982507944107056
+          ],
+          "actual_future_mse_delta_after_patch": 0.0022982507944107056,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.09781761467456818
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 1908.824409069952,
+          "midpoint_relative_l2_error": 0.03513115313771216,
+          "estimate_l2_norm": 54388.1440980868,
+          "actual_midpoint_l2_norm": 54334.23723916682,
+          "estimate_offset_from_noncentral_mean": 719.3015983186591,
+          "maximum_sample_offset_from_noncentral_mean": 3048.491960306895,
+          "estimate_offset_over_sample_radius": 0.2359532541611972,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.007981785573065281
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.007981785573065281,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.11587637662887573
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            -0.000598810613155365
+          ],
+          "actual_future_mse_delta_after_patch": -0.000598810613155365,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.10181497037410736
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 3630.0461634270196,
+          "midpoint_relative_l2_error": 0.06680955412051505,
+          "estimate_l2_norm": 54552.23348394913,
+          "actual_midpoint_l2_norm": 54334.23723916682,
+          "estimate_offset_from_noncentral_mean": 2617.4340658144015,
+          "maximum_sample_offset_from_noncentral_mean": 3048.491960306895,
+          "estimate_offset_over_sample_radius": 0.8585996288968075,
+          "coordinate_box_overshoot_l2": 964.7875434187908,
+          "coordinate_box_overshoot_fraction": 0.365380859375,
+          "downstream_native_fullspatial_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.028060242533683777
+          ],
+          "downstream_native_fullspatial_mse_after_patch": 0.028060242533683777,
+          "actual_future_fullspatial_mse_by_horizon": [
+            0.10197076946496964,
+            0.09173327684402466,
+            0.11225035041570663,
+            0.12510646879673004,
+            0.11663168668746948,
+            0.12802435457706451
+          ],
+          "actual_future_mse_delta_vs_native_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.011549167335033417
+          ],
+          "actual_future_mse_delta_after_patch": 0.011549167335033417,
+          "native_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052589178085327,
+            0.7486222982406616,
+            0.5394644737243652,
+            0.33936187624931335,
+            0.15932980179786682,
+            0.12087173014879227
+          ]
+        }
+      ]
+    }
+  ],
+  "baseline_actual_fullspatial_mse_by_horizon": [
+    0.10197076946496964,
+    0.09173327684402466,
+    0.11225035041570663,
+    0.12510646879673004,
+    0.11663168668746948,
+    0.1164751872420311
+  ],
+  "seconds": 2.394624552980531,
+  "full_tensor_sha256": "cba888cf0269a1745e4666902bb7a1cf5e6519abfd67dc9d16f4128f18143235",
+  "full_tensor_bytes": 234463206,
+  "limitations": [
+    "Only four initial states; action directions/horizons/patches are dependent, exploratory units",
+    "Natural midpoint used only for scoring and exact control, never interpolation fitting",
+    "Fullspatial representation fidelity is not physical steering success or output probability",
+    "Only central action physical truth is observed; sampled path futures are model predictions",
+    "Five sampled points do not identify a manifold or a density model",
+    "Cubic central interpolation equals four-point quadratic LS at zero; no specifically cubic mechanism"
+  ]
+}

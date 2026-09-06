@@ -1,0 +1,909 @@
+{
+  "bank_sha256": "0f31bf2eded70608bc9e64f251eaf08d475be43325961209552b0caf46cf0dab",
+  "candidate_count": 300,
+  "capture_indices": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "checkpoint_sha256": "c3297772c7af4e84c28bd0c0937e22398a888848305014bb3ab3f1508a310bd8",
+  "complete": true,
+  "direction": "Exact saved beta1 up raw vector; signed doses reverse the same vector, not alternate donors",
+  "doses": [
+    0.0,
+    0.125,
+    -0.125,
+    0.25,
+    -0.25,
+    0.5,
+    -0.5
+  ],
+  "episode": 0,
+  "held_episodes_loaded": 0,
+  "hooks_cleaned": true,
+  "imagined_edit_step": 1,
+  "model": {
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "config": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "loader": "official constructor/checkpoint; heads_cfg cleared",
+    "model_name": "jepa_wm_metaworld"
+  },
+  "module_paths": {
+    "p3_edited_residual": "world_model.model.predictor.predictor_blocks.3.output",
+    "predictor_norm_input": "world_model.model.predictor.predictor_norm.input",
+    "predictor_norm_output": "world_model.model.predictor.predictor_norm.output",
+    "predictor_proj_input": "world_model.model.predictor.predictor_proj.input",
+    "predictor_proj_output": "world_model.model.predictor.predictor_proj.output"
+  },
+  "new_cem_optimizations": 0,
+  "new_simulator_action_forks": 0,
+  "nnsight_version": "0.7.0",
+  "official_docs": [
+    "https://nnsight.net/getting-started/quickstart/",
+    "https://nnsight.net/features/1_getting/",
+    "https://pypi.org/project/nnsight/0.7.0/"
+  ],
+  "original_baseline_checks": {
+    "costs": {
+      "actual_dtype": "torch.float32",
+      "bound": 1e-06,
+      "cached_dtype": "torch.float32",
+      "max_absolute_error": 0.0
+    },
+    "pooled": {
+      "actual_dtype": "torch.float32",
+      "bound": 1e-06,
+      "cached_dtype": "torch.float32",
+      "max_absolute_error": 0.0
+    },
+    "proprio": {
+      "actual_dtype": "torch.float32",
+      "bound": 1e-06,
+      "cached_dtype": "torch.float32",
+      "max_absolute_error": 0.0
+    }
+  },
+  "parameters_after_sha256": "81b73f2c3271b6be45e65c87ce3ee85f1cf295dfb74fef0c72a373344e5f4a94",
+  "parameters_before_sha256": "81b73f2c3271b6be45e65c87ce3ee85f1cf295dfb74fef0c72a373344e5f4a94",
+  "parameters_unchanged": true,
+  "parity_policy": "MaxABS<=1e-6 every saved stage/loss; unsteered ranks/argmin exact; within-run complete beta0 identity exact. No bound expansion on failure.",
+  "reference_done_sha256": "d1f330ef47416cead84912cc815a9163a154750f33a565b116f35652642e6bdf",
+  "reference_report_sha256": "aed6ba00dbd3e8754429defdbeb82707f1eabbdd128eb454d69942e00ebfa5db",
+  "replan": 0,
+  "replay_checks": {
+    "act": 0.0,
+    "goal_pixels": 0.0,
+    "goal_proprio": 0.0,
+    "mocap_pos": 0.0,
+    "mocap_quat": 0.0,
+    "pixels": 0.0,
+    "proprio": 0.0,
+    "qpos": 0.0,
+    "qvel": 0.0,
+    "task._freeze_rand_vec": 0.0,
+    "task._last_rand_vec": 0.0,
+    "task._target_pos": 0.0,
+    "task.hand_init_pos": 0.0,
+    "task.obj_init_pos": 0.0,
+    "task.seeded_rand_vec": 0.0,
+    "time": 0.0,
+    "userdata": 0.0
+  },
+  "rows": [
+    {
+      "beta": 0.0,
+      "comparisons": {
+        "all300_first_step_losses": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "all300_terminal_costs": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "native_first_step_goal_loss": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "p3_edited_residual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_proprio": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            16
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_visual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            16,
+            16,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        }
+      },
+      "file": "zero.pt",
+      "sha256": "99fc5c2f285658ec2ee784720d0c5444d7e57da0f05b5636875d00bbf05da83c"
+    },
+    {
+      "beta": 0.125,
+      "comparisons": {
+        "all300_first_step_losses": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "all300_terminal_costs": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "native_first_step_goal_loss": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "p3_edited_residual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_proprio": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            16
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_visual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            16,
+            16,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        }
+      },
+      "file": "plus0p125.pt",
+      "sha256": "b8961e73662220c377f5b8524272a187c79e058e0cfa47868bcccb4baca63a2a"
+    },
+    {
+      "beta": -0.125,
+      "comparisons": {
+        "all300_first_step_losses": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "all300_terminal_costs": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "native_first_step_goal_loss": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "p3_edited_residual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_proprio": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            16
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_visual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            16,
+            16,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        }
+      },
+      "file": "minus0p125.pt",
+      "sha256": "90580b9a5abe5589af143791fc4b19e3ca5efc8c133fcf8524158c0a87c5d4fb"
+    },
+    {
+      "beta": 0.25,
+      "comparisons": {
+        "all300_first_step_losses": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "all300_terminal_costs": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "native_first_step_goal_loss": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "p3_edited_residual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_proprio": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            16
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_visual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            16,
+            16,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        }
+      },
+      "file": "plus0p25.pt",
+      "sha256": "d658ba6e83b5adca13719a213e5103d57804fee89319aaca8b9f1cec40a533a4"
+    },
+    {
+      "beta": -0.25,
+      "comparisons": {
+        "all300_first_step_losses": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "all300_terminal_costs": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "native_first_step_goal_loss": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "p3_edited_residual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_proprio": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            16
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_visual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            16,
+            16,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        }
+      },
+      "file": "minus0p25.pt",
+      "sha256": "2d0d5ce1ad090ba2e98bfbf1fb1f322107558ed73216c468c7f24b794e052282"
+    },
+    {
+      "beta": 0.5,
+      "comparisons": {
+        "all300_first_step_losses": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "all300_terminal_costs": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "native_first_step_goal_loss": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "p3_edited_residual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_proprio": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            16
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_visual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            16,
+            16,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        }
+      },
+      "file": "plus0p5.pt",
+      "sha256": "b44f2b869c5a9313a4297a8e36dbd4c2d9acae6c7263c776218ac064403ff8d4"
+    },
+    {
+      "beta": -0.5,
+      "comparisons": {
+        "all300_first_step_losses": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "all300_terminal_costs": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            300
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "native_first_step_goal_loss": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "p3_edited_residual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_norm_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            400
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_input": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "predictor_proj_output": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            256,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_proprio": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            256,
+            16
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        },
+        "returned_visual": {
+          "actual_dtype": "torch.float32",
+          "actual_shape": [
+            8,
+            1,
+            16,
+            16,
+            384
+          ],
+          "bound": 1e-06,
+          "exact": true,
+          "max_absolute_error": 0.0
+        }
+      },
+      "file": "minus0p5.pt",
+      "sha256": "1bede8fe6e7d55f00b59c1b35ae25f70447dc36602406b7491ef07c7157d823d"
+    }
+  ],
+  "scope": "NNsight tracer parity against completed native-hook seven-dose diagnostic; NOT new independent causal evidence",
+  "script_sha256": "f9b392f52a5235ac09b8b0b53dfe495dfbc555069025eb60406ec39c7e20526a",
+  "torch_version": "2.7.1+cu128",
+  "tracer_script_sha256": "97e5b7567e6f5ccbc1fe3f06667745f286f881af042ee6394ec4f564a0fcebd5",
+  "within_run_identity_exact": true
+}

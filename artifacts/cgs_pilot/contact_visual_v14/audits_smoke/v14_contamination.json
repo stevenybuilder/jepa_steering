@@ -1,0 +1,209 @@
+{
+  "action_audit": {
+    "actions_identical_across_hazard": true,
+    "all_scenes_share_identical_actions": true,
+    "chance_hazard": 0.5,
+    "distinct_action_sequences_per_level": {
+      "0": 1,
+      "1": 1
+    },
+    "hazard_from_actions_at_chance": true,
+    "loso_nn_accuracy_action_level_from_actions": 1.0,
+    "loso_nn_accuracy_hazard_from_actions": 0.5,
+    "max_abs_action_diff_across_hazard_within_pair": 0.0,
+    "nearest_other_scene_action_distance": {
+      "max": 0.0,
+      "mean": 0.0,
+      "median": 0.0,
+      "min": 0.0,
+      "n": 8,
+      "p05": 0.0,
+      "p95": 0.0
+    },
+    "unseen_action_control_present": false
+  },
+  "artifacts": "/root/cgs-pilot/artifacts/contact_visual_v14",
+  "droid_reference_audit": {
+    "action_novelty": {
+      "dtw": {
+        "distinct_stimulus_chunks": 2,
+        "ratio_median": 1.3678484156143254,
+        "reference_to_reference_loo_nn_subsample": {
+          "max": 3.47920157157768,
+          "mean": 1.4154939101201676,
+          "median": 1.1767307383704262,
+          "min": 0.28501409392315713,
+          "n": 60,
+          "p05": 0.46871412337499757,
+          "p95": 2.901245755260962
+        },
+        "stimulus_to_reference_nn": {
+          "max": 2.94302386940519,
+          "mean": 1.6095892760846626,
+          "median": 1.6095892760846626,
+          "min": 0.2761546827641355,
+          "n": 2,
+          "p05": 0.40949814209618823,
+          "p95": 2.809680410073137
+        }
+      },
+      "euclidean": {
+        "fraction_stimuli_beyond_reference_p95": 0.5,
+        "ratio_median": 1.5162580392252711,
+        "ratio_per_item": [
+          0.26726326754922913,
+          2.7652528109013135,
+          0.26726326754922913,
+          2.7652528109013135,
+          0.26726326754922913,
+          2.7652528109013135,
+          0.26726326754922913,
+          2.7652528109013135
+        ],
+        "reference_to_reference_loo_nn": {
+          "max": 15.686635644712759,
+          "mean": 0.7265877621432302,
+          "median": 0.6164611962662261,
+          "min": 0.0001051470973855622,
+          "n": 3000,
+          "p05": 0.18690608868645928,
+          "p95": 1.5271208163246734
+        },
+        "stimulus_to_reference_nn": {
+          "max": 1.704671055786768,
+          "mean": 0.934714244709093,
+          "median": 0.934714244709093,
+          "min": 0.16475743363141823,
+          "n": 8,
+          "p05": 0.16475743363141823,
+          "p95": 1.704671055786768
+        }
+      },
+      "n_reference_chunks_used": 3000,
+      "scaling": "dims 0-5 / 0.1, dim 6 / 0.75 (released max_norms)"
+    },
+    "frame_domain_shift": {
+      "encoder": "DINOv3 ViT-L/16 (JEPA-WM frozen encoder), mean-pooled patch tokens",
+      "fraction_stimuli_beyond_reference_p95": 1.0,
+      "nearest_reference_index": [
+        1640,
+        1640,
+        1640,
+        1640,
+        1091,
+        1091,
+        1091,
+        1091
+      ],
+      "protocol": "Somepalli et al. CVPR 2023 feature-space NN; ratio to leave-one-episode-out DROID NN (Rahman et al. WACV 2025)",
+      "ratio_median": 1.4109144147139032,
+      "ratio_per_item": [
+        1.4135650800536288,
+        1.4135650800536288,
+        1.3996070798016198,
+        1.3996070798016198,
+        1.4082637493741776,
+        1.4082637493741776,
+        1.4186962014913966,
+        1.4186962014913966
+      ],
+      "reference_to_reference_loo_nn": {
+        "max": 4.029192434175546,
+        "mean": 2.4914313381354627,
+        "median": 2.5323328767012527,
+        "min": 1.0432156000494708,
+        "n": 2197,
+        "p05": 1.6492826387347033,
+        "p95": 3.2791949652810244
+      },
+      "stimulus_to_reference_nn": {
+        "max": 3.5926110330878487,
+        "mean": 3.5706729932291923,
+        "median": 3.5729049585917227,
+        "min": 3.5442710226454754,
+        "n": 8,
+        "p05": 3.5442710226454754,
+        "p95": 3.5926110330878487
+      }
+    },
+    "reference_meta": {
+      "action_key": "steps/action",
+      "action_semantics": "JEPA-WM DROID convention: per-step delta of RLDS 'action' (target cartesian pose 6-D + gripper) across action_stride source steps with angle wrap (droid_dset._get_delta).",
+      "action_stride": 4,
+      "chunk_len": 3,
+      "episodes": 100,
+      "frame_stride": 15,
+      "https": "https://storage.googleapis.com/gresearch/robotics/droid_100/1.0.0/",
+      "image_key": "steps/observation/exterior_image_2_left",
+      "image_size": 256,
+      "n_action_chunks": 7791,
+      "n_frames": 2197,
+      "n_transitions": 594,
+      "shards": [
+        "r2d2_faceblur-train.tfrecord-00000-of-00031",
+        "r2d2_faceblur-train.tfrecord-00001-of-00031",
+        "r2d2_faceblur-train.tfrecord-00002-of-00031",
+        "r2d2_faceblur-train.tfrecord-00003-of-00031",
+        "r2d2_faceblur-train.tfrecord-00004-of-00031",
+        "r2d2_faceblur-train.tfrecord-00005-of-00031",
+        "r2d2_faceblur-train.tfrecord-00006-of-00031",
+        "r2d2_faceblur-train.tfrecord-00007-of-00031",
+        "r2d2_faceblur-train.tfrecord-00008-of-00031",
+        "r2d2_faceblur-train.tfrecord-00009-of-00031",
+        "r2d2_faceblur-train.tfrecord-00010-of-00031",
+        "r2d2_faceblur-train.tfrecord-00011-of-00031",
+        "r2d2_faceblur-train.tfrecord-00012-of-00031",
+        "r2d2_faceblur-train.tfrecord-00013-of-00031",
+        "r2d2_faceblur-train.tfrecord-00014-of-00031",
+        "r2d2_faceblur-train.tfrecord-00015-of-00031",
+        "r2d2_faceblur-train.tfrecord-00016-of-00031",
+        "r2d2_faceblur-train.tfrecord-00017-of-00031",
+        "r2d2_faceblur-train.tfrecord-00018-of-00031",
+        "r2d2_faceblur-train.tfrecord-00019-of-00031",
+        "r2d2_faceblur-train.tfrecord-00020-of-00031",
+        "r2d2_faceblur-train.tfrecord-00021-of-00031",
+        "r2d2_faceblur-train.tfrecord-00022-of-00031",
+        "r2d2_faceblur-train.tfrecord-00023-of-00031",
+        "r2d2_faceblur-train.tfrecord-00024-of-00031",
+        "r2d2_faceblur-train.tfrecord-00025-of-00031",
+        "r2d2_faceblur-train.tfrecord-00026-of-00031",
+        "r2d2_faceblur-train.tfrecord-00027-of-00031",
+        "r2d2_faceblur-train.tfrecord-00028-of-00031",
+        "r2d2_faceblur-train.tfrecord-00029-of-00031",
+        "r2d2_faceblur-train.tfrecord-00030-of-00031"
+      ],
+      "source": "gs://gresearch/robotics/droid_100/1.0.0/",
+      "subsample_seed": 0
+    },
+    "status": "run"
+  },
+  "duplicate_audit": {
+    "centroid_threshold_px": 2.0,
+    "n_cells_with_hazard_centroid_within_threshold": 0,
+    "n_near_duplicate_context_cells": 0,
+    "near_duplicate_context_pairs": [],
+    "nearest_other_scene_context_distance": {
+      "max": 1.0930125849950154,
+      "mean": 1.092383608385107,
+      "median": 1.0922222016120928,
+      "min": 1.0920774453212276,
+      "n": 8,
+      "p05": 1.0920774453212276,
+      "p95": 1.0930125849950154
+    },
+    "nearest_other_scene_hazard_centroid_px": {
+      "max": 19.939379115512644,
+      "mean": 11.336548852664968,
+      "median": 10.955887479125746,
+      "min": 3.4950413368957407,
+      "n": 8,
+      "p05": 3.4950413368957407,
+      "p95": 19.939379115512644
+    },
+    "pixel_threshold": 0.05
+  },
+  "framing": "jepa_wm_droid trained on DROID only (config datasets: [DROID]; arXiv:2512.24497): RoboCasa frame contamination is impossible; this audit quantifies domain shift and action novelty instead.",
+  "manifest_sha256": "d4369121b8e00ffb461230be6df4aca9daf61c065351d33e7c5c200103c1cc19",
+  "n_cells": 8,
+  "n_scenes": 2
+}

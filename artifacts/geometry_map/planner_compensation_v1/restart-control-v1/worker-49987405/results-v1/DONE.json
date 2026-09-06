@@ -1,0 +1,147 @@
+{
+  "all_seeds_retained": true,
+  "bank_sha256": "c3fb2716122f3eb561a69aec7a716007804a6e2d901d7599169b7456efc5c33d",
+  "best_restart_selection": false,
+  "budget_seconds": 1500,
+  "candidate_populations": "NOT matched to original baseline or other restart seeds",
+  "candidate_sha256": "b80aebccc641da5913b6e1b0fbb315323e4745876547fec1eb8f9e88f8471e4c",
+  "checkpoint_sha256": "c3297772c7af4e84c28bd0c0937e22398a888848305014bb3ab3f1508a310bd8",
+  "complete": true,
+  "episode": 7,
+  "goal_mode": "same immutable baseline raw and full-precision encoded target",
+  "held_sources_opened": false,
+  "intervention": "none: unchanged native model and objective",
+  "model": {
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "config": "/root/geometry-map-jepawm-pusht-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "loader": "official constructor/checkpoint; heads_cfg cleared",
+    "model_name": "jepa_wm_metaworld"
+  },
+  "native_cem": {
+    "H": 6,
+    "iterations": 15,
+    "samples": 300
+  },
+  "only_changed_variable": "native planner local CUDA generator seed AFTER fixed environment/model initialization",
+  "outputs": [
+    {
+      "bytes": 61168385,
+      "episode": 7,
+      "ever_success": false,
+      "first300_min_native_cost": 1.9747754335403442,
+      "goal_progress_m": 0.07428373459650037,
+      "original_baseline_native_terminal_goal_cost": 0.5482004284858704,
+      "path": "restart-817.pt",
+      "progress_change_vs_original_baseline_mm": -37.405465314365394,
+      "seconds": 49.12998363201041,
+      "seed": 817,
+      "selected_native_terminal_goal_cost": 0.835640549659729,
+      "sha256": "0b50de360c5ddf2ec20ed1d1c85981d5429f2b661f9dce02cf5511d295330463"
+    },
+    {
+      "bytes": 61168508,
+      "episode": 7,
+      "ever_success": false,
+      "first300_min_native_cost": 2.002847909927368,
+      "goal_progress_m": 0.11142916378299822,
+      "original_baseline_native_terminal_goal_cost": 0.5482004284858704,
+      "path": "restart-1801.pt",
+      "progress_change_vs_original_baseline_mm": -0.26003612786754116,
+      "seconds": 49.13197690399829,
+      "seed": 1801,
+      "selected_native_terminal_goal_cost": 0.606330394744873,
+      "sha256": "b53ac59ee0918c3992d8b2e72092274f7343c5a2488d9fd2ba88516edc3c1e89"
+    }
+  ],
+  "raw_steps_per_seed": 15,
+  "restart_seeds": [
+    817,
+    1801
+  ],
+  "script_sha256": "4def9da95c61fc6db222aa8a0537f29107467c4a3f52c8bb696806f41bbe9678",
+  "seconds": 105.67103099601809,
+  "source_baseline": {
+    "arm": "unsteered",
+    "episode": 7,
+    "ever_success": false,
+    "final_goal_distance_m": 0.17088260004468744,
+    "final_success": false,
+    "goal_progress_m": 0.11168919991086576,
+    "path": "episode-007/unsteered.pt",
+    "planning_horizon_statistics": [
+      {
+        "active_count": 0,
+        "candidate_count": 4515,
+        "delivered_norm_mean": 0.0,
+        "imagined_step": 1,
+        "original_cap_fraction": 0.42857142857142855,
+        "original_capped_norm_mean": 0.21486388935170167,
+        "original_requested_norm_mean": 0.23809441675082393,
+        "p3_standardized_rms_mean": 1.4734217148154545,
+        "standardized_residual_mean": 0.39392079380923595
+      },
+      {
+        "active_count": 0,
+        "candidate_count": 4515,
+        "delivered_norm_mean": 0.0,
+        "imagined_step": 2,
+        "original_cap_fraction": 0.2407530454042082,
+        "original_capped_norm_mean": 0.17867758014421922,
+        "original_requested_norm_mean": 0.19817854625194573,
+        "p3_standardized_rms_mean": 1.3823618426275412,
+        "standardized_residual_mean": 0.4864838695374306
+      },
+      {
+        "active_count": 0,
+        "candidate_count": 4515,
+        "delivered_norm_mean": 0.0,
+        "imagined_step": 3,
+        "original_cap_fraction": 0.6374307862679955,
+        "original_capped_norm_mean": 0.2386709141523339,
+        "original_requested_norm_mean": 0.28018195969882864,
+        "p3_standardized_rms_mean": 1.278719934355777,
+        "standardized_residual_mean": 0.7029147023114387
+      },
+      {
+        "active_count": 0,
+        "candidate_count": 4515,
+        "delivered_norm_mean": 0.0,
+        "imagined_step": 4,
+        "original_cap_fraction": 0.21085271317829457,
+        "original_capped_norm_mean": 0.20271192739242203,
+        "original_requested_norm_mean": 0.21913139875875096,
+        "p3_standardized_rms_mean": 1.1505603817214205,
+        "standardized_residual_mean": 0.455176937995955
+      },
+      {
+        "active_count": 0,
+        "candidate_count": 4515,
+        "delivered_norm_mean": 0.0,
+        "imagined_step": 5,
+        "original_cap_fraction": 0.11937984496124031,
+        "original_capped_norm_mean": 0.18333737514211754,
+        "original_requested_norm_mean": 0.1950537517947348,
+        "p3_standardized_rms_mean": 1.0777686713277832,
+        "standardized_residual_mean": 0.34908140731082277
+      },
+      {
+        "active_count": 0,
+        "candidate_count": 4515,
+        "delivered_norm_mean": 0.0,
+        "imagined_step": 6,
+        "original_cap_fraction": 0.11627906976744186,
+        "original_capped_norm_mean": 0.17037084828051485,
+        "original_requested_norm_mean": 0.17961325248742552,
+        "p3_standardized_rms_mean": 1.1013037777158246,
+        "standardized_residual_mean": 0.3829514715890684
+      }
+    ],
+    "seconds": 50.32672013100819,
+    "selected_per_horizon_latent_mse_to_actual": [
+      0.6303855776786804,
+      1.1261359453201294,
+      1.338135838508606
+    ],
+    "sha256": "c8b4f6cfc5f9251b59921c93be67fab6b561ff6dbdb45783a3934616fcccb8a4"
+  }
+}

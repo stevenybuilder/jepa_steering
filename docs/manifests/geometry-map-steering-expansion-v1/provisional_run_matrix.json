@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "status": "provisional_run_matrix; operator_and_held_evaluation_not_yet_frozen",
+  "starting_conditions": {
+    "reach_held": 40,
+    "pusht_held_official_sources": 11,
+    "total_held": 51,
+    "development_excluded": 22
+  },
+  "primary_arms": [
+    "unsteered_frozen_jepa_wm",
+    "static_sonar_to_be_frozen",
+    "norm_matched_sham_to_be_frozen"
+  ],
+  "arm_runs": 153,
+  "existing_unsteered_runs_reused": 23,
+  "new_baseline_runs": 28,
+  "new_steered_and_sham_runs_after_freeze": 102,
+  "total_new_runs": 130,
+  "optional_reach_hmm": {
+    "status": "not part of primary153; requires separately frozen mechanism",
+    "additional_runs": 40,
+    "total_if_added": 193,
+    "reason": "native Push-T has one plan per episode, so online temporal HMM adaptation versus static routing is not identifiable there"
+  },
+  "independence": "Use all11 official held Push source trajectories; alternate windows or arms do not create new independent sources.",
+  "checkpoint_identity": {
+    "reach_sha256": "c3297772c7af4e84c28bd0c0937e22398a888848305014bb3ab3f1508a310bd8",
+    "pusht_sha256": "9beca3eafe0739c3b3adb5d734fa435ccbda0fea8a65d53d4cccec176aaaa0eb",
+    "huggingface_revision": "9b9c41ef249466630dbf1a20e78391865d07b3b9"
+  },
+  "pairing": {
+    "same_original_stimulus_goal_seed": true,
+    "same_planner_rng_seed": true,
+    "same_hardware_class_within_start": true,
+    "baseline_goal_replay": "Use cached raw goal stimulus for all arms; verify start physics and pixels; do not replace original goal if regeneration differs.",
+    "sham": "Match each semantic edit's norm in the explicitly frozen native activation units at the same site/tokens/times; raw planner commands and applied simulator controls are distinct."
+  },
+  "endpoints": {
+    "reach_primary": "final-step native simulator success",
+    "reach_secondary": [
+      "final native goal distance",
+      "ever success",
+      "total reward"
+    ],
+    "pusht_primary": "original env.eval_state(goal_state,final_state).success: position difference<20 and wrapped angle difference<pi/9",
+    "pusht_secondary": [
+      "native state_dist = norm(goal_state-final_state)",
+      "overlap with cached expert goal geometry, only after separately verified geometry reconstruction"
+    ],
+    "pusht_coverage_caution": "Current info coverage is relative to rendered default painted goal; do not call it cached expert-goal overlap without checking goal alignment."
+  },
+  "analysis": {
+    "primary_contrast": "static Sonar minus unsteered, separately by task",
+    "binary_summary": "paired success-rate difference and discordant counts; exact paired test (McNemar/binomial on discordant pairs)",
+    "continuous_summary": "paired per-start differences in prespecified native endpoint",
+    "uncertainty": "episode/source-cluster bootstrap confidence intervals, all arms for a start resampled together; no frame-level pseudoreplication",
+    "sham_contrast": "semantic minus matched sham is a prespecified specificity check",
+    "no_outcome_guided_exclusions": true
+  },
+  "state_selection": "full paired episodes begin at original starting conditions; missing later CEM warm-start capture does not block initial-state steering",
+  "operator_freeze_required": [
+    "precise static Sonar definition",
+    "site and coordinate system",
+    "rank and frozen fitting split",
+    "dose and trust region",
+    "sham generator and norm metric",
+    "native evaluation metric implementation",
+    "any optional HMM transition/emission/routing choices"
+  ],
+  "user_count_clarification_pending": "100+ total arm runs versus100+ independent starting conditions; only the28 newly authorized baselines are executing now",
+  "no_efficacy_claims_before_held_results": true
+}

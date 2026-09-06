@@ -1,0 +1,479 @@
+{
+  "complete": true,
+  "schema_version": 1,
+  "created_utc": "2026-09-05T20:32:54.984683+00:00",
+  "episode_count": 50,
+  "seed_episode_counts": {
+    "2": 50
+  },
+  "observed_states": 1000,
+  "one_step_transitions": 950,
+  "duration_seconds": 12.304627024568617,
+  "model_provenance": {
+    "model_name": "jepa_wm_metaworld",
+    "config": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "loader": "official constructor/checkpoint; heads_cfg cleared",
+    "checkpoint_sha256": "c3297772c7af4e84c28bd0c0937e22398a888848305014bb3ab3f1508a310bd8",
+    "config_sha256": "37400233186d343e7a830ce820b75e86ad134bc26fa1adf43ebc3fd7ed4591c3",
+    "parameter_sha256_before": "99308a99885bd641ba7d249f24687d3fffece4c4df7ad39b532ee5b2993ebe82",
+    "all_requires_grad_false": true,
+    "encoder_block_path": "base_model.blocks",
+    "predictor_block_path": "predictor_blocks",
+    "hook_modules": {
+      "encoder.6.attention_output": {
+        "class": "dinov2.layers.attention.MemEffAttention",
+        "source_path": "/root/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/attention.py",
+        "source_sha256": "79c7be7a452b3aad96698ec38d5d5150b9f4d8ac084fa93324510dc9f624775d"
+      },
+      "encoder.6.mlp_output": {
+        "class": "dinov2.layers.mlp.Mlp",
+        "source_path": "/root/.cache/torch/hub/facebookresearch_dinov2_main/dinov2/layers/mlp.py",
+        "source_sha256": "255825c73b60a916dd00eb1e38aacbcdbf316e40d6a005efb46e245b7edb43aa"
+      },
+      "predictor.2.attention_output": {
+        "class": "src.models.utils.modules.RoPEAttention",
+        "source_path": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/src/models/utils/modules.py",
+        "source_sha256": "aabc4baa04036c05142a4e314d1712141a38e31611121d56d21674750f303fe8"
+      },
+      "predictor.2.mlp_output": {
+        "class": "src.models.utils.modules.MLP",
+        "source_path": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/src/models/utils/modules.py",
+        "source_sha256": "aabc4baa04036c05142a4e314d1712141a38e31611121d56d21674750f303fe8"
+      },
+      "predictor.3.attention_output": {
+        "class": "src.models.utils.modules.RoPEAttention",
+        "source_path": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/src/models/utils/modules.py",
+        "source_sha256": "aabc4baa04036c05142a4e314d1712141a38e31611121d56d21674750f303fe8"
+      },
+      "predictor.3.mlp_output": {
+        "class": "src.models.utils.modules.MLP",
+        "source_path": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/src/models/utils/modules.py",
+        "source_sha256": "aabc4baa04036c05142a4e314d1712141a38e31611121d56d21674750f303fe8"
+      },
+      "predictor.5.attention_output": {
+        "class": "src.models.utils.modules.RoPEAttention",
+        "source_path": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/src/models/utils/modules.py",
+        "source_sha256": "aabc4baa04036c05142a4e314d1712141a38e31611121d56d21674750f303fe8"
+      },
+      "predictor.5.mlp_output": {
+        "class": "src.models.utils.modules.MLP",
+        "source_path": "/root/geometry-map-jepawm-reach-wall-v1/vendor/jepa-wms/src/models/utils/modules.py",
+        "source_sha256": "aabc4baa04036c05142a4e314d1712141a38e31611121d56d21674750f303fe8"
+      }
+    },
+    "predictor_class": "VisionTransformerAdaLN",
+    "predictor_source_sha256": "77e20661849a33199c581b4ab47e2d0417ef2e81571e4998a30cc242b68abe97",
+    "action_encoder_inpred": true,
+    "helper_source_sha256": {
+      "canary_capture.py": "386df2afbd080b44026adcb83c001508c7ea698f7e4667dd9c063d2d2d1d51aa",
+      "model_loader.py": "9195db62c04108584fbe40b23946117fe6e828c1f1da8c0ebabe6e706a6a1163"
+    }
+  },
+  "parameter_sha256_after": "99308a99885bd641ba7d249f24687d3fffece4c4df7ad39b532ee5b2993ebe82",
+  "parameters_unchanged": true,
+  "manifest_sha256": "32fb9603bbada18d2ce4554a88a201c9adcf4b870913deaa3a868b1e3cf7b43d",
+  "script_sha256": "b59736eeccdeb78751bc784bb9bf7fc5443daf2ea0297cd90fc0bebde62f8e86",
+  "semantics": {
+    "phase": "offline_teacher_forced_one_step",
+    "weights": "frozen/eval/no edits",
+    "encoder_sample_index": "0..19: raw observed frame 5*i",
+    "predictor_sample_index": "0..18: raw observed frame 5*i with recorded raw actions [5*i:5*i+5]",
+    "imagined_timestep": 1,
+    "context_length": 1,
+    "candidate_identity": "The single recorded TD-MPC2 action chunk per sample; no candidate search or CEM ranking in this capture",
+    "encoder_tokens": "token0 CLS excluded from pooling; token1..256 row-major16x16 spatial patches",
+    "predictor_tokens": "256 row-major16x16 spatial positions;384 visual plus16 proprio channels. Actions condition AdaLN modulation/gates, not extra spatial tokens",
+    "components": "Raw attention-module or MLP-module output before outer AdaLN output gates, layer-scale, drop-path and residual addition; not per-head attribution",
+    "action_embedding": "Actual action-encoder output, including an internal predictor.action_encoder hook when action_encoder_inpred is true; action_conditioning_input is separately retained",
+    "pooled_components": "Mean over256 spatial tokens at every sampled observation/one-step prediction",
+    "full_spatial_selection": {
+      "seed": 2,
+      "episode": 0,
+      "raw_frame": 0,
+      "transition": 0
+    },
+    "figure_use": "Authentic source-frame background for population fixed-grid CV scores; not single-frame attribution",
+    "missing": [
+      "causal component importance",
+      "multiple imagined rollout steps",
+      "CEM costs/ranks for these TD-MPC2 actions"
+    ]
+  },
+  "outputs": [
+    {
+      "path": "capture_manifest.json",
+      "sha256": "32fb9603bbada18d2ce4554a88a201c9adcf4b870913deaa3a868b1e3cf7b43d",
+      "bytes": 16477
+    },
+    {
+      "path": "seed-2-episode-000.pt",
+      "sha256": "2f81ffcd6183d1efee9e998a980c64e579bf92b733020ff62dedfe85264e86dc",
+      "bytes": 2521206,
+      "seed": 2,
+      "episode": 0
+    },
+    {
+      "path": "representative_frame.png",
+      "sha256": "8d9d06c7f1e1b6154973e47499380b1e2acf4dfe92b136fb70d3bac1b30992bb",
+      "bytes": 49387,
+      "seed": 2,
+      "episode": 0,
+      "raw_frame_index": 0
+    },
+    {
+      "path": "representative_frame.json",
+      "sha256": "d521b7e6f02b5f50e544fab7e92d418eb16d84651df065637ded223d9108298a",
+      "bytes": 685
+    },
+    {
+      "path": "CANARY_DONE.json",
+      "sha256": "b56ec9edc66e4fd2dc3cd61fc27ede0fc10c717ebb593153f8cede0af4a9a73d",
+      "bytes": 5756
+    },
+    {
+      "path": "seed-2-episode-001.pt",
+      "sha256": "21fbcc9008935d8c76015f60125b50b27caad09221e1ec2a43c5549e229f00d9",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 1
+    },
+    {
+      "path": "seed-2-episode-002.pt",
+      "sha256": "97200841bd79e5d1768df84504572c2ac2094e2220cf78b22576eeabce19b5e8",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 2
+    },
+    {
+      "path": "seed-2-episode-003.pt",
+      "sha256": "53950c6f8111fe95e60b86cecafeb80e2d4cea43ea076d8df4dfe974100e9676",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 3
+    },
+    {
+      "path": "seed-2-episode-004.pt",
+      "sha256": "b11e33b0159d3543ed34f98531ec876eb91d5029342b444c3f6b24078cfb0f83",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 4
+    },
+    {
+      "path": "seed-2-episode-005.pt",
+      "sha256": "f4d307df9ae98ca29014e0049cc75fa5121e7f13a9f501b1cf8570e978af02db",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 5
+    },
+    {
+      "path": "seed-2-episode-006.pt",
+      "sha256": "3b75a88c0c6f4bcd9e52b5424d22cf74154349d697676e296026d93353551b86",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 6
+    },
+    {
+      "path": "seed-2-episode-007.pt",
+      "sha256": "f7ff32e0cbb8f1efa589e6c8fe317a3e2f1dca0ab5dbf417c672a77d580bbeec",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 7
+    },
+    {
+      "path": "seed-2-episode-008.pt",
+      "sha256": "d52507663aa876f99ca59b363789e7f163480b6d466cc6b22ad87580f09cc140",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 8
+    },
+    {
+      "path": "seed-2-episode-009.pt",
+      "sha256": "7f3246dd8e47d8b97cf7b97b85f7ce116a305aa26a63d4772858dc4c3e495c92",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 9
+    },
+    {
+      "path": "seed-2-episode-010.pt",
+      "sha256": "30d50dd944f91f910506a35ac5946659aaab6d851632f3e90ab0169d5e1cd076",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 10
+    },
+    {
+      "path": "seed-2-episode-011.pt",
+      "sha256": "75513e11585e80d3dd467e04a0b6f71a6bc0ff8d60b1e682b97cb80779f1c9bf",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 11
+    },
+    {
+      "path": "seed-2-episode-012.pt",
+      "sha256": "aff6237623b83621fb4e46cc95e16401042bb91c8e1421fa92b45fd36b587dff",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 12
+    },
+    {
+      "path": "seed-2-episode-013.pt",
+      "sha256": "4df2b071fae7a6c581d69b293be74f254294b410ee24871ce606d106c996f940",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 13
+    },
+    {
+      "path": "seed-2-episode-014.pt",
+      "sha256": "24a82e4280a62318fa55a62ce72a88516757eacaa3bebea7c9131a81d705da16",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 14
+    },
+    {
+      "path": "seed-2-episode-015.pt",
+      "sha256": "6620fec6b59fbca528fda15e71e45db18e13bf7c23ddb625331a063ab838e180",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 15
+    },
+    {
+      "path": "seed-2-episode-016.pt",
+      "sha256": "58aa6a432f191d71d802919ad63a5ce6fc79a23d70de08cdfda8e614b366d5cf",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 16
+    },
+    {
+      "path": "seed-2-episode-017.pt",
+      "sha256": "05232e84dfa0d6c4e1ad5b9944ec7490af327d5e9c8edb3a6cfb3b119abbc51d",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 17
+    },
+    {
+      "path": "seed-2-episode-018.pt",
+      "sha256": "d46db147485552cd218e5871c3e5d11529c0b8a0611f14f017bd5dbf6ba8559d",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 18
+    },
+    {
+      "path": "seed-2-episode-019.pt",
+      "sha256": "dc957690182d29ce0ec2236fa824b5014b123e2df841656e22b11f0648c9707a",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 19
+    },
+    {
+      "path": "seed-2-episode-020.pt",
+      "sha256": "d668df7c9e5f34af62a0c8fe6ae1370808f956ff77348e86adca687ae36af38d",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 20
+    },
+    {
+      "path": "seed-2-episode-021.pt",
+      "sha256": "1aebabf965568d2cec2690ed9c2c1056bc4ff9497effea9d6e0bfce1b5fdab08",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 21
+    },
+    {
+      "path": "seed-2-episode-022.pt",
+      "sha256": "bf21f4531cbe28c77c65ba642e4ebffcbbd1d1e0adaaea3ca2cf0e6d870ae8d5",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 22
+    },
+    {
+      "path": "seed-2-episode-023.pt",
+      "sha256": "34b3bd5eeba9e683f93d6d7234ea13c05a22f56465c9f4b0daeef138fd90fc78",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 23
+    },
+    {
+      "path": "seed-2-episode-024.pt",
+      "sha256": "a51c944f56355f446343536551bccccb4d09ceb4b19f3231d004a23db00305d6",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 24
+    },
+    {
+      "path": "seed-2-episode-025.pt",
+      "sha256": "3e838a0aa2aa877be334a9199d80ebea45bc49f01f9f9659ee1330365538aaf7",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 25
+    },
+    {
+      "path": "seed-2-episode-026.pt",
+      "sha256": "bece24534e2e5ea4ac40d700e8d2e0ba2bafff183652c3127887d7eb19cf2ceb",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 26
+    },
+    {
+      "path": "seed-2-episode-027.pt",
+      "sha256": "b29feae6cfe7c0574c7e946cea5ceccccfe7983d86edf429789b634ad922ad6f",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 27
+    },
+    {
+      "path": "seed-2-episode-028.pt",
+      "sha256": "c6201464f4780fc2a58cc9caa52a3be01ee4b1e629defa7bde7a51fa30f7f6c6",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 28
+    },
+    {
+      "path": "seed-2-episode-029.pt",
+      "sha256": "b85b6ef0d31f5f84863fbe2ab64daed8433dedd679f226fc38b4408b0b81a5fc",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 29
+    },
+    {
+      "path": "seed-2-episode-030.pt",
+      "sha256": "d103c52f03f8cfd6b3cc59d1d7a57c7e6709e8af58021e420340d6807053ab3c",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 30
+    },
+    {
+      "path": "seed-2-episode-031.pt",
+      "sha256": "a82063b197e38609e863ea62db6180b8aa5fcc2f77de793cf8f6d30db595b413",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 31
+    },
+    {
+      "path": "seed-2-episode-032.pt",
+      "sha256": "fdfffa209ec08360e839b7d67fb9e04527ebabc93c86f00e0bab6ef9370fe1de",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 32
+    },
+    {
+      "path": "seed-2-episode-033.pt",
+      "sha256": "6588de74d525285bea1566d3012dde101e929055a48ff935655e13484350b125",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 33
+    },
+    {
+      "path": "seed-2-episode-034.pt",
+      "sha256": "8ee5ff857b37137a20d7ba12b5e8f974f7dcef6420497d38471533b91198fb88",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 34
+    },
+    {
+      "path": "seed-2-episode-035.pt",
+      "sha256": "dbe170d5940fa8418a2218bc1bdee088342ad776e5e5fcbb27f66b0865234586",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 35
+    },
+    {
+      "path": "seed-2-episode-036.pt",
+      "sha256": "835ee9b085ce007ab815f75e61cbbbb4be5b4017ff290a77d16f9ec92555c0c2",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 36
+    },
+    {
+      "path": "seed-2-episode-037.pt",
+      "sha256": "88ae48df36da598968ed84537cb174ff96cc2f20d65fe7093d0418fac7f8d278",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 37
+    },
+    {
+      "path": "seed-2-episode-038.pt",
+      "sha256": "d9effbdf60bcb69d6192c4b15e779cc27ddbdcd834e451b4027cb9ba41fba733",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 38
+    },
+    {
+      "path": "seed-2-episode-039.pt",
+      "sha256": "d3ee44ea45619e38038c634222f955b02d54c34d8ff23bcb0e98d58c863f6f16",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 39
+    },
+    {
+      "path": "seed-2-episode-040.pt",
+      "sha256": "c72141180d722d78bd2c494c2ef36e9c264f5efacdbdc59097b268db400fe3c9",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 40
+    },
+    {
+      "path": "seed-2-episode-041.pt",
+      "sha256": "f6e8a09f69f161c9a686c863856497dc09a8448c62c2f82525d8de796e7d9399",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 41
+    },
+    {
+      "path": "seed-2-episode-042.pt",
+      "sha256": "59e96089abfb09c64b0854d21b79c5e8479a7870a4e8173ee9df3343aadc244a",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 42
+    },
+    {
+      "path": "seed-2-episode-043.pt",
+      "sha256": "432a72226fabaf4d15cc2907858f06adb8aaa51aba45e7141b5d63fd842e42c5",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 43
+    },
+    {
+      "path": "seed-2-episode-044.pt",
+      "sha256": "3c42d579dc97b270f7ae6e9dc4a929877a998f89f8c077756aecc7fe8b03677e",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 44
+    },
+    {
+      "path": "seed-2-episode-045.pt",
+      "sha256": "4f72968c9fa0a1058141b60d8753777c388919d3cd5d09c95d4555035ee7704a",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 45
+    },
+    {
+      "path": "seed-2-episode-046.pt",
+      "sha256": "fe96aef6ef6a5046156e477c4087ef4796535da96ad08c1da0956c4f1a1722f9",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 46
+    },
+    {
+      "path": "seed-2-episode-047.pt",
+      "sha256": "65a80edd64f99a52b5cf50879dab21203f9baa2b1ba255fa92ab1700bac015cd",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 47
+    },
+    {
+      "path": "seed-2-episode-048.pt",
+      "sha256": "7a32d9c2c1af927a584ddb9a6708b9f16f0641d9db70577188a13f64fd41bf80",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 48
+    },
+    {
+      "path": "seed-2-episode-049.pt",
+      "sha256": "7f07b57ca388c0904884b3ddacbeeb9608b796ffef92011ea4712e8bbaaeec58",
+      "bytes": 503112,
+      "seed": 2,
+      "episode": 49
+    }
+  ],
+  "causal_component_importance": "not_measured"
+}

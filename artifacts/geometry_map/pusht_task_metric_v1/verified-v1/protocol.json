@@ -1,0 +1,134 @@
+{
+  "complete": true,
+  "states": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "outer_split": "Leave one whole development state out;3TRAIN,1TEST; allpreviouslyseen",
+  "fit_channel": "ACTUAL encoded terminal visual/proprio minus original expert goal, TRAIN only",
+  "native_weighting": "visual /sqrt98304; proprio sqrt(.1/4096); squarednorm equals native terminal objective",
+  "pca_rank_max": 16,
+  "pca_centering": "TRAIN covariance axes centered; PSD metric acts on UNCENTERED latent-minus-goal \u0394",
+  "labels": [
+    "joint_xy_squared_proxy",
+    "one_minus_requested_goal_coverage"
+  ],
+  "label_scope": "Two NEW exploratory metric surrogates, not a retrospective primary endpoint rewrite",
+  "regularization": ".1*mean diagonal(A.T@A) weight penalty toward nativeones; A=uncentered PCA coordinates squared",
+  "weights": "nonnegative NNLS, no intercept; outsidePCA nativeenergy preserved",
+  "scale": "TRAIN labelmean mapped to TRAIN nativecostmean; native-only global scaling is rank-invariant",
+  "blends": [
+    0,
+    0.25,
+    0.5,
+    1
+  ],
+  "control": "Fixed Haar orthogonal within same TRAIN PCA span; identical learned spectrum and complement",
+  "control_seed": 2026090605,
+  "test_channels": [
+    "predicted",
+    "actual_oracle_encoding"
+  ],
+  "no_tuning_or_winner_selection": true,
+  "model_calls": 0,
+  "simulator_calls": 0,
+  "held_confirmation_access": false,
+  "sources": [
+    {
+      "complete": true,
+      "episode": 0,
+      "source_root": "/root/geometry-map-jepawm-pusht-v1/expanded-candidate-bank-v1/worker-49987413/results-v1",
+      "source_done_sha256": "5e0250a7152c746aab19d7176d5c42c1a00395a897e960e94a53505dd89170b1",
+      "native_objective_reconstruction_maxabs": {
+        "predicted": 1.0397372829373808e-07,
+        "actual": 7.143401359321899e-08
+      },
+      "shape": [
+        64,
+        102400
+      ],
+      "model_calls": 0,
+      "simulator_calls": 0,
+      "outputs": [
+        {
+          "path": "terminal-differences.npz",
+          "sha256": "014c52e123caed8817a19c1b980850adfc784ab853aacafe4a88c6180109b4a3",
+          "bytes": 47794356
+        }
+      ]
+    },
+    {
+      "complete": true,
+      "episode": 1,
+      "source_root": "/root/geometry-map-jepawm-pusht-v1/expanded-candidate-bank-v1/worker-49987402/results-v1",
+      "source_done_sha256": "b6c77c0ad92708d1c96120a8a78f1b82233089021f25f7c413bd07ce31839180",
+      "native_objective_reconstruction_maxabs": {
+        "predicted": 9.140115642125579e-08,
+        "actual": 1.0478338030583956e-07
+      },
+      "shape": [
+        64,
+        102400
+      ],
+      "model_calls": 0,
+      "simulator_calls": 0,
+      "outputs": [
+        {
+          "path": "terminal-differences.npz",
+          "sha256": "4d2056948cac6c5b5648887ed00f8a7ed0862a59de1212adbdc7b7553d86bb41",
+          "bytes": 47850513
+        }
+      ]
+    },
+    {
+      "complete": true,
+      "episode": 2,
+      "source_root": "/root/geometry-map-jepawm-pusht-v1/expanded-candidate-bank-v1/worker-49987398/results-v1",
+      "source_done_sha256": "7615ff288ca1a293c958df419058e0529fe4af2f050979a08c22e7da6bcbb179",
+      "native_objective_reconstruction_maxabs": {
+        "predicted": 1.0346833301255742e-07,
+        "actual": 1.2436099461332617e-07
+      },
+      "shape": [
+        64,
+        102400
+      ],
+      "model_calls": 0,
+      "simulator_calls": 0,
+      "outputs": [
+        {
+          "path": "terminal-differences.npz",
+          "sha256": "2d61c7ef7c62f7cef882138465f73b9d3ea59e6cf1dcc513528de5b52a7fe8a4",
+          "bytes": 47781218
+        }
+      ]
+    },
+    {
+      "complete": true,
+      "episode": 3,
+      "source_root": "/root/geometry-map-jepawm-pusht-v1/expanded-candidate-bank-v1/worker-49987414/results-v1",
+      "source_done_sha256": "6fc4198da929d0338fd6d53d25c832c64c15f1143479efc7488e86fbaa848aa9",
+      "native_objective_reconstruction_maxabs": {
+        "predicted": 7.178692129627962e-08,
+        "actual": 1.1407321687251226e-07
+      },
+      "shape": [
+        64,
+        102400
+      ],
+      "model_calls": 0,
+      "simulator_calls": 0,
+      "outputs": [
+        {
+          "path": "terminal-differences.npz",
+          "sha256": "3311aa4f17e91db10efedc3825adb954f02579c43e4322a8194b0cb10b565847",
+          "bytes": 47795111
+        }
+      ]
+    }
+  ],
+  "coverage_sha256": "08456343ea3628271f6dda88fe1925d7c64f61bbb273580c738c2007d4e12898",
+  "script_sha256": "40b0bd9c82d92c2d1c77bc216cc850855cde80dff502e6795dbed5dd85cfbff7"
+}

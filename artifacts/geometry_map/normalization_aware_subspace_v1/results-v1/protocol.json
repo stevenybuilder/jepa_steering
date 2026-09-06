@@ -1,0 +1,86 @@
+{
+  "exploratory": true,
+  "states": [
+    0,
+    1,
+    2,
+    3
+  ],
+  "candidates": 64,
+  "rank": 4,
+  "block": 5,
+  "horizon": 3,
+  "site": "Newest256 P5 residual400 channels; preserve all history and orthogonal component except measured FP32 rounding",
+  "basis": "Uncentered channel PCA top4 of same-x model current-action contrasts; local model-only perstate adaptation",
+  "arms": "native + signs\u00b1 for rawsemantic/rawrandom/calibratedsemantic/calibrated_outputrandom/calibrated_rawnormrandom =11",
+  "raw_dose": 0.1,
+  "output_target_fraction_native_suffix_signal": 0.005,
+  "weighted_RMS_squared": "mean visual384 squared +.1 mean proprio16 squared",
+  "raw_radius_fraction_native_P5": 0.02,
+  "calibration": "16 fixed uniform fractions first upward bracket +24 bisections; target tolerance max1e-6,.002target; all crossing counts exposed",
+  "feasibility": "All four semantic/random/sign calibrations intersection per candidate. Nonfeasible candidates retain native in ALL calibrated arms; entire64 pool retained",
+  "controls": "Raw matches inputnorm andrank; calibratedrandom matches outputnorm andrank; extra calibratedrawnormrandom matches semantic inputnorm; neither falsely claimed to match both",
+  "primary": "Selected cached requested-goal coverage vsnative and correspondingrandom, fourstate units",
+  "continuation_rule": "Mean coveragegain>=.01, positive>=3/4states, exceeds matchedcontrolsmean; exploratory allocation only, not significance",
+  "suffix_floor_maxabs": 1e-05,
+  "seed_formula": "2026090641+state",
+  "code_sha256": "62015f2977ad65171f9bbb14c5f5294d2916fc7fa88ef48c76e68f315331592a",
+  "checkpoint_sha256": "9beca3eafe0739c3b3adb5d734fa435ccbda0fea8a65d53d4cccec176aaaa0eb",
+  "inputs": [
+    {
+      "root": "/root/geometry-map-jepawm-pusht-v1/joint-visual-action-factorial-64-v1/inputs/episode-000",
+      "row": {
+        "key": "expanded-dev-000",
+        "source_id": 0,
+        "split": "development_external",
+        "path": "expanded-dev-000.pt",
+        "sha256": "62415d24a227bc600e0bb2b26fb4db6dea5a1e79d63cec04e0e467e6cbd023d4",
+        "bytes": 313982445
+      }
+    },
+    {
+      "root": "/root/geometry-map-jepawm-pusht-v1/joint-visual-action-factorial-64-backup-v1/from-49987402/inputs/episode-001",
+      "row": {
+        "key": "expanded-dev-001",
+        "source_id": 1,
+        "split": "development_external",
+        "path": "expanded-dev-001.pt",
+        "sha256": "09b233ac3cc1def73d7c5b064d4cda30c101ef170d54b21765368f6a5ec3b915",
+        "bytes": 313983917
+      }
+    },
+    {
+      "root": "/root/geometry-map-jepawm-pusht-v1/joint-visual-action-factorial-64-v1/inputs/episode-002",
+      "row": {
+        "key": "expanded-dev-002",
+        "source_id": 2,
+        "split": "development_external",
+        "path": "expanded-dev-002.pt",
+        "sha256": "368b13f88c10c1dac6d5f6cb80bdae487826f67e650aecfed0b3a77a1a208823",
+        "bytes": 313981229
+      }
+    },
+    {
+      "root": "/root/geometry-map-jepawm-pusht-v1/joint-visual-action-factorial-64-v1/inputs/episode-003",
+      "row": {
+        "key": "expanded-dev-003",
+        "source_id": 3,
+        "split": "development_external",
+        "path": "expanded-dev-003.pt",
+        "sha256": "372bfd64e1d3ae469f2f584a025b53eaefc1070fcd63b941eacfe6e297ed4511",
+        "bytes": 313981229
+      }
+    }
+  ],
+  "max_process_seconds": 585.0,
+  "held_access": false,
+  "model_training_steps": 0,
+  "cem_calls": 0,
+  "simulator_calls": 0,
+  "limitations": [
+    "Rank4 support is not a discovered manifold",
+    "Outputnorm calibration is not optimizing goals or task labels",
+    "Delivered effects can have different directions despite equal norms",
+    "Four states reused extensively, no confirmation claim"
+  ]
+}

@@ -1,0 +1,639 @@
+{
+  "cache_meta": {
+    "checkpoint": "/root/cgs-pilot/checkpoints/jepa_wm_droid.pth.tar",
+    "checkpoint_sha256": "daa69198aef764932f1cb809239a4e19c71da20a93c6a0b9f3869cb30a13f4aa",
+    "config_sha256": "231e8566aced452aaab157851e14a6c2981e2561580503608ff0c89be9e17c01",
+    "droid_reference": "/root/cgs-pilot/reference/droid_100/droid_100_reference.npz",
+    "manifest_sha256": "4c7bdd8aac46f3e9f8908a9443778e0077c45ee747f0233d0f548e4f65a069e6",
+    "model_name": "jepa_wm_droid",
+    "n_cells": 112,
+    "n_with_masks": 112,
+    "torch": "2.7.1+cu128"
+  },
+  "cache_sha256": "3491618011f2c5f57f63888f738249fe7b4a5275cc86d56aca5856c4a24973f0",
+  "checks": {
+    "enough_scenes": true,
+    "interaction_cosine_ok": true,
+    "median_rec_ok": true
+  },
+  "criteria": {
+    "interaction_cosine_positive_sign_flip_p_below": 0.05,
+    "median_rec_h1_at_least": 0.5,
+    "min_attainable_p": 9.5367431640625e-07,
+    "min_scenes": 16
+  },
+  "manifest_sha256": "4c7bdd8aac46f3e9f8908a9443778e0077c45ee747f0233d0f548e4f65a069e6",
+  "model_label": "JEPA-WM DROID",
+  "n_scenes": 21,
+  "per_scene": {
+    "contact_seed000202": {
+      "action_effect_nmse": {
+        "0": 1.3208562986487054,
+        "1": 1.809294378416383
+      },
+      "arc": {
+        "0": 0.8842861652374268,
+        "1": 0.8447668552398682
+      },
+      "drift_energy": {
+        "0": 0.08892736583948135,
+        "1": 0.0928245261311531
+      },
+      "interaction_cosine": 0.1038066170269399,
+      "interaction_nmse": 1.0831456840365317,
+      "interaction_pred_norm": 6.75383186340332,
+      "interaction_true_norm": 16.46183204650879,
+      "n_tokens_used": 63,
+      "rec_h0_control": 0.7724117431632153,
+      "rec_h1": 0.810939714144056,
+      "true_action_effect_norm": {
+        "0": 27.360034942626953,
+        "1": 22.957353591918945
+      }
+    },
+    "contact_seed000203": {
+      "action_effect_nmse": {
+        "0": 1.0278577985899562,
+        "1": 1.2567837836025715
+      },
+      "arc": {
+        "0": 0.9055109620094299,
+        "1": 0.8990699052810669
+      },
+      "drift_energy": {
+        "0": 0.07823251932859421,
+        "1": 0.07989463955163956
+      },
+      "interaction_cosine": 0.169032562279286,
+      "interaction_nmse": 0.9774729851156756,
+      "interaction_pred_norm": 5.70551872253418,
+      "interaction_true_norm": 23.119705200195312,
+      "n_tokens_used": 69,
+      "rec_h0_control": 0.6342389093559787,
+      "rec_h1": 0.5531789885609623,
+      "true_action_effect_norm": {
+        "0": 33.645442962646484,
+        "1": 31.88730239868164
+      }
+    },
+    "contact_seed000208": {
+      "action_effect_nmse": {
+        "0": 0.8219726090405316,
+        "1": 1.0072072581445064
+      },
+      "arc": {
+        "0": 1.046722650527954,
+        "1": 1.0434032678604126
+      },
+      "drift_energy": {
+        "0": 0.08544538915157318,
+        "1": 0.08955158293247223
+      },
+      "interaction_cosine": 0.37179282125864743,
+      "interaction_nmse": 0.8668774986045887,
+      "interaction_pred_norm": 16.81285858154297,
+      "interaction_true_norm": 37.93012237548828,
+      "n_tokens_used": 50,
+      "rec_h0_control": 0.5190009512463016,
+      "rec_h1": 0.5278007272122865,
+      "true_action_effect_norm": {
+        "0": 46.325958251953125,
+        "1": 42.45509338378906
+      }
+    },
+    "contact_seed000215": {
+      "action_effect_nmse": {
+        "0": 0.7551561485654205,
+        "1": 1.3946021278365808
+      },
+      "arc": {
+        "0": 0.9736382365226746,
+        "1": 0.9610164165496826
+      },
+      "drift_energy": {
+        "0": 0.08202654868364334,
+        "1": 0.08505575358867645
+      },
+      "interaction_cosine": 0.247918201305734,
+      "interaction_nmse": 0.9418962659222969,
+      "interaction_pred_norm": 8.134480476379395,
+      "interaction_true_norm": 26.5936279296875,
+      "n_tokens_used": 61,
+      "rec_h0_control": 0.5082680288901998,
+      "rec_h1": 0.5203849592798444,
+      "true_action_effect_norm": {
+        "0": 36.48894500732422,
+        "1": 26.91739845275879
+      }
+    },
+    "contact_seed000216": {
+      "action_effect_nmse": {
+        "0": 0.8886253887034677,
+        "1": 1.10738153810616
+      },
+      "arc": {
+        "0": 1.121906042098999,
+        "1": 1.1100963354110718
+      },
+      "drift_energy": {
+        "0": 0.11096673458814621,
+        "1": 0.11655114591121674
+      },
+      "interaction_cosine": 0.3263090181122028,
+      "interaction_nmse": 0.8984746249481879,
+      "interaction_pred_norm": 20.592050552368164,
+      "interaction_true_norm": 51.91089630126953,
+      "n_tokens_used": 96,
+      "rec_h0_control": 0.6807328587746729,
+      "rec_h1": 0.6374108347642659,
+      "true_action_effect_norm": {
+        "0": 67.10488891601562,
+        "1": 64.36067199707031
+      }
+    },
+    "contact_seed000217": {
+      "action_effect_nmse": {
+        "0": 0.9334512076522721,
+        "1": 1.0540722701248089
+      },
+      "arc": {
+        "0": 0.8167154788970947,
+        "1": 0.8117545247077942
+      },
+      "drift_energy": {
+        "0": 0.09782985597848892,
+        "1": 0.09691984951496124
+      },
+      "interaction_cosine": 0.23419964626042636,
+      "interaction_nmse": 0.9757285123132781,
+      "interaction_pred_norm": 6.872117519378662,
+      "interaction_true_norm": 16.799589157104492,
+      "n_tokens_used": 69,
+      "rec_h0_control": 0.6002534738201167,
+      "rec_h1": 0.6005354900357233,
+      "true_action_effect_norm": {
+        "0": 33.32364273071289,
+        "1": 31.437875747680664
+      }
+    },
+    "contact_seed000220": {
+      "action_effect_nmse": {
+        "0": 0.8934967858517523,
+        "1": 1.1860209046553347
+      },
+      "arc": {
+        "0": 0.7885603904724121,
+        "1": 0.7748037576675415
+      },
+      "drift_energy": {
+        "0": 0.10172446817159653,
+        "1": 0.10394465178251266
+      },
+      "interaction_cosine": 0.17613364306364782,
+      "interaction_nmse": 0.9947766011293998,
+      "interaction_pred_norm": 8.670052528381348,
+      "interaction_true_norm": 25.74579620361328,
+      "n_tokens_used": 67,
+      "rec_h0_control": 0.6125887940687476,
+      "rec_h1": 0.511738621998527,
+      "true_action_effect_norm": {
+        "0": 34.444576263427734,
+        "1": 33.57375717163086
+      }
+    },
+    "contact_seed000229": {
+      "action_effect_nmse": {
+        "0": 1.0262301999334276,
+        "1": 1.2467796773088613
+      },
+      "arc": {
+        "0": 0.8194372057914734,
+        "1": 0.8183491230010986
+      },
+      "drift_energy": {
+        "0": 0.08873363584280014,
+        "1": 0.08783913403749466
+      },
+      "interaction_cosine": 0.062458239048856404,
+      "interaction_nmse": 1.0172439350456026,
+      "interaction_pred_norm": 5.306522846221924,
+      "interaction_true_norm": 25.5279598236084,
+      "n_tokens_used": 71,
+      "rec_h0_control": 0.7074443672904211,
+      "rec_h1": 0.6938092879179878,
+      "true_action_effect_norm": {
+        "0": 36.71857833862305,
+        "1": 34.64894485473633
+      }
+    },
+    "contact_seed000232": {
+      "action_effect_nmse": {
+        "0": 1.4702293265620596,
+        "1": 1.969812786242456
+      },
+      "arc": {
+        "0": 0.8750365972518921,
+        "1": 0.8829252123832703
+      },
+      "drift_energy": {
+        "0": 0.08500789105892181,
+        "1": 0.08446405827999115
+      },
+      "interaction_cosine": 0.04984169555942527,
+      "interaction_nmse": 1.1227020019212606,
+      "interaction_pred_norm": 6.84339714050293,
+      "interaction_true_norm": 16.953466415405273,
+      "n_tokens_used": 65,
+      "rec_h0_control": 0.7688195867397605,
+      "rec_h1": 0.7701233830340223,
+      "true_action_effect_norm": {
+        "0": 27.714290618896484,
+        "1": 24.56956672668457
+      }
+    },
+    "contact_seed000236": {
+      "action_effect_nmse": {
+        "0": 0.9397335821547215,
+        "1": 1.0584641252216391
+      },
+      "arc": {
+        "0": 0.8671306371688843,
+        "1": 0.8515284061431885
+      },
+      "drift_energy": {
+        "0": 0.08793517202138901,
+        "1": 0.0900280699133873
+      },
+      "interaction_cosine": 0.03928413293941265,
+      "interaction_nmse": 1.046778871887966,
+      "interaction_pred_norm": 5.967611312866211,
+      "interaction_true_norm": 23.031496047973633,
+      "n_tokens_used": 69,
+      "rec_h0_control": 0.6293945295549236,
+      "rec_h1": 0.6379977569718013,
+      "true_action_effect_norm": {
+        "0": 35.28498458862305,
+        "1": 34.98774337768555
+      }
+    },
+    "contact_seed000237": {
+      "action_effect_nmse": {
+        "0": 1.009281583822342,
+        "1": 1.2160261257794283
+      },
+      "arc": {
+        "0": 0.9007441401481628,
+        "1": 0.9053257703781128
+      },
+      "drift_energy": {
+        "0": 0.1038086786866188,
+        "1": 0.10626529902219772
+      },
+      "interaction_cosine": 0.3101265724678971,
+      "interaction_nmse": 0.9108253358350183,
+      "interaction_pred_norm": 7.790066242218018,
+      "interaction_true_norm": 19.781030654907227,
+      "n_tokens_used": 64,
+      "rec_h0_control": 0.761611548634501,
+      "rec_h1": 0.7429473353345888,
+      "true_action_effect_norm": {
+        "0": 33.639366149902344,
+        "1": 31.07443618774414
+      }
+    },
+    "contact_seed000241": {
+      "action_effect_nmse": {
+        "0": 0.9894414917408296,
+        "1": 1.0217495304125368
+      },
+      "arc": {
+        "0": 0.823091447353363,
+        "1": 0.8164181113243103
+      },
+      "drift_energy": {
+        "0": 0.09067569673061371,
+        "1": 0.0900433212518692
+      },
+      "interaction_cosine": 0.288543118135823,
+      "interaction_nmse": 0.9182599035335703,
+      "interaction_pred_norm": 5.277093887329102,
+      "interaction_true_norm": 16.113656997680664,
+      "n_tokens_used": 69,
+      "rec_h0_control": 0.6399062224449277,
+      "rec_h1": 0.6310533880607053,
+      "true_action_effect_norm": {
+        "0": 33.907615661621094,
+        "1": 34.80017852783203
+      }
+    },
+    "contact_seed000247": {
+      "action_effect_nmse": {
+        "0": 0.9269734018695547,
+        "1": 1.2198973567333276
+      },
+      "arc": {
+        "0": 0.9215294122695923,
+        "1": 0.9065939784049988
+      },
+      "drift_energy": {
+        "0": 0.07790003716945648,
+        "1": 0.08024068921804428
+      },
+      "interaction_cosine": 0.30296787390902996,
+      "interaction_nmse": 0.908210848441827,
+      "interaction_pred_norm": 7.4318528175354,
+      "interaction_true_norm": 24.480329513549805,
+      "n_tokens_used": 76,
+      "rec_h0_control": 0.6696778535849114,
+      "rec_h1": 0.6289305327648999,
+      "true_action_effect_norm": {
+        "0": 34.60212326049805,
+        "1": 31.32432746887207
+      }
+    },
+    "contact_seed000251": {
+      "action_effect_nmse": {
+        "0": 1.211925325684177,
+        "1": 1.7795488945768225
+      },
+      "arc": {
+        "0": 0.7488349676132202,
+        "1": 0.7467494606971741
+      },
+      "drift_energy": {
+        "0": 0.11876575648784637,
+        "1": 0.11791692674160004
+      },
+      "interaction_cosine": 0.16644153844951648,
+      "interaction_nmse": 0.9723140782448897,
+      "interaction_pred_norm": 3.92677640914917,
+      "interaction_true_norm": 23.02448272705078,
+      "n_tokens_used": 63,
+      "rec_h0_control": 0.6597221123610312,
+      "rec_h1": 0.7021672637489108,
+      "true_action_effect_norm": {
+        "0": 30.80607795715332,
+        "1": 23.78067970275879
+      }
+    },
+    "contact_seed000252": {
+      "action_effect_nmse": {
+        "0": 1.0618010036918586,
+        "1": 1.2436902571615167
+      },
+      "arc": {
+        "0": 0.9701294898986816,
+        "1": 0.9533073902130127
+      },
+      "drift_energy": {
+        "0": 0.07364095002412796,
+        "1": 0.07387059181928635
+      },
+      "interaction_cosine": 0.37273783233786,
+      "interaction_nmse": 0.8635689499855033,
+      "interaction_pred_norm": 8.929500579833984,
+      "interaction_true_norm": 21.121822357177734,
+      "n_tokens_used": 63,
+      "rec_h0_control": 0.7069045970124076,
+      "rec_h1": 0.6401512656889713,
+      "true_action_effect_norm": {
+        "0": 35.595638275146484,
+        "1": 33.501625061035156
+      }
+    },
+    "contact_seed000255": {
+      "action_effect_nmse": {
+        "0": 0.9741065499272025,
+        "1": 1.1817030731813338
+      },
+      "arc": {
+        "0": 0.8454511761665344,
+        "1": 0.8347732424736023
+      },
+      "drift_energy": {
+        "0": 0.08960557729005814,
+        "1": 0.09141116589307785
+      },
+      "interaction_cosine": 0.2871963381057496,
+      "interaction_nmse": 0.9190472497350753,
+      "interaction_pred_norm": 4.816333770751953,
+      "interaction_true_norm": 19.413360595703125,
+      "n_tokens_used": 65,
+      "rec_h0_control": 0.6022219382105538,
+      "rec_h1": 0.5472434854034189,
+      "true_action_effect_norm": {
+        "0": 31.319990158081055,
+        "1": 30.006715774536133
+      }
+    },
+    "contact_seed000256": {
+      "action_effect_nmse": {
+        "0": 1.0013405562273974,
+        "1": 1.0210906431458129
+      },
+      "arc": {
+        "0": 0.994833767414093,
+        "1": 0.9933993816375732
+      },
+      "drift_energy": {
+        "0": 0.08199909329414368,
+        "1": 0.08116161823272705
+      },
+      "interaction_cosine": 0.2667840391761382,
+      "interaction_nmse": 0.955065315119754,
+      "interaction_pred_norm": 7.041022300720215,
+      "interaction_true_norm": 16.4215087890625,
+      "n_tokens_used": 65,
+      "rec_h0_control": 0.5629108971636431,
+      "rec_h1": 0.5618707379547999,
+      "true_action_effect_norm": {
+        "0": 33.878665924072266,
+        "1": 34.5556526184082
+      }
+    },
+    "contact_seed000257": {
+      "action_effect_nmse": {
+        "0": 1.1857022662221353,
+        "1": 1.4180213043364571
+      },
+      "arc": {
+        "0": 0.8534302711486816,
+        "1": 0.8623795509338379
+      },
+      "drift_energy": {
+        "0": 0.09400385618209839,
+        "1": 0.09353455901145935
+      },
+      "interaction_cosine": 0.09159328567603538,
+      "interaction_nmse": 1.0048354468548069,
+      "interaction_pred_norm": 3.688666582107544,
+      "interaction_true_norm": 17.854846954345703,
+      "n_tokens_used": 65,
+      "rec_h0_control": 0.647537609669702,
+      "rec_h1": 0.7088485724214252,
+      "true_action_effect_norm": {
+        "0": 30.095565795898438,
+        "1": 26.72488021850586
+      }
+    },
+    "contact_seed000258": {
+      "action_effect_nmse": {
+        "0": 1.2174089750644461,
+        "1": 1.7058384540619609
+      },
+      "arc": {
+        "0": 0.949001133441925,
+        "1": 0.9560996890068054
+      },
+      "drift_energy": {
+        "0": 0.09356430917978287,
+        "1": 0.09273793548345566
+      },
+      "interaction_cosine": 0.2369986272303591,
+      "interaction_nmse": 0.944176788005519,
+      "interaction_pred_norm": 7.249160289764404,
+      "interaction_true_norm": 28.363990783691406,
+      "n_tokens_used": 64,
+      "rec_h0_control": 0.5243163787619612,
+      "rec_h1": 0.5062536321284532,
+      "true_action_effect_norm": {
+        "0": 31.749662399291992,
+        "1": 28.964750289916992
+      }
+    },
+    "contact_seed000265": {
+      "action_effect_nmse": {
+        "0": 1.0306613582916286,
+        "1": 1.2921503225306217
+      },
+      "arc": {
+        "0": 0.825944721698761,
+        "1": 0.833804726600647
+      },
+      "drift_energy": {
+        "0": 0.09358418732881546,
+        "1": 0.09461391717195511
+      },
+      "interaction_cosine": 0.17478225518476012,
+      "interaction_nmse": 1.008641852770672,
+      "interaction_pred_norm": 7.400455474853516,
+      "interaction_true_norm": 19.853769302368164,
+      "n_tokens_used": 67,
+      "rec_h0_control": 0.654082757114615,
+      "rec_h1": 0.6638608013726153,
+      "true_action_effect_norm": {
+        "0": 31.053916931152344,
+        "1": 28.162015914916992
+      }
+    },
+    "contact_seed000267": {
+      "action_effect_nmse": {
+        "0": 1.040970464312359,
+        "1": 1.2783285816444443
+      },
+      "arc": {
+        "0": 0.9394285082817078,
+        "1": 0.8889740705490112
+      },
+      "drift_energy": {
+        "0": 0.07754631340503693,
+        "1": 0.08626561611890793
+      },
+      "interaction_cosine": 0.31165562478378467,
+      "interaction_nmse": 0.9107265704091467,
+      "interaction_pred_norm": 8.221053123474121,
+      "interaction_true_norm": 20.537845611572266,
+      "n_tokens_used": 68,
+      "rec_h0_control": 0.628861137908962,
+      "rec_h1": 0.571587528592496,
+      "true_action_effect_norm": {
+        "0": 33.833290100097656,
+        "1": 31.55570411682129
+      }
+    }
+  },
+  "pooled": {
+    "action_effect_nmse": {
+      "0": {
+        "ci_high": 1.1050386591812458,
+        "ci_low": 0.967850184688532,
+        "mean": 1.0346296344074404,
+        "median": 1.009281583822342,
+        "n": 21
+      },
+      "1": {
+        "ci_high": 1.4223119708712464,
+        "ci_low": 1.201740041592232,
+        "mean": 1.3080220663439792,
+        "median": 1.2436902571615167,
+        "n": 21
+      }
+    },
+    "arc": {
+      "0": {
+        "ci_high": 0.9364755734801292,
+        "ci_low": 0.8630777935187022,
+        "mean": 0.8986363524482364,
+        "median": 0.8842861652374268,
+        "n": 21
+      },
+      "1": {
+        "ci_high": 0.9280745946935245,
+        "ci_low": 0.8557594101343836,
+        "mean": 0.8902637703078133,
+        "median": 0.8829252123832703,
+        "n": 21
+      }
+    },
+    "drift_energy": {
+      "0": {
+        "ci_high": 0.09554502467314402,
+        "ci_low": 0.08590532401133151,
+        "mean": 0.09056781125920159,
+        "median": 0.08892736583948135,
+        "n": 21
+      },
+      "1": {
+        "ci_high": 0.09706700934718053,
+        "ci_low": 0.08744725017320543,
+        "mean": 0.0921492881718136,
+        "median": 0.0900433212518692,
+        "n": 21
+      }
+    },
+    "interaction_cosine": {
+      "ci_high": 0.26152566975847247,
+      "ci_low": 0.174766100603483,
+      "mean": 0.2186001753481682,
+      "median": 0.2369986272303591,
+      "n": 21,
+      "sign_flip_p_vs_zero": 9.999000099990002e-05
+    },
+    "interaction_nmse": {
+      "ci_high": 0.9911052212668877,
+      "ci_low": 0.936141153611282,
+      "mean": 0.9638461580885985,
+      "median": 0.955065315119754,
+      "n": 21
+    },
+    "rec_h0_control": {
+      "ci_high": 0.6731022006666568,
+      "ci_low": 0.6104371292914895,
+      "mean": 0.6424241093224549,
+      "median": 0.6399062224449277,
+      "n": 21
+    },
+    "rec_h1": {
+      "ci_high": 0.663509169376964,
+      "ci_low": 0.5900285713497891,
+      "mean": 0.6270873479709888,
+      "median": 0.6310533880607053,
+      "n": 21,
+      "sign_flip_p_vs_zero": 9.999000099990002e-05
+    }
+  },
+  "seeds_file": null,
+  "statement": "Counterfactual validity PASS: the predicted hazardous-action future recovers at least half of the true gentle->hazardous displacement (median Rec >= 0.5) and the predicted hazard x action interaction is positively aligned with the true one. Localization may proceed on discovery seeds.",
+  "token_mask": "egg|gripper patches from masks/",
+  "verdict": "PASS"
+}

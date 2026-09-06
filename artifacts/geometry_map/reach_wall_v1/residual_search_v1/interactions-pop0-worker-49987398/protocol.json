@@ -1,0 +1,209 @@
+{
+  "basis_sha256": "efe6976974107bd5284a871f6a87d622223e8f677e4cfbd8b86e2c3771a05042",
+  "episodes": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "future_truth_online": false,
+  "interaction": "AB-A_half-B_half+unsteered in actual returnedvisual tensors; this is finite-dose network interaction, not physical utility",
+  "pairs": [
+    {
+      "adaptive_development_only": true,
+      "component_budget_shares": [
+        0.5,
+        0.5
+      ],
+      "components": [
+        {
+          "block": 4,
+          "dose": 1,
+          "family": "branch_scale",
+          "head": 3,
+          "id": "broad0-067",
+          "mask": "all",
+          "pulse": 2,
+          "rank": 1,
+          "sign": -1,
+          "site": "attention_preproj"
+        },
+        {
+          "block": 1,
+          "dose": 1,
+          "family": "pca_gain",
+          "head": null,
+          "id": "broad0-126",
+          "mask": "center",
+          "pulse": 1,
+          "rank": 8,
+          "sign": 1,
+          "site": "residual"
+        }
+      ],
+      "id": "pair-000",
+      "pair_total_budget_multiplier": 1,
+      "parents": [
+        "broad0-067",
+        "broad0-126"
+      ],
+      "required_comparators": [
+        "baseline",
+        "A_at_half_budget",
+        "B_at_half_budget",
+        "AB_shared_total_budget",
+        "norm_matched_sham"
+      ],
+      "status": "proposed_not_executed"
+    },
+    {
+      "adaptive_development_only": true,
+      "component_budget_shares": [
+        0.5,
+        0.5
+      ],
+      "components": [
+        {
+          "block": 4,
+          "dose": 1,
+          "family": "branch_scale",
+          "head": 3,
+          "id": "broad0-067",
+          "mask": "all",
+          "pulse": 2,
+          "rank": 1,
+          "sign": -1,
+          "site": "attention_preproj"
+        },
+        {
+          "block": 4,
+          "dose": 1,
+          "family": "pca_gain",
+          "head": null,
+          "id": "broad0-197",
+          "mask": "top",
+          "pulse": 2,
+          "rank": 4,
+          "sign": 1,
+          "site": "residual"
+        }
+      ],
+      "id": "pair-001",
+      "pair_total_budget_multiplier": 1,
+      "parents": [
+        "broad0-067",
+        "broad0-197"
+      ],
+      "required_comparators": [
+        "baseline",
+        "A_at_half_budget",
+        "B_at_half_budget",
+        "AB_shared_total_budget",
+        "norm_matched_sham"
+      ],
+      "status": "proposed_not_executed"
+    },
+    {
+      "adaptive_development_only": true,
+      "component_budget_shares": [
+        0.5,
+        0.5
+      ],
+      "components": [
+        {
+          "block": 4,
+          "dose": 1,
+          "family": "branch_scale",
+          "head": 3,
+          "id": "broad0-067",
+          "mask": "all",
+          "pulse": 2,
+          "rank": 1,
+          "sign": -1,
+          "site": "attention_preproj"
+        },
+        {
+          "block": 1,
+          "dose": 1,
+          "family": "branch_scale",
+          "head": 7,
+          "id": "broad0-023",
+          "mask": "all",
+          "pulse": 3,
+          "rank": 1,
+          "sign": -1,
+          "site": "attention_preproj"
+        }
+      ],
+      "id": "pair-002",
+      "pair_total_budget_multiplier": 1,
+      "parents": [
+        "broad0-067",
+        "broad0-023"
+      ],
+      "required_comparators": [
+        "baseline",
+        "A_at_half_budget",
+        "B_at_half_budget",
+        "AB_shared_total_budget",
+        "norm_matched_sham"
+      ],
+      "status": "proposed_not_executed"
+    },
+    {
+      "adaptive_development_only": true,
+      "component_budget_shares": [
+        0.5,
+        0.5
+      ],
+      "components": [
+        {
+          "block": 4,
+          "dose": 1,
+          "family": "branch_scale",
+          "head": 3,
+          "id": "broad0-067",
+          "mask": "all",
+          "pulse": 2,
+          "rank": 1,
+          "sign": -1,
+          "site": "attention_preproj"
+        },
+        {
+          "block": 5,
+          "dose": 0.5,
+          "family": "pca_gain",
+          "head": null,
+          "id": "broad0-236",
+          "mask": "checker",
+          "pulse": 0,
+          "rank": 1,
+          "sign": -1,
+          "site": "mlp_output"
+        }
+      ],
+      "id": "pair-003",
+      "pair_total_budget_multiplier": 1,
+      "parents": [
+        "broad0-067",
+        "broad0-236"
+      ],
+      "required_comparators": [
+        "baseline",
+        "A_at_half_budget",
+        "B_at_half_budget",
+        "AB_shared_total_budget",
+        "norm_matched_sham"
+      ],
+      "status": "proposed_not_executed"
+    }
+  ],
+  "pairs_sha256": "372e4568fbea8ac3cea98ca2d526e1042819e7563424838f4a2e8fba3cad6177",
+  "phase": "adaptive_development_component_interactions",
+  "script_sha256": "c71ab70bd0c12823b3da23987ecbcd2c5bf4f1ca61d55751130f613776aad923",
+  "total_dose": "Shared C=min(parent per-pulse maximum); sum residualL2 budgets over both components AND all active imagined times <=C. A/B-half each getC/2, ABsameC, A/B-full getC alone."
+}

@@ -1,0 +1,218 @@
+{
+ "protocol": "cgs-causal-metric-steer-v0.1",
+ "d": 512,
+ "rank": 4,
+ "k_action": 4,
+ "lam_rel": 0.1,
+ "tau_action_rel": 0.1,
+ "mahal_incr": 0.25,
+ "n_rel_rows": 53,
+ "nuisance": {
+  "groups": {
+   "scene": {
+    "n_rows": 212,
+    "weight": 1.0,
+    "trace": 0.46208260088078484,
+    "top_eig_fraction": 0.7427229025375032
+   },
+   "action": {
+    "n_rows": 53,
+    "weight": 1.0,
+    "trace": 53.25514193556248,
+    "top_eig_fraction": 0.998119725893931
+   },
+   "null": {
+    "n_rows": 106,
+    "weight": 1.0,
+    "trace": 44.54382092280337,
+    "top_eig_fraction": 0.9671229110722309
+   },
+   "token": {
+    "n_rows": 4000,
+    "weight": 1.0,
+    "trace": 699.6909792904084,
+    "top_eig_fraction": 0.181524259906779
+   }
+  },
+  "lambda": 0.03896250120847925,
+  "lam_rel": 0.1,
+  "trace": 199.48800618741376,
+  "effective_rank": 10.8311156817843
+ },
+ "tau2": 0.5332617503975482,
+ "variants": {
+  "main": {
+   "eps0": 9.4551612345333,
+   "Lam": [
+    88.99122313120729,
+    0.37937193028839045,
+    0.09076560995095925,
+    0.07038445880212657
+   ],
+   "c_star_unit": [
+    0.9999999999985779,
+    1.686526775222665e-06,
+    3.1666767089979907e-09,
+    5.601422525326809e-09
+   ],
+   "constraints": {
+    "w_B": 0.0,
+    "w_S": 0.0,
+    "metric_scale": 21.130599072459397,
+    "worst_case_D_action": 7.581450290068718e-17,
+    "tau2": 0.5332617503975482,
+    "worst_case_mahal_increment": 0.13683247819352096,
+    "mahal_incr_bound": 0.25
+   },
+   "unit_edit": {
+    "euclidean_norm": 3.0091383310356377,
+    "causal_norm": 9.4551612345333,
+    "cos_with_mean_rel": 0.9999998754834621,
+    "D_action": 8.026834588067911e-18,
+    "mahal_increment": 0.11641149354386171,
+    "relational_energy_gain_causal": 7955.82193067906,
+    "relational_energy_gain_euclid": 81.63481373681304
+   }
+  },
+  "euclid": {
+   "eps0": 4.614466371064485,
+   "Lam": [
+    21.035456290508748,
+    0.09837094827485872,
+    0.025905701496532103,
+    0.015072079038344326
+   ],
+   "c_star_unit": [
+    0.9999999999877967,
+    4.938738581809009e-06,
+    5.589422255281905e-08,
+    1.1106543171348473e-07
+   ],
+   "constraints": {
+    "w_B": 0.0,
+    "w_S": 0.0,
+    "metric_scale": 2.333245764245411,
+    "worst_case_D_action": 4.8972302982068957e-17,
+    "tau2": 0.5332617503975482,
+    "worst_case_mahal_increment": 0.11857901059837664,
+    "mahal_incr_bound": 0.25
+   },
+   "unit_edit": {
+    "euclidean_norm": 3.020934035944515,
+    "causal_norm": 9.490098069508592,
+    "cos_with_mean_rel": 0.9999991133171063,
+    "D_action": 2.1976199950772598e-17,
+    "mahal_increment": 0.11686285971738589,
+    "relational_energy_gain_causal": 8014.71871979824,
+    "relational_energy_gain_euclid": 82.27614509772617
+   }
+  },
+  "random": {
+   "eps0": 9.4551612345333,
+   "unit_edit": {
+    "euclidean_norm": 6.030715664471884,
+    "causal_norm": 9.455161234533293,
+    "cos_with_mean_rel": -0.12002365939084002,
+    "D_action": 2.3218405754309046,
+    "mahal_increment": 0.21499011974172375,
+    "relational_energy_gain_causal": 0.2714351564493761
+   }
+  }
+ },
+ "twin_comparison": {
+  "cos_main_vs_euclid_top": 0.9999995962893764,
+  "cos_main_top_vs_mean_rel": 0.9999998747551652,
+  "cos_euclid_top_vs_mean_rel": 0.9999991069572584
+ },
+ "loso": {
+  "main": {
+   "mean": 0.9950831783925098,
+   "median": 0.9979928543029679,
+   "ci_low": 0.9927996174179745,
+   "ci_high": 0.9970515634696139,
+   "n": 53,
+   "sign_flip_p": 0.0001999600079984003,
+   "t": 890.4181002297399,
+   "abs_mean": 0.9950831783925098
+  },
+  "euclid": {
+   "mean": 0.9949639274713223,
+   "median": 0.9981853387335399,
+   "ci_low": 0.9924402959439198,
+   "ci_high": 0.9971089688449932,
+   "n": 53,
+   "sign_flip_p": 0.0001999600079984003,
+   "t": 814.945625854867,
+   "abs_mean": 0.9949639274713223
+  },
+  "definition": "held-out cosine, in the metric of the variant, between the held-out relational row and the rank-1 direction fitted on the other scenes (Sigma_N refitted without the held-out scene); sign of the direction from the training-fold mean, so under the null of no consistent direction the signed statistic is negatively biased (leave-one-out) -- a positive mean is the criterion, abs_mean is the unsigned capture"
+ },
+ "site": "L05.resid_post",
+ "step": 0,
+ "group": "hazard_corridor",
+ "solid_level": 1,
+ "n_scenes": 53,
+ "scenes": [
+  "drive_seed000003",
+  "drive_seed000004",
+  "drive_seed000007",
+  "drive_seed000009",
+  "drive_seed000010",
+  "drive_seed000014",
+  "drive_seed000015",
+  "drive_seed000017",
+  "drive_seed000018",
+  "drive_seed000019",
+  "drive_seed000020",
+  "drive_seed000021",
+  "drive_seed000023",
+  "drive_seed000025",
+  "drive_seed000026",
+  "drive_seed000029",
+  "drive_seed000033",
+  "drive_seed000035",
+  "drive_seed000036",
+  "drive_seed000037",
+  "drive_seed000044",
+  "drive_seed000045",
+  "drive_seed000046",
+  "drive_seed000050",
+  "drive_seed000052",
+  "drive_seed000054",
+  "drive_seed000057",
+  "drive_seed000061",
+  "drive_seed000063",
+  "drive_seed000067",
+  "drive_seed000068",
+  "drive_seed000069",
+  "drive_seed000072",
+  "drive_seed000074",
+  "drive_seed000076",
+  "drive_seed000077",
+  "drive_seed000078",
+  "drive_seed000085",
+  "drive_seed000087",
+  "drive_seed000089",
+  "drive_seed000091",
+  "drive_seed000094",
+  "drive_seed000097",
+  "drive_seed000099",
+  "drive_seed000103",
+  "drive_seed000107",
+  "drive_seed000110",
+  "drive_seed000111",
+  "drive_seed000112",
+  "drive_seed000115",
+  "drive_seed000117",
+  "drive_seed000118",
+  "drive_seed000119"
+ ],
+ "dump": "/root/cgs-pilot/artifacts/steering_operators/dump_armA",
+ "stimulus": "/root/cgs-pilot/artifacts/drive_factorial_merged/armA",
+ "discovery_seeds": "/root/cgs-pilot/artifacts/drive_factorial_merged/discovery_seeds_common.txt",
+ "factors": {
+  "used": false
+ },
+ "token_nuisance": true,
+ "fitted_on": "discovery scenes only (full-data export)"
+}

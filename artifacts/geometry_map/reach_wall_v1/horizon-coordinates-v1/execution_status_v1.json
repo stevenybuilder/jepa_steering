@@ -1,0 +1,124 @@
+{
+  "complete": false,
+  "core_work_complete": true,
+  "scope": "Initial Reach development references and residual diagnostics complete; optional later-context extension partially complete",
+  "initial_context": {
+    "episode_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ],
+    "context_real_raw_step": 1,
+    "future_real_raw_steps": [
+      6,
+      11,
+      16,
+      21,
+      26,
+      31
+    ],
+    "output_tensor_and_npz_sha_verified": true
+  },
+  "late_context": {
+    "completed_episode_ids": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      8,
+      9
+    ],
+    "failed_episode_ids": [
+      6,
+      10
+    ],
+    "not_attempted_episode_ids": [
+      7,
+      11
+    ],
+    "context_real_raw_step": 31,
+    "future_real_raw_steps": [
+      36,
+      41,
+      46,
+      51,
+      56,
+      61
+    ],
+    "completed_horizon_rows": 48,
+    "completed_output_tensor_and_npz_sha_verified": true,
+    "failure": "New paired identity failed: all30 image buffers, maxABS=1.0",
+    "image_dtype": "uint8",
+    "failed_episode_max_absolute_pixel_difference": 1,
+    "failed_episode_checks_passed_before_failure": [
+      "Fresh initial full physics snapshot",
+      "Fresh goal-encoding SHA",
+      "Encoded current context",
+      "All31 observed states including initial state"
+    ],
+    "failed_episode_checks_not_reached": [
+      "Repeated proprio buffers",
+      "All per-step full physics snapshots",
+      "All per-step actuator and mocap controls"
+    ],
+    "pixel_difference_count_and_locations": "not saved; cannot infer from maxABS alone",
+    "old_failed_roots_preserved": true,
+    "no_rerun_or_guard_change": true,
+    "receipts": [
+      "worker-49766237/late-results-v1/DONE.json",
+      "worker-49155754/late-results-v1/REMOTE_COPY_RECEIPT.json",
+      "worker-49902461/late-results-v1/REMOTE_COPY_RECEIPT.json"
+    ]
+  },
+  "grouping": {
+    "distinct_development_episodes": 12,
+    "total_contexts_captured": 20,
+    "total_horizon_rows": 120,
+    "episodes_with_both_contexts": 8,
+    "note": "Whole episode grouping; incomplete late subset is not12 complete paired-time episodes and no replacement selection is performed"
+  },
+  "core_outputs": {
+    "fixed_action_arms": 432,
+    "fixed_action_horizon_rows": 2592,
+    "physical_arms": 15,
+    "physical_episode_ids": [
+      0,
+      4,
+      10
+    ],
+    "residual_aggregate": "../residual-coordinate-time-v1/aggregate-v1/residual_coordinate_results.json",
+    "spatial_report": "../../reach_wall_action_interactions_v1/spatial-token-time-v1/action_token_time.json",
+    "readout_diagnosis": "../horizon-readout-diagnosis-v1/horizon_readout_diagnosis.json"
+  },
+  "job_accounting": [
+    {
+      "instance": 49766237,
+      "late_pid": 117853,
+      "status": "completed/copied/verified; assignment released"
+    },
+    {
+      "instance": 49155754,
+      "late_pid": 447918,
+      "status": "failed guard on6 after4,5 completed; all outputs copied/verified; assignment released"
+    },
+    {
+      "instance": 49902461,
+      "late_pid": 30232,
+      "status": "failed guard on10 after8,9 completed; all outputs copied/verified; assignment released"
+    }
+  ],
+  "postflight_utc": "2026-09-05T23:23:41Z",
+  "postflight": "All3 GPUs and Python process lists empty; no instances stopped or destroyed",
+  "tests_passed": 25
+}

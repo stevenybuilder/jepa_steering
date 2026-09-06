@@ -1,0 +1,86 @@
+{
+ "protocol": "cgs-modulation-operator-v0.1",
+ "block": 1,
+ "component": "attn",
+ "rank": 1,
+ "rank_requested": 1,
+ "slices": [
+  "gate_msa"
+ ],
+ "gamma": [
+  1.0
+ ],
+ "gate_group": "hazard",
+ "solid_level": 1,
+ "gate": {
+  "solid": 0.9044175148010254,
+  "h0": 0.001229786197654903,
+  "h0prime": 0.3098573088645935,
+  "ghost": 0.18830689787864685,
+  "separation_d": 3.392871141433716,
+  "gate_hf_mean": 0.15554355084896088
+ },
+ "selection": {
+  "shift_msa": {
+   "point": 0.000463777577822181,
+   "ci_low": 0.0003930327205874287,
+   "ci_high": 0.0005316510763730052,
+   "n_clusters": 16,
+   "sign_flip_p": 0.0001999600079984003,
+   "solid_minus_h0_mean": 0.0007906569446083249,
+   "null_minus_h0_mean": 0.00032687936678614386,
+   "norm_delta_mean": 2.376812696456909,
+   "p_maxt_fwer": 0.001996007984031936
+  },
+  "scale_msa": {
+   "point": 0.000770725652608373,
+   "ci_low": 0.0007103730706996647,
+   "ci_high": 0.0008462808746262498,
+   "n_clusters": 16,
+   "sign_flip_p": 0.0001999600079984003,
+   "solid_minus_h0_mean": 0.0010445066206180454,
+   "null_minus_h0_mean": 0.0002737809680096723,
+   "norm_delta_mean": 2.84084153175354,
+   "p_maxt_fwer": 0.001996007984031936
+  },
+  "gate_msa": {
+   "point": 0.007236102503719435,
+   "ci_low": 0.006338633669074738,
+   "ci_high": 0.008024102206339168,
+   "n_clusters": 16,
+   "sign_flip_p": 0.0001999600079984003,
+   "solid_minus_h0_mean": 0.008287129852131186,
+   "null_minus_h0_mean": 0.00105102734841175,
+   "norm_delta_mean": 1.7503814697265625,
+   "p_maxt_fwer": 0.001996007984031936
+  }
+ },
+ "n_scenes": 16,
+ "scenes": [
+  "drive_seed000003",
+  "drive_seed000004",
+  "drive_seed000007",
+  "drive_seed000009",
+  "drive_seed000010",
+  "drive_seed000014",
+  "drive_seed000015",
+  "drive_seed000017",
+  "drive_seed000018",
+  "drive_seed000019",
+  "drive_seed000020",
+  "drive_seed000021",
+  "drive_seed000023",
+  "drive_seed000025",
+  "drive_seed000026",
+  "drive_seed000029"
+ ],
+ "fitted_on": "discovery scenes only (full-data export)",
+ "rule": "m' = m + s*beta*g_h(h_hazard) * sum_c gamma_c ((m - m_ref).u_c) u_c on the last-frame modulation; u_c = unit throttle-brake contrast of slice c",
+ "checkpoint": "/root/cgs-pilot/artifacts/drive_models/armA_seed0/jepa-latest.pth.tar",
+ "checkpoint_sha256": "7fcfc9b4fb4725298decba5859b58452f7bf15cbf560d72775d895c76f4ef8ea",
+ "step": 0,
+ "artifacts": [
+  "/root/cgs-pilot/artifacts/drive_factorial_merged/armA"
+ ],
+ "seeds_file": "/root/cgs-pilot/artifacts/drive_factorial_merged/discovery_seeds_common.txt"
+}

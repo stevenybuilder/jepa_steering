@@ -1,0 +1,45 @@
+{
+  "complete": true,
+  "verified_utc": "2026-09-05T23:23:00Z",
+  "scope": "Bounded Push TRAIN decoder coverage correction only; no steering or untouched held-performance evaluation",
+  "source_ids": [202,303,404,505,606,707,808,909,1010,1111,1212,1313,1414,1515,1616,1717,1818,1919,2020,2121],
+  "fit_initial_states": 16,
+  "development_validation_initial_states": 4,
+  "transitions": 120,
+  "input_tensor_and_video_hashes_verified": true,
+  "unique_decoded_frame0_pixel_hashes": 20,
+  "unique_decoded_frame30_pixel_hashes": 20,
+  "capture_files_sha_verified": 20,
+  "fit_files_sha_verified": 5,
+  "executed_source_and_seven_helpers_match_local": true,
+  "tests_passed": 9,
+  "capture_done_sha256": "e193e461dadcaab5ac09090d765007cad8205b3180c498e8ef242b986619288a",
+  "fit_done_sha256": "762cc141106f7e616dcf7d4770ccd5da98d057c2cef4fc6339bb726faafcf7fc",
+  "readouts_sha256": "7d3a44cd90a449031215bb4ebaae13f87e31445cea56106c4fac89fa02e082fb",
+  "readouts": "fit-v1/readouts.joblib",
+  "results": "fit-v1/results.json",
+  "input_preparation_seconds": 0.05359719390980899,
+  "capture_seconds_including_model_load": 9.610096268821508,
+  "cpu_fit_seconds": 0.7939417157322168,
+  "development_validation_rmse_pixels": {
+    "physical_persistence": 32.32334922875112,
+    "p3_global_linear": 22.409649340775736,
+    "p3_spatial_linear": 19.598840566467835,
+    "predicted_global_linear": 48.90881942959639,
+    "predicted_spatial_linear": 31.433280659003753
+  },
+  "fit_group_cv_rmse_pixels": {
+    "physical_persistence": 36.36303885594152,
+    "p3_global_linear": 36.679620210786,
+    "p3_spatial_linear": 36.23534371541869
+  },
+  "limitations": [
+    "Only four disjoint development-validation initial states; these are not the untouched held task-performance panel.",
+    "P3 linear roughly ties persistence in grouped fit CV, and angle prediction remains weak; no robust decoder or operator readiness claim.",
+    "Encoded-next readouts are observed-future decoding diagnostics, not native model physical output or forecast accuracy.",
+    "First100 old source files had distinct video/action/state sequences but only one initial state; they are not100 independent starts.",
+    "Spatial diagnostic125 and corrected20-source protocols/results are preserved separately.",
+    "No original confirmation125-149 or54held scripted outcomes were opened; no CEM, operator deployment, new rental or full baseline occurred."
+  ],
+  "simplest_candidate_for_future_authorized_pilot": "Frozen global-P3 linear coordinate readout; not automatically deployed or declared validated"
+}

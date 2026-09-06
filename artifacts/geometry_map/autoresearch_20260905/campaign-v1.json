@@ -1,0 +1,22 @@
+{
+  "objective": "Find useful, reproducible inference-time control mechanisms in frozen JEPA-WM for Reach-Wall and Push-T; informative failures are valid outcomes.",
+  "authorization": "User requested four parallel diagnostics, broad evolutionary/greedy search including heads, dimensions, subspaces and interactions, then invoked autoresearch.",
+  "primary_utility": "Actual simulator task outcomes versus the same frozen unsteered model/planner; short action forks are exploratory proxies, not full-episode success claims.",
+  "search_scope": ["all six predictor blocks", "sixteen attention heads per block", "residual and MLP branches", "coordinate, action-grounded and PCA subspaces", "ranks 1/4/8/16 where supported", "spatial token masks", "six imagined timesteps", "signed doses", "matched-total-dose component interactions"],
+  "first_checkpoint": "Four diagnostics plus up to three broad search generations, with measured compute accounting; do not stop after the first negative or positive result.",
+  "initial_worker_gpu_hour_caps": {"planner_compensation": 4, "residual_search": 8, "action_consequences_and_readability": 6},
+  "resources": "Existing explicitly project-leased usable instances only, no additional rentals, one independent workload per GPU.",
+  "search_episodes": "Reach-Wall development0..7; Push distinct TRAIN initial-state groups with separate development-validation groups.",
+  "development_validation": "Reach8..11 and previously seen Push development panels are not untouched confirmation.",
+  "confirmation": "Original held Reach12..23 and reserved Push evaluation panels stay unopened until candidate, endpoint, comparator, sample size and analysis are frozen; do not reuse confirmation for search.",
+  "selection": "Keep every trial, failure and null result; forecast-error and sham-specificity rank candidates but do not prove behavioral utility; equal-start aggregation.",
+  "breadth": "Cover all implemented head/block sites, preserve diverse families and fresh mutations/restarts; report actual tested coverage, not the hypothetical Cartesian search space.",
+  "dose": "Cap base edits in post-projection/action-gate residual norm, then apply dose; paired interaction components share one total budget.",
+  "trial_records": ["../planner_compensation_v1", "../reach_wall_v1/residual_search_v1", "../action_consequence_diagnostics_v1"],
+  "root_analysis": ["scripts/geometry_map/analyze_crossed_compensation.py", "scripts/geometry_map/select_residual_search_v1.py", "scripts/geometry_map/residual_search_hooks.py"],
+  "literature_updates": [
+    {"url": "https://proceedings.mlr.press/v120/bharadhwaj20a.html", "use": "Motivates native CEM restart control for optimizer variability; does not establish our compensation explanation."},
+    {"url": "https://arxiv.org/html/2608.18746", "use": "Motivates coarse versus near-selected action ranking; different LeWM training study, no weights changed here."},
+    {"url": "https://arxiv.org/html/2609.03294", "use": "Related frozen-world-model objective/optimizer intervention; terminal readout validity and component interactions require testing, not assumed transfer."}
+  ]
+}

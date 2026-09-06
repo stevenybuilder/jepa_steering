@@ -1,0 +1,65 @@
+{
+  "arms": [
+    "nominal_elite_fit",
+    "bounded_elite_fit"
+  ],
+  "bank_sha256": "c3fb2716122f3eb561a69aec7a716007804a6e2d901d7599169b7456efc5c33d",
+  "budget_seconds": 600,
+  "change": "Only scratch candidate action coordinates passed to native elite mean/std fit, exact official XYZ projection; gripper unchanged",
+  "checkpoint_sha256": "c3297772c7af4e84c28bd0c0937e22398a888848305014bb3ab3f1508a310bd8",
+  "common_randomness": "Same original initial nominal300 and effective model inputs; same native Gaussian generator state after every iteration",
+  "episode": 7,
+  "held_sources_opened": false,
+  "metric_separation": "Projected objective gain/regret is separate from actual physical goal progress; no full episode efficacy",
+  "native_cem": {
+    "H": 6,
+    "elites": 10,
+    "iterations": 15,
+    "samples": 300
+  },
+  "raw_steps": 15,
+  "script_sha256": "3e3235714cdd443756cfd734599559c8dc4e9e27c61ea73db5f94214576f95b5",
+  "source_projected15": {
+    "bytes": 47220242,
+    "chunks": [
+      {
+        "ever_success_so_far": false,
+        "goal_distance_m": 0.22770244763287667,
+        "native_selected_cost": 1.1374437808990479,
+        "projected_forecast_mse_to_actual": [
+          0.2166355401277542,
+          0.43912801146507263,
+          0.6854541897773743
+        ],
+        "projected_selected_cost": 1.1753554344177246,
+        "raw_steps": 15,
+        "replan": 0,
+        "seconds": 51.718439627904445,
+        "unedited_forecast_mse_to_actual": [
+          0.22906430065631866,
+          0.43499553203582764,
+          0.6530942916870117
+        ]
+      }
+    ],
+    "episode": 7,
+    "ever_success": false,
+    "final_goal_distance_m": 0.22770244763287667,
+    "final_success": false,
+    "first300_rank_change_fraction": 0.9866666793823242,
+    "goal_progress_m": 0.054869352322676535,
+    "path": "projected15.pt",
+    "raw_steps": 15,
+    "same300_native_replay": {
+      "actual_dtype": "torch.float32",
+      "bound": 1e-06,
+      "cached_dtype": "torch.float32",
+      "max_absolute_error": 0.0
+    },
+    "seconds": 51.72453753591981,
+    "sha256": "0309eb4d65da30cf26c9df23eae5d1205695baae29da6a2c669e38514c21412c",
+    "stage": "projected15",
+    "total_reward": 31.37480103969574
+  },
+  "source_root": "/root/geometry-map-jepawm-reach-wall-v1/xyz-projected-planner-v1/worker-49987405/results-v1"
+}

@@ -1,0 +1,47 @@
+diff --git a/app/plan_common/datasets/__init__.py b/app/plan_common/datasets/__init__.py
+index 3323529..ce5b53f 100644
+--- a/app/plan_common/datasets/__init__.py
++++ b/app/plan_common/datasets/__init__.py
+@@ -18,6 +18,33 @@ Note: The normalization statistics below are computed from the training datasets
+ and match the values used during model training.
+ """
+ 
++
++# --- cgs_pilot vendor patch (rep_geometry_transcoder/scripts/cgs_pilot/vendor_patches/
++#     0001-driving-data-stats.patch, 2026-09-02). Additive only: DROID and every other entry
++#     below are untouched. Registers the "driving" environment used by feature-trained
++#     predictors (scripts/cgs_pilot/train_feature_predictor.py, hubconf model_name
++#     "jepa_wm_driving" -> env "driving"). Actions are raw (normalize_action=False -> mean 0,
++#     std 1) exactly like the DROID entry; the dims come from the environment so one vendor
++#     copy serves A=2 (steer, throttle/brake) and A=3 arms alike.
++import os as _cgs_os
++
++
++def _cgs_driving_stats():
++    action_dim = int(_cgs_os.environ.get("JEPAWM_DRIVING_ACTION_DIM", "2"))
++    proprio_dim = int(_cgs_os.environ.get("JEPAWM_DRIVING_PROPRIO_DIM", "2"))
++    return {
++        "action_dim": action_dim,
++        "proprio_dim": proprio_dim,
++        "state_dim": proprio_dim,
++        "action_mean": [0.0] * action_dim,
++        "action_std": [1.0] * action_dim,
++        "proprio_mean": [0.0] * proprio_dim,
++        "proprio_std": [1.0] * proprio_dim,
++        "state_mean": [0.0] * proprio_dim,
++        "state_std": [1.0] * proprio_dim,
++    }
++
++
+ # Environment data dimensions and normalization statistics
+ # These are used by hubconf.py to load models without needing the datasets
+ # fmt: off
+@@ -90,6 +117,8 @@ DATA_STATS = {
+         "state_mean": [0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0],
+         "state_std": [1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0],
+     },
++    # cgs_pilot: feature-trained driving predictors (see _cgs_driving_stats above)
++    "driving": _cgs_driving_stats(),
+ }
+ # fmt: on
+ 

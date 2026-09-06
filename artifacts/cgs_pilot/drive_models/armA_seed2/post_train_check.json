@@ -1,0 +1,85 @@
+{
+ "arm": "A_seed2",
+ "epochs_run": 30,
+ "epochs_requested": 30,
+ "best": {
+  "epoch": 28,
+  "val_tf_l2": 0.003305571845196413,
+  "val_unroll_l2": 0.003754720053249838
+ },
+ "split_rule": "meta.split",
+ "n_train": 1433,
+ "n_val": 165,
+ "hazard_fraction_train": 0.49965108164689465,
+ "elapsed_s": 657.6939363479614,
+ "ms_per_iter": 221.37920829984878,
+ "steps_per_epoch": 90,
+ "final_epoch": {
+  "epoch": 30,
+  "epoch_total_s": 22.657761573791504,
+  "epoch_train_s": 20.59914779663086,
+  "lr": 1e-05,
+  "ms_per_iter": 228.8794199625651,
+  "peak_vram_gb": 7.165529088,
+  "train_loss": 0.0030079394056080253,
+  "train_roll_l2_2": 0.003730118501507687,
+  "train_tf_l2": 0.0034286403409169632,
+  "val_copy_baseline_l2": 0.013296339497195952,
+  "val_tf_l2": 0.0032857704639547704,
+  "val_unroll_l2": 0.0038201112568265563,
+  "val_unroll_l2_h1": 0.0028774980116974226,
+  "val_unroll_l2_h2": 0.003131999576351408,
+  "val_unroll_l2_h3": 0.005450836182430838,
+  "wd": 1e-06
+ },
+ "encoder_identity": {
+  "ok": true,
+  "max_abs_err": 0.0009784698486328125,
+  "clips_checked": 2,
+  "rule": "fp16 half-ulp + 1e-4 (as run_precompute_features_smoke.sh)"
+ },
+ "val": {
+  "rule": "meta.split",
+  "n_val": 165,
+  "n_val_hazard_free": 85,
+  "n_val_hazard": 80,
+  "jepa-latest": {
+   "epoch": 30,
+   "hazard_free": {
+    "tf_l2": 0.0022668276543674226,
+    "unroll_l2": 0.00249224601167382,
+    "unroll_l2_h1": 0.0021900618435157573,
+    "unroll_l2_h2": 0.002233108038575772,
+    "unroll_l2_h3": 0.00305356815292993,
+    "copy_baseline_l2": 0.00906244735507404
+   },
+   "hazard": {
+    "tf_l2": 0.00436839759349823,
+    "unroll_l2": 0.005230968150620659,
+    "unroll_l2_h1": 0.0036078989505767822,
+    "unroll_l2_h2": 0.004087071912363171,
+    "unroll_l2_h3": 0.007997933588922024,
+    "copy_baseline_l2": 0.01779485003401836
+   }
+  },
+  "jepa-best": {
+   "epoch": 28,
+   "hazard_free": {
+    "tf_l2": 0.0022799472160199108,
+    "unroll_l2": 0.00250475567528138,
+    "unroll_l2_h1": 0.0022023081382298295,
+    "unroll_l2_h2": 0.002247105915482868,
+    "unroll_l2_h3": 0.0030648529721314416,
+    "copy_baseline_l2": 0.00906244735507404
+   },
+   "hazard": {
+    "tf_l2": 0.0043952977284789085,
+    "unroll_l2": 0.005082807208721837,
+    "unroll_l2_h1": 0.0036298745311796666,
+    "unroll_l2_h2": 0.004145833989605307,
+    "unroll_l2_h3": 0.007472713105380535,
+    "copy_baseline_l2": 0.01779485003401836
+   }
+  }
+ }
+}

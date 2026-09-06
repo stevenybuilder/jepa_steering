@@ -1,0 +1,35 @@
+{
+  "complete": true,
+  "scope": "Fixed no-refit metric-support ablation on four repeatedly seen DEVELOPMENT states and 64 cached plans each; no new model/simulator calls.",
+  "primary_channel": "predicted",
+  "unit": "Equal-weight state, n=4, not 256 independent plans",
+  "predicted_result": {
+    "all_four_learned_with_complement_choices": [0, 0, 0, 1],
+    "native_choices": [0, 0, 0, 1],
+    "pointwise_xy_span_only_coverage_gain_pp": [2.7997, 0.0, 0.0, 1.8402],
+    "pointwise_xy_span_only_mean_gain_pp": 1.1600,
+    "same_spectrum_rotated_control_has_identical_coverage_gains": true,
+    "other_learned_span_only_mean_gain_pp": 0.7177,
+    "unweighted_span_only_mean_gain_pp": 0.7177,
+    "complement_only_mean_gain_pp": 0.9073,
+    "all_frozen_learned_gates_fail": true,
+    "interpretation": "Complement removal changes ranking and exposes small coverage gains, but the learned weighting does not outperform its matched rotated controls. This is not recovered task alignment."
+  },
+  "complement_diagnostics": {
+    "predicted_mean_energy_fraction_range": [0.8185990754892497, 0.8892215792647051],
+    "predicted_pair_difference_rms_exceeds_span_by_approx_factor": [2.17, 2.71],
+    "interpretation": "Complement has larger candidate-cost contrasts as well as larger mean energy; mean energy alone would not establish ranking dominance. Removing it is still not sufficient for learned-specific utility."
+  },
+  "actual_encoding_channel": {
+    "scope": "Offline oracle diagnosis, not a runtime operator; deltas use native actual-encoding choice as baseline.",
+    "unweighted_span_only_state3_coverage_gain_pp": 13.8496,
+    "same_state3_gain_shared_by_all_learned_and_rotated_span_only_variants": true,
+    "interpretation": "True-future encoding also exhibits a complement/support issue, particularly state3, rather than a gain unique to learned weights."
+  },
+  "limitations": [
+    "Weights were originally fitted with complement included; dropping complement is an intentionally fixed ablation, not a newly optimized span-only metric.",
+    "All results adaptive development, no confirmatory inference, full-rollout efficacy, or steering promotion.",
+    "Dropping complement changes cost support but leaves every cached action and physical outcome unchanged.",
+    "Requested-goal polygon coverage and combined agent/block XY distance remain separate outcomes."
+  ]
+}

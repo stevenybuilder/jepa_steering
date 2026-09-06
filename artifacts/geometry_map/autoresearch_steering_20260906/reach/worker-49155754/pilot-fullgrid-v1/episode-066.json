@@ -1,0 +1,105 @@
+{
+  "episode": 66,
+  "selected": {
+    "native_planner": 300,
+    "native_bank": 112,
+    "edit": 112,
+    "sham": 112
+  },
+  "physical": {
+    "native_planner": {
+      "initial_hand_goal_distance_m": 0.28119799494743347,
+      "final_hand_goal_distance_m": 0.1864764392375946,
+      "minimum_hand_goal_distance_m": 0.1864764392375946,
+      "hand_goal_progress_m": 0.09472155570983887,
+      "native_ever_success": false,
+      "native_final_success": false,
+      "native_reward_sum": 32.46199667453766,
+      "candidate_index": 300
+    },
+    "native_bank": {
+      "initial_hand_goal_distance_m": 0.28119799494743347,
+      "final_hand_goal_distance_m": 0.19059467315673828,
+      "minimum_hand_goal_distance_m": 0.19059467315673828,
+      "hand_goal_progress_m": 0.09060332179069519,
+      "native_ever_success": false,
+      "native_final_success": false,
+      "native_reward_sum": 32.05196464061737,
+      "candidate_index": 112
+    },
+    "edit": {
+      "initial_hand_goal_distance_m": 0.28119799494743347,
+      "final_hand_goal_distance_m": 0.19059467315673828,
+      "minimum_hand_goal_distance_m": 0.19059467315673828,
+      "hand_goal_progress_m": 0.09060332179069519,
+      "native_ever_success": false,
+      "native_final_success": false,
+      "native_reward_sum": 32.05196464061737,
+      "candidate_index": 112,
+      "shared_identical_action_index": 112
+    },
+    "sham": {
+      "initial_hand_goal_distance_m": 0.28119799494743347,
+      "final_hand_goal_distance_m": 0.19059467315673828,
+      "minimum_hand_goal_distance_m": 0.19059467315673828,
+      "hand_goal_progress_m": 0.09060332179069519,
+      "native_ever_success": false,
+      "native_final_success": false,
+      "native_reward_sum": 32.05196464061737,
+      "candidate_index": 112,
+      "shared_identical_action_index": 112
+    }
+  },
+  "forecast_mse": [
+    {
+      "horizon": 1,
+      "visual_mse": {
+        "native": 0.461497962474823,
+        "edit": 0.29231229424476624,
+        "sham": 0.5063484311103821
+      },
+      "proprio_mse": {
+        "native": 0.014975436963140965,
+        "edit": 0.007675712462514639,
+        "sham": 0.016357406973838806
+      }
+    },
+    {
+      "horizon": 2,
+      "visual_mse": {
+        "native": 0.8322414755821228,
+        "edit": 0.6274374723434448,
+        "sham": 0.8842422366142273
+      },
+      "proprio_mse": {
+        "native": 0.049226030707359314,
+        "edit": 0.02477562427520752,
+        "sham": 0.0542350597679615
+      }
+    },
+    {
+      "horizon": 3,
+      "visual_mse": {
+        "native": 1.2726941108703613,
+        "edit": 0.8846685886383057,
+        "sham": 1.3564953804016113
+      },
+      "proprio_mse": {
+        "native": 0.09160004556179047,
+        "edit": 0.04485735297203064,
+        "sham": 0.10082710534334183
+      }
+    }
+  ],
+  "cost_identity_maxabs": 2.2649765014648438e-06,
+  "canaries": [
+    {
+      "exact_zero_cost": true,
+      "analytic_output_correction_equivalence_maxabs": 1.1920928955078125e-07,
+      "separate_channel_norm_matched": true
+    }
+  ],
+  "progress_change_vs_native_m": -0.004118233919143677,
+  "progress_change_vs_sham_m": 0.0,
+  "progress_change_vs_bank_m": 0.0
+}

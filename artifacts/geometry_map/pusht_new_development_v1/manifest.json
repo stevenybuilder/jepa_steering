@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "panel": "pusht_new_official_train_development_v1",
+  "frozen_utc": "2026-09-06T07:39:00Z",
+  "split": "new_development_not_confirmation",
+  "selection": "Ascending source IDs after2121; first four distinct float32 initial7D state fingerprints; duplicates are the only exclusion. No actions, future states, pixels, rewards or outcomes consulted before freeze.",
+  "source_host": 49766237,
+  "source_root": "/root/geometry-map-jepawm-pusht-v1/assets/unpacked/pusht_noise/train",
+  "dataset": "facebook/jepa-wms",
+  "dataset_revision": "6116f042ae7ae4c8e3f1fd2f194f432615664182",
+  "archive": "pusht/pusht_noise.zip",
+  "archive_sha256": "442f5dee246edf670964ed7bdecd248683cd6d00580fa0e4d458abb53f92da08",
+  "known_initial_group_source_ids": [0,101,202,303,404,505,606,707,808,909,1010,1111,1212,1313,1414,1515,1616,1717,1818,1919,2020,2121],
+  "metadata_source_count": 18685,
+  "metadata_cpu_seconds": 0.03332505100000005,
+  "excluded_duplicate_ranges": [
+    {"first":2122,"last":2221,"duplicate_of":2121},
+    {"first":2223,"last":2322,"duplicate_of":2222},
+    {"first":2324,"last":2423,"duplicate_of":2323},
+    {"first":2425,"last":2524,"duplicate_of":2424}
+  ],
+  "rows": [
+    {"development_ordinal":0,"source_id":2222,"source_length":140,"initial_state_sha256":"668de0bfbe769fdbad20d0ffcdb8271367f4692a686a4ba00de1383c3d6f20e6"},
+    {"development_ordinal":1,"source_id":2323,"source_length":78,"initial_state_sha256":"66e9f38cfa1f24389e5f55a011e26a4908a3b853736bbb24d5082d6e0e8cc8c2"},
+    {"development_ordinal":2,"source_id":2424,"source_length":107,"initial_state_sha256":"378afdee245dcf84e690f097bb0911cb2ad70d0de4a384f2f1f7902b12892f57"},
+    {"development_ordinal":3,"source_id":2525,"source_length":67,"initial_state_sha256":"d31c21493c1db043f19c74a0184b01b5c68076743fc3065ed3588085fe8fe938"}
+  ],
+  "clip_offset": 0,
+  "raw_state_indices": [0,30],
+  "raw_action_indices": [0,29],
+  "observed_raw_indices_for_future_capture": [0,5,10,15,20,25,30],
+  "action_conversion": "official rel_actions.float()/100; preserve all30x2 raw relative commands without clipping",
+  "shape": "T (official shapes.pkl absent; native loader default)",
+  "goal_construction": "NOT YET EXECUTED: use pinned native env.update_env({'shape':'T'}), env.rollout(seed, original_raw_initial7D, exact30raw_commands, env_info); goal_state/goal_pixels/goal_proprio come from last returned simulator observation. Two exact replays required. Do not use raw dataset frame30 as simulator goal or already observed reset state as initializer.",
+  "environment_seed_rule": "2026090600+source_id",
+  "planner_seed_rule": "91600+source_id",
+  "native_config": "configs/evals/simu_env_planning/pt/jepa-wm/pt_L2_cem_sourcedset_H6_nas6_ctxt2_r224_alpha0.1_ep96_decode.yaml",
+  "native_goal_cost": "visualMSE+0.1*proprioMSE",
+  "no_simulator_or_model_execution_authorized": true,
+  "no_held_or_confirmation_access": true,
+  "all_starts_retained_no_replacement": true
+}

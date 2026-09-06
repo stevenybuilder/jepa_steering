@@ -1,0 +1,74 @@
+{
+  "schema": 1,
+  "task": "Reach-Wall exploratory frozen output forecast-error correction",
+  "created_utc": "2026-09-06T04:39:18Z",
+  "training_episodes": [
+    4,
+    7,
+    9,
+    10
+  ],
+  "training_labels": "Only actual executed H1..H3 native full99 prefixes; no future after replanning",
+  "test_episodes": [
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,
+    72,
+    73
+  ],
+  "original_held_access": false,
+  "operator": "Full spatial256x400 output residual correction, same observed pooled features and fixed ridge760/dose.5. Native model, objective and bank retained. Explicit OUTPUT mechanistic comparison.",
+  "model": "Dual ridge prediction of full256x400 physical-minus-native error from same76development-calibration examples and813observables",
+  "dose": 0.5,
+  "sham": "Same signed channel permutation aspooledpilot plus fixedtokenpermutation; exact fullvisual/fullproprio norm eachcandidate",
+  "horizon_caveat": "Trained physicaltruth H1..3; application to terminalH6 is unvalidated extrapolation. Report H1..3 actual selected native prefix forecast error separately.",
+  "bank": "Saved last native CEM300proposals plus original native selected mean; all301 candidates frozen before correctedscore; native planner/weights/objective fixed",
+  "arms": [
+    "native_planner_selected",
+    "native_bank_best",
+    "correction_best",
+    "matched_sham_best"
+  ],
+  "primary": "Episode-equal physically executed15rawstep hand-goal progress, correction minus eachcontrol",
+  "promotion": "Full99 followup ONLY if >.005m mean over nativeplanner, banknative and sham, positive vsnativeplanner and sham on at least5/8starts; descriptive exploratory evidence only",
+  "statistical_unit": "8development initialstates; plans/horizons not independent; no pvalues or confirmationclaim",
+  "process_gpu_seconds_limit": 5400,
+  "hardware": {
+    "49155754": [
+      66,
+      67
+    ],
+    "49902461": [
+      68,
+      69
+    ],
+    "49982193": [
+      70,
+      71,
+      72,
+      73
+    ]
+  },
+  "source_code_sha256": {
+    "pilot_fullgrid.py": "2beaa8e6e82dbb2dc5e95712afce94c2805e10cd9f7d7137d3797481f8003bc4",
+    "extract_fit_fullgrid.py": "d032c8e6ba3a216c77f42bc3ed54b10e1f4814aebeb3751439cde4bfaf0b51c2"
+  },
+  "runner_sha256": "2beaa8e6e82dbb2dc5e95712afce94c2805e10cd9f7d7137d3797481f8003bc4",
+  "per_worker_process_seconds_limit": 1200,
+  "test_input_manifest_sha256": "67293dc523c8f4ff2fa311b37bac7663cbfef9b8e7616ff71299d4949240ace1",
+  "frozen_correction_sha256": "3a27d5cd1a2c60fbc9317735423289e0836579ddcae07fe1ea3a46bd65a35370",
+  "parent": "pooled correction pilot-v1: forecast improvement8/8 but0/8 actionchanges vsbank/sham",
+  "instance": 49982193,
+  "episodes": [
+    70,
+    71,
+    72,
+    73
+  ],
+  "pid": 11375,
+  "start_epoch": 1788669627.9366322,
+  "correction_sha256": "3a27d5cd1a2c60fbc9317735423289e0836579ddcae07fe1ea3a46bd65a35370"
+}

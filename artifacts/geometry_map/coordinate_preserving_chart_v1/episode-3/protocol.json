@@ -1,0 +1,61 @@
+{
+  "complete": true,
+  "episode": 3,
+  "script_sha256": "e6061b149b45a38de79bc13b97099ad44857b2d8650de3c497d7eb1f5bf5d6c1",
+  "decoder_script_sha256": "4de08c4677cbe62e994b96bf63bbf393ef214316ad9e5bb44c173547c083127d",
+  "source": {
+    "path": "near-dev-003.pt",
+    "sha256": "db4e8fc98d8174bc827e718e04ec9c495bb90488ff5e93d52fb736a76bd06831",
+    "bytes": 57458973
+  },
+  "side_source": {
+    "path": "chart_inputs.pt",
+    "sha256": "aa71abedcd805b0c3cb12a53be469ab6eb31101c5f16ab9251c8b9d50225601d",
+    "bytes": 26663502
+  },
+  "control_source": {
+    "path": "results.pt",
+    "sha256": "286240af346d7f87602c449134cf8c2a1a7832118cc987159ebd660a02892c34",
+    "bytes": 103543073
+  },
+  "target_source": {
+    "path": "FROZEN.pt",
+    "sha256": "dc95444db94f3541ceeaac86312870262a9fcbe3163ef50b2baeee1cb072dc1d",
+    "bytes": 27043509
+  },
+  "frozen_control_sources": [
+    "linear_rank4",
+    "nonlinear_RBF_rank4"
+  ],
+  "waypoints": 20,
+  "central_query": true,
+  "controls_refitted": false,
+  "chart_refitted": false,
+  "site": "P3/H3 full newest256x400 residual; PCA64 complement fixed",
+  "graph": "mean+cB+(RBF(c)-mean)(I-B^T B), so re-encoding preserves coordinates",
+  "arms": [
+    "rbf_same_coordinate",
+    "graph_same_coordinate",
+    "rbf_matched_dose",
+    "graph_matched_dose",
+    "common_norm_sham"
+  ],
+  "norm_target": ".95 times candidate-wise min of original-RBF and graph full-shift Euclidean norms",
+  "dose_solver": "33point first upward crossing scan,40 bisections within first bracket; finite-grid crossing counts not uniqueness proof",
+  "coordinate_dose_tolerance": "1e-8 absolute +1e-8 relative; native realized pair norm max1e-4 absolute +1e-6 relative",
+  "norm_matching_limitation": "Different candidate-wise alpha changes coordinate shifts; on-ray matching avoids off-surface normalization but is not an equal-coordinate contrast",
+  "primary": "Matched-dose graph vs RBF actual H3/H6 spatial forecast error and fixed9action physical ranking/choice",
+  "secondary": "Frozen analyst model-response target loss, exact reencode, support, raw norm and nonmonotonic-ray feasibility",
+  "decision": "Exploratory only; no promotion from4seen states. Report all states and both frozen-control parents; no outcome selection",
+  "max_state_seconds": 225,
+  "max_aggregate_seconds": 900,
+  "optimizer_steps": 0,
+  "simulator_calls": 0,
+  "cem_calls": 0,
+  "held_accessed": false,
+  "literature": [
+    "https://arxiv.org/abs/2205.02304",
+    "https://arxiv.org/html/2509.00224v1"
+  ],
+  "literature_scope": "Orthogonal nonlinear augmentation is established dimensionality-reduction construction, not evidence of robot steering utility"
+}

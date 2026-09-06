@@ -1,0 +1,44 @@
+{
+  "phase": "exploratory_failure_informed_geometry_extension",
+  "user_brief": "/Users/stevenyang/Downloads/jepa_patch_policy_research_brief.md",
+  "objective": "Identify state-, patch-, layer- and horizon-dependent causal geometry that could improve frozen-world-model action consequences and planning, without presuming globally linear features or a dense nonlinear manifold.",
+  "unchanged_work": "Existing broad generations, physical head/subspace trials, full99 paired episodes, and command-fidelity controls continue; original confirmation data remain unopened.",
+  "checkpoint_boundary": "Released JEPA-WM uses a frozen DINOv2 visual encoder and action-conditioned predictor. Optional RGB decoder is absent from native planning. Training masks, runtime attention masks, and physical partial observability are different objects.",
+  "hypotheses": [
+    {
+      "id": "local_charts",
+      "claim": "A fixed global low-rank chart can miss state-dependent geometry that local equal-rank charts preserve.",
+      "primary_exploratory_site": "Push-T predictor block3 residual at imaginedH3",
+      "secondary_sites": "Blocks1/3/5 and imaginedH1/H3/H6, each analyzed separately",
+      "data": "16TRAIN initial-state groups with7fixed actions each;8already-seen development groups with7fixed actions each; not168independent episodes",
+      "comparisons": "Full256patch flatten versus meanpool; TRAIN-PCA32 ambient; globalrank8 versus32-neighbor localrank8 versus32random-neighbor rank8; atmost4rows perTRAINepisode perneighborhood",
+      "endpoints": "Episode-averaged held-development reconstruction and actualfuture agent/blockXY prediction; same ridgealpha100; all outcomes reported",
+      "falsification": "No advantage over global/random charts, or reconstruction improvement without actual-consequence improvement, weakens proposed control relevance.",
+      "limits": "Local reconstruction and rotating PCA tangents alone do not prove intrinsic manifold curvature or a causal mechanism. Fixedhyperparameters do not exhaust nonlinear models. Global versuslocal usesdifferentnumbersoftrainingrows, disclosed."
+    },
+    {
+      "id": "patch_head_distribution",
+      "claim": "Spatial averaging can conceal distributed or mutually cancelling state-dependent head contributions.",
+      "capture": "All256float32patches atP1/P3/P5;16head contributions afterrealoutputprojection andactiongate atall6predictorblocks; sharedprojectionbias separate",
+      "measurements": "Fullpatch versuspooled cosines; headenergy participation; state/horizon-specific norms; headsum-plus-bias reconstruction error; TRAINstandardizedsubspace tails,kurtosis andsquared-scoredependence",
+      "limits": "Activation densities are analyst-fitted descriptions, not native JEPA output probabilities; attention/headnorm is not causalimportance or biologicalfiring; no superpositionclaim fromcoactivation alone."
+    },
+    {
+      "id": "causal_response_transfer",
+      "claim": "A state-conditioned map trained on actual interventions predicts edit consequences better than an observational regression map.",
+      "status": "Measuredresponseprediction improved strongly, but testedPush-Tvariants stillfailtoimproveactionselection; full numericalresults retained inaction_consequence_diagnostics_v1/pusht.",
+      "next_boundary": "BetterinterventionJacobian is insufficientifdesiredcorrection,subspace,orplannerobjectiveiswrong."
+    }
+  ],
+  "primary_sources": [
+    {"url": "https://arxiv.org/html/2607.18236v1", "use": "Densepatchversuspooling motivation; behaviorclonedpolicy, notourimaginationplanner orsteeringevidence"},
+    {"url": "https://arxiv.org/html/2605.26379v1", "use": "Linearidentifiability depends onlatentdistribution/dynamics assumptions; encoder resultnotuniversalpredictorlinearity"},
+    {"url": "https://guusbouwens.com/downloadables/A%20Late%20Semantic%20Repair%20Pathway%20in%20I-JEPA%E2%80%99s%20Visual%20World%20Model.pdf", "use": "Authorfulltext nowaccessible; visible-context andmixedattention/MLP patching, encoder-only noexecutedrobotics"},
+    {"url": "https://openreview.net/pdf?id=CC5xKstwmf", "use": "Indexedprimarypaper andauthorposter: distributedmotiongeometry versusfunctionalportability; fullPDFdirectaccess stillchallenged"},
+    {"url": "https://arxiv.org/abs/2105.04906", "use": "Covariancedecorrelation isnotsemanticindependence orGaussianity"},
+    {"url": "https://arxiv.org/abs/2301.08243", "use": "Spatialcontext andmaskconstruction; notproofruntimecausalsemanticaxes"},
+    {"url": "https://arxiv.org/html/2605.05115v1", "use": "Curvedactivationpath versuslinearchord; MountainCar64DGRUworldmodel, positioncentroid-derivedbehaviorreadout, notJEPAclosed-looproboticswin"},
+    {"url": "https://arxiv.org/html/2507.08802v1", "use": "Overflexiblenonlinearalignmentcanmanufactureapparentmechanisms; retainactualmodel/action/physicschecks"},
+    {"url": "https://arxiv.org/abs/cs/0212008", "use": "Localtangentspaceapproximation asageometriccomparison, notuniversalsemanticidentification"}
+  ]
+}

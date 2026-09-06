@@ -1,0 +1,117 @@
+{
+  "candidate_sha256": "b80aebccc641da5913b6e1b0fbb315323e4745876547fec1eb8f9e88f8471e4c",
+  "cap_radius": 0.2684265781947949,
+  "checkpoint_sha256": "c3297772c7af4e84c28bd0c0937e22398a888848305014bb3ab3f1508a310bd8",
+  "complete": true,
+  "conditions": [
+    [
+      "unsteered",
+      0,
+      null
+    ],
+    [
+      "positive",
+      1,
+      null
+    ],
+    [
+      "negative",
+      -1,
+      null
+    ],
+    [
+      "positive_sham",
+      1,
+      6101
+    ],
+    [
+      "negative_sham",
+      -1,
+      6101
+    ]
+  ],
+  "cross_process_float32_bound": 1e-06,
+  "cross_process_ranks_exact": true,
+  "episodes": [
+    10
+  ],
+  "finite_difference_epsilons_normalized": [
+    0.01,
+    0.005
+  ],
+  "held_sources_opened": false,
+  "limitations": [
+    "Action blocking alone is not proof of compensation",
+    "Sign/Jacobian agreement is local evidence, not intentionality or formal mediation",
+    "Fixed first15steps, not closed-loop full-episode efficacy",
+    "Old native commands may exceed action bounds; never silently clipped by this runner"
+  ],
+  "model": {
+    "checkpoint": "/root/.cache/huggingface/hub/models--facebook--jepa-wms/snapshots/9b9c41ef249466630dbf1a20e78391865d07b3b9/jepa_wm_metaworld.pth.tar",
+    "config": "/root/geometry-map-jepawm-pusht-v1/vendor/jepa-wms/configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "loader": "official constructor/checkpoint; heads_cfg cleared",
+    "model_name": "jepa_wm_metaworld"
+  },
+  "native_cem": {
+    "H": 6,
+    "iterations": 15,
+    "samples": 300
+  },
+  "negative_policy": "Exact negation AFTER original beta0.5 capped update; no refit or dose search",
+  "new_cem_arms": [
+    [
+      "negative_all",
+      1.0,
+      false,
+      null
+    ],
+    [
+      "negative_all_sham",
+      1.0,
+      false,
+      6101
+    ]
+  ],
+  "no_refit": true,
+  "original_beta": 0.5,
+  "outputs": [
+    {
+      "bytes": 11319157,
+      "episode": 10,
+      "path": "episode-010/fixed_command_controls.pt",
+      "sha256": "4376461bed26d5af854367565221dd49beee4e6807104c584e26fab337dedf3b",
+      "stage": "blocked_control"
+    },
+    {
+      "arm": "negative_all",
+      "bytes": 61168444,
+      "episode": 10,
+      "goal_progress_m": 0.09109203628169499,
+      "path": "episode-010/negative_all.pt",
+      "sha256": "50b73a7ab6e17261ca901fa315ee68b4b7f7939017269ee03b887fc43c9ac3eb",
+      "stage": "new_native_plan"
+    },
+    {
+      "arm": "negative_all_sham",
+      "bytes": 61169059,
+      "episode": 10,
+      "goal_progress_m": 0.09015784937740998,
+      "path": "episode-010/negative_all_sham.pt",
+      "sha256": "f38d04087ec2de743ae61ffb0679ee857e854032f297a29453d62f5f780135b8",
+      "stage": "new_native_plan"
+    },
+    {
+      "bytes": 380564067,
+      "episode": 10,
+      "path": "episode-010/crossed_forecasts_and_jacobians.pt",
+      "sha256": "a5c09a26434bd644b7d4baa51cac81ed91678bf4a9d605cc92bc8c13a8206d62",
+      "stage": "crossed_native_forecasts"
+    }
+  ],
+  "raw_steps_new_plan": 15,
+  "restore_baseline_encoded_goal": true,
+  "script_sha256": "202acdb5123f7fd104b2fbb17ea0fe2bc4d9d0f5319e92bd3929fb664e371d7e",
+  "seconds": 131.8366608020151,
+  "time_limit_seconds": 900.0,
+  "within_run_identity": "bit exact"
+}

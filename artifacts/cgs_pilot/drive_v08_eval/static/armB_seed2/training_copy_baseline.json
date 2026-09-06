@@ -1,0 +1,221 @@
+{
+ "model_label": "arm B seed 2 v0.8 static",
+ "artifacts": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armB_seed2",
+ "cache": "/root/cgs-pilot/artifacts/drive_v08_eval/static/armB_seed2/latent_cache.npz",
+ "training_reference": "/root/cgs-pilot/artifacts/drive_features/armB/training_reference.npz",
+ "n_train_clips": 1433,
+ "n_scenes": 31,
+ "level": "pooled (mean over DINOv3 patch tokens, last future step); training reference stores pooled frames only",
+ "nn_metric": "||ctx - clip_ctx||^2 / 1.015 + 1.0 * ||chunk - clip_chunk||^2 / 1",
+ "interpretation_scope": "memorisation control at the pooled level: a copier of the nearest TRAINING clip's future delta; descriptive, no preregistered threshold; complements retrieval_baseline.py",
+ "identities": {
+  "h1_level1_vs_level0": {
+   "n_scenes_used": 31,
+   "model": {
+    "cosine": {
+     "median": 0.838277280330658,
+     "mean": 0.638060266452451,
+     "ci_low": 0.5240117464935587,
+     "ci_high": 0.7460810655307384,
+     "n": 31
+    },
+    "nmse": {
+     "median": 0.2988620698451996,
+     "mean": 0.6038119687188056,
+     "ci_low": 0.435129527182829,
+     "ci_high": 0.777885316672825,
+     "n": 31
+    }
+   },
+   "nn_distance_h1a1": {
+    "median": 5.482126149843939,
+    "mean": 5.488888411153599,
+    "ci_low": 5.47265817054386,
+    "ci_high": 5.504277905721791,
+    "n": 31
+   },
+   "copy_k1": {
+    "cosine": {
+     "median": 0.31609268486499786,
+     "mean": 0.18751359681288401,
+     "ci_low": 0.12068738218319291,
+     "ci_high": 0.25594358864007516,
+     "n": 30
+    },
+    "nmse": {
+     "median": 0.9011211395263672,
+     "mean": 0.9824493969640424,
+     "ci_low": 0.9420000121478111,
+     "ci_high": 1.0240106001976996,
+     "n": 31
+    },
+    "cosine_copy_vs_model": {
+     "median": 0.3085481822490692,
+     "mean": 0.29689632207155225,
+     "ci_low": 0.28976266374190646,
+     "ci_high": 0.3032134369264046,
+     "n": 30
+    },
+    "model_minus_copy_cosine": {
+     "median": 0.5035799741744995,
+     "mean": 0.467517285545667,
+     "ci_low": 0.4248514779501905,
+     "ci_high": 0.5095530644757673,
+     "n": 30,
+     "sign_flip_p": 0.0001999600079984003
+    },
+    "copy_minus_model_nmse": {
+     "median": 0.5835753381252289,
+     "mean": 0.3786374282452368,
+     "ci_low": 0.23988492509290096,
+     "ci_high": 0.5100588929028278,
+     "n": 31,
+     "sign_flip_p": 0.0001999600079984003
+    }
+   },
+   "copy_k5": {
+    "cosine": {
+     "median": 0.2768419086933136,
+     "mean": 0.1664362167639117,
+     "ci_low": 0.08035070623060869,
+     "ci_high": 0.2510980796519547,
+     "n": 31
+    },
+    "nmse": {
+     "median": 0.9481571316719055,
+     "mean": 0.9712916055033284,
+     "ci_low": 0.9505107182168192,
+     "ci_high": 0.99247671308056,
+     "n": 31
+    },
+    "cosine_copy_vs_model": {
+     "median": 0.3635137677192688,
+     "mean": 0.36237419829253226,
+     "ci_low": 0.32356989443782835,
+     "ci_high": 0.4026445860043168,
+     "n": 31
+    },
+    "model_minus_copy_cosine": {
+     "median": 0.4845803380012512,
+     "mean": 0.4716240496885392,
+     "ci_low": 0.43007088690815914,
+     "ci_high": 0.5123569808389631,
+     "n": 31,
+     "sign_flip_p": 0.0001999600079984003
+    },
+    "copy_minus_model_nmse": {
+     "median": 0.648325651884079,
+     "mean": 0.3674796367845228,
+     "ci_low": 0.21180922540445482,
+     "ci_high": 0.5185659058512218,
+     "n": 31,
+     "sign_flip_p": 0.0001999600079984003
+    }
+   }
+  },
+  "h1_level3_vs_level0": {
+   "n_scenes_used": 31,
+   "model": {
+    "cosine": {
+     "median": 0.6780416965484619,
+     "mean": 0.6206360603532484,
+     "ci_low": 0.569176171720028,
+     "ci_high": 0.6719613573003199,
+     "n": 31
+    },
+    "nmse": {
+     "median": 0.5403949618339539,
+     "mean": 0.6359517295514384,
+     "ci_low": 0.5612039702794245,
+     "ci_high": 0.7111461634837811,
+     "n": 31
+    }
+   },
+   "nn_distance_h1a1": {
+    "median": 5.539954453980001,
+    "mean": 5.539139636290043,
+    "ci_low": 5.5315998059940625,
+    "ci_high": 5.546924263049002,
+    "n": 31
+   },
+   "copy_k1": {
+    "cosine": {
+     "median": 0.03466003015637398,
+     "mean": 0.05478613799805903,
+     "ci_low": 0.03150668460307755,
+     "ci_high": 0.07968971011592181,
+     "n": 31
+    },
+    "nmse": {
+     "median": 1.1285706758499146,
+     "mean": 1.148623614541946,
+     "ci_low": 1.1188578156213607,
+     "ci_high": 1.1777880755163006,
+     "n": 31
+    },
+    "cosine_copy_vs_model": {
+     "median": 0.2101798802614212,
+     "mean": 0.1861453087880246,
+     "ci_low": 0.15547808162237126,
+     "ci_high": 0.21406353088696636,
+     "n": 31
+    },
+    "model_minus_copy_cosine": {
+     "median": 0.5721869021654129,
+     "mean": 0.5658499223551893,
+     "ci_low": 0.5187186160681097,
+     "ci_high": 0.6130033060063367,
+     "n": 31,
+     "sign_flip_p": 0.0001999600079984003
+    },
+    "copy_minus_model_nmse": {
+     "median": 0.5286563634872437,
+     "mean": 0.5126718849905075,
+     "ci_low": 0.45256085162681914,
+     "ci_high": 0.5733204302047529,
+     "n": 31,
+     "sign_flip_p": 0.0001999600079984003
+    }
+   },
+   "copy_k5": {
+    "cosine": {
+     "median": 0.0970093309879303,
+     "mean": 0.1000794202245156,
+     "ci_low": 0.07072557406544577,
+     "ci_high": 0.1302466698568042,
+     "n": 31
+    },
+    "nmse": {
+     "median": 1.0214622020721436,
+     "mean": 1.032982374391248,
+     "ci_low": 1.0131061611636993,
+     "ci_high": 1.0543686643723518,
+     "n": 31
+    },
+    "cosine_copy_vs_model": {
+     "median": 0.2799472510814667,
+     "mean": 0.2789766067458737,
+     "ci_low": 0.26351751835355836,
+     "ci_high": 0.29474542414949784,
+     "n": 31
+    },
+    "model_minus_copy_cosine": {
+     "median": 0.5496650189161301,
+     "mean": 0.5205566401287327,
+     "ci_low": 0.48835667441247005,
+     "ci_high": 0.552351059938472,
+     "n": 31,
+     "sign_flip_p": 0.0001999600079984003
+    },
+    "copy_minus_model_nmse": {
+     "median": 0.4526982307434082,
+     "mean": 0.39703064483980977,
+     "ci_low": 0.33879864756618777,
+     "ci_high": 0.45493709543539634,
+     "n": 31,
+     "sign_flip_p": 0.0001999600079984003
+    }
+   }
+  }
+ }
+}

@@ -1,0 +1,911 @@
+{
+  "complete": true,
+  "meta": {
+    "key": "near-dev-002",
+    "pair": 3,
+    "radius": 4,
+    "target_t": -0.25,
+    "source_sha256": "de830b324f56acb699135ddb7814a2591c18af00f58199321118f2ca02b6ae05",
+    "frozen_noncentral_path_sha256": "c19106bd931e4ab1c8b71b9b4a146c766916597af57a818c4af01371bfc42367",
+    "split": "development_external",
+    "batch": 8,
+    "goal_fullprecision_shared": true,
+    "fresh_goal_encoding_difference": {
+      "visual": 0.0,
+      "proprio": 0.0
+    },
+    "central_raw_step": 0,
+    "donor_action_physics_available_in_this_file": false,
+    "donor_activation_is_oracle_causal_reference_not_physical_truth": true
+  },
+  "rows": [
+    {
+      "block": 3,
+      "intervention_horizon": 1,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 10.275097018488005,
+          "midpoint_relative_l2_error": 0.0006566380121293746,
+          "estimate_l2_norm": 15647.04265431513,
+          "actual_midpoint_l2_norm": 15648.038689029696,
+          "estimate_offset_from_noncentral_mean": 22.31584677922407,
+          "maximum_sample_offset_from_noncentral_mean": 94.40006850418557,
+          "estimate_offset_over_sample_radius": 0.23639651043510224,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            4.897101007372839e-06,
+            1.3182211660023313e-06,
+            1.5256273400154896e-06,
+            2.6280611109541496e-06,
+            2.715604068725952e-06,
+            2.676936446732725e-06
+          ],
+          "downstream_oracle_patch_mse_after_patch": 2.6269251520716352e-06,
+          "downstream_native_recipient_mse_by_horizon": [
+            2.1745998310507275e-05,
+            3.540497709764168e-05,
+            0.0001106794152292423,
+            0.00019275104568805546,
+            0.00020010287698823959,
+            0.0002240423345938325
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10198196768760681,
+            0.09263354539871216,
+            0.11448124796152115,
+            0.12574459612369537,
+            0.11835160851478577,
+            0.11846040934324265
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0057607889175415,
+            0.7486487030982971,
+            0.5403372645378113,
+            0.3379650413990021,
+            0.15870700776576996,
+            0.08985614776611328
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 2.068374990261182,
+          "midpoint_relative_l2_error": 0.00013218110150195684,
+          "estimate_l2_norm": 15647.839370368687,
+          "actual_midpoint_l2_norm": 15648.038689029696,
+          "estimate_offset_from_noncentral_mean": 24.917350279253515,
+          "maximum_sample_offset_from_noncentral_mean": 94.40006850418557,
+          "estimate_offset_over_sample_radius": 0.26395479022505913,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            1.9823907848603994e-07,
+            5.606899833310308e-08,
+            6.833801080574631e-08,
+            1.212014950624507e-07,
+            1.2456638387448038e-07,
+            1.2249125802554772e-07
+          ],
+          "downstream_oracle_patch_mse_after_patch": 1.1515086839608557e-07,
+          "downstream_native_recipient_mse_by_horizon": [
+            2.502961979189422e-05,
+            3.947267759940587e-05,
+            0.0001255893730558455,
+            0.00022539233032148331,
+            0.00023294486163649708,
+            0.0002568877534940839
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.1018374040722847,
+            0.09266439080238342,
+            0.11461267620325089,
+            0.1257442981004715,
+            0.11841070652008057,
+            0.11851391941308975
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0060958862304688,
+            0.7485554814338684,
+            0.540461540222168,
+            0.3378622233867645,
+            0.1586998999118805,
+            0.08990815281867981
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 6.157926909782762,
+          "midpoint_relative_l2_error": 0.00039352707595871893,
+          "estimate_l2_norm": 15647.44537880825,
+          "actual_midpoint_l2_norm": 15648.038689029696,
+          "estimate_offset_from_noncentral_mean": 23.271523699111434,
+          "maximum_sample_offset_from_noncentral_mean": 94.40006850418557,
+          "estimate_offset_over_sample_radius": 0.2465201992737919,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            1.7699379668556503e-06,
+            4.826336521546182e-07,
+            5.640433755615959e-07,
+            9.810922847464099e-07,
+            1.0120911611011252e-06,
+            9.972646921596606e-07
+          ],
+          "downstream_oracle_patch_mse_after_patch": 9.67843902799359e-07,
+          "downstream_native_recipient_mse_by_horizon": [
+            2.2661435650661588e-05,
+            3.723816917045042e-05,
+            0.00011786854156525806,
+            0.00020852539455518126,
+            0.00021597498562186956,
+            0.0002399147633695975
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10191253572702408,
+            0.09264951944351196,
+            0.11454653739929199,
+            0.12574438750743866,
+            0.11838049441576004,
+            0.11848655343055725
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0059335231781006,
+            0.7486026883125305,
+            0.5403990745544434,
+            0.3379141688346863,
+            0.15870311856269836,
+            0.08988122642040253
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 0.09661635842090724,
+          "midpoint_relative_l2_error": 6.174343017738169e-06,
+          "estimate_l2_norm": 15648.03921038479,
+          "actual_midpoint_l2_norm": 15648.038689029696,
+          "estimate_offset_from_noncentral_mean": 25.93549049647993,
+          "maximum_sample_offset_from_noncentral_mean": 94.40006850418557,
+          "estimate_offset_over_sample_radius": 0.2747401660553878,
+          "coordinate_box_overshoot_l2": 0.28022509063806733,
+          "coordinate_box_overshoot_fraction": 0.027978515625,
+          "downstream_oracle_patch_mse_by_horizon": [
+            6.109516781371838e-10,
+            3.643969292976834e-10,
+            4.442179124541923e-10,
+            8.519698835307565e-10,
+            8.451668809250634e-10,
+            8.373790549853766e-10
+          ],
+          "downstream_oracle_patch_mse_after_patch": 6.590137324735679e-10,
+          "downstream_native_recipient_mse_by_horizon": [
+            2.681848854990676e-05,
+            4.074743264936842e-05,
+            0.00012962182518094778,
+            0.00023412809241563082,
+            0.0002417396754026413,
+            0.00026566835003905
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.1018025279045105,
+            0.0926722064614296,
+            0.11464592814445496,
+            0.1257447451353073,
+            0.11842621117830276,
+            0.1185280904173851
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0061793327331543,
+            0.7485322952270508,
+            0.5404929518699646,
+            0.3378366529941559,
+            0.15869876742362976,
+            0.08992203325033188
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 9.72018504623411,
+          "midpoint_relative_l2_error": 0.0006211759338918685,
+          "estimate_l2_norm": 15647.807364667871,
+          "actual_midpoint_l2_norm": 15648.038689029696,
+          "estimate_offset_from_noncentral_mean": 25.583731489143844,
+          "maximum_sample_offset_from_noncentral_mean": 94.40006850418557,
+          "estimate_offset_over_sample_radius": 0.2710139080885253,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            3.9414635466528125e-06,
+            1.152729623754567e-06,
+            1.1983394188064267e-06,
+            1.0687089115890558e-06,
+            1.2173848062957404e-06,
+            1.5901838423815207e-06
+          ],
+          "downstream_oracle_patch_mse_after_patch": 1.694801653684408e-06,
+          "downstream_native_recipient_mse_by_horizon": [
+            2.8529706469271332e-05,
+            4.684452142100781e-05,
+            0.00014752363495063037,
+            0.0002596758713480085,
+            0.0002684073115233332,
+            0.0002987285843119025
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10196301341056824,
+            0.09277338534593582,
+            0.11484059691429138,
+            0.12585890293121338,
+            0.11863964051008224,
+            0.11879432946443558
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0058964490890503,
+            0.748641312122345,
+            0.540503203868866,
+            0.3377646207809448,
+            0.1586589813232422,
+            0.08995525538921356
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 19.430984699886043,
+          "midpoint_relative_l2_error": 0.0012417520870208764,
+          "estimate_l2_norm": 15647.581530838399,
+          "actual_midpoint_l2_norm": 15648.038689029696,
+          "estimate_offset_from_noncentral_mean": 28.723055139586236,
+          "maximum_sample_offset_from_noncentral_mean": 94.40006850418557,
+          "estimate_offset_over_sample_radius": 0.3042694311001765,
+          "coordinate_box_overshoot_l2": 1.9724046174947836,
+          "coordinate_box_overshoot_fraction": 0.057626953125,
+          "downstream_oracle_patch_mse_by_horizon": [
+            1.5781981346663088e-05,
+            4.647073637897847e-06,
+            4.911480118607869e-06,
+            4.455428552319063e-06,
+            5.045378657086985e-06,
+            6.550734269694658e-06
+          ],
+          "downstream_oracle_patch_mse_after_patch": 6.898679203004576e-06,
+          "downstream_native_recipient_mse_by_horizon": [
+            3.8073663745308295e-05,
+            5.5380671255989e-05,
+            0.0001684007147559896,
+            0.0002883942215703428,
+            0.00029847302357666194,
+            0.0003359417023602873
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10213353484869003,
+            0.09287833422422409,
+            0.11504105478525162,
+            0.1259765326976776,
+            0.11885911226272583,
+            0.11906806379556656
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0056085586547852,
+            0.7487523555755615,
+            0.5405166745185852,
+            0.33769264817237854,
+            0.1586221307516098,
+            0.0899953842163086
+          ]
+        }
+      ],
+      "actual_donor_patch_vs_native_mse_by_horizon": [
+        2.6957168302033097e-05,
+        4.095409531146288e-05,
+        0.00013009000394959003,
+        0.00023501257237512618,
+        0.00024263205705210567,
+        0.00026658273418433964
+      ],
+      "actual_donor_patch_vs_native_mse_after_patch": 0.00015703809913247824,
+      "exact_self_patch": true,
+      "oracle_donor_not_used_in_any_fit": true
+    },
+    {
+      "block": 3,
+      "intervention_horizon": 3,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 51.983292833320135,
+          "midpoint_relative_l2_error": 0.0033441811769260965,
+          "estimate_l2_norm": 15546.564894022955,
+          "actual_midpoint_l2_norm": 15544.400881145477,
+          "estimate_offset_from_noncentral_mean": 64.45674395946321,
+          "maximum_sample_offset_from_noncentral_mean": 252.47332149438998,
+          "estimate_offset_over_sample_radius": 0.2553012079769207,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0001816095900721848,
+            4.236579479766078e-05,
+            4.26692895416636e-05,
+            5.4790001740911976e-05
+          ],
+          "downstream_oracle_patch_mse_after_patch": 8.035866630962119e-05,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.001101220608688891,
+            0.0011698412708938122,
+            0.0012437215773388743,
+            0.0013779937289655209
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.1067017987370491,
+            0.12534137070178986,
+            0.11468946188688278,
+            0.11431398242712021
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.5373548269271851,
+            0.34413570165634155,
+            0.16296778619289398,
+            0.09168405085802078
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 11.233205473375069,
+          "midpoint_relative_l2_error": 0.0007226528419632013,
+          "estimate_l2_norm": 15544.932070774017,
+          "actual_midpoint_l2_norm": 15544.400881145477,
+          "estimate_offset_from_noncentral_mean": 69.01811878517314,
+          "maximum_sample_offset_from_noncentral_mean": 252.47332149438998,
+          "estimate_offset_over_sample_radius": 0.2733679676595325,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            7.976721462910064e-06,
+            2.056097400782164e-06,
+            2.026184347414528e-06,
+            2.5124270450760378e-06
+          ],
+          "downstream_oracle_patch_mse_after_patch": 3.6428575640456984e-06,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0008777608745731413,
+            0.0010056393221020699,
+            0.001098073204047978,
+            0.0012314232299104333
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.10813581943511963,
+            0.12516061961650848,
+            0.11482399702072144,
+            0.11456314474344254
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.5368212461471558,
+            0.3435514271259308,
+            0.16290700435638428,
+            0.09151032567024231
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 31.715337514743897,
+          "midpoint_relative_l2_error": 0.0020403062013932553,
+          "estimate_l2_norm": 15545.723298138824,
+          "actual_midpoint_l2_norm": 15544.400881145477,
+          "estimate_offset_from_noncentral_mean": 62.96044942786974,
+          "maximum_sample_offset_from_noncentral_mean": 252.47332149438998,
+          "estimate_offset_over_sample_radius": 0.24937466285628415,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            6.670688890153542e-05,
+            1.5132986845856067e-05,
+            1.5388222891488113e-05,
+            1.9995084585389122e-05
+          ],
+          "downstream_oracle_patch_mse_after_patch": 2.9305796488188207e-05,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0009460835717618465,
+            0.0010657698148861527,
+            0.0011473584454506636,
+            0.001275331829674542
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.1074017584323883,
+            0.125229611992836,
+            0.1147603914141655,
+            0.11443239450454712
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.5371198058128357,
+            0.3437924385070801,
+            0.16287937760353088,
+            0.09156190603971481
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 2.4531572994657593,
+          "midpoint_relative_l2_error": 0.00015781613702727567,
+          "estimate_l2_norm": 15544.540695234373,
+          "actual_midpoint_l2_norm": 15544.400881145477,
+          "estimate_offset_from_noncentral_mean": 73.75339008792176,
+          "maximum_sample_offset_from_noncentral_mean": 252.47332149438998,
+          "estimate_offset_over_sample_radius": 0.29212349903496865,
+          "coordinate_box_overshoot_l2": 2.346607674460106,
+          "coordinate_box_overshoot_fraction": 0.06490234375,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            2.380072601226857e-07,
+            8.068945334116506e-08,
+            8.742528478933309e-08,
+            1.3190320657940902e-07
+          ],
+          "downstream_oracle_patch_mse_after_patch": 1.3450630831357557e-07,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.000858561135828495,
+            0.000973124464508146,
+            0.0010704335290938616,
+            0.0012063791509717703
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.10852271318435669,
+            0.12512105703353882,
+            0.1148596778512001,
+            0.11462996155023575
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.5366643071174622,
+            0.34342262148857117,
+            0.16290879249572754,
+            0.09148113429546356
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 51.68903788241791,
+          "midpoint_relative_l2_error": 0.0033252512128089757,
+          "estimate_l2_norm": 15546.024695633678,
+          "actual_midpoint_l2_norm": 15544.400881145477,
+          "estimate_offset_from_noncentral_mean": 70.0095797606974,
+          "maximum_sample_offset_from_noncentral_mean": 252.47332149438998,
+          "estimate_offset_over_sample_radius": 0.2772949606964831,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.00019418379815761,
+            6.238969945115969e-05,
+            6.165043305372819e-05,
+            7.471457502106205e-05
+          ],
+          "downstream_oracle_patch_mse_after_patch": 9.823462460190058e-05,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0012647503754124045,
+            0.0013453252613544464,
+            0.0014358904445543885,
+            0.0015949131920933723
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.10645247250795364,
+            0.12540031969547272,
+            0.11463842540979385,
+            0.11427506059408188
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.5371275544166565,
+            0.34450140595436096,
+            0.16338324546813965,
+            0.0919891968369484
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 102.50952660074941,
+          "midpoint_relative_l2_error": 0.006594627054754356,
+          "estimate_l2_norm": 15547.67484009882,
+          "actual_midpoint_l2_norm": 15544.400881145477,
+          "estimate_offset_from_noncentral_mean": 97.64133369487844,
+          "maximum_sample_offset_from_noncentral_mean": 252.47332149438998,
+          "estimate_offset_over_sample_radius": 0.3867392131451325,
+          "coordinate_box_overshoot_l2": 15.477526018118024,
+          "coordinate_box_overshoot_fraction": 0.131923828125,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0007730047800578177,
+            0.0002451022737659514,
+            0.00024132746329996735,
+            0.0002923783322330564
+          ],
+          "downstream_oracle_patch_mse_after_patch": 0.000387953215977177,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0020732644479721785,
+            0.0018494752002879977,
+            0.0019339766586199403,
+            0.002151613123714924
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.10470631718635559,
+            0.1257857233285904,
+            0.11445527523756027,
+            0.11399980634450912
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.5373874306678772,
+            0.34582751989364624,
+            0.16411730647087097,
+            0.09270864725112915
+          ]
+        }
+      ],
+      "actual_donor_patch_vs_native_mse_by_horizon": [
+        0.0,
+        0.0,
+        0.0008501882548443973,
+        0.0009600174962542951,
+        0.0010541934752836823,
+        0.001185684697702527
+      ],
+      "actual_donor_patch_vs_native_mse_after_patch": 0.0010125209810212255,
+      "exact_self_patch": true,
+      "oracle_donor_not_used_in_any_fit": true
+    },
+    {
+      "block": 3,
+      "intervention_horizon": 6,
+      "methods": [
+        {
+          "method": "endpoint_chord",
+          "midpoint_l2_error": 235.7437223119903,
+          "midpoint_relative_l2_error": 0.0151169740832027,
+          "estimate_l2_norm": 15589.670785752995,
+          "actual_midpoint_l2_norm": 15594.63693027946,
+          "estimate_offset_from_noncentral_mean": 155.19679584956415,
+          "maximum_sample_offset_from_noncentral_mean": 528.9831786547412,
+          "estimate_offset_over_sample_radius": 0.2933870151490367,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.007455054204910994
+          ],
+          "downstream_oracle_patch_mse_after_patch": 0.007455054204910994,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0055682784877717495
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.112250417470932,
+            0.12510643899440765,
+            0.11663173884153366,
+            0.11783649772405624
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.53946453332901,
+            0.3393617570400238,
+            0.1593298614025116,
+            0.09685341268777847
+          ]
+        },
+        {
+          "method": "near_chord",
+          "midpoint_l2_error": 72.45811988753267,
+          "midpoint_relative_l2_error": 0.0046463486268695205,
+          "estimate_l2_norm": 15593.03047360541,
+          "actual_midpoint_l2_norm": 15594.63693027946,
+          "estimate_offset_from_noncentral_mean": 172.5476505529319,
+          "maximum_sample_offset_from_noncentral_mean": 528.9831786547412,
+          "estimate_offset_over_sample_radius": 0.3261874054137948,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0005528563051484525
+          ],
+          "downstream_oracle_patch_mse_after_patch": 0.0005528563051484525,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0038911302108317614
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.112250417470932,
+            0.12510643899440765,
+            0.11663173884153366,
+            0.12211856245994568
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.53946453332901,
+            0.3393617570400238,
+            0.1593298614025116,
+            0.09877421706914902
+          ]
+        },
+        {
+          "method": "linear_equal_data",
+          "midpoint_l2_error": 154.320960757226,
+          "midpoint_relative_l2_error": 0.009895771312096879,
+          "estimate_l2_norm": 15591.913235070713,
+          "actual_midpoint_l2_norm": 15594.63693027946,
+          "estimate_offset_from_noncentral_mean": 132.15710498240134,
+          "maximum_sample_offset_from_noncentral_mean": 528.9831786547412,
+          "estimate_offset_over_sample_radius": 0.24983233931651755,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.00386853632517159
+          ],
+          "downstream_oracle_patch_mse_after_patch": 0.00386853632517159,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0033977103885263205
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.112250417470932,
+            0.12510643899440765,
+            0.11663173884153366,
+            0.1181144118309021
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.53946453332901,
+            0.3393617570400238,
+            0.1593298614025116,
+            0.0937749519944191
+          ]
+        },
+        {
+          "method": "cubic_equal_data",
+          "midpoint_l2_error": 57.14278227647852,
+          "midpoint_relative_l2_error": 0.0036642585865866973,
+          "estimate_l2_norm": 15594.210040902874,
+          "actual_midpoint_l2_norm": 15594.63693027946,
+          "estimate_offset_from_noncentral_mean": 204.4277551088109,
+          "maximum_sample_offset_from_noncentral_mean": 528.9831786547412,
+          "estimate_offset_over_sample_radius": 0.3864541697312413,
+          "coordinate_box_overshoot_l2": 13.43020062865197,
+          "coordinate_box_overshoot_fraction": 0.09271484375,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.000420526135712862
+          ],
+          "downstream_oracle_patch_mse_after_patch": 0.000420526135712862,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.00609951838850975
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.112250417470932,
+            0.12510643899440765,
+            0.11663173884153366,
+            0.12764865159988403
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.53946453332901,
+            0.3393617570400238,
+            0.1593298614025116,
+            0.10619716346263885
+          ]
+        },
+        {
+          "method": "reparameterized_chord",
+          "midpoint_l2_error": 235.90193045623147,
+          "midpoint_relative_l2_error": 0.0151271191186369,
+          "estimate_l2_norm": 15589.82380964254,
+          "actual_midpoint_l2_norm": 15594.63693027946,
+          "estimate_offset_from_noncentral_mean": 161.28992196411022,
+          "maximum_sample_offset_from_noncentral_mean": 528.9831786547412,
+          "estimate_offset_over_sample_radius": 0.3049055782346182,
+          "coordinate_box_overshoot_l2": 0.0,
+          "coordinate_box_overshoot_fraction": 0.0,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.007507116999477148
+          ],
+          "downstream_oracle_patch_mse_after_patch": 0.007507116999477148,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.005780726205557585
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.112250417470932,
+            0.12510643899440765,
+            0.11663173884153366,
+            0.11798209697008133
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.53946453332901,
+            0.3393617570400238,
+            0.1593298614025116,
+            0.09714746475219727
+          ]
+        },
+        {
+          "method": "reflected_curvature",
+          "midpoint_l2_error": 462.4879739401306,
+          "midpoint_relative_l2_error": 0.029656860625086878,
+          "estimate_l2_norm": 15588.832154378979,
+          "actual_midpoint_l2_norm": 15594.63693027946,
+          "estimate_offset_from_noncentral_mean": 340.7332692278599,
+          "maximum_sample_offset_from_noncentral_mean": 528.9831786547412,
+          "estimate_offset_over_sample_radius": 0.6441287416631655,
+          "coordinate_box_overshoot_l2": 108.90171228887637,
+          "coordinate_box_overshoot_fraction": 0.2403515625,
+          "downstream_oracle_patch_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.017438044771552086
+          ],
+          "downstream_oracle_patch_mse_after_patch": 0.017438044771552086,
+          "downstream_native_recipient_mse_by_horizon": [
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.0,
+            0.013418316841125488
+          ],
+          "actual_central_action_future_mse_by_horizon": [
+            0.10197079926729202,
+            0.09173345565795898,
+            0.112250417470932,
+            0.12510643899440765,
+            0.11663173884153366,
+            0.11772778630256653
+          ],
+          "native_central_recipient_goal_cost_by_horizon": [
+            1.3390675783157349,
+            1.0052587985992432,
+            0.7486220598220825,
+            0.53946453332901,
+            0.3393617570400238,
+            0.1593298614025116,
+            0.10450305789709091
+          ]
+        }
+      ],
+      "actual_donor_patch_vs_native_mse_by_horizon": [
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.004347701091319323
+      ],
+      "actual_donor_patch_vs_native_mse_after_patch": 0.004347701091319323,
+      "exact_self_patch": true,
+      "oracle_donor_not_used_in_any_fit": true
+    }
+  ],
+  "seconds": 1.1140171039733104,
+  "full_tensor_sha256": "5e6011ae448191377f2112a874f4c5ab362aaee91c0c35aaf572a9b90ff01537",
+  "full_tensor_bytes": 92411285,
+  "limitations": [
+    "Observed interior donor activation used only as oracle patch and scoring target, never estimator fit",
+    "All edited recipients retain central actions; donor-patch output is not native donor-action dynamics",
+    "Central-action physical truth is not donor-action truth",
+    "Four states and dependent directions; exploratory causal interchange, not steering success"
+  ]
+}

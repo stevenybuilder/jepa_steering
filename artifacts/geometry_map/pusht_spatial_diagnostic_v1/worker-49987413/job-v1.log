@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/root/geometry-map-jepawm-pusht-v1/spatial-decoder-diagnostic-v1/worker-49987413/code-v1/scripts/geometry_map/capture_pusht_spatial.py", line 96, in <module>
+    if __name__=="__main__":main()
+                            ^^^^^^
+  File "/root/geometry-map-jepawm-pusht-v1/spatial-decoder-diagnostic-v1/worker-49987413/code-v1/scripts/geometry_map/capture_pusht_spatial.py", line 60, in main
+    video_receipt=json.loads((args.video_inputs/"DONE.json").read_text())
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/pathlib.py", line 1058, in read_text
+    with self.open(mode='r', encoding=encoding, errors=errors) as f:
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/conda/lib/python3.11/pathlib.py", line 1044, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: 'spatial-decoder-diagnostic-v1/worker-49987413/video-inputs/DONE.json'

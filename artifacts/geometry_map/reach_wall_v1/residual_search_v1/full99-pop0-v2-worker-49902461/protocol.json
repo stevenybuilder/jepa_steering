@@ -1,0 +1,53 @@
+{
+  "candidates": [
+    {
+      "block": 4,
+      "dose": 1,
+      "family": "branch_scale",
+      "head": 3,
+      "id": "broad0-067",
+      "mask": "all",
+      "pulse": 2,
+      "rank": 1,
+      "sign": -1,
+      "site": "attention_preproj"
+    },
+    {
+      "block": 1,
+      "dose": 1,
+      "family": "pca_gain",
+      "head": null,
+      "id": "broad0-126",
+      "mask": "center",
+      "pulse": 1,
+      "rank": 8,
+      "sign": 1,
+      "site": "residual"
+    }
+  ],
+  "episodes": [
+    7
+  ],
+  "held_data_opened": false,
+  "interpretation": "Exploratory selected candidates, not independent confirmation",
+  "native_cem": {
+    "iterations": 15,
+    "max_raw_prefix": 15,
+    "maximum_horizon": 6,
+    "near_end_horizon": "Released planner shortens toremainingsteps; no override",
+    "population": 300
+  },
+  "phase": "adaptive_development_full99",
+  "prediction_truth": "Compare only physically executed5-step prefix horizons, not counterfactual future after replan",
+  "primary": "Native ever-success; final-success/reward/final-hand-goal-distance all reported, no endpoint swapping",
+  "raw_episode_steps": 99,
+  "seconds_limit": 7200.0,
+  "sham": "Same-state post-projection/gate norm and fixed permutation; adaptive states/populations differ, no cumulative cross-arm dose equality claim",
+  "source_sha256": {
+    "discovery_bases.npz": "efe6976974107bd5284a871f6a87d622223e8f677e4cfbd8b86e2c3771a05042",
+    "full99_population0_v1.json": "84ca37aea07d0c2bd4c6380cf597b2ea2b988524f93dd01e7ad6bc2db394c272",
+    "reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml": "37400233186d343e7a830ce820b75e86ad134bc26fa1adf43ebc3fd7ed4591c3",
+    "run_residual_search_full_v1.py": "42b24177491956784de38bbeedaa3904aa62594f5f35833cd4533b3015670ffe"
+  },
+  "timing_policy": "Pulse indexes imagined steps within each native unroll; a pulse beyond a shortened horizon does not fire"
+}

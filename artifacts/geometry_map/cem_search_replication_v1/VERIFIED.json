@@ -1,0 +1,70 @@
+{
+  "complete": true,
+  "verified_utc": "2026-09-06T08:22:20Z",
+  "study": "cem_search_replication_v1",
+  "source_ids": [2222,2323,2424,2525],
+  "independent_new_development_initial_groups": 4,
+  "confirmation_access": false,
+  "model_fit_or_latent_intervention": false,
+  "frozen_source_manifest_sha256": "9fb993bfb632746649f725f088a424d81c0ab1fc5b2ac035e518a306031f1f8e",
+  "frozen_raw_done_sha256": "d0feef5ae9e4063e0f51b9bc81965e49f9a89519aa7d6a81efaf2c925de721c0",
+  "tests": {"new_adapter":6,"unchanged_native_trace":6,"new_exporter":2,"total":14,"adapter_and_trace_pass_local_and_both_native_runtimes":true},
+  "guards": {
+    "receipt_split_before_tensor_load": true,
+    "original_raw7D_initializer_preserved": true,
+    "initial_observed_pixels_state_true_proprio_exact": true,
+    "expert_goal_two_replays_exact_pixels_states_proprio_physics": true,
+    "goal_is_actual_expert_replay_endpoint_not_dataset_frame30": true,
+    "initial_and_fullprecision_goal_encode_repeat_exact": true,
+    "all24_stage_plan_physics_replayed_twice_exact": true,
+    "native_CEM_actions_costs_not_mutated_by_trace": true,
+    "final_live_parameter_hash_both_shards": "b4e9fdb652b2b68017a45844421e536c5d440b2fcb7df3e808aba5e5db3efeba",
+    "new_untraced_full_CEM_identity_rerun": false,
+    "prior_full_CEM_identity_reference": "cem_search_audit_v1/VERIFIED.json; unchanged core all9000costs/all30meanforecasts/actions/plannerRNG exact"
+  },
+  "immutable_core_sha256": "65649b617ba9f7cbb53b138cdb094ec527eb65a07f19704c78e9af31c4101834",
+  "adapter_sha256": "23edc94c0afaa91280b4f63cdf51e3936b2917d049e58d3619c77a53630efa26",
+  "native_search": {"iterations":30,"samples":300,"elites":10,"horizon":6,"num_act_stepped":6,"raw_steps_per_plan":30,"stages":[1,15,30]},
+  "timing": {
+    "runner_seconds_by_shard": [210.28022659616545,208.81916852795985],
+    "runner_seconds_total": 419.0993951241253,
+    "runner_hours_total": 0.11641649864559036,
+    "definition": "Runner monotonic wall clock from main entry through output hashes; includes model load, expert source prep, native CEM and paired physics; excludes pre-main interpreter/import and separate CPU archive export",
+    "outer_whole_process_hard_cap_seconds_per_shard": 375,
+    "outer_whole_process_aggregate_hard_cap_seconds": 750,
+    "timeouts_or_failed_model_attempts": 0
+  },
+  "primary_stage30_minus15_mean_coverage_pp": [3.1119375574545527,0,-5.8468222056161645,0],
+  "primary_equal_source_mean_coverage_pp": -0.683721162040403,
+  "primary_model_cost_change": [-0.04804420471191406,-0.013556063175201416,-0.04277089983224869,-0.008536368608474731],
+  "secondary_stage30_mean_minus_best_coverage_pp": [0.6430235864329281,0,1.3891750501735745,0],
+  "secondary_equal_source_mean_coverage_pp": 0.5080496591516256,
+  "native_final_success_mean_and_best": [1,1],
+  "native_success_denominator": 4,
+  "native_success_is_not_requested_polygon_coverage_threshold": true,
+  "aggregate_sha256": "6f919623406e4362e8a68c2fa17fa8f827e014a073f5bd5fc38c4b54b601004a",
+  "archives": [
+    {
+      "source_host":49987398,
+      "source_root":"/root/geometry-map-jepawm-pusht-v1/cem-search-replication-v1",
+      "backup_host":49987414,
+      "backup_root":"/root/geometry-map-jepawm-pusht-v1/cem-search-replication-backup-v1/from-49987398",
+      "manifest_sha256":"2d4443ac507286f69823884acb3ded2f82d7143de13937d2d7137aff6aa56f19",
+      "source_done_sha256":"b03e5b309aa7f571a490d3efa46b76645ab2429df1a83193f56de4a254888dda",
+      "files":681,"bytes":175793345,"all_source_and_backup_files_SHA_identical":true
+    },
+    {
+      "source_host":49987414,
+      "source_root":"/root/geometry-map-jepawm-pusht-v1/cem-search-replication-v1",
+      "backup_host":49987398,
+      "backup_root":"/root/geometry-map-jepawm-pusht-v1/cem-search-replication-backup-v1/from-49987414",
+      "manifest_sha256":"f476cbc39b4bea33d6a75f708939477f142fd7ee5b175dcd810bd6d404466386",
+      "source_done_sha256":"52692e10dc2c979884536468a0b706392f417b8c95c3145d83f38ed6854bdfd4",
+      "files":367,"bytes":175822680,"all_source_and_backup_files_SHA_identical":true
+    }
+  ],
+  "total_archived_files":1048,
+  "total_archived_bytes":351616025,
+  "local_large_tensors_copied":false,
+  "interpretation":"Extra CEM refinement lowered model cost on all four new starts but worsened mean requested coverage overall. Final elite means weakly outperform current best candidates here; no general elite-averaging failure demonstrated. Mixed exploratory development replication, not a held confirmation or full closed-loop steering result."
+}
