@@ -7,6 +7,8 @@ baseline covers all 42 released MetaWorld tasks and Push-T.
 The active design is [EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md), with machine-readable
 settings in [study.json](configs/study.json). The [benchmark runbook](docs/BENCHMARK.md)
 contains setup, commands, metrics, and the measurement-based compute estimate.
+The [GPU/Vast guide](docs/GPU_EFFICIENCY.md) documents bounded multi-GPU execution,
+precision comparisons, and the read-only Vast offer workflow.
 
 ## Current state
 

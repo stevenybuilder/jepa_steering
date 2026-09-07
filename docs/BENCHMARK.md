@@ -74,7 +74,8 @@ jepa-benchmark --vendor vendor/jepa-wms \
   --manifest runs/metaworld-inventory/trajectories.jsonl --data-root data/metaworld \
   --exposure-registry data/metaworld-exposure.json \
   --tasks mw-reach mw-reach-wall --max-trajectories 12 \
-  --batch-size 8 --device cuda:0 --output runs/benchmark-metaworld-b8
+  --batch-size 8 --device cuda:0 --precision float32 --prefetch-batches 2 \
+  --output runs/benchmark-metaworld-b8
 
 jepa-benchmark --vendor vendor/jepa-wms \
   --checkpoint data/checkpoints/jepa_wm_pusht.pth.tar \
@@ -82,16 +83,25 @@ jepa-benchmark --vendor vendor/jepa-wms \
   --manifest runs/pusht-inventory/trajectories.jsonl --data-root data/pusht \
   --exposure-registry data/pusht-exposure.json \
   --tasks pusht --max-trajectories 12 \
-  --batch-size 8 --device cuda:0 --output runs/benchmark-pusht-b8
+  --batch-size 8 --device cuda:0 --precision float32 --prefetch-batches 2 \
+  --output runs/benchmark-pusht-b8
 ```
 
 Budget a maximum of 0.5 GPU-hours for the initial measurement, supervised by the job
 runtime. Do not leave all eight GPUs leased during setup/download. The CLI caps the
 default selected trajectory count, but is not a scheduler or billing stop mechanism.
 
-Run a separate invocation with `--write-cache` to measure encoded-cache I/O. Without it,
-cache_write_seconds is zero and the report must not be extrapolated to a full capture
-job. The initial cache contains final encoded targets only, not every internal block.
+Run a separate invocation with `--write-cache` to measure encoded-cache I/O. Cache CPU
+staging and background serialization are timed separately, and the bounded writer queue
+is fully drained before `DONE.json` is written. Without it, cache timings are zero and
+the report must not be extrapolated to a full capture job. The initial cache contains
+final encoded targets only, not every internal block.
+
+Strict FP32 keeps TF32 disabled. `--precision bfloat16`, `--precision float16`, and
+`--allow-tf32` are explicit performance candidates, never silent substitutions. Run a
+strict-FP32 reference on the same selection and use `jepa-compare-runs` before adopting
+one. The comparison does not adjudicate a candidate unless both predeclared drift bounds
+are supplied. See [GPU_EFFICIENCY.md](GPU_EFFICIENCY.md).
 
 The `--split` choices are fit/development only. There is no protected-holdout override.
 Future confirmation needs an audited frozen registry and a dedicated evaluator.
@@ -115,14 +125,16 @@ Measure a representative pass for each category before pricing the full suite.
 ## Multiple GPUs
 
 The benchmark supports disjoint trajectory shards, without DDP/padded duplicate samples.
-Launch one process per GPU with the same arguments plus `--num-shards 2 --shard-index 0`
-or 1 and different output directories. Use the same overall selection/max-trajectories.
-For eight GPUs use shards 0..7 only after the two-GPU result demonstrates storage scaling.
-Empty shards are errors, not zero-throughput successes. No orchestration is automatic.
+`jepa-multigpu` launches one process per listed device, enforces a wall-clock limit,
+terminates sibling workers on failure, and validates nonoverlapping selections before
+writing an aggregate receipt. For example, add `--devices 0 1 --max-runtime-seconds 1800`
+to the single-GPU arguments. Use the same overall selection/max-trajectories. For eight
+GPUs use devices 0..7 only after the two-GPU result demonstrates storage scaling. Empty
+shards are errors, not zero-throughput successes.
 
-Aggregate window_metrics.json across shards only after checking common config/source,
-disjoint trajectory IDs, and complete expected coverage. The protocol aggregation helper
-rejects duplicate windows. A multi-host aggregation CLI is not yet implemented.
+The launcher checks common config/source, disjoint trajectory IDs, report hashes, and
+duplicate windows. Multi-host execution remains out of scope: avoiding model collectives
+is intentional because each trajectory is an independent unit and the model fits on one GPU.
 
 ## Available local validation
 

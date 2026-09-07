@@ -8,6 +8,12 @@ from offline_study.protocol import validate_manifest
 
 
 class BenchmarkTests(unittest.TestCase):
+    def test_toy_backend_refuses_unvalidated_precision_modes(self):
+        with self.assertRaises(ValueError):
+            ToyBackend(precision="bfloat16")
+        with self.assertRaises(ValueError):
+            ToyBackend(allow_tf32=True)
+
     def test_temporal_metric_alignment(self):
         target = torch.arange(7.).view(1, 7, 1).expand(2, 7, 3)
         prediction = target.transpose(0, 1).clone()

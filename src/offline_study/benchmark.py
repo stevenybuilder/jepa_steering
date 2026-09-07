@@ -13,7 +13,15 @@ import numpy as np
 import torch
 
 from .backends import JepaBackend, ToyBackend
-from .protocol import sha256, shard_for, summarize_metrics, validate_manifest, window_starts, write_json
+from .pipeline import AsyncCacheWriter, PrefetchIterator
+from .protocol import (
+    sha256,
+    shard_for,
+    summarize_metrics,
+    validate_manifest,
+    window_starts,
+    write_json,
+)
 from .vendor import open_dataset
 
 
@@ -32,13 +40,15 @@ def elapsed_call(fn, device):
 
 def score_predictions(predicted, target, horizons=(1, 3, 6)):
     """Prediction has [time,batch,...], target has [batch,time,...]; index 0 is context."""
-    metrics = {}
+    names, columns = [], []
     for modality in ("visual", "proprio"):
         for h in horizons:
             delta = predicted[modality][h].float() - target[modality][:, h].float()
-            metrics[f"{modality}_mse_h{h}"] = delta.square().flatten(1).mean(1).cpu().tolist()
-    batch = len(next(iter(metrics.values())))
-    return [{key: values[i] for key, values in metrics.items()} for i in range(batch)]
+            names.append(f"{modality}_mse_h{h}")
+            columns.append(delta.square().flatten(1).mean(1))
+    # Transfer once; six separate .cpu().tolist() calls force six CUDA synchronizations.
+    values = torch.stack(columns, dim=1).cpu().tolist()
+    return [dict(zip(names, row, strict=True)) for row in values]
 
 
 def select_rows(rows, tasks, split, max_trajectories, shard_index, num_shards):
@@ -70,7 +80,7 @@ def toy_rows(count):
                  starts=window_starts(61), exposure_status="synthetic") for i in range(count)]
 
 
-def batches(rows, batch_size, backend, data_root):
+def batches(rows, batch_size, backend, data_root, pin_memory=False):
     buffers = []
     datasets = {}
     for row in rows:
@@ -99,15 +109,39 @@ def batches(rows, batch_size, backend, data_root):
             buffers.append((row, start, visual[frames], proprio[frames],
                             suffix.reshape(row["horizon"], row["stride"], -1)))
             if len(buffers) == batch_size:
-                yield collate(buffers)
+                yield collate(buffers, pin_memory=pin_memory)
                 buffers = []
     if buffers:
-        yield collate(buffers)
+        yield collate(buffers, pin_memory=pin_memory)
 
 
-def collate(items):
+def collate(items, pin_memory=False):
     meta = [{"trajectory_id": x[0]["trajectory_id"], "task": x[0]["task"], "start": x[1]} for x in items]
-    return meta, torch.stack([x[2] for x in items]), torch.stack([x[3] for x in items]), torch.stack([x[4] for x in items])
+    tensors = tuple(torch.stack([x[i] for x in items]) for i in (2, 3, 4))
+    if pin_memory:
+        tensors = tuple(value.pin_memory() for value in tensors)
+    return (meta, *tensors)
+
+
+def _rate(units, seconds):
+    return units / seconds if seconds > 0 else None
+
+
+def _cuda_environment(device):
+    if device.type != "cuda":
+        return {}
+    properties = torch.cuda.get_device_properties(device)
+    with torch.cuda.device(device):
+        bf16_supported = torch.cuda.is_bf16_supported()
+    return {
+        "gpu": torch.cuda.get_device_name(device),
+        "gpu_capability": list(torch.cuda.get_device_capability(device)),
+        "gpu_total_memory_bytes": properties.total_memory,
+        "visible_cuda_devices": torch.cuda.device_count(),
+        "bf16_supported": bf16_supported,
+        "tf32_matmul_allowed": torch.backends.cuda.matmul.allow_tf32,
+        "tf32_cudnn_allowed": torch.backends.cudnn.allow_tf32,
+    }
 
 
 @torch.inference_mode()
@@ -116,50 +150,72 @@ def execute(args, backend, rows):
     if device.type == "cuda":
         torch.cuda.reset_peak_memory_stats(device)
     timings = dict(load_seconds=0., encode_seconds=0., rollout_seconds=0.,
-                   metrics_seconds=0., cache_write_seconds=0., warmup_seconds=0.)
+                   metrics_seconds=0., cache_stage_seconds=0., cache_write_seconds=0.,
+                   cache_wait_seconds=0., data_decode_seconds=0., warmup_seconds=0.)
     measurements = []
-    iterator = iter(batches(rows, args.batch_size, backend, args.data_root))
-    identity, batch_id = None, 0
     started = time.perf_counter()
-    for_batch_start = started
-    while True:
-        try:
-            meta, visual, proprio, raw_actions = next(iterator)
-        except StopIteration:
-            break
-        timings["load_seconds"] += time.perf_counter() - for_batch_start
-        if batch_id == 0:
+    iterator = PrefetchIterator(
+        batches(rows, args.batch_size, backend, args.data_root, pin_memory=device.type == "cuda"),
+        args.prefetch_batches,
+    )
+    cache_writer = AsyncCacheWriter(args.cache_queue_depth) if args.write_cache else None
+    identity, batch_id = None, 0
+    try:
+        while True:
+            try:
+                meta, visual, proprio, raw_actions = next(iterator)
+            except StopIteration:
+                break
+            if batch_id == 0:
+                start = time.perf_counter()
+                encoded = backend.encode(visual, proprio)
+                actions = backend.normalize_actions(raw_actions)
+                context = backend.context(encoded)
+                reference = backend.predict(context, actions)
+                zero = backend.predict(context, actions, instrument=True)
+                identity = all(torch.equal(reference[k], zero[k]) for k in ("visual", "proprio"))
+                if not identity:
+                    raise RuntimeError("Zero-dose instrumentation changed predictions")
+                for _ in range(args.warmup):
+                    backend.predict(context, actions)
+                synchronize(device)
+                timings["warmup_seconds"] = time.perf_counter() - start
+                del encoded, context, actions, reference, zero
+            encoded, seconds = elapsed_call(
+                lambda visual=visual, proprio=proprio: backend.encode(visual, proprio), device)
+            timings["encode_seconds"] += seconds
+            # Include normalization/context preparation in measured rollout time.
+            predicted, seconds = elapsed_call(
+                lambda encoded=encoded, raw_actions=raw_actions: backend.predict(
+                    backend.context(encoded), backend.normalize_actions(raw_actions)),
+                device,
+            )
+            timings["rollout_seconds"] += seconds
             start = time.perf_counter()
-            encoded = backend.encode(visual, proprio)
-            actions = backend.normalize_actions(raw_actions)
-            context = backend.context(encoded)
-            reference = backend.predict(context, actions)
-            zero = backend.predict(context, actions, instrument=True)
-            identity = all(torch.equal(reference[k], zero[k]) for k in ("visual", "proprio"))
-            if not identity:
-                raise RuntimeError("Zero-dose instrumentation changed predictions")
-            for _ in range(args.warmup):
-                backend.predict(context, actions)
-            synchronize(device)
-            timings["warmup_seconds"] = time.perf_counter() - start
-            del encoded, context, actions, reference, zero
-        encoded, seconds = elapsed_call(lambda: backend.encode(visual, proprio), device)
-        timings["encode_seconds"] += seconds
-        # Include normalization/context preparation in measured rollout time.
-        predicted, seconds = elapsed_call(lambda: backend.predict(backend.context(encoded), backend.normalize_actions(raw_actions)), device)
-        timings["rollout_seconds"] += seconds
-        start = time.perf_counter()
-        values = score_predictions(predicted, encoded)
-        measurements.extend({**m, "metrics": value} for m, value in zip(meta, values))
-        timings["metrics_seconds"] += time.perf_counter() - start
-        if args.write_cache:
-            start = time.perf_counter()
-            torch.save({"windows": meta, "encoded": {k: encoded[k].cpu() for k in ("visual", "proprio")}},
-                       args.output / f"encoded-{batch_id:05d}.pt")
-            timings["cache_write_seconds"] += time.perf_counter() - start
-        batch_id += 1
-        del encoded, predicted
-        for_batch_start = time.perf_counter()
+            values = score_predictions(predicted, encoded)
+            measurements.extend(
+                {**meta_row, "metrics": value}
+                for meta_row, value in zip(meta, values, strict=True)
+            )
+            timings["metrics_seconds"] += time.perf_counter() - start
+            if cache_writer is not None:
+                start = time.perf_counter()
+                payload = {
+                    "windows": meta,
+                    "encoded": {k: encoded[k].detach().cpu() for k in ("visual", "proprio")},
+                }
+                timings["cache_stage_seconds"] += time.perf_counter() - start
+                cache_writer.submit(args.output / f"encoded-{batch_id:05d}.pt", payload)
+            batch_id += 1
+            del encoded, predicted
+    finally:
+        iterator.close()
+        timings["load_seconds"] = iterator.consumer_wait_seconds
+        timings["data_decode_seconds"] = iterator.producer_seconds
+        if cache_writer is not None:
+            cache_writer.close()
+            timings["cache_write_seconds"] = cache_writer.writer_seconds
+            timings["cache_wait_seconds"] = cache_writer.consumer_wait_seconds
     measured = time.perf_counter() - started - timings["warmup_seconds"]
     if not measurements:
         raise ValueError("No eligible windows; inspect short trajectories or sharding")
@@ -172,14 +228,27 @@ def execute(args, backend, rows):
         windows=len(measurements), batches=batch_id, horizon=6, initial_observed_frames=1,
         frame_stride=5, actual_future_frames_fed_to_predictor=False,
         zero_dose_identity=identity, measured_pipeline_seconds=measured, timing=timings,
-        windows_per_second=len(measurements) / measured,
-        rollout_windows_per_second=len(measurements) / timings["rollout_seconds"],
+        windows_per_second=_rate(len(measurements), measured),
+        encoder_frames_per_second=_rate(7 * len(measurements), timings["encode_seconds"]),
+        rollout_windows_per_second=_rate(len(measurements), timings["rollout_seconds"]),
         peak_allocated_gpu_bytes=torch.cuda.max_memory_allocated(device) if device.type == "cuda" else None,
         peak_reserved_gpu_bytes=torch.cuda.max_memory_reserved(device) if device.type == "cuda" else None,
         environment=dict(python=platform.python_version(), torch=torch.__version__, numpy=np.__version__,
-                         device=str(device), cuda=torch.version.cuda,
-                         gpu=torch.cuda.get_device_name(device) if device.type == "cuda" else None,
-                         cpu_threads=torch.get_num_threads()),
+                         device=str(device), cuda=torch.version.cuda, cpu_threads=torch.get_num_threads(),
+                         **_cuda_environment(device)),
+        execution=dict(
+            precision=args.precision,
+            allow_tf32=args.allow_tf32,
+            batch_size=args.batch_size,
+            encoder_frames_per_batch=7 * args.batch_size,
+            pinned_host_batches=device.type == "cuda",
+            prefetch_batches=args.prefetch_batches,
+            asynchronous_cache_writer=cache_writer is not None,
+            cache_queue_depth=args.cache_queue_depth if cache_writer is not None else 0,
+            parallelism="independent_trajectory_process_sharding; no model collectives",
+            precision_parity_status=("reference_float32" if args.precision == "float32" and not args.allow_tf32
+                                     else "candidate_requires_separate_float32_parity_comparison"),
+        ),
         shard_index=args.shard_index, num_shards=args.num_shards,
         task_trajectory_counts=dict(Counter(r["task"] for r in rows)),
         task_measured_trajectory_counts=dict(Counter(r["task"] for r in summarize_metrics(measurements)["per_trajectory"])),
@@ -187,6 +256,7 @@ def execute(args, backend, rows):
         limitations=["Unedited baseline only; ablation throughput is not measured",
                      "Startup/model loading are recorded separately; downloads are excluded",
                      "Cache timing covers encoded tensors only when --write-cache is enabled",
+                     "Reduced precision or TF32 requires a separately reviewed float32 parity comparison",
                      "Synthetic timings must not be extrapolated to JEPA-WM or GPUs"])
     return report
 
@@ -209,17 +279,30 @@ def main():
     p.add_argument("--batch-size", type=int, default=8)
     p.add_argument("--warmup", type=int, default=3)
     p.add_argument("--device", default="cuda:0")
+    p.add_argument("--precision", choices=["float32", "bfloat16", "float16"], default="float32")
+    p.add_argument("--allow-tf32", action="store_true",
+                   help="Opt-in CUDA TensorFloat-32 matmuls; treated as a separate parity candidate")
+    p.add_argument("--prefetch-batches", type=int, default=2,
+                   help="Bounded producer queue; 0 disables decode/data prefetch")
+    p.add_argument("--cache-queue-depth", type=int, default=2,
+                   help="Maximum queued cache writes when --write-cache is set")
     p.add_argument("--num-shards", type=int, default=1)
     p.add_argument("--shard-index", type=int, default=0)
     p.add_argument("--write-cache", action="store_true")
     args = p.parse_args()
-    if args.batch_size < 1 or args.max_trajectories < 0 or args.warmup < 0 or not 0 <= args.shard_index < args.num_shards:
-        p.error("Invalid batch, trajectory, warmup, or shard parameters")
+    if (args.batch_size < 1 or args.max_trajectories < 0 or args.warmup < 0 or
+            args.prefetch_batches < 0 or args.cache_queue_depth < 1 or
+            not 0 <= args.shard_index < args.num_shards):
+        p.error("Invalid batch, trajectory, warmup, pipeline, or shard parameters")
     if args.backend == "jepa" and any(getattr(args, key) is None for key in
                                     ("vendor", "checkpoint", "checkpoint_sha256", "manifest", "data_root", "exposure_registry")):
         p.error("Real JEPA requires vendor, checkpoint+checksum, manifest, data-root, and exposure-registry")
     if args.backend == "toy" and args.device != "cpu":
         p.error("Toy smoke fixture runs on CPU only")
+    if args.backend == "toy" and (args.precision != "float32" or args.allow_tf32):
+        p.error("Toy smoke fixture supports only strict float32")
+    if args.allow_tf32 and args.precision != "float32":
+        p.error("--allow-tf32 is valid only with --precision float32")
     args.output.mkdir(parents=True, exist_ok=False)
     try:
         rows = toy_rows(12) if args.backend == "toy" else [json.loads(line) for line in args.manifest.read_text().splitlines() if line.strip()]
@@ -242,8 +325,9 @@ def main():
         write_json(args.output / "selection.json", selected)
         write_json(args.output / "config.json", {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()})
         start = time.perf_counter()
-        backend = ToyBackend("cpu") if args.backend == "toy" else JepaBackend(
-            args.vendor, args.checkpoint, args.checkpoint_sha256, selected[0]["dataset"], args.device)
+        backend = ToyBackend("cpu", args.precision, args.allow_tf32) if args.backend == "toy" else JepaBackend(
+            args.vendor, args.checkpoint, args.checkpoint_sha256, selected[0]["dataset"], args.device,
+            args.precision, args.allow_tf32)
         setup_seconds = time.perf_counter() - start
         report = execute(args, backend, selected)
         report.update(model_setup_seconds=setup_seconds,
@@ -255,8 +339,18 @@ def main():
         for source in sorted(Path(__file__).parent.glob("*.py")):
             code_hash.update(source.name.encode() + b"\0" + source.read_bytes())
         report["harness_source_sha256"] = code_hash.hexdigest()
+        report["cache_files"] = [
+            {"path": path.name, "bytes": path.stat().st_size, "sha256": sha256(path)}
+            for path in sorted(args.output.glob("encoded-*.pt"))
+        ]
         write_json(args.output / "report.json", report)
-        write_json(args.output / "DONE.json", {"status": report["status"], "report_sha256": sha256(args.output / "report.json")})
+        write_json(args.output / "DONE.json", {
+            "status": report["status"],
+            "report_sha256": sha256(args.output / "report.json"),
+            "window_metrics_sha256": sha256(args.output / "window_metrics.json"),
+            "selection_sha256": sha256(args.output / "selection.json"),
+            "config_sha256": sha256(args.output / "config.json"),
+        })
         print(json.dumps({k: report[k] for k in ("status", "gpu_benchmark_valid", "windows", "independent_trajectories", "measured_pipeline_seconds")}))
     except Exception as exc:
         write_json(args.output / "FAILED.json", {"status": "failed", "error": str(exc)})

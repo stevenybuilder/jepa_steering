@@ -32,6 +32,11 @@
       "shared_total_perturbation_budget": true, "status": "protocol_pending"}
   },
   "execution": {"initial_gpus": 1, "initial_benchmark_budget_gpu_hours": 0.5,
+    "baseline_precision": "float32_strict_no_tf32",
+    "performance_candidates": ["bfloat16_autocast", "float16_autocast", "float32_tf32"],
+    "parallelism": "disjoint_trajectory_process_shards_no_collectives",
+    "initial_batch_sizes": [4, 8, 16], "prefetch_batches": 2,
+    "max_initial_runtime_seconds": 1800,
     "automatic_gpu_rental": false, "automatic_method_search": false,
     "full_suite_gpu_hours_estimate": null, "estimate_status": "await_real_throughput_measurement"}
 }
