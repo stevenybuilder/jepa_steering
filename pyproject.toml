@@ -7,7 +7,7 @@ name = "jepa-steering-offline"
 version = "0.1.0"
 description = "Lineage-aware offline evaluation and throughput measurement for frozen JEPA-WM"
 requires-python = ">=3.10"
-dependencies = ["numpy>=1.24", "torch>=2.7"]
+dependencies = ["numpy>=1.24", "torch>=2.7", "PyYAML>=6", "einops>=0.8"]
 
 [project.scripts]
 jepa-inventory = "offline_study.inventory:main"
@@ -19,6 +19,7 @@ jepa-intervention-multigpu = "offline_study.intervention_multigpu:main"
 jepa-aggregate-interventions = "offline_study.intervention_multigpu:aggregate_main"
 jepa-analyze-development = "offline_study.development_analysis:main"
 jepa-multigpu = "offline_study.multigpu:main"
+jepa-author-validation-audit = "offline_study.author_validation:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]

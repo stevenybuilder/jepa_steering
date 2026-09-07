@@ -8,13 +8,56 @@ sole change is clearing ``heads_cfg`` so an unused visualization head is not bui
 from __future__ import annotations
 
 import copy
+import contextlib
+import hashlib
 import importlib
+import os
 import sys
 from pathlib import Path
 from typing import Any
 
 import torch
 import yaml
+
+
+DINO_SOURCE_SHA256 = "88b35b92ca99c27c3bd9c650d930f43e78c7e6341fb13ecfffdc26272fbf80a5"
+DINO_WEIGHT_SHA256 = "b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9"
+
+
+@contextlib.contextmanager
+def verified_local_dino_cache():
+    """Use the identical already-downloaded encoder without a GitHub branch probe.
+
+    Both US workers' 157 Python files and encoder weights were audited identical.
+    An unknown/missing cache fails closed instead of fetching a moving revision.
+    Only the one DINO hub call inside the official constructor is redirected.
+    """
+    from .protocol import sha256
+    directory = Path(torch.hub.get_dir()) / "facebookresearch_dinov2_main"
+    digest = hashlib.sha256()
+    files = sorted(directory.rglob("*.py"))
+    for path in files:
+        digest.update(str(path.relative_to(directory)).encode() + b"\0" + path.read_bytes())
+    if len(files) != 157 or digest.hexdigest() != DINO_SOURCE_SHA256:
+        raise ValueError("Local DINO source cache does not match the audited runtime")
+    weights = Path(torch.hub.get_dir()) / "checkpoints/dinov2_vits14_pretrain.pth"
+    if sha256(weights) != DINO_WEIGHT_SHA256:
+        raise ValueError("Local DINO encoder weights changed")
+    original = torch.hub.load
+
+    def load(repo_or_dir, model, *args, **kwargs):
+        if repo_or_dir == "facebookresearch/dinov2":
+            if model != "dinov2_vits14" or kwargs.get("force_reload", False):
+                raise ValueError("Unexpected encoder or forced cache replacement")
+            return original(str(directory), model, *args, **{**kwargs, "source": "local"})
+        return original(repo_or_dir, model, *args, **kwargs)
+
+    torch.hub.load = load
+    try:
+        yield {"dino_source_sha256": DINO_SOURCE_SHA256, "dino_weights_sha256": DINO_WEIGHT_SHA256,
+               "dino_loader_source": "verified_local_cache_no_network_branch_resolution"}
+    finally:
+        torch.hub.load = original
 
 
 def load_headless(
@@ -73,19 +116,23 @@ def load_headless(
     # entrypoint wraps this same call but also imports simulators and planners that
     # are deliberately outside this recorded-action benchmark.
     init_module = importlib.import_module(model_kwargs["module_name"]).init_module
-    model = init_module(
-        folder=args_eval.get("folder"),
-        checkpoint=checkpoint,
-        model_kwargs=pretrain_kwargs,
-        wrapper_kwargs=wrapper_kwargs,
-        cfgs_data=cfgs_data,
-        device=torch_device,
-        action_dim=data_stats["action_dim"],
-        proprio_dim=data_stats["proprio_dim"],
-        preprocessor=preprocessor,
-    )
+    cache_context = (verified_local_dino_cache() if os.environ.get("JEPA_VERIFIED_LOCAL_DINO") == "1"
+                     else contextlib.nullcontext({}))
+    with cache_context as encoder_provenance:
+        model = init_module(
+            folder=args_eval.get("folder"),
+            checkpoint=checkpoint,
+            model_kwargs=pretrain_kwargs,
+            wrapper_kwargs=wrapper_kwargs,
+            cfgs_data=cfgs_data,
+            device=torch_device,
+            action_dim=data_stats["action_dim"],
+            proprio_dim=data_stats["proprio_dim"],
+            preprocessor=preprocessor,
+        )
     model.eval()
     provenance = {
+        **encoder_provenance,
         "model_name": model_name,
         "config": str(config_path),
         "checkpoint": str(checkpoint),

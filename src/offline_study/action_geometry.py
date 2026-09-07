@@ -89,7 +89,8 @@ def collect_donors(backend, context, actions, direction, radius):
         predictions = backend.predict(backend.expand_context(context, 5),
                                       donor_actions(actions, direction, radius))
     batch = actions.shape[1]
-    captured = capture.value.reshape(batch, 5, *capture.value.shape[1:])
+    # Fit and evaluate interpolation in FP32 even when predictor inference uses BF16.
+    captured = capture.value.float().reshape(batch, 5, *capture.value.shape[1:])
     native_predictions = {key: value[:, 4::5].clone() for key, value in predictions.items()}
     return captured[:, :4], captured[:, 4], native_predictions
 

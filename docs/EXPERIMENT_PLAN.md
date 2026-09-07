@@ -1,9 +1,110 @@
 # Frozen-model offline study: active plan
 
-Status: scope agreed; real strict-FP32 baselines have run; Push-T and MetaWorld
-lineage corrections are implemented. Intervention arm families are agreed, but their executable scientific
-protocols are not frozen. Completed baseline jobs are throughput/descriptive evidence,
-not efficacy experiments or power calculations.
+Status (2026-09-07 alignment audit): custom strict-FP32 baselines and fixed intervention
+sweeps have run; individual executable protocols and completion evidence live in their
+run receipts. Push-T and MetaWorld lineage corrections are implemented. These results
+are custom offline development evidence, not author-matched validation or confirmation.
+Author-validation runtime parity and all six task/precision refits are complete.
+Protected-excluded MetaWorld replacement evaluations are active. Push-T's separately
+authorized, cohort-bound 21-row frozen replication sweep is now active on a second US
+worker; the original protected registry is preserved. Completion is established by verified run
+receipts, not this status paragraph. No full author-pool replication is complete.
+
+## Author-validation correction requested on 2026-09-07
+
+The initial committed version of this plan (`8f07ad2`, September 6 at 23:25 EDT)
+already prescribed a custom split, four windows and planning-wrapper context. Following
+that plan did not fulfill the subsequently reiterated request to match the authors'
+offline validation. The lineage corrections did not remove this protocol mismatch.
+The original settings below remain documented as the legacy study, not quietly replaced
+in already frozen protocols or result provenance.
+
+The correction is tracked in [AUTHOR_VALIDATION_AUDIT.md](../reports/AUTHOR_VALIDATION_AUDIT.md)
+and `configs/study.json:author_validation_alignment`. The metadata-only
+`offline_study.author_validation` command reproduces the published split and slice order,
+with direct tests against the pinned upstream implementation. It counts source rows,
+lineage groups, clips and rollout prefixes separately and identifies fit overlap and
+protected cohorts. It does not execute a model, grant exposure permission or claim parity
+of preprocessing, rollout metrics, statistical analysis or original training histories.
+
+Before replacement evaluations: freeze the matched evaluator and existing intervention
+arms, verify preprocessing/context/metric parity, refit without any validation-family
+overlap, and verify cohort access against the preserved exposure registry. Protected
+trajectories cannot be relabelled development to bypass these checks. Do not silently
+drop protected trajectories and claim complete official validation coverage.
+
+The authors' full available validation pool has 1,260 MetaWorld rows (33 Reach and
+27 Reach-Wall) and 21 Push-T rows. A complete pass over that pool is a stated extension
+of their batch-wise validation monitoring, not a reconstruction of the exact samples
+behind a published curve. Author-split replication and untouched confirmation remain
+different claims. The legacy `authors_split_reproduced: false` remains correct until
+new executable parity checks and completed run receipts support a narrower claim.
+
+### Protected-preserving execution amendment
+
+The active replacement settings are [author_correction.json](../configs/author_correction.json).
+They supersede only the legacy execution settings below, not historical result records.
+Use the published normalized dataset/transform, context capacity three, H6 rollout at
+every valid prefix of every included clip, and official visual/proprioceptive embedding
+L1/L2 losses at H1–H6. MetaWorld clips have 18 frames; Push-T clips have eight; both use
+frame stride five and concatenated recorded actions. bfloat16 is the published-precision
+primary analysis and FP32 is a separately reported sensitivity analysis; neither may be
+selected based on favorable outcomes. Direct actual-upstream rollout and metric parity
+was checked on fit-only examples in both precisions for all three primary tasks.
+
+Each task/precision refit uses 128 previously eligible fitting families, four fixed
+clip/prefix examples per family, excluding **every** official-validation lineage and
+every protected lineage. The five fixed sweeps retain their registered arms, controls,
+fitting algorithms and dose rules. There is no autonomous successor search. Report
+requested and realized edit energy because low-precision rounding can prevent exact
+equal-delivered-energy comparisons.
+
+Authorized replacement coverage is 29 of 33 Reach rows and 24 of 27 Reach-Wall rows.
+The four and three protected rows respectively stay unopened. The broad unsteered
+baseline includes 1,120 of 1,260 official-validation rows across all 42 MetaWorld tasks,
+excluding 140 protected rows. Label these partial author-split development replications,
+never complete official validation or untouched confirmation.
+
+The verified Push-T registry marks **all 21 released validation rows protected**, even
+though historical evidence records earlier access. The earlier metadata-only intention
+to evaluate 21 rows did not grant permission. The original intention is preserved by
+hash in the replacement config; the bound executable cohort has zero evaluation rows
+and all 21 exclusions. Both Push-T precision-specific fits can be completed safely now.
+Opening validation requires a separately verified, frozen access decision; changing a
+split label is not an acceptable substitute. This does not make those 21 rows fresh
+confirmation, nor does it invalidate the preserved 36-family custom development runs.
+
+Subsequent explicit authorization is now implemented in a separate run root,
+`/workspace/jepa-runtime/pusht-author-replication-20260907`. Its access receipt SHA256 is
+`a80b37516e5f95f6de649adb7004410f680a6c8ee860a927ddd948310314e559` and authorized cohort
+SHA256 is `2376af7881b4e411e8a726f178b16ead707551c5b691fe1c1dfa38553db9b9ed`.
+All ten task/precision/category protocols were already frozen before this opening;
+the original fits and protocols are retained and no operator is refitted from validation.
+This grants the recorded full fixed replication sweep, not fresh confirmation or
+permission to alter arms/doses after outcomes. The seven primary MetaWorld protected
+rows remain unopened. Next-stage selection follows the existing development rule and
+the user's later explicit autonomous-advancement instruction; selection evidence is
+not independent confirmation.
+
+Further user approval now authorizes the seven primary MetaWorld rows for the same
+frozen replication sweeps. The append-only extension run is
+`/workspace/jepa-runtime/metaworld-author-extension-20260907`: execute only the four
+missing Reach and three missing Reach-Wall trajectories, then verify original fit,
+protocol, shard hashes and complete paired coverage before merging with the original
+53 rows. Full primary coverage becomes 33/33 Reach, 27/27 Reach-Wall and 21/21 Push-T
+only after those receipts complete. No refitting or additional arm search is permitted;
+these seven cease to be an untouched confirmation reserve after replication access.
+Other protected MetaWorld rows remain outside this authorization. See
+[planning methodology alignment](../reports/PLANNING_METHOD_ALIGNMENT.md) for the
+separate simulator, episode-count, seed and fresh-confirmation requirements.
+
+The primary forecast endpoint remains H6 proprioceptive **embedding** MSE. Also report
+visual embedding MSE and L1/L2 at every horizon. Point estimates include both
+clip-weighted and lineage-weighted means. Intervals use paired lineage bootstrap draws
+with simultaneous correction over all registered contrasts and both H6 MSE endpoints
+within task/category/precision; the minimum useful effect is 1% of the corresponding
+fit-only native error. These runs do not reproduce the authors' training-curve history,
+three trained seeds, decoded physical-state errors, or closed-loop task-success results.
 
 ## Objective and task coverage
 

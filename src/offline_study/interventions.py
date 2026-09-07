@@ -82,7 +82,16 @@ def validate_frozen_protocol(protocol: dict) -> None:
     category = protocol.get("category")
     if category not in CATEGORY_ARMS:
         raise ValueError(f"Unknown intervention category: {category}")
-    if protocol.get("fit_split") != "fit" or protocol.get("evaluation_split") != "development":
+    replication = protocol.get("evaluation_split") == "author_replication"
+    access = protocol.get("author_validation", {})
+    scoped_replication = protocol.get("tasks") == ["pusht"] or (
+        protocol.get("tasks") in (["mw-reach"], ["mw-reach-wall"]) and
+        access.get("access_scope") == "metaworld_seven_row_replication_extension")
+    if replication and (not scoped_replication or
+            not _is_sha256(access.get("access_authorization_sha256")) or
+            access.get("retune_from_outcomes") is not False or access.get("fresh_confirmation") is not False):
+        raise ValueError("Author replication requires an explicit frozen task-scoped access contract")
+    if protocol.get("fit_split") != "fit" or (protocol.get("evaluation_split") != "development" and not replication):
         raise ValueError("Intervention protocols must fit on fit and evaluate on development")
     for field in ("manifest_sha256", "checkpoint_sha256", "fit_receipt_sha256"):
         if not _is_sha256(protocol.get(field)):
@@ -237,6 +246,10 @@ def validate_operator_bank(bank: dict, protocol_sha256: str, selected_meta: list
     rows = bank.get("rows")
     if not isinstance(rows, dict):
         raise ValueError("Operator bank rows must be a mapping")
+    role = bank.get("evaluation_role", "development")
+    if role not in {"development", "author_replication"} or (
+            role == "author_replication" and not _is_sha256(bank.get("access_authorization_sha256"))):
+        raise ValueError("Operator bank lacks its scoped replication access binding")
     for meta in selected_meta:
         key = window_key(meta)
         row = rows.get(key)
@@ -246,8 +259,8 @@ def validate_operator_bank(bank: dict, protocol_sha256: str, selected_meta: list
             raise ValueError(f"Operator bank row identity mismatch: {key}")
         if row.get("lineage_group") != meta.get("lineage_group"):
             raise ValueError(f"Operator bank row lineage mismatch: {key}")
-        if row.get("split") != "development":
-            raise ValueError(f"Operator bank row is not development-only: {key}")
+        if row.get("split") != role or meta.get("split", "development") != role:
+            raise ValueError(f"Operator bank row does not match the authorized evaluation role: {key}")
         if not isinstance(row.get("tensors", {}), dict):
             raise ValueError(f"Operator bank row tensors must be a mapping: {key}")
     if not isinstance(bank.get("global_tensors", {}), dict):
@@ -377,8 +390,10 @@ class PredictorIntervention:
         visual, actions, proprio = args
         changed = visual.clone()
         for edit in matching:
-            changed[:, -1] = self._replace(
-                changed[:, -1], edit.delta, f"predictor_visual/H{self.horizon}")
+            before = changed[:, -1]
+            replacement = self._replace(before, edit.delta, f"predictor_visual/H{self.horizon}")
+            edit.realized_l2 = (replacement - before).float().flatten(1).norm(dim=1)
+            changed[:, -1] = replacement
             edit.applications += 1
         return changed, actions, proprio
 
@@ -391,8 +406,10 @@ class PredictorIntervention:
         x, condition, *tail = args
         changed = condition.clone()
         for edit in matching:
-            changed[:, -1] = self._replace(
-                changed[:, -1], edit.delta, f"block_condition/P{block}/H{self.horizon}")
+            before = changed[:, -1]
+            replacement = self._replace(before, edit.delta, f"block_condition/P{block}/H{self.horizon}")
+            edit.realized_l2 = (replacement - before).float().flatten(1).norm(dim=1)
+            changed[:, -1] = replacement
             edit.applications += 1
         return (x, changed, *tail), kwargs
 

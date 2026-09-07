@@ -189,7 +189,7 @@ def prepare_support(backend, context, actions, protocol, bank):
     mapping = fitted["maps"][protocol["category"]]
     with NativeFieldCapture(backend.predictor) as capture:
         backend.predict(context, actions)
-    target = predict_target(capture.values[3].flatten(1), fitted["target"])
+    target = predict_target(capture.values[3].float().flatten(1), fitted["target"])
     batch = actions.shape[1]
     required = {}
     for key, rank in mapping.values():
@@ -207,7 +207,7 @@ def prepare_support(backend, context, actions, protocol, bank):
         with PredictorIntervention(backend.predictor, edits):
             predictions = backend.predict(backend.expand_context(context, len(chunk)),
                                           actions.repeat_interleave(len(chunk), dim=1))
-        final = predictions["visual"][6].reshape(batch, len(chunk), -1)
+        final = predictions["visual"][6].float().reshape(batch, len(chunk), -1)
         for index, probe in enumerate(chunk):
             outputs[probe] = final[:, index].clone()
     responses = {key: torch.stack([(outputs[(key, j, 1)] - outputs[(key, j, -1)]) / (2 * radius)
