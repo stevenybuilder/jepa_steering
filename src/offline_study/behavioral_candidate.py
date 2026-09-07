@@ -80,27 +80,58 @@ def launch_contract(args):
 @torch.no_grad()
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    for name in ("vendor", "freeze", "baseline-code", "original-root", "checkpoint", "engineering", "output"):
+    for name in ("vendor", "freeze", "baseline-code", "original-root", "checkpoint", "engineering", "output", "goal-bank", "goal-delivery-proof"):
         parser.add_argument("--" + name, required=True, type=Path)
     parser.add_argument("--task", choices=("reach", "reach-wall"), required=True)
     parser.add_argument("--arm", choices=tuple(COUPLING_ARMS), required=True)
     parser.add_argument("--logical-ranks", nargs="+", type=int, required=True)
+    parser.add_argument("--repair-plan", type=Path,
+                        help="Optional input-only whole-stream replacement manifest, frozen before reruns")
     args = parser.parse_args()
     use_vendor(args.vendor)
     protocol, expected, fit_protocol, root, engineering_hash = launch_contract(args)
+    bank = torch.load(root / "operator_bank.pt", map_location="cpu", weights_only=True)
+    run_shard(args, protocol, expected, engineering_hash,
+        lambda backend: H6StaticPlanningIntervention(backend, fit_protocol, bank, COUPLING_ARMS[args.arm]),
+        {"source_arm": COUPLING_ARMS[args.arm]})
+
+
+@torch.no_grad()
+def run_shard(args, protocol, expected, engineering_hash, make_adapter, launch_details):
+    """Common frozen episode/RNG loop for independently gated fixed components."""
     from omegaconf import OmegaConf
     from evals.simu_env_planning.envs.init import make_env
     from evals.simu_env_planning.planning.gc_agent import GC_Agent
     from evals.simu_env_planning.planning import plan_evaluator
+    from .planning_goal_bank import GoalBank, verify_delivery
+    goals = GoalBank(args.goal_bank, args.task, sha256(args.freeze / "protocol.json"))
+    delivery_hash = verify_delivery(args.goal_delivery_proof, goals.report_hash, sha256(args.freeze / "protocol.json"))
+    repair_root = getattr(args, "repair_plan", None)
+    repair_hash = None
+    if repair_root is not None:
+        repair_hash = sha256(repair_root / "plan.json")
+        repair = json.loads((repair_root / "plan.json").read_text())
+        if (json.loads((repair_root / "FROZEN.json").read_text())["plan_sha256"] != repair_hash or
+                repair["task"] != args.task or repair["arm"] != args.arm or
+                repair["freeze_sha256"] != sha256(args.freeze / "protocol.json") or
+                repair["goal_bank_report_sha256"] != goals.report_hash or
+                repair["goal_delivery_report_sha256"] != delivery_hash or
+                repair["replacement_episodes"] != expected or repair["logical_ranks"] != args.logical_ranks or
+                repair["outcomes_used_for_repair_selection"] is not False or repair["sample_size_reduced"] is not False):
+            raise ValueError("Unbound or changed whole-stream repair plan")
     args.output.mkdir(parents=True, exist_ok=False)
     started = time.monotonic()
     try:
         write_json(args.output / "protocol.json", {"role": "fixed_planning_development_candidate_shard",
             "freeze_sha256": sha256(args.freeze / "protocol.json"), "task": args.task, "arm": args.arm,
-            "source_arm": COUPLING_ARMS[args.arm], "expected_episodes": expected,
+            **launch_details, "expected_episodes": expected,
             "logical_ranks": args.logical_ranks, "source_sha256": source_hash(),
             "native_baseline_source_sha256": protocol["source_sha256"],
             "engineering_report_sha256": engineering_hash, "precision": "float32_strict_no_tf32",
+            "canonical_native_goal_bank_report_sha256": goals.report_hash,
+            "canonical_native_goal_delivery_report_sha256": delivery_hash,
+            "input_only_whole_stream_repair_plan_sha256": repair_hash,
+            "actual_goal_pixels_bitwise_match_original_native": True,
             "all_native_below_full_h6": True, "fresh_confirmation": False,
             "unchanged_fit_and_scientific_panel": True, "no_selection_from_partial_outcomes": True})
         random.seed(0)
@@ -111,7 +142,6 @@ def main():
                               "metaworld", "cuda:0", "float32")
         versions = _model_versions(backend.model)
         rng_python, rng_numpy, rng_torch = random.getstate(), np.random.get_state(), torch.get_rng_state()
-        bank = torch.load(root / "operator_bank.pt", map_location="cpu", weights_only=True)
         records = []
         torch.cuda.reset_peak_memory_stats()
         for rank in sorted(args.logical_ranks):
@@ -128,10 +158,10 @@ def main():
                     before = time.monotonic()
                     episode_root = args.output / f"calls-{row['episode']:03d}"
                     episode_root.mkdir()
-                    adapter = H6StaticPlanningIntervention(backend, fit_protocol, bank, COUPLING_ARMS[args.arm])
+                    adapter = make_adapter(backend)
                     observed = ObservedSupport(adapter, episode_root)
                     agent.planner.unroll = observed
-                    with close_expert_environments(plan_evaluator):
+                    with close_expert_environments(plan_evaluator), goals.deliver(row):
                         result = run_episode(cfg, backend, agent, env, row["environment_seed"])
                     verify_call_schedule(result["planning_calls"], observed.calls)
                     record = {**row, "arm": args.arm, "result": result,

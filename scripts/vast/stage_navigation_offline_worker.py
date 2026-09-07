@@ -19,13 +19,17 @@ def main():
     parser.add_argument("--key", required=True)
     parser.add_argument("--cohorts", type=Path, required=True)
     parser.add_argument("--assets-only", action="store_true")
+    parser.add_argument("--rsync", action="store_true", help="Resume interrupted owned staging without retransmitting complete files")
+    parser.add_argument("--wall-training-worker", action="store_true",
+                        help="Stage the complete Wall source population to the existing California worker, without replacing its runtime")
     args = parser.parse_args()
     instances = json.loads(subprocess.check_output([VAST, "show", "instances", "--raw"], text=True))
     if sum(float(row["instance"]["totalHour"]) for row in instances) > 7:
         raise ValueError("Aggregate exceeds authorized hourly cap")
     by_id = {row["id"]: row for row in instances}
     endpoints = {}
-    for identifier in (SOURCE, DESTINATION):
+    destination_id = 50195621 if args.wall_training_worker else DESTINATION
+    for identifier in (SOURCE, destination_id):
         row = by_id[identifier]
         if row["actual_status"] != "running" or not row["geolocation"].endswith(", US"):
             raise ValueError("Source/destination must be live US-owned instances")
@@ -47,7 +51,14 @@ def main():
                 raise ValueError("Unsafe manifest input path")
             paths.append(prefix + name)
         paths.append(f"{runtime}/navigation-assets-20260907-v1/downloads/model/jepa_wm_{task}.pth.tar")
-    source, destination = endpoints[SOURCE], endpoints[DESTINATION]
+    if args.wall_training_worker:
+        # These destination paths were reserved and checked absent. No active
+        # runtime, vendor source, model weights or MetaWorld outputs are replaced.
+        paths = [f"{runtime}/navigation-assets-20260907-v1/extracted/wall/wall_single",
+                 f"{runtime}/navigation-input-check-20260907-v1",
+                 f"{runtime}/wall-training-accumulation-pilot-20260907-v2"]
+        paths += [f"{runtime}/navigation-assets-20260907-v1/{name}.json" for name in ("protocol", "report", "DONE")]
+    source, destination = endpoints[SOURCE], endpoints[destination_id]
     ssh_options = ["-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=accept-new",
                    "-o", "ServerAliveInterval=15", "-o", "ServerAliveCountMax=6", "-o", "ConnectTimeout=15"]
     agent = subprocess.check_output(["ssh-agent", "-s"], text=True)
@@ -60,11 +71,17 @@ def main():
                 "set -o pipefail; gzip -d | tar -C / -xf -"]
         command = ("set -o pipefail; tar --exclude=__pycache__ --exclude='._*' -C / --null -T - -cf -"
                    " | gzip -1 | " + shlex.join(dest))
+        if args.rsync:
+            transport = shlex.join(["ssh", *ssh_options, "-p", str(destination[1])])
+            command = shlex.join(["rsync", "-arzR", "--partial", "--timeout=180", "--info=stats2",
+                "--exclude=__pycache__", "--exclude=._*", "--from0", "--files-from=-", "-e", transport,
+                "/", "root@" + destination[0] + ":/"])
         subprocess.run(["ssh", "-A", "-i", args.key, *ssh_options, "-p", str(source[1]),
                         "root@" + source[0], command], input="\0".join(paths).encode() + b"\0",
                        env=env, check=True, timeout=2400)
         print(json.dumps({"status": "selected_navigation_inputs_and_runtime_copied_pending_gpu_checks",
-                          "source": SOURCE, "destination": DESTINATION, "input_path_count": len(paths)}), flush=True)
+                          "source": SOURCE, "destination": destination_id, "input_path_count": len(paths),
+                          "complete_wall_training_data_staged": args.wall_training_worker}), flush=True)
     finally:
         subprocess.run(["ssh-agent", "-k"], env=env, stdout=subprocess.DEVNULL, check=False)
 

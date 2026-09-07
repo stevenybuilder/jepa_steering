@@ -21,6 +21,12 @@ REPLICATES = 20000
 SEED = 2026090722
 
 
+def shard_paths(root):
+    """Physical shard groups and intact single logical streams share one schema."""
+    return sorted(p for p in root.iterdir() if p.is_dir() and
+                  (p.name.startswith("shard-") or p.name.startswith("rank-"))) if root.is_dir() else []
+
+
 def exact_discordance(wins, losses):
     n = wins + losses
     return min(1., 2 * sum(math.comb(n, k) for k in range(min(wins, losses) + 1)) / 2**n) if n else 1.
@@ -63,7 +69,7 @@ def load_panel(root, freeze):
         panel[task] = {}
         for arm in NAMES:
             records = []
-            shards = sorted((root / task / arm).glob("shard-*"))
+            shards = shard_paths(root / task / arm)
             if not shards:
                 raise ValueError(f"Incomplete panel: missing {task}/{arm}")
             for shard in shards:

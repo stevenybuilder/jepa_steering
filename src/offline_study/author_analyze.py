@@ -69,10 +69,21 @@ def analyze(measurements, protocol, receipt, task):
             "fresh_confirmation": False, "winner_selection": False}
 
 
+def expected_shards(root, count):
+    if count < 1:
+        raise ValueError("A positive frozen shard count is required")
+    directories = sorted(root.glob("shard-*"))
+    if {p.name for p in directories} != {f"shard-{i}" for i in range(count)} or any(not p.is_dir() for p in directories):
+        raise ValueError("Missing or unexpected fixed disjoint shards")
+    return directories
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     for flag in ("cohort", "fit", "shards", "output"):
         parser.add_argument("--" + flag, required=True, type=Path)
+    parser.add_argument("--shard-count", type=int, default=2,
+                        help="Physical sharding only; complete frozen trajectory/arm coverage is still required")
     args = parser.parse_args()
     cohort = json.loads(args.cohort.read_text())
     validate_cohort(cohort)
@@ -80,9 +91,7 @@ def main():
     receipt = json.loads((args.fit / "fit_receipt.json").read_text())
     receipt, protocol = verify_fit(args.fit, sha256(args.cohort), receipt["checkpoint_sha256"], receipt["precision"])
     inputs, measurements, diagnostics, reports = {}, [], [], []
-    directories = sorted(args.shards.glob("shard-*"))
-    if len(directories) != 2:
-        raise ValueError("Expected both fixed disjoint shards")
+    directories = expected_shards(args.shards, args.shard_count)
     for directory in directories:
         done = json.loads((directory / "DONE.json").read_text())
         for name in ("report", "window_metrics", "selection", "protocol", "mechanism_diagnostics"):
@@ -92,6 +101,9 @@ def main():
                 raise ValueError(f"Shard checksum mismatch: {path}")
             inputs[str(path)] = actual
         report = json.loads((directory / "report.json").read_text())
+        if (report["shard_count"] != args.shard_count or
+                directory.name != f"shard-{report['shard_index']}" or report["task"] != cohort["task"]):
+            raise ValueError("Changed physical shard identity or task")
         for key, expected in (("cohort_sha256", sha256(args.cohort)),
                               ("protocol_sha256", sha256(args.fit / "protocol.json")),
                               ("fit_receipt_sha256", sha256(args.fit / "fit_receipt.json")),

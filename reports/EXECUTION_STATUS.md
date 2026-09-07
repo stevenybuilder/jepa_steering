@@ -1,4 +1,24 @@
-# Execution checkpoint — 2026-09-07, 21:49 UTC
+# Execution checkpoint — 2026-09-07, 23:23 UTC
+
+**MetaWorld stimulus repair:** outcome-blind pairing audit-v3 found
+five mismatched expert-goal observation hashes among286 completed candidate
+episodes (Reach20/35, Reach-Wall25), with all initial vectors/images and seeds
+still matching. The complete audit and mismatches are preserved at
+`artifacts/offline_study/behavioral-pairing-audit-20260907-v3` with FAILED, not DONE.
+The cause is now reproduced:24 native expert repeats had identical physical goals,
+proprioception and expert actions, but4–12 RGB channel values varied by one level.
+The exact historical conflicting hashes were reproduced. All192 original native
+baseline goal images were then recovered byte-for-byte, without model outcomes or
+changed scenarios. Shared goal delivery passed24 source-environment repetitions,
+all192 original hash bindings and unchanged planner RNG. Proof-v2 report SHA
+`4eb1e0c3cd7247f7164eec0a5a43a0c8b6abdaaba8c5203caad2055d5a365c30`.
+Three canonical rank/combined streams are running after preserving the original
+partial traces. Four coupling repair queues wait for the original complete shards,
+then freeze input-only replacement manifests and rerun entire affected12-episode
+logical streams. No reduced sample size, isolated-episode RNG restart, relaxed
+pixel gate, discarded failure or double counting is allowed. Corrected paired
+assembly/analysis and confirmation remain incomplete. Wall/Maze offline and
+DROID native endpoints are unaffected. See [repair contract](METAWORLD_STIMULUS_REPAIR.md).
 
 The six-task study is **not complete**. The governing documents remain
 [EXPERIMENT_PLAN.md](../docs/EXPERIMENT_PLAN.md),
@@ -10,12 +30,12 @@ RoboCasa is excluded. No new method search or partial-outcome selection is autho
 
 | US instance | GPUs | Assignment | Hourly rate |
 |---|---:|---|---:|
-| 50125440 | 8 RTX5090 | Four native MetaWorld development shards; four fixed coupling/control shards | $2.953889 |
+| 50125440 | 8 RTX5090 | Three canonical rank/combined streams; Wall native96; four coupling/control shards with input-repair queues next | $2.953889 |
 | 50189244 | 1 RTX PRO6000 Blackwell Server | PointMaze native96 development; DROID64 and queued engineering completed | $1.884000 |
 | 50195621 | 4 RTX5090 | Four remaining disjoint coupling/control scientific shards; hardware checks passed | $1.641667 |
-| 50205763 | 1 RTX4090 | Indiana replacement booting; reserved for Wall/Maze full offline baselines and unchanged fits | $0.343704 projected |
+| 50205763 | 1 RTX4090 | Wall/Maze complete native offline baselines and20 category/precision fits finished; intervention comparisons running | $0.343704 |
 
-Including retained stopped disks and the booting worker, projected aggregate is **$6.928815/hour**,
+Including retained stopped disks, live aggregate is **$6.928815/hour**,
 before usage-based bandwidth. Latest user ceiling is $7/hour, US-only. New
 California staging took time and initially suffered an interrupted transfer;
 those GPUs were not counted as scientifically active while staging. Direct
@@ -25,7 +45,54 @@ The board and live provider/process checks supersede this timestamped snapshot.
 The preceding new rental50205255 was destroyed before staging any research data,
 source or job: its US label conflicted with a reported CN IP. No research result
 was removed or lost; provider absence was verified. The replacement's published
-IP independently geolocates toIndianaUS. Live endpoint checks still precede staging.
+IP and live remote egress both independently geolocate toIndianaUS. Source inputs
+and isolated runtime are staged. All14 GPUs were executing useful jobs at the
+22:39 check, not merely rented or waiting on downloads.
+
+## Direct Wall/DROID phase answer
+
+| Task | Offline native forecasts | Offline interventions | Behavioral endpoint |
+|---|---|---|---|
+| Wall | Complete and verified, BF16 + FP32,192 validation trajectories /2112 clips /4224 H6 prefixes | BF16 coupling comparison complete and verified; remaining category/precision comparisons running/queued |40/96 native simulator episodes at23:22; no candidate-success comparison yet |
+| PointMaze | Complete and verified, BF16 + FP32,200 trajectories /12200 clips /24400 H6 prefixes | All five categories fitted in both precisions; coupling comparisons running |81/96 native simulator episodes at23:22 |
+| DROID | Separate offline intervention-forecast sweep not completed | Not completed; distinct training/fit population remains unresolved |64/64 recorded-action native planning evaluations verified; no physical robot execution or intervention comparison |
+
+Navigation verification reconstructs all expected trajectory/prefix identities,
+window hashes and aggregate metrics:
+`artifacts/offline_study/navigation-native-verification-20260907-v1`.
+The raw window metrics remain outside Git. A complete native reference is not a
+complete intervention study; overlapping clips/prefixes are not independent samples.
+
+Both MetaWorld native development references now have96/96 episodes complete.
+The first complete Wall BF16 coupling scope does not demonstrate an offline gain:
+equal-budget joint steering changes H6 proprio MSE by **+0.1567%** versus native
+(simultaneous95% increase interval **[0.0017%,0.3117%]**) and visual MSE by+0.3754%
+(interval spans zero). Its proprio error is also worse than its matched-random
+control. No arm meets the frozen minimum-useful improvement rule in this first
+scope. This is not a behavioral veto or a task-success finding. Every arm and
+contrast is retained in `artifacts/offline_study/navigation-analysis-compact-20260907-v1`;
+full verified report SHA `fe1f2a630e6f32cb255abc3c7bbc4f117b3256a295dbb3e453866969f1c5d554`.
+
+The complete Wall data and source/pilot receipts are now staged on California:
+58.964GB logical transfer,432.258MB wire bytes, no new rental or local dataset copy.
+Production three-seed training is still not launched; staging is not a training result.
+
+The next separately gated jobs are Reach combined logical stream0 and Reach-Wall
+rank4/control logical stream0 (12 episodes each, not the whole96-condition cohort).
+They use immutable `rank-panel-code-v2`, tarSHA
+`1f6da479ed7af993e82b7ccfa905f2dbad8de4ec14c36b68df56a1b71dc59652`.
+Initial preflight-v1 rejected newer source files before model/outcome access.
+The complete diffs were audited: unchanged MetaWorld dispatch/normalization/config,
+plus extraction of the identical support computation into a forwarding method.
+Only those four exact old/new hash pairs are accepted; all other critical operator
+files and original native code-v33 remain checksum-bound. No prefix-cache subclass
+or numerically different batch setting is used in these scientific jobs.
+
+The DROID public-source catalogue contains74970 trajectory objects across13 labs,
+including both success and failure folders. This read-only metadata enumeration
+does **not** reconstruct the authors'8000-example training subset and selects no
+replacement population. Compact receipt:
+`artifacts/offline_study/primary-durable-20260907/droid-public-catalogue-20260907-v1`.
 
 ## What actually completed
 

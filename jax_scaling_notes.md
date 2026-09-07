@@ -449,3 +449,56 @@ To reduce staging latency and disk needs,
 initial transfer includes only checksum-bound fitting/validation videos plus the
 existing runtime, not every raw training video or archive. This is less input
 movement, not fewer evaluation trajectories. No GPU was rented solely for storage.
+
+### Measured follow-through at22:41 UTC
+
+The Indiana4090 completed all native navigation offline baselines and all20
+category/task/precision fits, and now runs the unchanged intervention comparisons.
+Native Wall validation cost129s BF16 /121s FP32 for4224 prefixes; Maze687s /658s
+for24400. Those are complete measured baseline runtimes on this worker, not
+intervention runtimes or evidence that FP32 is always faster. Precision remains
+predeclared: BF16 primary, FP32 sensitivity; we do not choose it from results.
+
+Only128 fit plus the complete validation videos were staged initially. The resumed
+direct US-to-US transfer handled23.115GB logical input/runtime data but sent3.559GB
+wire bytes through reuse and compression. This illustrates lowering the network
+term in `T_total = staging + queueing + compute + verification`; it does not reduce
+the scientific population. Interrupted transfers now resume with rsync, without
+deleting destination files or copying large datasets through the laptop.
+
+As MetaWorld native jobs finished, GPUs were reassigned to the fixed rank/control
+panel and Wall simulator reference. Fourteen GPUs now serve independent jobs at
+about$6.93/hour before bandwidth. Intact logical RNG streams—not overlapping
+episode fragments—are scheduling units. Each completed12-episode rank stream is
+only one eighth of a96-episode condition, and final analysis still requires all
+streams and controls. Parallel hardware hides independent work; it does not make
+the many response-probe forwards in a rank intervention disappear.
+
+At22:50, one GPU was reassigned from a partial Reach rank/combined run to a bounded
+expert-goal reproducibility diagnostic after five paired goal-image hashes differed.
+No candidate outcomes were used to choose that diagnostic. This is useful
+verification work, not model-throughput work; the other13 evaluations continue.
+Keep throughput reporting subordinate to correct stimulus pairing. A completed
+fast run is not valid comparative evidence when the required pairing check fails.
+
+### Measured follow-through at23:23 UTC
+
+The goal-image discrepancy was reproduced and the exact original pixels recovered;
+canonical delivery then passed24 real source-environment checks. Three expensive
+streams restarted with the verified stimulus delivery, and input-only whole-stream
+repair jobs are queued behind the existing coupling runs. This verification costs
+time, but avoids treating unpaired inputs as valid comparison evidence. No sample,
+planner budget, precision or statistical threshold was changed to improve speed.
+
+Completed navigation scopes now get CPU-only hash/coverage/statistical analysis
+while the dedicated GPU executes the next scope. The analyzer accepts the declared
+8/32 physical shards while requiring the same complete trajectories and arms.
+This overlaps independent work; it does not run two experiments on one GPU.
+
+Staging Wall's complete data to the existing California worker transferred
+58.964GB logically but only432.258MB over the wire using compression. No laptop
+dataset copy or new rental was needed. That reduces preparation latency for the
+authorized training seeds; it is not evidence that training has started. The
+general lesson remains to measure the whole critical path, including I/O and
+verification, instead of using GPU occupancy alone as a speed metric.
+[GPU resource balance](https://jax-ml.github.io/scaling-book/gpus/).
