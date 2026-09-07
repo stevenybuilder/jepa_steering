@@ -1,7 +1,7 @@
 # Frozen-model offline study: active plan
 
-Status: scope agreed; real strict-FP32 baselines have run; Push-T lineage correction
-is active. Intervention arm families are agreed, but their executable scientific
+Status: scope agreed; real strict-FP32 baselines have run; Push-T and MetaWorld
+lineage corrections are implemented. Intervention arm families are agreed, but their executable scientific
 protocols are not frozen. Completed baseline jobs are throughput/descriptive evidence,
 not efficacy experiments or power calculations.
 
@@ -57,6 +57,28 @@ with 10% of the outer fitting pool reserved internally for development (approxim
 81/9/10 overall). The inventory names this `study_hash_90_10_with_inner_development`,
 not an exact reproduction of the paper's split. It uses deterministic SHA256 ordering
 with seed234. Splits are assigned to lineage groups, never individual correlated rows.
+
+### MetaWorld duplicate correction and exposure status (2026-09-07)
+
+The official MetaWorld release contains 12,600 rows, but 160 are redundant numerical
+copies: 156 lineage groups contain two rows and two groups contain three. All members
+of each such group have byte-identical float32 state and action tensors. The corrected
+inventory therefore defines a MetaWorld lineage group by SHA256 of task plus exact
+state/action tensor contents, yielding 12,440 independent numerical trajectory groups.
+Video bytes are deliberately not part of this identity claim.
+
+The earlier baseline assigned the deterministic split to row IDs. Re-hashing all new
+content IDs would reshuffle every row and could falsely relabel measured development
+data as holdout. The correction instead reconstructs that exact legacy row split and
+coalesces each duplicate group conservatively: development wins because it has already
+been measured; otherwise an untouched holdout assignment wins over unused fit. The
+result is 10,056 fit, 1,125 development, and 1,259 provisional-holdout groups. Historical
+protections exclude six development groups, leaving 1,119 reviewed development groups
+for the corrected all-task baseline. Reach contains 295 total groups and 28 reviewed
+development groups; Reach-Wall contains 297 total groups and 24 reviewed development
+groups. Details and receipt hashes are in
+[the MetaWorld lineage correction report](../reports/METAWORLD_LINEAGE_CORRECTION.md).
+
 For Push-T, the released train data contains exactly 185 initial-state families of 101
 distinct action/state rollouts each. A family is defined by the SHA256 of its exact
 initial state; this was verified directly from the released tensors. The resulting
@@ -105,6 +127,9 @@ generalization units. Aggregate windows within rollout and rollouts within famil
 cluster uncertainty and power calculations by the 185 verified families. The released
 files do not identify these families as source demonstrations, so call them
 initial-state families rather than making a stronger provenance claim.
+
+MetaWorld likewise aggregates windows within released row and rows within exact
+state/action lineage group. Exact duplicate rows do not increase statistical sample size.
 
 Four evenly spaced valid H6 windows per trajectory is the initial throughput budgeting
 assumption. All eligible trajectories are retained; too-short trajectories and fewer

@@ -58,4 +58,19 @@ collected initial-state families assigned to a frozen split before their outcome
   current Push-T pools are not confirmation-eligible.
 
 The MetaWorld inventory and baseline use one lineage group per released trajectory and
-are not affected by this Push-T row-family error.
+are not affected by this Push-T initial-state-family error. A separate exact-duplicate
+audit subsequently corrected MetaWorld's independent-unit accounting; see
+[the MetaWorld lineage correction report](METAWORLD_LINEAGE_CORRECTION.md).
+
+## Corrected expanded baseline receipt
+
+- Active manifest SHA256:
+  `e91f421193b18cb96b640b505f6186fa30e7f4647d99c3cb385c7b73d018849f`
+- Exposure registry SHA256:
+  `a6db652f938c7be3c1d0089f83b6e6c9be8d5fbd58cecbb74a4722192a4f68fa`
+- Baseline report SHA256:
+  `07e3c3a41c79aedfec7a0bfe723527af27dd3d11b5770423baf16792c54f3abe`
+- Window metrics SHA256:
+  `8d1f517416896586d13d79fa62a3136f8393d1ee1186a45a491a979daeb79f93`
+- Scale: 3,636 rollout rows, 36 independent initial-state families, 14,544
+  windows, 459.006 seconds wall time on eight RTX 5090 GPUs.

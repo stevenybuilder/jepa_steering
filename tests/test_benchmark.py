@@ -11,8 +11,12 @@ from offline_study.benchmark import (
     select_rows,
     toy_rows,
 )
-from offline_study.protocol import validate_manifest
-from offline_study.inventory import assign_study_splits
+from offline_study.protocol import study_split, validate_manifest
+from offline_study.inventory import (
+    _metaworld_trajectory_group,
+    assign_metaworld_splits,
+    assign_study_splits,
+)
 
 
 class BenchmarkTests(unittest.TestCase):
@@ -116,6 +120,73 @@ class BenchmarkTests(unittest.TestCase):
             "fit": 16, "development": 4,
         })
         self.assertNotIn("holdout", {row["split"] for row in rows})
+
+    def test_metaworld_exact_state_action_duplicates_share_lineage(self):
+        states = torch.arange(24, dtype=torch.float32).view(6, 4)
+        actions = torch.arange(12, dtype=torch.float32).view(6, 2)
+        group = _metaworld_trajectory_group("mw-reach", states, actions)
+        self.assertEqual(
+            group,
+            _metaworld_trajectory_group(
+                "mw-reach", states.clone(), actions.clone()
+            ),
+        )
+        self.assertNotEqual(
+            group,
+            _metaworld_trajectory_group(
+                "mw-reach", states, actions + 1
+            ),
+        )
+        self.assertNotEqual(
+            group,
+            _metaworld_trajectory_group(
+                "mw-reach-wall", states, actions
+            ),
+        )
+
+    def test_metaworld_duplicate_split_preserves_exposure_and_holdout(self):
+        groups = [f"group-{i}" for i in range(20)]
+        rows = [
+            {
+                "trajectory_id": f"metaworld:all:{i}",
+                "legacy_split_unit": f"metaworld:all:{i}",
+                "lineage_group": groups[i],
+            }
+            for i in range(20)
+        ]
+        legacy = study_split(
+            [row["legacy_split_unit"] for row in rows], 234
+        )
+        by_split = {
+            split: next(
+                i for i, row in enumerate(rows)
+                if legacy[row["legacy_split_unit"]] == split
+            )
+            for split in ("fit", "development", "holdout")
+        }
+
+        # A development duplicate can no longer be confirmation data.
+        dev_i, holdout_i = by_split["development"], by_split["holdout"]
+        rows[holdout_i]["lineage_group"] = rows[dev_i]["lineage_group"]
+        membership, reconstructed = assign_metaworld_splits(rows, 234)
+        self.assertEqual(reconstructed, legacy)
+        self.assertEqual(membership[rows[dev_i]["lineage_group"]], "development")
+        self.assertEqual(rows[holdout_i]["split"], "development")
+
+        # Without development exposure, holdout wins over an unused fit copy.
+        rows = [
+            {
+                "trajectory_id": f"metaworld:all:{i}",
+                "legacy_split_unit": f"metaworld:all:{i}",
+                "lineage_group": groups[i],
+            }
+            for i in range(20)
+        ]
+        fit_i, holdout_i = by_split["fit"], by_split["holdout"]
+        rows[fit_i]["lineage_group"] = rows[holdout_i]["lineage_group"]
+        membership, _ = assign_metaworld_splits(rows, 234)
+        self.assertEqual(membership[rows[holdout_i]["lineage_group"]], "holdout")
+        self.assertEqual(rows[fit_i]["split"], "holdout")
 
     def test_manifest_rejects_lineage_leakage_across_splits(self):
         rows = toy_rows(2)
