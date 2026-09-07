@@ -15,7 +15,7 @@ import torch
 
 from . import VENDOR_COMMIT
 from .backends import JepaBackend
-from .benchmark import batches, elapsed_call, select_rows, synchronize
+from .benchmark import batches, elapsed_call, filter_reviewed_development, select_rows, synchronize
 from .interventions import (
     PredictorIntervention,
     compile_edits,
@@ -386,6 +386,8 @@ def main():
             raise ValueError("Requested tasks differ from the frozen task registry")
         rows = [json.loads(line) for line in args.manifest.read_text().splitlines() if line.strip()]
         validate_manifest(rows)
+        registry = json.loads(args.exposure_registry.read_text())
+        rows = filter_reviewed_development(rows, registry, sha256(args.manifest))
         selected = select_rows(
             rows, args.tasks, "development", args.max_trajectories,
             args.shard_index, args.num_shards,
@@ -394,13 +396,6 @@ def main():
             raise ValueError("Empty development trajectory selection")
         if len({row["dataset"] for row in selected}) != 1:
             raise ValueError("One dataset/checkpoint is required per intervention process")
-        registry = json.loads(args.exposure_registry.read_text())
-        if registry.get("manifest_sha256") != sha256(args.manifest) or not registry.get("review_basis"):
-            raise ValueError("Exposure registry is not bound to this reviewed manifest")
-        for row in selected:
-            entry = registry.get("trajectories", {}).get(row["trajectory_id"], {})
-            if entry.get("use") != "development" or not entry.get("evidence"):
-                raise ValueError(f"Unreviewed/protected source cannot enter intervention: {row['trajectory_id']}")
         selected_meta = [
             {"trajectory_id": row["trajectory_id"], "task": row["task"],
              "start": start, "split": "development"}

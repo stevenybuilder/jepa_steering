@@ -73,6 +73,18 @@ def select_rows(rows, tasks, split, max_trajectories, shard_index, num_shards):
     return [r for r in selected if shard_for(r["trajectory_id"], num_shards) == shard_index]
 
 
+def filter_reviewed_development(rows, registry, manifest_sha256):
+    """Remove anything not explicitly cleared for development before selection/sharding."""
+    if registry.get("manifest_sha256") != manifest_sha256 or not registry.get("review_basis"):
+        raise ValueError("Exposure registry must identify this manifest and its historical review basis")
+    cleared = []
+    for row in rows:
+        entry = registry.get("trajectories", {}).get(row["trajectory_id"], {})
+        if entry.get("use") == "development" and entry.get("evidence"):
+            cleared.append(row)
+    return cleared
+
+
 def toy_rows(count):
     return [dict(trajectory_id=f"toy:{i}", dataset="toy", source_pool="fixture", index=i,
                  task=("mw-reach", "mw-reach-wall", "pusht")[i % 3], split="development",
@@ -309,19 +321,14 @@ def main():
         validate_manifest(rows)
         if any(r["horizon"] != 6 or r["stride"] != 5 for r in rows):
             raise ValueError("Current benchmark requires H6 and stride5")
+        if args.backend == "jepa":
+            registry = json.loads(args.exposure_registry.read_text())
+            rows = filter_reviewed_development(rows, registry, sha256(args.manifest))
         selected = select_rows(rows, args.tasks, args.split, args.max_trajectories, args.shard_index, args.num_shards)
         if not selected:
             raise ValueError("Empty trajectory selection/shard")
         if args.backend == "jepa" and (len({r["dataset"] for r in selected}) != 1 or selected[0]["dataset"] == "toy"):
             raise ValueError("One real dataset/checkpoint per process")
-        if args.backend == "jepa":
-            registry = json.loads(args.exposure_registry.read_text())
-            if registry.get("manifest_sha256") != sha256(args.manifest) or not registry.get("review_basis"):
-                raise ValueError("Exposure registry must identify this manifest and its historical review basis")
-            for row in selected:
-                entry = registry.get("trajectories", {}).get(row["trajectory_id"], {})
-                if entry.get("use") != "development" or not entry.get("evidence"):
-                    raise ValueError(f"Unreviewed/protected source cannot enter benchmark: {row['trajectory_id']}")
         write_json(args.output / "selection.json", selected)
         write_json(args.output / "config.json", {k: str(v) if isinstance(v, Path) else v for k, v in vars(args).items()})
         start = time.perf_counter()

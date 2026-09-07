@@ -3,7 +3,13 @@ import unittest
 import torch
 
 from offline_study.backends import ToyBackend
-from offline_study.benchmark import batches, score_predictions, select_rows, toy_rows
+from offline_study.benchmark import (
+    batches,
+    filter_reviewed_development,
+    score_predictions,
+    select_rows,
+    toy_rows,
+)
 from offline_study.protocol import validate_manifest
 
 
@@ -63,6 +69,21 @@ class BenchmarkTests(unittest.TestCase):
         rows[0]["starts"] = [70]
         with self.assertRaises(ValueError):
             validate_manifest(rows)
+
+    def test_exposure_filter_precedes_selection_and_sharding(self):
+        rows = toy_rows(3)
+        registry = {
+            "manifest_sha256": "manifest",
+            "review_basis": "test audit",
+            "trajectories": {
+                "toy:0": {"use": "development", "evidence": "reviewed"},
+                "toy:1": {"use": "protected", "evidence": "legacy holdout"},
+            },
+        }
+        filtered = filter_reviewed_development(rows, registry, "manifest")
+        self.assertEqual([row["trajectory_id"] for row in filtered], ["toy:0"])
+        with self.assertRaisesRegex(ValueError, "Exposure registry"):
+            filter_reviewed_development(rows, registry, "different")
 
 
 if __name__ == "__main__":

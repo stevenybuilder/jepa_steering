@@ -9,7 +9,7 @@ import time
 from collections import Counter
 from pathlib import Path
 
-from .benchmark import select_rows
+from .benchmark import filter_reviewed_development, select_rows
 from .protocol import sha256, summarize_metrics, write_json
 
 
@@ -94,6 +94,9 @@ def aggregate_shards(output: Path, shard_count: int, wall_seconds: float) -> dic
     if reference_config.get("backend") == "jepa":
         manifest_path = Path(reference_config["manifest"])
         source_rows = [json.loads(line) for line in manifest_path.read_text().splitlines() if line.strip()]
+        registry_path = Path(reference_config["exposure_registry"])
+        registry = json.loads(registry_path.read_text())
+        source_rows = filter_reviewed_development(source_rows, registry, sha256(manifest_path))
         expected = select_rows(
             source_rows,
             reference_config["tasks"],

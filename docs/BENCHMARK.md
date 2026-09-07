@@ -60,7 +60,10 @@ The real benchmark requires a reviewed exposure registry bound to the manifest:
 ```
 
 This is a schema example, not evidence for any actual row. Unmapped sources are
-rejected. This prevents a new 90/10 split from accidentally opening an old holdout.
+excluded before trajectory capping and GPU sharding; protected entries are excluded as
+well. A requested task with no reviewed trajectories still fails. This prevents a new
+90/10 split from accidentally opening an old holdout or changing the selected panel
+merely because a protected row happened to sort first.
 
 ## Initial GPU commands
 
