@@ -259,15 +259,29 @@ def load_model(vendor, asset_root, encoder_source, encoder_root, contract, prepr
     return model, provenance
 
 
+def peek_stimulus(generator, recording_count, sampled_frames=5, goal_frames=4):
+    """Trace the two native CPU draws without consuming or replacing that RNG."""
+    shadow = torch.Generator(device="cpu")
+    shadow.set_state(generator.get_state())
+    index = torch.randint(0, recording_count, (1,), generator=shadow).item()
+    offset = torch.randint(0, sampled_frames - goal_frames + 1, (1,), generator=shadow).item()
+    return index, offset, shadow.get_state()
+
+
 @torch.no_grad()
-def full_episode(cfg, model, dset, preprocessor, output, repetition):
+def full_episode(cfg, model, dset, preprocessor, output, repetition, *,
+                 seed=SMOKE_SEED, agent=None, role="engineering_not_efficacy"):
     from evals.simu_env_planning.envs.init import make_env
     from evals.simu_env_planning.planning.gc_agent import GC_Agent
     from evals.simu_env_planning.planning.plan_evaluator import PlanEvaluator
     from evals.utils import prepare_obs
 
     calls = []
-    original = model.unroll
+    if agent is None:
+        agent = GC_Agent(cfg, model, dset=dset, preprocessor=preprocessor)
+    if agent.dset is not dset or agent.model is not model or agent.cfg.local_seed != cfg.local_seed:
+        raise ValueError("Agent must retain this rank's dataset and RNG streams")
+    original = agent.planner.unroll
     def observed(context, act_suffix=None, **kwargs):
         result = original(context, act_suffix=act_suffix, **kwargs)
         # No-proprio DROID returns a visual Tensor, unlike the other tasks'
@@ -276,21 +290,27 @@ def full_episode(cfg, model, dset, preprocessor, output, repetition):
             raise ValueError("Nonfinite DROID forecast")
         calls.append(list(act_suffix.shape[:2]))
         write_json(output / "progress.json", {"repetition": repetition, "unroll_calls": len(calls),
-            "expected_calls": 30, "role": "engineering_not_efficacy"})
+            "expected_calls": 30, "role": role})
         return result
-    model.unroll = observed
+    agent.planner.unroll = observed
     env = None
     try:
-        agent = GC_Agent(cfg, model, dset=dset, preprocessor=preprocessor)
         env = make_env(cfg)
         evaluator = PlanEvaluator(cfg, agent)
-        _, info = env.reset(seed=SMOKE_SEED, task_idx=0)
+        _, info = env.reset(seed=seed, task_idx=0)
         env.proprio_env.unwrapped._freeze_rand_vec = False
         env.proprio_env.unwrapped.seeded_rand_vec = True
-        env.seed(SMOKE_SEED)
-        initial, goal, _, _ = evaluator.set_episode(cfg, agent, env, SMOKE_SEED, task_idx=0)
+        env.seed(seed)
+        index, offset, expected_rng = peek_stimulus(agent.local_generator, len(dset))
+        initial, goal, _, _ = evaluator.set_episode(cfg, agent, env, seed, task_idx=0)
+        sample = copy.deepcopy(dset.last_sample)
+        if (not torch.equal(expected_rng, agent.local_generator.get_state()) or
+                sample["path"] != str(dset.samples[index]) or len(sample["raw_frame_indices"]) != 5):
+            raise ValueError("Native stimulus selection or RNG consumption changed")
+        sample.update(recording_index=index, goal_segment_offset=offset,
+                      goal_segment_raw_frame_indices=sample["raw_frame_indices"][offset:offset + 4])
         setup = {"initial_sha256": observation_digest(initial), "goal_sha256": observation_digest(goal),
-                 "dataset_sample": dset.last_sample}
+                 "dataset_sample": sample}
         agent.set_goal(prepare_obs(cfg.task_specification.obs, goal))
         def actor(obs, steps_left):
             action = agent.act(prepare_obs(cfg.task_specification.obs, obs), steps_left=steps_left)
@@ -306,7 +326,7 @@ def full_episode(cfg, model, dset, preprocessor, output, repetition):
             "metrics": {k: float(v) for k, v in metrics.items()}, "unroll_calls": calls,
             "dummy_success_intentionally_omitted": True, "robot_executions": 0}
     finally:
-        model.unroll = original
+        agent.planner.unroll = original
         if env is not None:
             from evals.simu_env_planning.envs.droid_dset_dummy_env import DummyEnv
             # The author's placeholder owns no simulator resources and defines

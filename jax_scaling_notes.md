@@ -351,3 +351,46 @@ so the roughly 90 GB navigation extraction stays remote. Do not fill the laptop
 or rent a GPU solely to hold files. The 96 GB worker was rented for larger-model
 DROID computation and useful engineering/training, with storage as a supporting
 resource. Use cloud/object storage only when needed and account for its cost.
+
+## Execution lessons: 2026-09-07, 20:23 UTC
+
+**Critical path:** the completed full 100-step rank/combined engineering episodes
+took 7,681–7,867 seconds each on RTX5090. The fixed coupling-only checks, including
+their fit-only parity checks, took 313–316 seconds. These are different algorithms
+on one engineering scenario, not a controlled hardware ranking or an efficacy
+comparison. The roughly13% prefix-cache saving above cannot by itself erase a
+roughlytwo-hour rank episode. Keep the cheaper independent comparisons running
+while validating response-construction improvements; do not silently remove probes.
+
+**Ready independent work:** added a California4xRTX5090 worker at$1.641667/hour
+for the remaining fixed coupling/control logical streams. The projected full
+account rate is$6.585111/hour. Retaining eight logical RNG streams and unique
+episode IDs makes these disjoint shards portable without inter-GPU gradient or
+activation communication. Hardware-specific parity still precedes production.
+Runtime preparation is real overhead: the initial SSH stream was interrupted,
+and source rsync was an empty non-executable placeholder. Keepalive-enabled
+direct streaming succeeded. No speedup should be inferred from rented GPU count
+while the worker is still being prepared.
+
+**Memory capacity versus price:** DROID's two full native engineering plans used
+15.1GB peak allocated memory on the96GB worker (about23GB reserved). This indicates
+that baseline evaluation can fit32GB GPUs; it does not prove that a cheaper GPU
+has better throughput. The96GB worker can be useful for training/engineering but
+is not needed merely to store the recordings or load the DROID baseline.
+
+**Training accumulation, pending validation:** the prepared pilot uses the exact
+native16 logical samplers, batches of8, and global128. It compares accumulation
+against the actual upstream training function's local gradients averaged across
+those16 batches, including optimizer moments, scaler and CPU RNG. The source
+collective's floating-point reduction order is not claimed identical. This follows
+the book's separation of effective batch from physical device layout, but remains
+a queued engineering test, not an adopted training speedup.
+[Training parallelism](https://jax-ml.github.io/scaling-book/training/).
+
+**Real storage fallback:** local disk reached less than300MiB free. Six duplicate
+raw fitting captures totaling8.76GB were relocated only after checksums matched
+their prior receipts and two existing US copies. Small reports and recovery maps
+remain local. No extra GPU was bought as a disk. Storage relocation changes the
+location of evidence, not the sample size or experiment design; the historical
+full-local verification must not be presented as a current claim that every raw
+capture remains on the laptop. See[execution status](reports/EXECUTION_STATUS.md).

@@ -3,10 +3,31 @@ import unittest
 import numpy as np
 import torch
 
-from offline_study.droid_native import array_hash, assert_same, observation_digest
+from offline_study.droid_native import array_hash, assert_same, observation_digest, peek_stimulus
+from offline_study.droid_replication import assigned_rows
+from offline_study.planning_contract import seed_schedule
 
 
 class DroidNativeTests(unittest.TestCase):
+    def test_trace_preserves_persistent_native_generator(self):
+        generator = torch.Generator().manual_seed(3001)
+        for _ in range(8):
+            before = generator.get_state()
+            index, offset, after = peek_stimulus(generator, 15)
+            self.assertTrue(torch.equal(before, generator.get_state()))
+            self.assertEqual(index, torch.randint(0, 15, (1,), generator=generator).item())
+            self.assertEqual(offset, torch.randint(0, 2, (1,), generator=generator).item())
+            self.assertTrue(torch.equal(after, generator.get_state()))
+
+    def test_shards_keep_complete_logical_streams(self):
+        rows = seed_schedule(1, 64, 8, 3)
+        parts = [assigned_rows(rows, [rank]) for rank in range(8)]
+        self.assertEqual([row for part in parts for row in part], rows)
+        self.assertEqual([len(part) for part in parts], [8] * 8)
+        for ranks in ([], [0, 0], [8]):
+            with self.assertRaises(ValueError):
+                assigned_rows(rows, ranks)
+
     def test_parity_includes_dtype_and_rng_state(self):
         value = ({"pixels": torch.zeros(2, 3)}, np.random.RandomState(234).get_state())
         assert_same(value, value)
