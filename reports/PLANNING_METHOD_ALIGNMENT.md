@@ -153,3 +153,28 @@ outcomes cannot select a candidate. Durable, checksum-verified reports are under
 They do not promote a Reach-Wall coupling arm that failed its offline advancement gate.
 Dynamic support/rank operators still need separate transfer validation, including an
 explicit policy for the planner's shortened horizons.
+
+### Rank-transfer implementation and queued fit checks (approximately noon EDT)
+
+`planning_support.py` now implements that transfer as an explicitly recorded study
+extension. It uses the unchanged BF16-primary rank bank with the actual upstream
+two-context, strict-FP32 planning unroll, retaining all 32 source response probes,
+the native H3 shadow target and the source common-degeneracy test. The H6 target is
+not redefined for H5: when the official planner shortens its horizon below six,
+this adapter returns a true native rollout and adds no fictitious actions. The same
+rule applies to both components if a combined recipe later advances. This is our
+intervention-transfer policy, not a setting claimed to appear in the JEPA-WM paper.
+
+Candidate slices have at most eight elements; the 300-candidate CEM population is
+not reduced, reordered or padded. This bounds memory while the operator computes
+its response probes. Fit-only checks compare active edits with the unchanged source
+compiler, demand bitwise no-op identity, and check chunked native forecasts at the
+existing 1e-6 absolute / 1e-5 relative tolerance. They retain a non-divisible 19-item
+batch and benchmark 300 repeated fit-action sequences. These timings are not actual
+closed-loop/CEM throughput or additional independent observations.
+
+The checks are queued on the existing US worker, taking GPUs 1 and 2 only after
+their respective combined-development shards have completed and released memory.
+No confirmation outcomes or new simulator policies are opened by this queue.
+Actual selected-candidate CEM integration, combined-transfer parity if needed,
+prospective exposure verification and the final policy-analysis freeze remain gates.
