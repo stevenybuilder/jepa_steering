@@ -1,12 +1,25 @@
 # Frozen-model offline study: active plan
 
+Latest user-approved scope (2026-09-07, after 14:00 EDT): six intended tasks --
+Reach, Reach-Wall, Push-T, PointMaze, Wall, and DROID. RoboCasa is explicitly
+excluded. DROID follows the authors' recorded-Franka planning/action-score setup,
+not a simulator or newly executed physical-robot task-success experiment. Its
+64-episode evaluation, three training seeds, released-code sparse aggregation
+within epochs 215–315 (18 checkpoints at native cadence), distinct
+model/inputs and source discrepancies are specified in
+[DROID_METHOD_ALIGNMENT.md](DROID_METHOD_ALIGNMENT.md) and executable
+`offline_study.droid_contract`. The other five tasks retain 96 episodes and ten
+late epochs. The multi-seed/history track is required, not optional; absent
+histories cannot be supplied by repeatedly evaluating the released checkpoint.
+This expands intended scope, not the count of completed tasks or measured outcomes.
+
 User-approved behavioral expansion (2026-09-07, afternoon): add PointMaze and Wall,
 retain the existing three tasks, and compare predefined interventions using planning
 success alongside prediction metrics. The old significant-offline-improvement rule
 remains part of the completed offline study, but is NOT a mandatory admission rule
 for the new behavioral-development stage. Preserve all prior measurements and exposure
 records. See [the behavioral amendment](BEHAVIORAL_EVALUATION_AMENDMENT.md) for the
-five-task scope, separate development/confirmation roles, multi-training-seed and
+expanded scope, separate development/confirmation roles, multi-training-seed and
 checkpoint-history track, rerun accounting, and outstanding pre-execution freezes.
 
 Status (2026-09-07, approximately 12:35 EDT): the corrected primary offline comparisons are

@@ -1,5 +1,11 @@
 # GPU efficiency and Vast execution
 
+For the learner-facing concepts, audited implementation status and optimization
+decision log, see [jax_scaling_notes.md](../jax_scaling_notes.md). The examples below
+describe the original seven-frame baseline harness, not the corrected author-style
+clip evaluator or all planning runners. In particular, bounded decode prefetch exists
+in the original baseline but is not yet ported to the corrected author runtime.
+
 This project uses the GPU chapter of the JAX Scaling Book as a performance model,
 not as permission to copy LLM sharding recipes into a small frozen world model. The
 relevant constraints are Tensor Core utilization, HBM traffic, host-to-device stalls,

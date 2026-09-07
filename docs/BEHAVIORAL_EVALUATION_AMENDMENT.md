@@ -2,11 +2,12 @@
 
 ## Decision and scope
 
-Implement the user-approved PointMaze and Wall additions and paper-style behavioral
-design-choice evaluation. Confidence is high in their relevance and official asset
-availability, but runtime and intervention efficacy remain unmeasured. Retain Reach,
-Reach-Wall and Push-T: five intended tasks, not five completed behavioral evaluations.
-Defer adding RoboCasa/DROID to the execution suite while assessing their dependencies.
+Implement the user-approved PointMaze, Wall and subsequently approved DROID additions
+and paper-style behavioral design-choice evaluation. Retain Reach, Reach-Wall and
+Push-T: six intended tasks, not six completed behavioral evaluations. RoboCasa is
+explicitly excluded by the user's latest instruction. DROID measures planned-action
+agreement on recorded physical-robot scenarios; the five other tasks measure
+simulated behavior. See [the DROID method contract](DROID_METHOD_ALIGNMENT.md).
 
 This amendment records the user's explicit direction before new behavioral outcomes.
 It supersedes the old offline-improvement requirement ONLY as an admission rule for
@@ -43,8 +44,17 @@ Significant offline improvement is NOT a mandatory admission criterion in the ne
 behavioral stage. Identity/fidelity, valid inputs, frozen parameters and verified
 exposure remain required. A finite candidate/control registry must be fixed from
 the existing hypotheses before behavioral outcomes. The exact panel, selection,
-practical-effect and multiplicity contract remain pending; this amendment alone is
-not a launch or reveal receipt. It must not become an unbounded Cartesian search.
+practical-effect and multiplicity contract are now implemented for the initial
+MetaWorld panel in `offline_study.behavioral_development`: native, equal-budget
+coupling, rank4, their combination, and three corresponding matched-random controls.
+This is seven conditions, using existing components without new fitting choices.
+The new development stream is 2026090721 with the official eight-rank seed formula;
+base-1 prepared confirmation stays reserved. The executable freeze binds exact
+component/fit/source hashes and six primary contrasts per task (12 across Reach
+and Reach-Wall), with paired simultaneous intervals and a prospective 5pp useful
+success-gain rule. Only native jobs can initially launch; candidate-specific
+engineering receipts remain mandatory. Other tasks and conditional HMM are still
+required separate work, not silently declared complete by this initial panel.
 
 Use actual task success as the primary behavioral endpoint. Keep forecast errors,
 failure modes, action magnitudes and runtime as separately reported diagnostics.
@@ -74,12 +84,17 @@ MetaWorld or Push-T. Use raw archives, not the small Hugging Face preview parque
 
 ## Training variability and checkpoint histories
 
-Add a separate three-training-seed robustness/replication track. The five-task suite
-uses four environment-trained models because Reach/Reach-Wall share MetaWorld.
-The paper's final-model aggregation includes three training seeds and the final ten
-epoch evaluations. Existing final checkpoints cannot supply their absent histories.
-Full newly reproduced histories for all four models therefore require 12 training
-runs; two extra final checkpoints per model alone address a narrower seed question.
+The three-training-seed robustness/replication track is REQUIRED by the user, not
+an optional follow-up. The six-task suite uses five environment-trained models
+because Reach/Reach-Wall share MetaWorld. Use three training seeds and the final
+ten epoch evaluations for the five simulated tasks. For DROID, the released rebuttal
+analysis explicitly permits sparse checkpoints within epochs 215–315: native cadence
+gives 18 checkpoints, with 64 episodes per checkpoint/condition. Retain the wider
+released-code MetaWorld window for a separately labelled sensitivity. Existing final checkpoints cannot supply
+their absent histories. Full reproduced histories require 15 training runs;
+two extra final checkpoints per model alone address a narrower seed question.
+Reproduction seed IDs are 234, 235 and 236; only 234 is directly specified in the
+released configs, so do not claim these are the authors' unpublished exact triplet.
 
 Before training launch, freeze the actual seed triplets, source configs, global batch,
 optimizer/schedule, update counts, checkpoint retention and evaluation cadence.
@@ -114,12 +129,15 @@ smoke seed 2026090719. It records and verifies every 300-candidate and mean fore
 at all 15 iterations per replan. These engineering outcomes cannot select candidates
 or count toward confirmation. An incomplete episode cannot receive a DONE receipt.
 
-Work remains subject to the latest user limit: aggregate $5/hour, US-only. Stage
+Work remains subject to the latest user limit: aggregate $7/hour, US-only. Stage
 assets while independent GPU jobs run, batch candidates, and preserve source/results
 before releasing workers. Additional work should be scientifically relevant, not
 created solely to fill a GPU. Report actual utilization and measured throughput.
 
 ## RoboCasa/DROID decision and limitations
+
+Superseding decision: DROID is approved for implementation; RoboCasa is excluded.
+The earlier recommendation to defer both is retired, not an execution restriction.
 
 DROID is real-robot data. In JEPA-WM, its reported evaluation is an offline planned-
 action score on recorded robot videos, not newly executed real-robot task success.
@@ -130,10 +148,11 @@ data are released, but dependencies, population lineage and transfer adapter nee
 auditing before an execution decision. Neither name alone strengthens a robotics
 claim without valid measurements; MetaWorld already supplies simulated robot control.
 
-Recommendation: finish the five-task behavioral suite and assess a bounded DROID or
-RoboCasa extension only against a concrete unanswered question. Evidence of successful
-setup with adequate resources could change this recommendation. Do not download the
-entire multi-terabyte DROID corpus just to reproduce its small evaluation subset.
+Stage all 16 released Franka recordings and the official DROID checkpoint now, while
+the existing task work continues. Audit the 15-recording released-config selection
+versus the paper's 16 and preserve the larger-model and training-cadence differences.
+Do not download the entire multi-terabyte DROID corpus merely to reproduce the small
+evaluation subset; separately resolve the paper's training subset for required histories.
 
 ## Sources and next required evidence
 

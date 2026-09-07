@@ -2,7 +2,9 @@
 
 Read docs/EXPERIMENT_PLAN.md and configs/study.json before scientific changes.
 
-- Primary tasks: mw-reach, mw-reach-wall, pusht. Never report a single-task run as
+- User-approved scope: mw-reach, mw-reach-wall, pusht, pointmaze, wall, droid.
+  RoboCasa is excluded. DROID uses the paper's recorded-plan action endpoint,
+  not physical-robot closed-loop success. Never report a single-task run as
   completion of the suite. Report both requested and actually measured task counts.
 - archive/ is historical evidence. Do not edit it or execute its scripts as the new
   protocol without explicitly porting and validating the needed behavior.

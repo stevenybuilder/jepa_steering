@@ -2,8 +2,13 @@
 
 Status: recommended execution sequence, not a frozen confirmation protocol or a
 claim that closed-loop implementation is complete. The current authorized budget is
-$5/hour aggregate, US-only; noon Eastern September 7 is a best-effort target, not a
+$7/hour aggregate, US-only; noon Eastern September 7 was a best-effort target, not a
 reason to weaken scientific gates. See `configs/execution_authorization_20260907.json`.
+
+The later [behavioral amendment](BEHAVIORAL_EVALUATION_AMENDMENT.md) supersedes the
+offline-significance admission gate below for new planning-development comparisons.
+The current scope is six tasks, with required training histories; preserve the
+already-completed offline rules as historical provenance, not a planning veto.
 
 Current preparation is documented in [PLANNING_METHOD_ALIGNMENT.md](../reports/PLANNING_METHOD_ALIGNMENT.md).
 Paper-scale planning contracts and verified simulator goal-setup checks now exist
