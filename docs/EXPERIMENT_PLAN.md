@@ -1,5 +1,14 @@
 # Frozen-model offline study: active plan
 
+User-approved behavioral expansion (2026-09-07, afternoon): add PointMaze and Wall,
+retain the existing three tasks, and compare predefined interventions using planning
+success alongside prediction metrics. The old significant-offline-improvement rule
+remains part of the completed offline study, but is NOT a mandatory admission rule
+for the new behavioral-development stage. Preserve all prior measurements and exposure
+records. See [the behavioral amendment](BEHAVIORAL_EVALUATION_AMENDMENT.md) for the
+five-task scope, separate development/confirmation roles, multi-training-seed and
+checkpoint-history track, rerun accounting, and outstanding pre-execution freezes.
+
 Status (2026-09-07, approximately 12:35 EDT): the corrected primary offline comparisons are
 complete, verified across all 30 task/category/precision scopes: 33 Reach, 27 Reach-Wall,
 and 21 Push-T trajectories. All six refits exclude validation families; the seven added
