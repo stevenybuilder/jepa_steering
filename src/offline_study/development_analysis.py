@@ -15,6 +15,65 @@ from .protocol import sha256, write_json
 BOOTSTRAP_SEED = 2026090704
 
 
+def simultaneous_contrasts(values, seed, replicates=10_000):
+    """Aligned lineage draws preserve dependence across a frozen contrast family."""
+    array = np.asarray(values, dtype=np.float64)
+    if array.ndim != 2 or array.shape[0] < 2 or array.shape[1] < 1 or not np.isfinite(array).all():
+        raise ValueError("Simultaneous intervals require finite lineage-by-contrast values")
+    mean = array.mean(0)
+    se = array.std(0, ddof=1) / np.sqrt(len(array))
+    indices = np.random.default_rng(seed).integers(0, len(array), size=(replicates, len(array)))
+    deviations = array[indices].mean(1) - mean
+    standardized = np.divide(deviations, se, out=np.zeros_like(deviations), where=se > 0)
+    critical = float(np.quantile(np.abs(standardized).max(1), .95, method="higher"))
+    return {"mean": mean.tolist(), "standard_error": se.tolist(), "critical_value": critical,
+            "lower": (mean - critical * se).tolist(), "upper": (mean + critical * se).tolist(),
+            "zero_observed_variance": (se == 0).tolist()}
+
+
+def frozen_family_analysis(report, protocol):
+    plan = protocol.get("development_analysis_plan", {})
+    if plan.get("interval") != "paired_max_standardized_bootstrap_simultaneous_95":
+        return None
+    endpoint = plan["primary_forecast_endpoint"]
+    contrasts = report["aggregation"]["primary_contrasts"]
+    vectors = []
+    group_ids = None
+    for contrast in contrasts:
+        groups = contrast["per_lineage_group"]
+        mapping = {row["lineage_group"]: row["candidate_minus_control"][endpoint] for row in groups}
+        if len(mapping) != len(groups):
+            raise ValueError("Duplicate independent lineage in a contrast")
+        if group_ids is None:
+            group_ids = sorted(mapping)
+        if sorted(mapping) != group_ids:
+            raise ValueError("Contrasts do not share the exact paired lineage population")
+        vectors.append([mapping[group] for group in group_ids])
+    summary = simultaneous_contrasts(np.asarray(vectors).T, plan["bootstrap_seed"], plan["bootstrap_replicates"])
+    threshold, margin = plan["smallest_useful_effect"], plan["equivalence_margin"]
+    intervals = [{"name": contrast["name"], "candidate": contrast["candidate"],
+                  "control": contrast["control"], "mean": summary["mean"][i],
+                  "simultaneous_95_interval": [summary["lower"][i], summary["upper"][i]],
+                  "improves_by_smallest_useful_effect": summary["upper"][i] < -threshold,
+                  "within_equivalence_margin": summary["lower"][i] > -margin and summary["upper"][i] < margin,
+                  "zero_observed_variance": summary["zero_observed_variance"][i]}
+                 for i, contrast in enumerate(contrasts)]
+    eligible = []
+    for name in ("equal_anchor_linear", "cubic", "projected_cubic", "reflected_curvature"):
+        controls = {item["control"]: item for item in intervals if item["candidate"] == name}
+        if all(control in controls and controls[control]["improves_by_smallest_useful_effect"]
+               for control in ("native", "matched_random")):
+            eligible.append(name)
+    return {"endpoint": endpoint, "independent_lineage_groups": len(group_ids),
+            "interval_method": plan["interval"], "bootstrap_seed": plan["bootstrap_seed"],
+            "bootstrap_replicates": plan["bootstrap_replicates"],
+            "critical_value": summary["critical_value"], "smallest_useful_effect": threshold,
+            "equivalence_margin": margin, "contrasts": intervals,
+            "development_eligible_arms": eligible,
+            "selection_status": "retain_native" if not eligible else "eligible_pending_parsimony_review",
+            "scientific_confirmation": False}
+
+
 def bootstrap_mean_summary(
     values: list[float], seed: int, replicates: int = 10_000,
 ) -> dict[str, float | int | list[float] | None]:
@@ -106,6 +165,7 @@ def analyze_task_report(report: dict, protocol: dict, seed: int, replicates: int
         "native_group_weighted_metrics": native[task]["metrics"],
         "primary_contrasts": contrast_results,
         "mechanism_diagnostics": mechanism_metrics,
+        "frozen_primary_family": frozen_family_analysis(report, protocol),
     }
 
 
@@ -158,17 +218,18 @@ def main():
                 "resampling_unit": "lineage_group",
                 "bootstrap_replicates": args.bootstrap_replicates,
                 "seed": args.seed,
-                "interval": "two-sided percentile 95%",
+                "interval": "descriptive_percentile_95_plus_per_task_frozen_primary_family_where_registered",
                 "task_pooling": False,
                 "contrast_difference": "candidate_minus_control",
-                "multiplicity_adjusted_in_development": False,
+                "multiplicity_adjusted_in_development": all(
+                    result.get("frozen_primary_family") is not None for result in task_results),
                 "arm_selection_from_this_receipt": False,
             },
             "per_task": sorted(task_results, key=lambda row: row["task"]),
             "limitations": [
                 "Development estimates variance and effect size; it is not confirmation",
-                "Intervals are descriptive bootstrap intervals, not multiplicity-adjusted tests",
-                "No task pooling, arm selection, smallest-useful-effect choice, or power claim is made",
+                "Univariate summaries are descriptive; only an explicitly frozen primary family uses simultaneous intervals",
+                "No task pooling, final recipe selection, or power claim is made; frozen family margins derive only from fitting data",
                 "Push-T remains development-only until fresh independent families exist",
                 "Forecast embedding error is not closed-loop physical behavior",
             ],

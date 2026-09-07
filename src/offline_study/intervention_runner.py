@@ -104,6 +104,14 @@ def score_intervention_predictions(
             metric_names.append(f"{modality}_mse_h{horizon}")
             metric_columns.append(delta.square().flatten(1).mean(1))
 
+    if category == "action_response_geometry":
+        for modality in ("visual", "proprio"):
+            for horizon in (3, 6):
+                outputs = predicted[modality][horizon].float().reshape(window_count, len(arm_names), -1)
+                native = outputs[:, arm_names.index("native"):arm_names.index("native") + 1]
+                metric_names.append(f"{modality}_native_fidelity_mse_h{horizon}")
+                metric_columns.append((outputs - native).square().mean(2).flatten())
+
     diagnostic_names, diagnostic_columns = [], []
     if category == "vision_action_coupling":
         indices = {
@@ -277,11 +285,15 @@ def execute(args, backend, selected, protocol, bank):
                 key: encoded[key].repeat_interleave(arm_count, dim=0)
                 for key in ("visual", "proprio")
             }
-            compiled, seconds = elapsed_call(
-                lambda protocol=protocol, bank=bank, meta=meta: compile_edits(
-                    protocol, bank, meta, device),
-                device,
-            )
+            geometry_diagnostics = None
+            if protocol["category"] == "action_response_geometry" and "geometry" in protocol:
+                from .action_geometry import prepare_geometry
+                (compiled, geometry_diagnostics), seconds = elapsed_call(
+                    lambda: prepare_geometry(backend, context, actions, protocol, bank), device)
+            else:
+                compiled, seconds = elapsed_call(
+                    lambda protocol=protocol, bank=bank, meta=meta: compile_edits(
+                        protocol, bank, meta, device), device)
             timings["operator_stage_seconds"] += seconds
             edit_norms = _edit_norms(compiled, len(meta) * arm_count)
             if batch_count == 0:
@@ -333,6 +345,8 @@ def execute(args, backend, selected, protocol, bank):
             start = time.perf_counter()
             values, diagnostics = score_intervention_predictions(
                 predicted, expanded_target, arm_names, protocol["category"], len(meta))
+            if geometry_diagnostics is not None:
+                diagnostics = geometry_diagnostics
             expanded_rows = []
             for window_index, metadata in enumerate(meta):
                 for arm in arm_names:

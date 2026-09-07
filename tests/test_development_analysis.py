@@ -1,10 +1,17 @@
 import unittest
 
-from offline_study.development_analysis import analyze_task_report, bootstrap_mean_summary
+from offline_study.development_analysis import analyze_task_report, bootstrap_mean_summary, simultaneous_contrasts
 from offline_study.operator_fit import make_protocol
 
 
 class DevelopmentAnalysisTests(unittest.TestCase):
+    def test_simultaneous_interval_preserves_paired_contrast_dependence(self):
+        first = simultaneous_contrasts([[-1., -2.], [0., 0.], [2., 4.], [3., 6.]], 5, 2000)
+        self.assertEqual(first, simultaneous_contrasts([[-1., -2.], [0., 0.], [2., 4.], [3., 6.]], 5, 2000))
+        self.assertAlmostEqual(first["lower"][1], 2 * first["lower"][0])
+        self.assertAlmostEqual(first["upper"][1], 2 * first["upper"][0])
+        self.assertGreater(first["critical_value"], 0.)
+
     def test_bootstrap_is_deterministic_and_uses_independent_values(self):
         first = bootstrap_mean_summary([-1., 0., 2., 3.], seed=9, replicates=1000)
         second = bootstrap_mean_summary([-1., 0., 2., 3.], seed=9, replicates=1000)
