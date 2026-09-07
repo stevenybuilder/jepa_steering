@@ -149,3 +149,9 @@ jepa-fit-coupling --vendor vendor/jepa-wms \
 The output contains `fit_selection.json`, `fit_receipt.json`, `protocol.json`,
 `operator_bank.pt`, and `DONE.json`. A script exit is only a fit/protocol milestone;
 it is not an intervention result or confirmation claim.
+
+After all three development runs complete, `jepa-analyze-development --runs RUN...`
+produces deterministic percentile-bootstrap summaries over independent lineage groups.
+It never pools tasks, selects an arm, chooses a smallest useful effect, or labels the
+development interval confirmatory. Those decisions and multiplicity handling are a
+subsequent frozen-analysis gate before any protected MetaWorld evaluation is opened.

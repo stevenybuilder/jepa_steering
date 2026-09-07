@@ -234,6 +234,18 @@ def make_protocol(
             "outcome_tuning": False,
         },
         "frozen_at": frozen_at,
+        "development_analysis_plan": {
+            "resampling_unit": "lineage_group",
+            "task_pooling": False,
+            "bootstrap_replicates": 10000,
+            "bootstrap_seed": 2026090704,
+            "interval": "two-sided percentile 95%",
+            "primary_forecast_endpoint": "proprio_mse_h6",
+            "primary_mechanism_endpoint": "visual_output_interaction_mse_h6",
+            "role": "variance/effect-size estimation before a separate confirmation freeze",
+            "arm_selection": False,
+            "confirmatory_multiplicity_and_smallest_useful_effect": "freeze after development",
+        },
         "arms": [
             {"name": "native", "edits": []},
             {"name": "zero_dose", "edits": [{**visual, "scale": 0.}, {**action, "scale": 0.}]},
