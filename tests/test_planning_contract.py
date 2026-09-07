@@ -35,6 +35,23 @@ class PlanningContractTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             seed_schedule(episodes=4, logical_ranks=8)
 
+    def test_navigation_uses_its_own_full_budget_random_state_recipe(self):
+        vendor = Path(__file__).resolve().parents[1] / "vendor/jepa-wms"
+        if not vendor.is_dir():
+            self.skipTest("Pinned upstream source not installed")
+        for task, name in (("pointmaze", "maze-base"), ("wall", "wall-base")):
+            contract = prepare(vendor, task)
+            cfg = contract["config"]
+            self.assertEqual(cfg["task_specification"]["task"], name)
+            self.assertEqual(contract["goal_source"], "random_state")
+            self.assertEqual(contract["max_elementary_steps"], 30)
+            self.assertEqual(cfg["planner"]["iterations"], 30)
+            self.assertEqual(cfg["planner"]["num_samples"], 300)
+            self.assertEqual(cfg["planner"]["num_act_stepped"], 6)
+            self.assertEqual(contract["source_config_episodes"], 96)
+            self.assertEqual(len(contract["episodes"]), 96)
+            self.assertFalse(contract["fresh_family_confirmation"])
+
 
 if __name__ == "__main__":
     unittest.main()

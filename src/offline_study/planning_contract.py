@@ -19,6 +19,8 @@ CONFIGS = {
     "pusht": "configs/evals/simu_env_planning/pt/jepa-wm/pt_L2_cem_sourcedset_H6_nas6_ctxt2_r224_alpha0.1_ep96_decode.yaml",
     "reach": "configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
     "reach-wall": "configs/evals/simu_env_planning/mw/jepa-wm/reach-wall_L2_cem_sourcexp_H6_nas3_ctxt2_r256_alpha0.1_ep48_decode.yaml",
+    "pointmaze": "configs/evals/simu_env_planning/mz/jepa-wm/mz_L2_cem_sourcerandstate_H6_nas6_ctxt2_r224_alpha0.1_ep96_decode.yaml",
+    "wall": "configs/evals/simu_env_planning/wall/jepa-wm/wall_L2_cem_sourcerandstate_H6_nas6_ctxt2_r224_alpha0.1_ep96_decode.yaml",
 }
 
 
@@ -54,6 +56,8 @@ def prepare(vendor, task):
     cfg = copy.deepcopy(original)
     planner, spec = cfg["planner"], cfg["task_specification"]
     pusht = task == "pusht"
+    navigation = task in ("pointmaze", "wall")
+    single_plan = pusht or navigation
     task_template = None
     if task == "reach":
         # There is no full JEPA-WM Reach example; the released MW model is shared.
@@ -64,16 +68,21 @@ def prepare(vendor, task):
         for key in ("iterations", "horizon", "num_samples", "num_elites", "num_act_stepped"):
             if planner[key] != template["planner"][key]:
                 raise ValueError("Reach template and shared MW planner disagree")
-    expected = {"planner_name": "cem", "iterations": 30 if pusht else 15,
+    expected = {"planner_name": "cem", "iterations": 30 if single_plan else 15,
                 "num_samples": 300, "num_elites": 10, "horizon": 6,
-                "var_scale": 1., "num_act_stepped": 6 if pusht else 3,
+                "var_scale": 1., "num_act_stepped": 6 if single_plan else 3,
                 "repeat_actskip": False, "distribute_planner": False}
     if any(planner[key] != value for key, value in expected.items()):
         raise ValueError("Upstream CEM settings differ from audited paper recipe")
     if planner["planning_objective"] != {"objective_type": "L2", "sum_all_diffs": False, "alpha": .1}:
         raise ValueError("Wrong official planning objective")
-    if spec["goal_source"] != ("dset" if pusht else "expert") or spec["img_size"] != 224:
+    goal_source = "random_state" if navigation else ("dset" if pusht else "expert")
+    if spec["goal_source"] != goal_source or spec["img_size"] != 224:
         raise ValueError("Unexpected task sampling or image size")
+    if navigation and (spec["task"] != ("maze-base" if task == "pointmaze" else "wall-base") or
+                       spec["goal_H"] != 6 or spec["done_at_succ"] is not False or
+                       spec["succ_def"] != "simu"):
+        raise ValueError("Navigation simulator, horizon or success rule changed")
     model = cfg["model_kwargs"]
     if model["wrapper_kwargs"]["ctxt_window"] != 2 or model["data"]["custom"]["frameskip"] != 5:
         raise ValueError("Do not substitute offline context or action spacing for planning")
@@ -94,10 +103,12 @@ def prepare(vendor, task):
         "source_config_episodes": original["meta"]["eval_episodes"],
         "planned_replication_episodes_per_condition": 96,
         "paper_reference": "https://arxiv.org/html/2512.24497v4#A7.SS2",
-        "simulation": "official PushTEnv / Pymunk 6.8.0" if pusht else "official MetaWorldWrapper / MetaWorld V3 / MuJoCo",
+        "simulation": ({"pointmaze": "official PointMaze / D4RL / mujoco-py / MuJoCo 2.1",
+                        "wall": "official DotWall simulator / torch CPU"}[task] if navigation else
+                       ("official PushTEnv / Pymunk 6.8.0" if pusht else "official MetaWorldWrapper / MetaWorld V3 / MuJoCo")),
         "goal_source": spec["goal_source"], "planning_context": 2, "offline_context": 3,
-        "max_elementary_steps": 30 if pusht else 100,
-        "replanning": "one H6 plan, execute all 30 elementary actions" if pusht else "replan after each 15 elementary actions until episode end",
+        "max_elementary_steps": 30 if single_plan else 100,
+        "replanning": "one H6 plan, execute all 30 elementary actions" if single_plan else "replan after each 15 elementary actions until episode end",
         "reported_unit": "paired initial/goal scenario; cluster reused Push-T source families",
         "fresh_family_confirmation": False,
         "trained_checkpoints_per_task_available_to_this_run": 1,

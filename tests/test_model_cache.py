@@ -9,6 +9,17 @@ from offline_study.protocol import sha256
 
 
 class ModelCacheTests(unittest.TestCase):
+    def test_environment_mapping_is_explicit_and_unknown_fails_before_loading(self):
+        from offline_study.backends import JepaBackend
+        for kind in ("metaworld", "pusht", "pointmaze", "wall"):
+            self.assertEqual(model_loader.model_name_for_dataset(kind), "jepa_wm_" + kind)
+            self.assertEqual(model_loader.MODEL_DATASETS["jepa_wm_" + kind], kind)
+        for kind in ("maze", "Wall", "droid", "unknown"):
+            with self.assertRaisesRegex(ValueError, "Unsupported"):
+                JepaBackend(Path("missing"), Path("missing"), "bad", kind, "cpu")
+        with self.assertRaisesRegex(ValueError, "Unsupported"):
+            model_loader.load_headless(Path("missing"), model_name="jepa_wm_unknown")
+
     def test_missing_cache_fails_before_network_access(self):
         with tempfile.TemporaryDirectory() as temporary, patch("torch.hub.get_dir", return_value=temporary), patch("torch.hub.load") as load:
             with self.assertRaisesRegex(ValueError, "audited runtime"):

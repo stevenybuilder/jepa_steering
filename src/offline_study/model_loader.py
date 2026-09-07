@@ -22,6 +22,15 @@ import yaml
 
 DINO_SOURCE_SHA256 = "88b35b92ca99c27c3bd9c650d930f43e78c7e6341fb13ecfffdc26272fbf80a5"
 DINO_WEIGHT_SHA256 = "b938bf1bc15cd2ec0feacfe3a1bb553fe8ea9ca46a7e1d8d00217f29aef60cd9"
+MODEL_DATASETS = {"jepa_wm_" + kind: kind for kind in
+                  ("metaworld", "pusht", "pointmaze", "wall")}
+
+
+def model_name_for_dataset(dataset):
+    name = "jepa_wm_" + dataset
+    if name not in MODEL_DATASETS:
+        raise ValueError("Unsupported JEPA-WM dataset: " + dataset)
+    return name
 
 
 @contextlib.contextmanager
@@ -64,6 +73,8 @@ def load_headless(
     repo: Path, device: str = "cuda:0", model_name: str = "jepa_wm_metaworld",
     checkpoint_override: Path | None = None,
 ) -> tuple[torch.nn.Module, Any, dict[str, str]]:
+    if model_name not in MODEL_DATASETS:
+        raise ValueError("Unsupported JEPA-WM model: " + model_name)
     repo = repo.resolve()
     sys.path.insert(0, str(repo))
 
@@ -73,8 +84,6 @@ def load_headless(
     from app.plan_common.datasets.transforms import make_inverse_transforms, make_transforms
     from src.utils.yaml_utils import expand_env_vars
 
-    if model_name not in ("jepa_wm_metaworld", "jepa_wm_pusht"):
-        raise ValueError(model_name)
     config_rel, weight_key = hubconf._MODEL_CONFIGS[model_name]
     config_path = repo / config_rel
     args_eval = expand_env_vars(yaml.safe_load(config_path.read_text()))
@@ -88,7 +97,7 @@ def load_headless(
     if device.startswith("cuda") and not torch.cuda.is_available():
         raise RuntimeError("Requested GPU is unavailable; refusing silent CPU fallback")
     torch_device = torch.device(device)
-    data_stats = get_data_stats("pusht" if model_name == "jepa_wm_pusht" else "metaworld")
+    data_stats = get_data_stats(MODEL_DATASETS[model_name])
     img_size = cfgs_data.get("img_size", 224)
     transform = make_transforms(
         img_size=img_size,
@@ -134,6 +143,7 @@ def load_headless(
     provenance = {
         **encoder_provenance,
         "model_name": model_name,
+        "normalization_dataset": MODEL_DATASETS[model_name],
         "config": str(config_path),
         "checkpoint": str(checkpoint),
         "loader": "official constructor/checkpoint; heads_cfg cleared",

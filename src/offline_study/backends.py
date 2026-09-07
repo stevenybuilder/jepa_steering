@@ -24,6 +24,8 @@ class JepaBackend:
         precision: str = "float32",
         allow_tf32: bool = False,
     ):
+        from .model_loader import load_headless, model_name_for_dataset
+        model_name = model_name_for_dataset(dataset)
         use_vendor(vendor)
         if sha256(checkpoint) != checkpoint_sha256:
             raise ValueError("Checkpoint checksum mismatch")
@@ -50,9 +52,8 @@ class JepaBackend:
             torch.backends.cuda.matmul.allow_tf32 = allow_tf32
             torch.backends.cudnn.allow_tf32 = allow_tf32
             torch.set_float32_matmul_precision("high" if allow_tf32 else "highest")
-        from .model_loader import load_headless
         self.model, self.preprocessor, self.provenance = load_headless(
-            vendor, device=device, model_name="jepa_wm_pusht" if dataset == "pusht" else "jepa_wm_metaworld",
+            vendor, device=device, model_name=model_name,
             checkpoint_override=checkpoint,
         )
         self.model.eval().requires_grad_(False)
