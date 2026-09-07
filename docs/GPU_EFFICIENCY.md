@@ -29,6 +29,10 @@ Sources:
 - Start with one GPU, then two. Eight GPUs are justified only by measured two-GPU
   storage and throughput scaling. A faster GPU can expose data/decode bottlenecks, so
   GPU FLOP specifications alone are not a purchasing rule.
+- Batch registered intervention arms inside each window batch. This encodes the seven
+  source/target frames once per window and performs one larger predictor unroll for all
+  arms. See [INTERVENTIONS.md](INTERVENTIONS.md); effective activation memory scales
+  with windows times arms, so intervention batches start smaller than baseline batches.
 
 `report.json` records precision, TF32 state, batch size, prefetch depth, pinned-memory
 use, stage timing, peak allocated/reserved memory, device capability, and both pipeline
@@ -51,6 +55,11 @@ Run the read-only offer search:
 ```bash
 scripts/vast/search_offers.sh > offers.json
 ```
+
+The query requires a full GPU (`gpu_frac>=0.99`, plus Vast's verified and rentable
+default filters) so a deceptively cheap fractional offer cannot enter the timing
+baseline. Treat the returned price as ephemeral and re-run the query immediately before
+an explicitly budget-authorized rental.
 
 The query asks for one reliable CUDA-capability-8.0+ GPU with at least 24 GB VRAM,
 100 GB disk, and reasonable download bandwidth. It does not rent anything. Select a

@@ -83,6 +83,17 @@ class JepaBackend:
         from tensordict import TensorDict
         return TensorDict({k: encoded[k][:, :1] for k in ("visual", "proprio")}, batch_size=[])
 
+    def expand_context(self, context, repeats):
+        from tensordict import TensorDict
+        return TensorDict({
+            key: context[key].repeat_interleave(repeats, dim=0)
+            for key in ("visual", "proprio")
+        }, batch_size=[])
+
+    @property
+    def predictor(self):
+        return self.model.model.predictor
+
     def predict(self, context, actions, instrument=False):
         with contextlib.ExitStack() as stack:
             stack.enter_context(self.autocast())
@@ -121,6 +132,9 @@ class ToyBackend:
 
     def context(self, encoded):
         return {k: v[:, :1].clone() for k, v in encoded.items()}
+
+    def expand_context(self, context, repeats):
+        return {key: value.repeat_interleave(repeats, dim=0) for key, value in context.items()}
 
     def predict(self, context, actions, instrument=False):
         visual, proprio = context["visual"][:, 0], context["proprio"][:, 0]

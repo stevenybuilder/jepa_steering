@@ -14,11 +14,13 @@ precision comparisons, and the read-only Vast offer workflow.
 
 - Implemented: real-dataset inventory, a pinned PyTorch JEPA-WM adapter, recorded-action
   H6 baseline benchmark, per-trajectory/per-task metrics, immutable run receipts,
-  zero-dose instrumentation check, and nonoverlapping trajectory sharding.
+  zero-dose instrumentation check, nonoverlapping trajectory sharding, and a
+  [frozen-protocol intervention executor](docs/INTERVENTIONS.md) that batches arms.
 - Executed here: CPU synthetic smoke and unit checks only; see [validation](reports/VALIDATION.md).
 - Not executed here: official dataset inventory, real checkpoint inference, or GPU throughput.
-- Not yet implemented in the new harness: the four intervention experiment runners.
-  Their historical implementations remain available for carefully scoped reuse.
+- Not yet frozen/fitted: the category-specific operator banks and remaining scientific
+  choices. Historical implementations remain available for carefully scoped reuse;
+  the new executor refuses to invent or tune those choices on development outcomes.
 - No GPU rental, CEM search, simulator rollout, weight training, or protected-holdout
   evaluation is triggered by the current benchmark.
 
