@@ -24,9 +24,27 @@ if ! command -v uv >/dev/null; then
   python3 -m pip install --no-cache-dir 'uv==0.8.15'
 fi
 
-uv python install 3.10
+python_base_dir="${workspace_root}/jepa-python-base"
+python_interpreter="${JEPA_PYTHON_INTERPRETER:-}"
+if [[ -z "${python_interpreter}" && -x "${python_base_dir}/bin/python" ]]; then
+  python_interpreter="${python_base_dir}/bin/python"
+fi
+if [[ -z "${python_interpreter}" ]] && command -v python3.10 >/dev/null; then
+  python_interpreter="$(command -v python3.10)"
+fi
+if [[ -z "${python_interpreter}" && -x /opt/conda/bin/conda ]]; then
+  # Several Vast hosts have fast conda mirrors but cannot reliably reach the
+  # GitHub-hosted python-build-standalone archive used by `uv python install`.
+  # Prefer the image's package channel so bootstrap is not coupled to that route.
+  /opt/conda/bin/conda create -y -p "${python_base_dir}" python=3.10 pip
+  python_interpreter="${python_base_dir}/bin/python"
+fi
+if [[ -z "${python_interpreter}" ]]; then
+  uv python install 3.10
+  python_interpreter="$(uv python find 3.10)"
+fi
 if [[ ! -x "${environment_dir}/bin/python" ]]; then
-  uv venv --python 3.10 "${environment_dir}"
+  uv venv --python "${python_interpreter}" "${environment_dir}"
 fi
 source "${environment_dir}/bin/activate"
 
