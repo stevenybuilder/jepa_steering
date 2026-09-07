@@ -1,7 +1,9 @@
 """Audit fixed primary-precision eligibility and registered equivalence evidence.
 
-Only operator rank has an explicit total ordering/selection rule. Do not invent a
-tie breaker for other multi-arm sets or confuse localization with a point winner.
+Operator rank has an explicit total ordering/selection rule. Coupling efficacy
+uses the equal-budget arm, per EXPERIMENT_PLAN.md, not the unscaled factorial.
+Do not invent a tie breaker for other multi-arm sets or confuse localization with
+a point winner.
 """
 import argparse
 import json
@@ -48,6 +50,15 @@ def audit(report, protocol):
     result = {"eligible_with_verified_energy": candidates, "fixed_gates": gates,
         "frozen_equivalence_margin": margin, "planning_or_confirmation_authorized": False,
         "selected_arm": None, "unique_combined_recipe_frozen": False}
+    if protocol["category"] == "vision_action_coupling":
+        # The governing plan explicitly reserves the unscaled factorial for
+        # interaction and the equal-budget arm for efficacy. No new tie rule.
+        name = "joint_equal_standardized_energy"
+        eligible = name in candidates
+        return {**result, "decision": "planned_equal_budget_efficacy_arm_selected" if eligible else "retain_native",
+            "selected_arm": name if eligible else "native",
+            "selection_basis": "EXPERIMENT_PLAN.md: use unscaled factorial for interaction and equal-budget arms for efficacy",
+            "unscaled_factorial_is_not_promoted_for_efficacy": True}
     if not candidates:
         return {**result, "decision": "retain_native", "selected_arm": "native"}
     best = max(candidates, key=lambda n: gates["arms"][n]["native_error_reduction_percent"])

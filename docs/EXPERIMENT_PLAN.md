@@ -11,6 +11,12 @@ the authors' training histories, full 42-task validation coverage, or end-to-end
 completion. Combined/drop-one work and prospective policy evaluation remain unfinished.
 See [corrected results and exact completion evidence](../reports/CORRECTED_OFFLINE_RESULTS.md).
 
+At approximately 11:52 EDT, the predeclared Reach combined/drop-one stage launched
+on all eight US GPUs after both precision-specific fit-only checks passed. Its exact
+ten arms, source component bindings, complete 33-row previously exposed population
+and fixed analysis are recorded in [COMBINED_DEVELOPMENT.md](COMBINED_DEVELOPMENT.md).
+This does not open another untouched reserve or establish closed-loop efficacy.
+
 ## Author-validation correction requested on 2026-09-07
 
 The initial committed version of this plan (`8f07ad2`, September 6 at 23:25 EDT)

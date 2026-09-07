@@ -30,7 +30,8 @@ the complete export retains all 672 arm/endpoint/precision comparisons, includin
 
 | Task | Frozen arm | Error reduction vs native | Simultaneous 95% interval | Frozen advancement gates |
 |---|---|---:|---:|---|
-| Reach | Joint vision/action | 2.877% | [1.872%, 3.883%] | Eligible; combined recipe not frozen |
+| Reach | Equal-budget joint vision/action | 2.035% | [1.298%, 2.773%] | Selected coupling efficacy arm; combined development running |
+| Reach | Unscaled joint vision/action | 2.877% | [1.872%, 3.883%] | Factorial interaction arm, not the equal-budget efficacy choice |
 | Reach | Rank 4 | 2.887% | [2.276%, 3.499%] | Eligible; explicit rank-parsimony rule selects rank 4 |
 | Reach | Single block 0 | 3.026% | [2.124%, 3.929%] | Eligible; does not uniquely localize the mechanism |
 | Reach-Wall | Joint vision/action | 2.327% | [0.825%, 3.828%] | Does not establish the frozen useful-effect threshold |
@@ -49,6 +50,13 @@ coupling, rank, layer and all-patch choices, requiring the planned combination a
 drop-one work. Pairwise uncertainty and unregistered comparisons must not be
 silently resolved by a new purportedly predeclared tie breaker.
 
+The plan explicitly assigns the unscaled coupling factorial to interaction estimation
+and the equal-budget arm to efficacy. Parsimony audit v2 applies that existing rule;
+it does not change measurements or replace v1. The fixed Reach combined/drop-one
+development stage uses equal-budget coupling and rank 4 at the original B3 reference,
+not an outcome-selected new layer. No non-global spatial support passed advancement,
+so the conditional layer/position 2x2 has no eligible non-global spatial input.
+
 The explicit rank rule chooses the smallest eligible rank equivalent to the observed
 best under the frozen margin. Reach rank 4 and rank 8 meet that test; rank 1 does not.
 Failure to reject a rank difference was not treated as equivalence.
@@ -61,12 +69,15 @@ Durable export: `artifacts/offline_study/primary-durable-20260907/three-task-off
 - Closure report SHA256: `c282b82a32663ebd48447f399d088251758a318a0d0a3707e07be126d0a7db34`.
 - Full metrics report: `0c476a2468b4f939a8458c1dc1fec9325306d3b15191b667568fc7e9124cdf50`.
 - All-arm CSV: `d001b9678716b5a993121c199156b34b2b7244e329ffbba45c462d729aec27b7`.
-- Primary parsimony audit: `d7fbdfdc682636d3e7ca844fde6ca68ff77b9f89a5e72d333fd6a2fccaab531a`.
+- Primary parsimony audit v1 (preserved): `d7fbdfdc682636d3e7ca844fde6ca68ff77b9f89a5e72d333fd6a2fccaab531a`.
+- Primary parsimony audit v2 (equal-budget efficacy interpretation): `a6faeb4b1edd70c2b29abf03f8f3e0ce23fc8f1b7c3d75cf6058737df6f1b42e`.
 
 The source instances retain their originals. Utah BF16 evidence was checksum-verified
-locally and on the primary host before Utah was stopped. The primary durable transfer
-and its independent verification are recorded separately; a transfer starting is not
-proof of durable completion.
+locally and on the primary host before Utah was stopped. Primary durable verification
+has now completed: 741 artifact hashes, all 30 primary scopes, both broad baselines,
+and all six raw native-fit captures. The verification report is in
+`artifacts/offline_study/primary-durable-verification-20260907-v1/`, SHA256
+`e8404086e292f3db3f689239ee69b460ce538545236e65d333dba6c44177955f`.
 
 ## Remaining work
 

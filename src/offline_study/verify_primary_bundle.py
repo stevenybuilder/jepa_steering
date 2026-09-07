@@ -136,6 +136,8 @@ def main():
             "both_broad_baseline_precisions_verified": True, "full_study_complete": False,
             "fresh_confirmation": False, "sources_preserved": True})
         write_json(args.output / "DONE.json", {"report_sha256": sha256(args.output / "report.json")})
+        write_json(args.output / "progress.json", {"status": "durability_verified", "durability_verified": True,
+            "installed_captures": 6, "expected_captures": 6, "report_sha256": sha256(args.output / "report.json")})
     except Exception as exc:
         write_json(args.output / "FAILED.json", {"error": str(exc), "durability_verified": False})
         raise

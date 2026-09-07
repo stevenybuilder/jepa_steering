@@ -30,6 +30,18 @@ class ParsimonyTests(unittest.TestCase):
         self.assertEqual(interval_between(self.report(), "rank8", "rank4"), [-.001, .003])
         self.assertIsNone(interval_between(self.report(), "rank1", "rank8"))
 
+    def test_coupling_efficacy_follows_explicit_equal_budget_plan(self):
+        protocol = {"category": "vision_action_coupling", "development_analysis_plan": {"equivalence_margin": .009}}
+        names = ["joint", "joint_equal_standardized_energy"]
+        gates = {"statistically_eligible_arms": names, "arms": {n: {
+            "all_delivered_energies_within_frozen_fp32_tolerance": True,
+            "native_error_reduction_percent": 3. if n == "joint" else 2.} for n in names}}
+        with patch("offline_study.author_parsimony.qualify", return_value=gates):
+            self.assertEqual(audit(self.report(), protocol)["selected_arm"], names[1])
+        gates["statistically_eligible_arms"] = ["joint"]
+        with patch("offline_study.author_parsimony.qualify", return_value=gates):
+            self.assertEqual(audit(self.report(), protocol)["selected_arm"], "native")
+
     def test_precision_and_unregistered_tie_breaker_cannot_select(self):
         report = self.report()
         with self.assertRaises(ValueError):
