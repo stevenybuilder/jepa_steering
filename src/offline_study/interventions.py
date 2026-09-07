@@ -8,6 +8,34 @@ from typing import Any
 import torch
 
 
+# Predictor blocks are zero-indexed. The singleton arms make the depth-locality
+# claim exhaustive over the six-block predictor; B2+B3 remains the archived,
+# evidence-derived intermediate-zone composite and all-six is the global arm.
+LAYER_MECHANISM_ARM_BLOCKS = {
+    **{f"single_block{block}": {block} for block in range(6)},
+    "intermediate_blocks2_3": {2, 3},
+    "all_six_blocks": set(range(6)),
+}
+LAYER_RANDOM_CONTROL_FOR = {
+    arm: f"matched_random_{arm}" for arm in LAYER_MECHANISM_ARM_BLOCKS
+}
+LAYER_ARM_BLOCKS = {
+    **LAYER_MECHANISM_ARM_BLOCKS,
+    **{
+        LAYER_RANDOM_CONTROL_FOR[arm]: blocks
+        for arm, blocks in LAYER_MECHANISM_ARM_BLOCKS.items()
+    },
+}
+RANK_ARM_RANKS = {
+    "rank1": 1,
+    "rank4": 4,
+    "rank8": 8,
+    "matched_random_rank1": 1,
+    "matched_random_rank4": 4,
+    "matched_random_rank8": 8,
+}
+
+
 CATEGORY_ARMS = {
     "vision_action_coupling": {
         "native", "zero_dose", "visual_only", "action_condition_only", "joint",
@@ -23,12 +51,12 @@ CATEGORY_ARMS = {
     },
     "distribution_spatial": {
         "native", "zero_dose", "one_patch", "contiguous_group",
-        "equal_size_scattered_group", "all_patches", "matched_random",
+        "equal_size_scattered_group", "all_patches",
+        "matched_random_one_patch", "matched_random_contiguous_group",
+        "matched_random_equal_size_scattered_group", "matched_random_all_patches",
     },
-    "distribution_layer": {
-        "native", "zero_dose", "one_block", "two_blocks", "all_six_blocks",
-        "matched_random",
-    },
+    "distribution_layer": {"native", "zero_dose", *LAYER_ARM_BLOCKS},
+    "operator_rank": {"native", "zero_dose", *RANK_ARM_RANKS},
 }
 EDIT_SITES = {"predictor_visual", "block_condition", "block_output"}
 
@@ -122,6 +150,63 @@ def validate_frozen_protocol(protocol: dict) -> None:
     zero_sites = {hook_key(edit) for edit in zero_edits}
     if active_sites - zero_sites:
         raise ValueError("zero_dose does not exercise every registered hook location")
+
+    if category == "distribution_layer":
+        active_scopes = set()
+        for arm in arms:
+            if arm["name"] not in LAYER_ARM_BLOCKS:
+                continue
+            edits = arm["edits"]
+            if any(edit["site"] == "predictor_visual" for edit in edits):
+                raise ValueError("Layer-distribution arms require block-local edit sites")
+            actual_blocks = {edit["block"] for edit in edits}
+            expected_blocks = LAYER_ARM_BLOCKS[arm["name"]]
+            if actual_blocks != expected_blocks:
+                raise ValueError(
+                    f"Layer arm {arm['name']} requires zero-indexed blocks "
+                    f"{sorted(expected_blocks)}; found {sorted(actual_blocks)}"
+                )
+            active_scopes.update(
+                (edit["site"], edit["horizon"], edit.get("token_start"),
+                 edit.get("token_end"))
+                for edit in edits
+            )
+        if len(active_scopes) != 1:
+            raise ValueError(
+                "Layer-distribution arms must share one edit site, horizon, and spatial scope"
+            )
+        budget = protocol["dose_budget"]
+        if budget.get("energy_rule") != "equal_total_delivered_squared_l2_per_arm":
+            raise ValueError("Layer distribution requires equal total delivered squared L2 per arm")
+        if budget.get("capacity_rule") != "fixed_total_direct_sum_rank_per_arm":
+            raise ValueError("Layer distribution requires fixed total direct-sum rank per arm")
+        if budget.get("random_control_rule") != "same_support_rank_spectrum_and_energy":
+            raise ValueError("Layer random controls must match support, rank, spectrum, and energy")
+
+    if category == "operator_rank":
+        rank_scopes = set()
+        for arm in arms:
+            if arm["name"] not in RANK_ARM_RANKS:
+                continue
+            expected_rank = RANK_ARM_RANKS[arm["name"]]
+            if arm.get("operator_rank") != expected_rank:
+                raise ValueError(
+                    f"Rank arm {arm['name']} requires operator_rank={expected_rank}"
+                )
+            rank_scopes.update(
+                (edit["site"], edit["horizon"], edit.get("block"),
+                 edit.get("token_start"), edit.get("token_end"))
+                for edit in arm["edits"]
+            )
+        if len(rank_scopes) != 1:
+            raise ValueError(
+                "Operator-rank arms must share one edit site, block, horizon, and spatial scope"
+            )
+        budget = protocol["dose_budget"]
+        if budget.get("energy_rule") != "equal_total_delivered_squared_l2_across_ranks":
+            raise ValueError("Operator-rank arms require equal total delivered squared L2")
+        if budget.get("random_control_rule") != "same_support_rank_spectrum_and_energy":
+            raise ValueError("Rank random controls must match support, rank, spectrum, and energy")
     contrasts = protocol.get("primary_contrasts")
     if not isinstance(contrasts, list) or not contrasts:
         raise ValueError("Frozen protocol requires predeclared primary contrasts")

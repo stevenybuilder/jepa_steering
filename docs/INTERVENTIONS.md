@@ -17,8 +17,10 @@ split into separate spatial and layer experiments):
 Every category has a required native arm, a zero-dose arm that exercises real hook
 sites at scale zero, the named mechanism arms from the experiment plan, and a matched
 random control. Missing arms fail closed. The native and zero-dose forecasts must be
-bitwise identical for every batch. On the first batch, the native rows are also checked
-against a same-shape uninstrumented reference pass.
+bitwise identical within every edited batch. On the first batch, native rows are also
+checked against a same-shape uninstrumented reference pass with a declared narrow FP32
+tolerance (`rtol=1e-5`, `atol=5e-5`), because separate optimized CUDA attention calls
+are not bitwise repeatable. The receipt records exact maximum and mean discrepancies.
 
 The zero-dose arm must register every hook location used by any active or matched-random
 arm, with every scale set to exactly zero. Extra, post-hoc arms are rejected as strictly
@@ -49,7 +51,14 @@ The protocol must use these arm names:
 | Action geometry | equal_anchor_linear, cubic, projected_cubic, reflected_curvature, matched_random |
 | Imagined-time routing | constant_gate, memoryless_gate, hmm_filtered_gate, matched_random |
 | Spatial distribution | one_patch, contiguous_group, equal_size_scattered_group, all_patches, matched_random |
-| Layer distribution | one_block, two_blocks, all_six_blocks, matched_random |
+| Layer distribution | early_block0, intermediate_block2, intermediate_block3, intermediate_blocks2_3, final_block5, all_six_blocks, matched_random |
+
+Layer names use zero-indexed predictor blocks. The block registry is enforced by the
+protocol validator: B0 is an early control, B2/B3 are the evidence-derived intermediate
+sites, B2+B3 is the primary intermediate-zone arm, B5 is the final-block control, and
+the random control is B2+B3 scope-matched. Every layer arm must use the same hook type,
+imagined horizon, and spatial scope. Its fitted layer-specific directions must be scaled
+so total delivered squared L2 energy is equal across arms.
 
 ## Operator bank
 

@@ -26,6 +26,14 @@ from .pipeline import PrefetchIterator
 from .protocol import sha256, summarize_metrics, validate_manifest, write_json
 
 
+# Predictor attention uses optimized CUDA kernels. Separate FP32 executions can
+# differ at roundoff scale even when inputs and weights are identical. The
+# same-pass native/zero-dose check below remains bitwise exact; this tolerance
+# is only for the additional uninstrumented-versus-instrumented comparison.
+IDENTITY_RTOL = 1e-5
+IDENTITY_ATOL = 5e-5
+
+
 def _model_versions(model) -> dict[str, int]:
     versions = {
         f"parameter:{name}": parameter._version
@@ -50,6 +58,34 @@ def _edit_norms(edits, effective_batch: int) -> list[dict[str, float]]:
         for index, value in enumerate(values):
             rows[index][label] = value
     return rows
+
+
+def _identity_diagnostics(left: torch.Tensor, right: torch.Tensor) -> dict:
+    """Return actionable diagnostics for a failed instrumentation identity check."""
+    if left.shape != right.shape:
+        return {"left_shape": list(left.shape), "right_shape": list(right.shape)}
+    finite = torch.isfinite(left) & torch.isfinite(right)
+    difference = (left.float() - right.float()).abs()
+    finite_difference = difference[finite]
+    return {
+        "shape": list(left.shape),
+        "dtype": str(left.dtype),
+        "all_finite": bool(finite.all().item()),
+        "different_elements": int(torch.count_nonzero(left != right).item()),
+        "maximum_absolute_difference": (
+            float(finite_difference.max().item()) if finite_difference.numel() else None
+        ),
+        "mean_absolute_difference": (
+            float(finite_difference.mean().item()) if finite_difference.numel() else None
+        ),
+        "rtol": IDENTITY_RTOL,
+        "atol": IDENTITY_ATOL,
+    }
+
+
+def _numerically_identical(left: torch.Tensor, right: torch.Tensor) -> bool:
+    return bool(torch.allclose(
+        left, right, rtol=IDENTITY_RTOL, atol=IDENTITY_ATOL, equal_nan=False))
 
 
 def score_intervention_predictions(
@@ -219,6 +255,7 @@ def execute(args, backend, selected, protocol, bank):
         args.prefetch_batches,
     )
     instrumentation_identity = None
+    instrumentation_identity_diagnostics = {}
     zero_dose_identity = True
     batch_count = 0
     try:
@@ -275,11 +312,21 @@ def execute(args, backend, selected, protocol, bank):
             for key in ("visual", "proprio"):
                 if not torch.equal(predicted[key][:, native_positions], predicted[key][:, zero_positions]):
                     zero_dose_identity = False
-                    raise RuntimeError(f"Zero-dose identity failed for {key}")
-                if batch_count == 0 and not torch.equal(
-                        reference[key][:, native_positions], predicted[key][:, native_positions]):
-                    instrumentation_identity = False
-                    raise RuntimeError(f"Native instrumentation identity failed for {key}")
+                    diagnostics = _identity_diagnostics(
+                        predicted[key][:, native_positions], predicted[key][:, zero_positions])
+                    raise RuntimeError(f"Zero-dose identity failed for {key}: {diagnostics}")
+                if batch_count == 0:
+                    reference_native = reference[key][:, native_positions]
+                    predicted_native = predicted[key][:, native_positions]
+                    diagnostics = _identity_diagnostics(reference_native, predicted_native)
+                    diagnostics["bitwise_equal"] = torch.equal(reference_native, predicted_native)
+                    diagnostics["within_declared_fp32_tolerance"] = _numerically_identical(
+                        reference_native, predicted_native)
+                    instrumentation_identity_diagnostics[key] = diagnostics
+                    if not diagnostics["within_declared_fp32_tolerance"]:
+                        instrumentation_identity = False
+                        raise RuntimeError(
+                            f"Native instrumentation identity failed for {key}: {diagnostics}")
             if batch_count == 0:
                 instrumentation_identity = True
                 del reference
@@ -338,6 +385,7 @@ def execute(args, backend, selected, protocol, bank):
         "arm_evaluations_per_second": len(measurements) / measured,
         "zero_dose_identity": zero_dose_identity,
         "native_instrumentation_identity": instrumentation_identity,
+        "native_instrumentation_identity_diagnostics": instrumentation_identity_diagnostics,
         "timing": timings,
         "peak_allocated_gpu_bytes": torch.cuda.max_memory_allocated(device),
         "peak_reserved_gpu_bytes": torch.cuda.max_memory_reserved(device),

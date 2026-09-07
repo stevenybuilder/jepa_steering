@@ -4,9 +4,16 @@ from copy import deepcopy
 import torch
 from torch import nn
 
-from offline_study.intervention_runner import score_intervention_predictions, summarize_interventions
+from offline_study.intervention_runner import (
+    _identity_diagnostics,
+    _numerically_identical,
+    score_intervention_predictions,
+    summarize_interventions,
+)
 from offline_study.interventions import (
     CATEGORY_ARMS,
+    LAYER_ARM_BLOCKS,
+    RANK_ARM_RANKS,
     CompiledEdit,
     PredictorIntervention,
     compile_edits,
@@ -18,13 +25,67 @@ from offline_study.interventions import (
 def frozen_protocol(category="vision_action_coupling"):
     arms = []
     for name in sorted(CATEGORY_ARMS[category]):
-        arms.append({
-            "name": name,
-            "edits": [] if name == "native" else [{
+        if category == "distribution_layer" and name != "native":
+            blocks = range(6) if name == "zero_dose" else sorted(LAYER_ARM_BLOCKS[name])
+            edits = [{
+                "site": "block_output", "horizon": 3, "block": block,
+                "tensor": f"direction_b{block}",
+                "scale": 0. if name == "zero_dose" else .1,
+            } for block in blocks]
+        elif category == "operator_rank" and name != "native":
+            edits = [{
+                "site": "block_output", "horizon": 3, "block": 3,
+                "tensor": "direction_b3", "scale": 0. if name == "zero_dose" else .1,
+            }]
+        else:
+            edits = [] if name == "native" else [{
                 "site": "block_condition", "horizon": 3, "block": 0,
                 "tensor": "direction", "scale": 0. if name == "zero_dose" else .1,
-            }],
+            }]
+        arms.append({
+            "name": name,
+            "edits": edits,
         })
+    primary_contrasts = {
+        "vision_action_coupling": {
+            "name": "joint_vs_native", "candidate": "joint", "control": "native",
+        },
+        "action_response_geometry": {
+            "name": "cubic_vs_linear", "candidate": "cubic",
+            "control": "equal_anchor_linear",
+        },
+        "imagined_time_routing": {
+            "name": "hmm_vs_memoryless", "candidate": "hmm_filtered_gate",
+            "control": "memoryless_gate",
+        },
+        "distribution_spatial": {
+            "name": "contiguous_vs_random", "candidate": "contiguous_group",
+            "control": "matched_random_contiguous_group",
+        },
+        "distribution_layer": {
+            "name": "intermediate_zone_vs_random",
+            "candidate": "intermediate_blocks2_3",
+            "control": "matched_random_intermediate_blocks2_3",
+        },
+        "operator_rank": {
+            "name": "rank8_vs_rank1", "candidate": "rank8", "control": "rank1",
+        },
+    }
+    dose_budget = {"kind": "fixture"}
+    if category == "distribution_layer":
+        dose_budget.update({
+            "energy_rule": "equal_total_delivered_squared_l2_per_arm",
+            "capacity_rule": "fixed_total_direct_sum_rank_per_arm",
+            "random_control_rule": "same_support_rank_spectrum_and_energy",
+        })
+    elif category == "operator_rank":
+        dose_budget.update({
+            "energy_rule": "equal_total_delivered_squared_l2_across_ranks",
+            "random_control_rule": "same_support_rank_spectrum_and_energy",
+        })
+    for arm in arms:
+        if arm["name"] in RANK_ARM_RANKS:
+            arm["operator_rank"] = RANK_ARM_RANKS[arm["name"]]
     return {
         "schema_version": 1,
         "status": "frozen",
@@ -37,12 +98,10 @@ def frozen_protocol(category="vision_action_coupling"):
         "evaluation_split": "development",
         "tasks": ["mw-reach"],
         "hypothesis": "Predeclared fixture hypothesis",
-        "dose_budget": {"kind": "fixture"},
+        "dose_budget": dose_budget,
         "frozen_at": "2026-09-07T00:00:00Z",
         "arms": arms,
-        "primary_contrasts": [{
-            "name": "joint_vs_native", "candidate": "joint", "control": "native",
-        }],
+        "primary_contrasts": [primary_contrasts[category]],
     }
 
 
@@ -65,6 +124,16 @@ class FakePredictor(nn.Module):
 
 
 class InterventionTests(unittest.TestCase):
+    def test_identity_check_accepts_cuda_scale_roundoff_but_not_real_changes(self):
+        reference = torch.tensor([0., 1., -2.], dtype=torch.float32)
+        roundoff = reference + torch.tensor([1e-6, -1e-5, 4e-5])
+        changed = reference + torch.tensor([0., 0., 1e-3])
+        self.assertTrue(_numerically_identical(reference, roundoff))
+        self.assertFalse(_numerically_identical(reference, changed))
+        diagnostics = _identity_diagnostics(reference, roundoff)
+        self.assertAlmostEqual(diagnostics["maximum_absolute_difference"], 4e-5, places=6)
+        self.assertEqual(diagnostics["different_elements"], 3)
+
     def test_protocol_requires_frozen_complete_arm_registry(self):
         protocol = frozen_protocol()
         validate_frozen_protocol(protocol)
@@ -124,6 +193,47 @@ class InterventionTests(unittest.TestCase):
         protocol = deepcopy(frozen_protocol())
         protocol["tasks"].append(protocol["tasks"][0])
         with self.assertRaisesRegex(ValueError, "must be unique"):
+            validate_frozen_protocol(protocol)
+
+    def test_layer_protocol_freezes_intermediate_block_identities(self):
+        protocol = frozen_protocol("distribution_layer")
+        validate_frozen_protocol(protocol)
+
+        block2 = next(
+            arm for arm in protocol["arms"] if arm["name"] == "single_block2")
+        block2["edits"][0]["block"] = 1
+        with self.assertRaisesRegex(ValueError, "requires zero-indexed blocks.*2"):
+            validate_frozen_protocol(protocol)
+
+    def test_layer_protocol_requires_matched_time_and_spatial_scope(self):
+        protocol = frozen_protocol("distribution_layer")
+        block3 = next(
+            arm for arm in protocol["arms"] if arm["name"] == "single_block3")
+        block3["edits"][0]["horizon"] = 4
+        zero = next(arm for arm in protocol["arms"] if arm["name"] == "zero_dose")
+        zero["edits"].append({
+            "site": "block_output", "horizon": 4, "block": 3,
+            "tensor": "direction_b3", "scale": 0.,
+        })
+        with self.assertRaisesRegex(ValueError, "share one edit site, horizon, and spatial scope"):
+            validate_frozen_protocol(protocol)
+
+    def test_layer_protocol_has_scope_matched_random_for_every_arm(self):
+        protocol = frozen_protocol("distribution_layer")
+        validate_frozen_protocol(protocol)
+        random_block4 = next(
+            arm for arm in protocol["arms"]
+            if arm["name"] == "matched_random_single_block4")
+        random_block4["edits"][0]["block"] = 3
+        with self.assertRaisesRegex(ValueError, "requires zero-indexed blocks.*4"):
+            validate_frozen_protocol(protocol)
+
+    def test_rank_protocol_freezes_rank_and_scope(self):
+        protocol = frozen_protocol("operator_rank")
+        validate_frozen_protocol(protocol)
+        rank4 = next(arm for arm in protocol["arms"] if arm["name"] == "rank4")
+        rank4["operator_rank"] = 3
+        with self.assertRaisesRegex(ValueError, "requires operator_rank=4"):
             validate_frozen_protocol(protocol)
 
     def test_hooks_apply_only_registered_horizon_block_and_tokens(self):

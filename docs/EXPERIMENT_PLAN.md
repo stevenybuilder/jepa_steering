@@ -136,15 +136,43 @@ assumption. All eligible trajectories are retained; too-short trajectories and f
 than four distinct windows are explicitly reported. Windows can overlap and must be
 aggregated within trajectory. Expanding windows does not increase independent n.
 
+## Design-choice selection method
+
+Adopt the clean structure of the JEPA-WM design-choice study without copying its
+training-specific assumptions. For each category, define a finite candidate registry
+and a category-specific reference protocol, vary only that category's named factor,
+and hold checkpoint, inputs, actions, fitting population and algorithm, evaluation
+windows, hook/time/spatial scope, operator capacity, and perturbation energy fixed
+unless one of them is the factor under study. Evaluate every registered arm on the
+same paired development trajectories; do not stop or add arms after inspecting results.
+
+Run the choices in this order: vision-action substrate, action-response geometry,
+operator rank, layer distribution, spatial distribution, and finally temporal routing.
+Temporal routing is eligible only after a non-routed operator has a reproducible effect
+and the fit data establish incremental history value and treatment separation. Each
+sweep uses its frozen category reference rather than silently inheriting a favorable
+setting found in another sweep.
+
+Selection is per task/checkpoint; a mixed-task average may summarize but cannot choose
+an arm. An arm is eligible only if it passes identity/fidelity checks, improves the
+predeclared recorded-future endpoint by the smallest useful effect, and beats its
+scope/rank/energy-matched random control. Among statistically equivalent eligible arms,
+choose the simpler one. If none is eligible, retain native/no intervention. After the
+one-factor sweeps, combine compatible selected choices on development and run drop-one
+ablations. Freeze that combined recipe, controls, endpoints, multiplicity handling,
+and sample size before one protected evaluation. Closed-loop success remains the final
+primary outcome; offline forecast and mechanism measures are advancement gates.
+
 ## Agreed ablation table
 
 | Category | Arms | Primary mechanism comparison |
 |---|---|---|
 | Vision–action coupling | No edit; visual-only; action-condition-only; joint; spatially permuted joint | Joint versus individual edits; nonadditive output interaction |
 | Action-response geometry | Equal-anchor linear; cubic; cubic projected onto endpoint line; reflected curvature | Contribution of off-line curvature beyond data quantity and line reparameterization |
-| Routing across imagined time | Constant gate; memoryless gate; HMM-filtered gate | HMM versus memoryless using the same underlying operator and comparable dose |
+| Operator dimensionality | Rank 1; rank 4; rank 8; rank-matched random subspaces | Added value of distributed signal beyond a single direction at fixed support and energy |
+| Routing across imagined time | Constant gate; memoryless gate; HMM-filtered gate | Conditional HMM versus memoryless using the same underlying operator and comparable dose |
 | Spatial distribution | One patch; contiguous group; equally sized scattered group; all patches | Concentration at fixed block/time and total perturbation budget |
-| Layer distribution | One block; two blocks; all six blocks | Distribution at fixed spatial scope/time and total perturbation budget |
+| Layer distribution | Every singleton B0–B5; intermediate B2+B3; all six blocks | Single-layer localization versus the intermediate zone and global depth distribution, at fixed spatial scope/time, rank, and energy |
 
 The last two rows form one diagnostic category. Do not cross every row into a large grid.
 All categories include zero-dose identity and suitable norm/scope-matched random controls.
@@ -182,6 +210,17 @@ targets require later simulator forks or existing matched outcome banks.
 Reuse candidate: archive/.../scripts/geometry_map/action_path_geometry.py.
 Anchor radius/directions, target coordinate, site, and dimensionality remain to freeze.
 
+### Operator dimensionality
+
+At the category reference site P3/H3 with full spatial support, compare ranks 1, 4,
+and 8. The rank set is bounded and motivated by the archived distributed-code evidence;
+it is not an invitation to search arbitrary ranks. Fit every rank with the same target,
+algorithm, fitting groups, and regularization rule. Match total delivered squared L2
+energy across ranks. For each rank, use a random subspace with the same support, rank,
+spectrum, and energy. The primary question is whether rank 4 or 8 improves the
+recorded-future endpoint beyond rank 1 and its own matched-random control. If higher
+rank is statistically equivalent to rank 1, select rank 1.
+
 ### HMM across imagined time (agreed choice)
 
 The first comparison uses native unedited imagined H1/H2 activations to gate an edit
@@ -200,22 +239,47 @@ Regime count, fitted operator, gate rule, and comparator budget remain to freeze
 
 ### Spatial and layer distribution
 
-Select positions/blocks on discovery data, then freeze them. Compare selected positions
-with random sets of equal cardinality. A proposed initial group size is16 patches
-(4x4 contiguous versus16 scattered); it is not yet a selected winner.
-Use layer-specific directions targeting the same quantity, not one vector copied across
-all blocks. Share total perturbation energy sum_{block,patch} ||delta||^2, and also report
-downstream effect magnitudes. Early edits change later activations, so construct and log
-multi-block edits consistently from a specified native reference.
+Treat depth and token position as two axes of one localization question, but run them as
+separate one-factor sweeps rather than a full layer-by-position grid.
+
+The layer sweep fixes the block-output hook, H3, full 256-patch support, semantic target,
+fit procedure, total direct-sum rank, and total perturbation energy. It compares all six
+zero-indexed singleton blocks B0 through B5, the archived evidence-derived intermediate
+zone B2+B3, and the global B0+B1+B2+B3+B4+B5 arm. Fit a basis in the direct sum of the
+registered block spaces and split it into layer-specific slices; do not copy one vector
+across blocks. This keeps total operator rank fixed even when support spans more layers.
+Every layer-support arm has its own random control with identical block support, rank,
+spectrum, and energy. Early edits change later activations, so all multi-block edits are
+constructed from and logged against the same specified native reference.
+
+The spatial sweep fixes P3/H3, rank, target, and fitting procedure. Select the candidate
+single patch and 4x4 contiguous region on fitting data, then freeze them. Compare one
+selected patch, the selected contiguous 16-patch region, an equally sized scattered
+16-patch set, and all 256 patches. Each support has its own random-direction control with
+the same positions, rank, spectrum, and energy; selected positions additionally compare
+against random position sets of equal cardinality. Share total perturbation energy
+sum_{block,patch} ||delta||^2 and report downstream effect magnitudes.
+
+A singleton winner supports layer localization; B2+B3 beating B2 and B3 supports an
+intermediate distributed zone; all six beating B2+B3 supports global depth distribution.
+Likewise, one/contiguous support beating scattered/all supports spatial localization,
+while scattered/all beating localized supports spatial distribution. After both sweeps,
+run only a minimal 2x2 interaction check crossing the best non-global versus global layer
+support with the best non-global versus all-patch spatial support. Do not launch the full
+layer-by-position Cartesian grid.
 
 ## Evaluation order and scientific claims
 
 1. Baseline throughput on development trajectories from Reach, Reach-Wall, and Push-T.
 2. Broad unedited H6 error coverage after inventory/exposure reconciliation.
 3. Fit one bounded, explicit operator protocol per category on fitting data.
-4. Development comparisons with paired trajectory aggregation, retaining every arm.
-5. Freeze primary contrasts, smallest useful effects, sample size, and analysis.
-6. Open verified untouched offline evaluation once. For current MetaWorld data this
+4. Run every registered arm in each one-factor development sweep with paired trajectory
+   aggregation; apply the frozen eligibility and parsimony rule.
+5. Combine compatible selected choices on development and run predeclared drop-one
+   ablations plus the minimal layer-by-position interaction check.
+6. Freeze the combined recipe, primary contrasts, smallest useful effects, sample size,
+   multiplicity handling, and analysis.
+7. Open verified untouched offline evaluation once. For current MetaWorld data this
    means its protected trajectory split; for Push-T it requires prospectively collected
    independent families because the released train/val pools are development-exposed.
    Later physical forks and closed-loop confirmation assess behavior, not just embedding error.
