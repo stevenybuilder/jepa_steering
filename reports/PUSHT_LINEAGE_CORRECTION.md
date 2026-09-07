@@ -36,10 +36,12 @@ independence structure contains 185 initial-state families.
 
 Recomputing a 149/17/19 family split does not make its 19 holdout-labelled train families
 untouched: the old development baseline already included rows from all 185 families.
-Historical work also accessed the released validation pool. Accordingly, current
-released Push-T train and validation data are development/replication data for this
-study. Confirmation requires fresh, independently collected initial-state families
-assigned to a frozen split before their outcomes are inspected.
+Before intervention execution, those 19 families are therefore returned to development,
+producing 149 fit and 36 development families (15,049 and 3,636 rollout rows) and no
+confirmation family in released train. Historical work also accessed the released
+validation pool. Accordingly, current released Push-T train and validation data are
+development/replication data for this study. Confirmation requires fresh, independently
+collected initial-state families assigned to a frozen split before their outcomes are inspected.
 
 ## Implemented safeguards
 

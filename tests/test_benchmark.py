@@ -1,4 +1,5 @@
 import unittest
+from collections import Counter
 
 import torch
 
@@ -103,6 +104,18 @@ class BenchmarkTests(unittest.TestCase):
                 row["split"] for row in rows if row["lineage_group"] == f"group-{group}"
             }), 1)
         self.assertEqual(rows[-1]["split"], "external_reserve")
+
+    def test_exposed_holdout_groups_are_reassigned_to_development(self):
+        rows = [
+            {"trajectory_id": f"pusht:train:{group}", "source_pool": "train",
+             "lineage_group": f"group-{group}"}
+            for group in range(20)
+        ]
+        membership = assign_study_splits(rows, 234, holdout_eligible=False)
+        self.assertEqual(dict(Counter(membership.values())), {
+            "fit": 16, "development": 4,
+        })
+        self.assertNotIn("holdout", {row["split"] for row in rows})
 
     def test_manifest_rejects_lineage_leakage_across_splits(self):
         rows = toy_rows(2)

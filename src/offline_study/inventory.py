@@ -18,12 +18,18 @@ def _initial_state_group(value) -> str:
     return f"pusht:initial-state:{hashlib.sha256(array.tobytes()).hexdigest()}"
 
 
-def assign_study_splits(rows: list[dict], seed: int) -> dict[str, str]:
-    """Split lineage groups, never individual correlated rollout variants."""
+def assign_study_splits(
+    rows: list[dict], seed: int, *, holdout_eligible: bool = True
+) -> dict[str, str]:
+    """Split lineage groups; optionally return an exposed holdout to development."""
     eligible_groups = sorted({
         row["lineage_group"] for row in rows if row["source_pool"] != "val"
     })
-    membership = study_split(eligible_groups, seed)
+    structural_membership = study_split(eligible_groups, seed)
+    membership = {
+        group: (split if holdout_eligible or split != "holdout" else "development")
+        for group, split in structural_membership.items()
+    }
     for row in rows:
         row["split"] = (
             membership[row["lineage_group"]]
@@ -69,17 +75,39 @@ def main():
                                  exposure_status="unverified", world_model_exposure="unknown",
                                  source_revision=args.data_revision))
             del dset
-        membership = assign_study_splits(rows, args.seed)
+        # The released Push-T train pool is already exposed across every lineage
+        # family in this study. Preserve fit/development separation, but do not
+        # manufacture a confirmation holdout by relabelling exposed families.
+        holdout_eligible = args.dataset != "pusht"
+        membership = assign_study_splits(
+            rows, args.seed, holdout_eligible=holdout_eligible
+        )
+        structural_membership = study_split(sorted(membership), args.seed)
         validate_manifest(rows)
         manifest = args.output / "trajectories.jsonl"
         manifest.write_text("".join(json.dumps(r, sort_keys=True) + "\n" for r in rows))
+        limitations = [
+            "Source revision and row order must be preserved; raw-media checksums not yet verified",
+            "A split label alone does not establish that a cohort is historically untouched",
+        ]
+        if args.dataset == "pusht":
+            limitations.extend([
+                "Push-T supplied val is external_reserve",
+                "Released Push-T holdout-labelled families are development-exposed and reassigned to development",
+                "Push-T rollout rows sharing an exact initial state are repeated observations within one family",
+            ])
         write_json(args.output / "inventory.json", dict(
             status="metadata_inventory_complete", dataset=args.dataset, data_root=str(args.data_root.resolve()),
             data_revision=args.data_revision, vendor_commit=VENDOR_COMMIT, source_seed=args.seed,
-            split_policy="study_hash_90_10_with_inner_development; not exact authors' split",
+            split_policy=(
+                "study_hash_by_lineage_group; Push-T released holdout groups returned to development"
+                if args.dataset == "pusht" else
+                "study_hash_90_10_with_inner_development_by_lineage_group; not exact authors' split"
+            ),
             manifest_sha256=sha256(manifest), trajectories=len(rows),
             split_counts=dict(Counter(r["split"] for r in rows)),
             lineage_group_counts=dict(Counter(membership.values())),
+            structural_lineage_group_counts=dict(Counter(structural_membership.values())),
             lineage_group_size_counts=dict(Counter(
                 Counter(r["lineage_group"] for r in rows if r["source_pool"] != "val").values()
             )),
@@ -90,10 +118,8 @@ def main():
             source_trajectory_contents_hashed=False,
             lineage_policy=("exact_initial_state_sha256_family" if args.dataset == "pusht"
                             else "whole_trajectory"),
-            limitations=["Source revision and row order must be preserved; raw-media checksums not yet verified",
-                         "No claim that provisional holdout is historically unseen",
-                         "Push-T supplied val is external_reserve; 90/10 is applied to train lineage groups only",
-                         "Push-T rollout rows sharing an exact initial state are repeated observations within one family"]
+            confirmation_eligible_from_this_manifest=holdout_eligible,
+            limitations=limitations,
         ))
         print(json.dumps({"status": "metadata_inventory_complete", "output": str(args.output), "trajectories": len(rows)}))
     except Exception as exc:

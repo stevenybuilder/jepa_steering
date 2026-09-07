@@ -73,8 +73,12 @@ forecast error, but it is not a family-independent efficacy sample or power calc
 
 This exposure cannot be undone by recomputing a group split. For this study, the entire
 released Push-T train pool is now development-exposed at the family level. In any
-corrected manifest, the 19 `holdout` labels record the deterministic structural split
-only; they are **not** evidence of untouched confirmation eligibility. The supplied val
+correction receipt, the 19 `holdout` labels record the deterministic structural split
+only; they are **not** evidence of untouched confirmation eligibility. Before any
+intervention execution, those 19 families are reassigned to development. The active
+released-data analysis split is therefore 149 fit families, 36 development families,
+and zero confirmation families (15,049/3,636/0 rollout rows). This keeps fitting and
+development separate without discarding already exposed data. The supplied val
 pool was accessed by historical work and likewise is not silently promoted to a fresh
 confirmation cohort. Push-T confirmation therefore requires newly collected independent
 initial-state families with a prospectively frozen manifest. Until those exist, Push-T

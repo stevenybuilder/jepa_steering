@@ -48,8 +48,9 @@ Push-T is split by exact-initial-state family, not by rollout row. Manifest vali
 fails if one lineage group crosses study splits, and the exposure filter excludes an
 entire development family if even one of its rows lacks explicit clearance. The released
 Push-T train pool is already development-exposed at the family level in this study; its
-holdout-labelled groups must not be presented as untouched confirmation. See the dated
-correction in the experiment plan.
+structural holdout groups are reassigned to development, producing 149 fit and 36
+development families. They must not be presented as untouched confirmation. See the
+dated correction in the experiment plan.
 
 The real benchmark requires a reviewed exposure registry bound to the manifest:
 
