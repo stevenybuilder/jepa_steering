@@ -8,6 +8,7 @@ sole change is clearing ``heads_cfg`` so an unused visualization head is not bui
 from __future__ import annotations
 
 import copy
+import importlib
 import sys
 from pathlib import Path
 from typing import Any
@@ -27,7 +28,6 @@ def load_headless(
     from app.plan_common.datasets import get_data_stats
     from app.plan_common.datasets.preprocessor import Preprocessor
     from app.plan_common.datasets.transforms import make_inverse_transforms, make_transforms
-    from evals.simu_env_planning.eval import init_module
     from src.utils.yaml_utils import expand_env_vars
 
     if model_name not in ("jepa_wm_metaworld", "jepa_wm_pusht"):
@@ -69,10 +69,13 @@ def load_headless(
         inverse_transform=inverse_transform,
     )
     checkpoint = str(checkpoint_override) if checkpoint_override else hubconf._get_checkpoint_path(weight_key, use_hf=True)
+    # Import the configured model constructor directly. The upstream evaluation
+    # entrypoint wraps this same call but also imports simulators and planners that
+    # are deliberately outside this recorded-action benchmark.
+    init_module = importlib.import_module(model_kwargs["module_name"]).init_module
     model = init_module(
         folder=args_eval.get("folder"),
         checkpoint=checkpoint,
-        module_name=model_kwargs.get("module_name"),
         model_kwargs=pretrain_kwargs,
         wrapper_kwargs=wrapper_kwargs,
         cfgs_data=cfgs_data,
@@ -93,4 +96,3 @@ def load_headless(
 
 def load_headless_metaworld(repo: Path, device: str = "cuda:0") -> tuple[torch.nn.Module, Any, dict[str, str]]:
     return load_headless(repo, device=device)
-
