@@ -5,18 +5,19 @@ scripts and the active study. It executes all registered arms for one category, 
 it does not select directions, anchors, patches, blocks, HMM states, gates, doses, or
 success criteria. Those choices must be fitted on `fit`, reviewed, and frozen first.
 
-The executor supports the five predeclared comparisons (the fourth study category is
-split into separate spatial and layer experiments):
+The executor supports six predeclared comparisons, with spatial and layer distribution
+kept as separate one-factor experiments:
 
 - `vision_action_coupling`
 - `action_response_geometry`
+- `operator_rank`
 - `imagined_time_routing`
 - `distribution_spatial`
 - `distribution_layer`
 
 Every category has a required native arm, a zero-dose arm that exercises real hook
-sites at scale zero, the named mechanism arms from the experiment plan, and a matched
-random control. Missing arms fail closed. The native and zero-dose forecasts must be
+sites at scale zero, the named mechanism arms from the experiment plan, and its named
+matched-random controls. Missing arms fail closed. The native and zero-dose forecasts must be
 bitwise identical within every edited batch. On the first batch, native rows are also
 checked against a same-shape uninstrumented reference pass with a declared narrow FP32
 tolerance (`rtol=1e-5`, `atol=5e-5`), because separate optimized CUDA attention calls
@@ -47,18 +48,37 @@ The protocol must use these arm names:
 
 | Category | Required mechanism/control arms (plus native and zero_dose) |
 |---|---|
-| Vision/action | visual_only, action_condition_only, joint, permuted_visual, permuted_joint, matched_random |
+| Vision/action | visual_only, action_condition_only, joint, joint_equal_standardized_energy, permuted_visual, permuted_joint, matched_random, matched_random_equal_standardized_energy |
 | Action geometry | equal_anchor_linear, cubic, projected_cubic, reflected_curvature, matched_random |
 | Imagined-time routing | constant_gate, memoryless_gate, hmm_filtered_gate, matched_random |
-| Spatial distribution | one_patch, contiguous_group, equal_size_scattered_group, all_patches, matched_random |
-| Layer distribution | early_block0, intermediate_block2, intermediate_block3, intermediate_blocks2_3, final_block5, all_six_blocks, matched_random |
+| Operator rank | rank1, rank4, rank8, plus one rank/spectrum/energy-matched random control for each |
+| Spatial distribution | one_patch, contiguous_group, equal_size_scattered_group, all_patches, plus support-specific random-direction controls and equal-cardinality random-position controls |
+| Layer distribution | single_block0 through single_block5, intermediate_blocks2_3, all_six_blocks, plus one support-specific matched-random control for each |
 
 Layer names use zero-indexed predictor blocks. The block registry is enforced by the
-protocol validator: B0 is an early control, B2/B3 are the evidence-derived intermediate
-sites, B2+B3 is the primary intermediate-zone arm, B5 is the final-block control, and
-the random control is B2+B3 scope-matched. Every layer arm must use the same hook type,
-imagined horizon, and spatial scope. Its fitted layer-specific directions must be scaled
-so total delivered squared L2 energy is equal across arms.
+protocol validator: every singleton B0--B5 is included, B2+B3 is the evidence-derived
+intermediate-zone composite, and all six blocks is the global arm. Every mechanism arm
+has a random control with exactly the same block support. All layer arms must use the
+same hook type, imagined horizon, spatial scope, and total direct-sum operator rank.
+Fit one basis in the registered direct-sum layer space and split it into layer-specific
+slices; never copy one vector across blocks. Scale slices so total delivered squared L2
+energy is equal across arms.
+
+The operator-rank protocol fixes P3/H3, full 256-patch support, semantic target, fitting
+groups, algorithm, and total delivered squared L2 energy while varying rank 1, 4, or 8.
+Each mechanism arm declares `operator_rank` and has a random subspace with the same
+support, rank, spectrum, and energy. The layer protocol also declares `operator_rank`,
+but it must be the same positive integer for every arm. Its `dose_budget` must declare
+`equal_total_delivered_squared_l2_per_arm`, `fixed_total_direct_sum_rank_per_arm`, and
+`same_support_rank_spectrum_and_energy`. These are frozen-protocol requirements; the
+fit receipt and run receipt must provide the numerical rank/spectrum and delivered-dose
+audit before a result is scientifically eligible.
+
+For spatial distribution, `matched_random_<support>` means a random direction on the
+same tokens. `random_position_<support>` retains the arm's token count and topology but
+moves it to a fit-frozen random location/set. This separates whether a particular token
+region matters from whether an edit of that size matters anywhere. The all-patch arm
+has no random-position analog because there is only one complete 256-patch support.
 
 ## Operator bank
 
@@ -138,9 +158,12 @@ field and P3 (zero-indexed predictor block 3) action condition, and fits one ran
 maximum-covariance direction pair. It never loads development or holdout outcomes.
 
 The component dose is fixed at 0.1 robust fit-score standard deviations before any
-development execution. The joint arm retains both component doses. The matched-random
-arm uses orthogonal unit directions at the same per-site doses, and the spatial sham
-uses a fixed permutation of the 256 visual patches, which preserves visual L2 norm.
+development execution. The factorial joint arm retains both component doses. A separate
+equal-standardized-energy joint scales each component by 1/sqrt(2), matching the total
+squared standardized dose of either single component; its random control receives the
+same scaling. The matched-random arms use orthogonal unit directions at the corresponding
+per-site doses, and the spatial sham uses a fixed permutation of the 256 visual patches,
+which preserves visual L2 norm.
 The fit receipt is written and hashed before the protocol; the resulting operator bank
 is then bound to the frozen protocol hash.
 

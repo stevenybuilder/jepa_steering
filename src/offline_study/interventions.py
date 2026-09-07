@@ -34,12 +34,18 @@ RANK_ARM_RANKS = {
     "matched_random_rank4": 4,
     "matched_random_rank8": 8,
 }
+SPATIAL_RANDOM_POSITION_ARMS = {
+    "random_position_one_patch",
+    "random_position_contiguous_group",
+    "random_position_equal_size_scattered_group",
+}
 
 
 CATEGORY_ARMS = {
     "vision_action_coupling": {
         "native", "zero_dose", "visual_only", "action_condition_only", "joint",
-        "permuted_visual", "permuted_joint", "matched_random",
+        "joint_equal_standardized_energy", "permuted_visual", "permuted_joint",
+        "matched_random", "matched_random_equal_standardized_energy",
     },
     "action_response_geometry": {
         "native", "zero_dose", "equal_anchor_linear", "cubic", "projected_cubic",
@@ -54,6 +60,7 @@ CATEGORY_ARMS = {
         "equal_size_scattered_group", "all_patches",
         "matched_random_one_patch", "matched_random_contiguous_group",
         "matched_random_equal_size_scattered_group", "matched_random_all_patches",
+        *SPATIAL_RANDOM_POSITION_ARMS,
     },
     "distribution_layer": {"native", "zero_dose", *LAYER_ARM_BLOCKS},
     "operator_rank": {"native", "zero_dose", *RANK_ARM_RANKS},
@@ -153,6 +160,7 @@ def validate_frozen_protocol(protocol: dict) -> None:
 
     if category == "distribution_layer":
         active_scopes = set()
+        operator_ranks = set()
         for arm in arms:
             if arm["name"] not in LAYER_ARM_BLOCKS:
                 continue
@@ -171,9 +179,16 @@ def validate_frozen_protocol(protocol: dict) -> None:
                  edit.get("token_end"))
                 for edit in edits
             )
+            operator_ranks.add(arm.get("operator_rank"))
         if len(active_scopes) != 1:
             raise ValueError(
                 "Layer-distribution arms must share one edit site, horizon, and spatial scope"
+            )
+        if len(operator_ranks) != 1 or not all(
+                isinstance(rank, int) and not isinstance(rank, bool) and rank > 0
+                for rank in operator_ranks):
+            raise ValueError(
+                "Layer-distribution arms require one shared positive operator_rank"
             )
         budget = protocol["dose_budget"]
         if budget.get("energy_rule") != "equal_total_delivered_squared_l2_per_arm":
@@ -304,8 +319,11 @@ def compile_edits(protocol: dict, bank: dict, meta: list[dict], device: torch.de
         staged = torch.stack([
             torch.zeros_like(template) if value is None else value for value in slots
         ])
-        delivered_l2 = staged.double().flatten(1).norm(dim=1).tolist()
         delta = staged.to(device, non_blocking=True)
+        # This is a dense reduction over the same arm-batched tensor consumed by
+        # the predictor. Keeping it on the CPU dominated full-scale execution
+        # through thread-pool and memory-bandwidth contention across GPU shards.
+        delivered_l2 = delta.double().flatten(1).norm(dim=1).cpu().tolist()
         compiled.append(CompiledEdit(*key, delta=delta, delivered_l2=delivered_l2))
     return compiled
 

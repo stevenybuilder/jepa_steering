@@ -202,6 +202,7 @@ def make_protocol(
     action_scale: float,
     frozen_at: str,
 ) -> dict:
+    equal_energy_factor = 2. ** -.5
     visual = {"site": "predictor_visual", "horizon": HORIZON,
               "tensor": "visual_direction", "scale": visual_scale}
     action = {"site": "block_condition", "horizon": HORIZON, "block": BLOCK,
@@ -209,6 +210,14 @@ def make_protocol(
     permuted = {**visual, "tensor": "permuted_visual_direction"}
     random_visual = {**visual, "tensor": "random_visual_direction"}
     random_action = {**action, "tensor": "random_action_direction"}
+    equal_energy_visual = {**visual, "scale": visual_scale * equal_energy_factor}
+    equal_energy_action = {**action, "scale": action_scale * equal_energy_factor}
+    equal_energy_random_visual = {
+        **random_visual, "scale": visual_scale * equal_energy_factor,
+    }
+    equal_energy_random_action = {
+        **random_action, "scale": action_scale * equal_energy_factor,
+    }
     protocol = {
         "schema_version": 1,
         "status": "frozen",
@@ -229,6 +238,10 @@ def make_protocol(
             "visual_delivered_l2": visual_scale,
             "action_condition_delivered_l2": action_scale,
             "joint_policy": "retain both single-component doses",
+            "equal_standardized_energy_joint_policy": (
+                "scale both standardized component doses by 1/sqrt(2) so their "
+                "squared standardized dose sums to one single-component budget"
+            ),
             "matched_random_policy": "orthogonal unit directions with identical per-site doses",
             "permutation_policy": "fixed permutation of 256 visual patches preserves visual L2",
             "outcome_tuning": False,
@@ -252,9 +265,13 @@ def make_protocol(
             {"name": "visual_only", "edits": [visual]},
             {"name": "action_condition_only", "edits": [action]},
             {"name": "joint", "edits": [visual, action]},
+            {"name": "joint_equal_standardized_energy",
+             "edits": [equal_energy_visual, equal_energy_action]},
             {"name": "permuted_visual", "edits": [permuted]},
             {"name": "permuted_joint", "edits": [permuted, action]},
             {"name": "matched_random", "edits": [random_visual, random_action]},
+            {"name": "matched_random_equal_standardized_energy",
+             "edits": [equal_energy_random_visual, equal_energy_random_action]},
         ],
         "primary_contrasts": [
             {"name": "joint_vs_visual_only", "candidate": "joint", "control": "visual_only"},
@@ -262,6 +279,13 @@ def make_protocol(
              "control": "action_condition_only"},
             {"name": "joint_vs_matched_random", "candidate": "joint", "control": "matched_random"},
             {"name": "joint_vs_permuted_joint", "candidate": "joint", "control": "permuted_joint"},
+            {"name": "equal_energy_joint_vs_visual_only",
+             "candidate": "joint_equal_standardized_energy", "control": "visual_only"},
+            {"name": "equal_energy_joint_vs_action_condition_only",
+             "candidate": "joint_equal_standardized_energy", "control": "action_condition_only"},
+            {"name": "equal_energy_joint_vs_matched_random",
+             "candidate": "joint_equal_standardized_energy",
+             "control": "matched_random_equal_standardized_energy"},
         ],
     }
     validate_frozen_protocol(protocol)

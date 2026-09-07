@@ -1,3 +1,4 @@
+import math
 import unittest
 
 import torch
@@ -85,6 +86,19 @@ class OperatorFitTests(unittest.TestCase):
             "mw-reach", "a" * 64, "b" * 64, "c" * 64, .2, .3,
             "2026-09-07T00:00:00+00:00")
         validate_frozen_protocol(protocol)
+        arms = {arm["name"]: arm for arm in protocol["arms"]}
+        self.assertAlmostEqual(
+            arms["joint_equal_standardized_energy"]["edits"][0]["scale"],
+            .2 / math.sqrt(2),
+        )
+        self.assertAlmostEqual(
+            arms["joint_equal_standardized_energy"]["edits"][1]["scale"],
+            .3 / math.sqrt(2),
+        )
+        self.assertAlmostEqual(
+            arms["matched_random_equal_standardized_energy"]["edits"][0]["scale"],
+            .2 / math.sqrt(2),
+        )
         evaluation = [{"trajectory_id": "t", "lineage_group": "g", "task": "mw-reach",
                        "split": "development", "starts": [0, 5]}]
         tensors = {

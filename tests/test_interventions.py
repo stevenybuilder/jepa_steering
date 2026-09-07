@@ -86,6 +86,8 @@ def frozen_protocol(category="vision_action_coupling"):
     for arm in arms:
         if arm["name"] in RANK_ARM_RANKS:
             arm["operator_rank"] = RANK_ARM_RANKS[arm["name"]]
+        if arm["name"] in LAYER_ARM_BLOCKS:
+            arm["operator_rank"] = 1
     return {
         "schema_version": 1,
         "status": "frozen",
@@ -226,6 +228,14 @@ class InterventionTests(unittest.TestCase):
             if arm["name"] == "matched_random_single_block4")
         random_block4["edits"][0]["block"] = 3
         with self.assertRaisesRegex(ValueError, "requires zero-indexed blocks.*4"):
+            validate_frozen_protocol(protocol)
+
+    def test_layer_protocol_requires_one_shared_positive_operator_rank(self):
+        protocol = frozen_protocol("distribution_layer")
+        all_six = next(
+            arm for arm in protocol["arms"] if arm["name"] == "all_six_blocks")
+        all_six["operator_rank"] = 4
+        with self.assertRaisesRegex(ValueError, "one shared positive operator_rank"):
             validate_frozen_protocol(protocol)
 
     def test_rank_protocol_freezes_rank_and_scope(self):

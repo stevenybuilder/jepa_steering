@@ -156,8 +156,12 @@ setting found in another sweep.
 Selection is per task/checkpoint; a mixed-task average may summarize but cannot choose
 an arm. An arm is eligible only if it passes identity/fidelity checks, improves the
 predeclared recorded-future endpoint by the smallest useful effect, and beats its
-scope/rank/energy-matched random control. Among statistically equivalent eligible arms,
-choose the simpler one. If none is eligible, retain native/no intervention. After the
+scope/rank/energy-matched random control. Estimate contrasts from paired per-lineage
+aggregates and use a predeclared familywise simultaneous interval within each category
+and task/checkpoint. "Equivalent" means that interval lies wholly inside a frozen
+equivalence margin; failure to reject a difference is not equivalence. Among equivalent
+eligible arms, choose the simpler one. Otherwise an unresolved comparison is
+inconclusive, and if no arm is eligible retain native/no intervention. After the
 one-factor sweeps, combine compatible selected choices on development and run drop-one
 ablations. Freeze that combined recipe, controls, endpoints, multiplicity handling,
 and sample size before one protected evaluation. Closed-loop success remains the final
@@ -167,7 +171,7 @@ primary outcome; offline forecast and mechanism measures are advancement gates.
 
 | Category | Arms | Primary mechanism comparison |
 |---|---|---|
-| Vision–action coupling | No edit; visual-only; action-condition-only; joint; spatially permuted joint | Joint versus individual edits; nonadditive output interaction |
+| Vision–action coupling | No edit; visual-only; action-condition-only; joint; equal-standardized-energy joint; spatially permuted joint | Joint versus individual edits; nonadditive output interaction; equal-budget efficacy |
 | Action-response geometry | Equal-anchor linear; cubic; cubic projected onto endpoint line; reflected curvature | Contribution of off-line curvature beyond data quantity and line reparameterization |
 | Operator dimensionality | Rank 1; rank 4; rank 8; rank-matched random subspaces | Added value of distributed signal beyond a single direction at fixed support and energy |
 | Routing across imagined time | Constant gate; memoryless gate; HMM-filtered gate | Conditional HMM versus memoryless using the same underlying operator and comparable dose |
@@ -186,8 +190,11 @@ and joint arms with identical inputs and individual component doses.
 Measure output interaction r = z_joint - z_visual - z_action + z_native before squaring
 errors. A nonzero interaction of MSE scores can occur even for additive outputs, so
 decompose that quadratic cross term separately. Joint edits have more total perturbation
-than a single component under a factorial; add a separately dose-matched comparison
-before attributing improved efficacy to coupling rather than budget.
+than a single component under a factorial. Therefore include a separate joint arm with
+both standardized component doses scaled by 1/sqrt(2), so their squared standardized
+dose sums to one single-component budget, plus its own matched-random arm. Use the
+unscaled factorial for the interaction estimand and the equal-budget arms for efficacy;
+do not substitute one comparison for the other.
 
 Reuse candidates: archive/.../scripts/geometry_map/run_joint_visual_action_factorial.py
 and run_joint_factorial_64.py. Donor/reference selection, exact hook, signed doses,
@@ -218,8 +225,11 @@ it is not an invitation to search arbitrary ranks. Fit every rank with the same 
 algorithm, fitting groups, and regularization rule. Match total delivered squared L2
 energy across ranks. For each rank, use a random subspace with the same support, rank,
 spectrum, and energy. The primary question is whether rank 4 or 8 improves the
-recorded-future endpoint beyond rank 1 and its own matched-random control. If higher
-rank is statistically equivalent to rank 1, select rank 1.
+recorded-future endpoint beyond rank 1 and its own matched-random control. Control the
+rank-contrast family jointly. If a higher rank is equivalent to rank 1 under the frozen
+margin, select rank 1. Rank 1 is also the fixed category-reference capacity for the
+separate layer and spatial sweeps; a higher-rank winner is introduced only in the later
+combined development recipe, not retroactively into those one-factor comparisons.
 
 ### HMM across imagined time (agreed choice)
 
@@ -243,7 +253,7 @@ Treat depth and token position as two axes of one localization question, but run
 separate one-factor sweeps rather than a full layer-by-position grid.
 
 The layer sweep fixes the block-output hook, H3, full 256-patch support, semantic target,
-fit procedure, total direct-sum rank, and total perturbation energy. It compares all six
+fit procedure, total direct-sum rank at 1, and total perturbation energy. It compares all six
 zero-indexed singleton blocks B0 through B5, the archived evidence-derived intermediate
 zone B2+B3, and the global B0+B1+B2+B3+B4+B5 arm. Fit a basis in the direct sum of the
 registered block spaces and split it into layer-specific slices; do not copy one vector
@@ -252,21 +262,29 @@ Every layer-support arm has its own random control with identical block support,
 spectrum, and energy. Early edits change later activations, so all multi-block edits are
 constructed from and logged against the same specified native reference.
 
-The spatial sweep fixes P3/H3, rank, target, and fitting procedure. Select the candidate
+The spatial sweep fixes P3/H3, rank 1, target, and fitting procedure. Select the candidate
 single patch and 4x4 contiguous region on fitting data, then freeze them. Compare one
 selected patch, the selected contiguous 16-patch region, an equally sized scattered
 16-patch set, and all 256 patches. Each support has its own random-direction control with
-the same positions, rank, spectrum, and energy; selected positions additionally compare
-against random position sets of equal cardinality. Share total perturbation energy
-sum_{block,patch} ||delta||^2 and report downstream effect magnitudes.
+the same positions, rank, spectrum, and energy. The fit-selected one-patch, contiguous,
+and scattered supports additionally have random-position arms preserving cardinality
+and topology; the all-patch arm has no position analog. Share total perturbation energy
+sum_{block,patch} ||delta||^2 and report downstream effect magnitudes. Control the
+predeclared support-contrast family jointly.
 
-A singleton winner supports layer localization; B2+B3 beating B2 and B3 supports an
-intermediate distributed zone; all six beating B2+B3 supports global depth distribution.
-Likewise, one/contiguous support beating scattered/all supports spatial localization,
-while scattered/all beating localized supports spatial distribution. After both sweeps,
-run only a minimal 2x2 interaction check crossing the best non-global versus global layer
-support with the best non-global versus all-patch spatial support. Do not launch the full
-layer-by-position Cartesian grid.
+A singleton supports layer localization only if it beats its matched random, the
+singleton contrast family isolates it from the other blocks, and it is equivalent to
+the broader supports within the frozen margin. B2+B3 beating both B2 and B3 by the
+smallest useful effect supports an intermediate distributed zone. All six beating the
+best singleton and B2+B3 by that effect supports global depth distribution. Analogously,
+localized spatial support must beat its direction and position controls and be equivalent
+to broader support; all-patch support must improve over the best localized arm to support
+spatial distribution. Any wide interval that spans these decision regions is
+inconclusive. After both sweeps, run only a secondary development 2x2 compatibility
+check crossing the rule-selected best non-global versus global layer support with the
+rule-selected best non-global versus all-patch spatial support. Do not launch the full
+layer-by-position Cartesian grid or treat this post-selection check as independent
+confirmation.
 
 ## Evaluation order and scientific claims
 
