@@ -151,10 +151,10 @@ the published candidate/iteration counts and completed 210 adapter calls in appr
 outcomes cannot select a candidate. Durable, checksum-verified reports are under
 `artifacts/offline_study/primary-durable-20260907/planning-static-cem-smoke-v1/`.
 They do not promote a Reach-Wall coupling arm that failed its offline advancement gate.
-Dynamic support/rank operators still need separate transfer validation, including an
-explicit policy for the planner's shortened horizons.
+These static checks do not validate dynamic support/rank transfer or the exact
+selected combined recipe; their separate checks are described below.
 
-### Rank-transfer implementation and queued fit checks (approximately noon EDT)
+### Rank-transfer implementation and completed fit checks (12:35 EDT)
 
 `planning_support.py` now implements that transfer as an explicitly recorded study
 extension. It uses the unchanged BF16-primary rank bank with the actual upstream
@@ -165,16 +165,41 @@ this adapter returns a true native rollout and adds no fictitious actions. The s
 rule applies to both components if a combined recipe later advances. This is our
 intervention-transfer policy, not a setting claimed to appear in the JEPA-WM paper.
 
-Candidate slices have at most eight elements; the 300-candidate CEM population is
-not reduced, reordered or padded. This bounds memory while the operator computes
-its response probes. Fit-only checks compare active edits with the unchanged source
-compiler, demand bitwise no-op identity, and check chunked native forecasts at the
-existing 1e-6 absolute / 1e-5 relative tolerance. They retain a non-divisible 19-item
-batch and benchmark 300 repeated fit-action sequences. These timings are not actual
-closed-loop/CEM throughput or additional independent observations.
+Only response-operator construction uses candidate slices of at most eight elements.
+The actual native and edited forecasts retain the full official candidate population;
+no reduction, reordering or padding is used. Earlier v1/v2 checks rejected slicing
+actual forecasts because batch/stride-dependent FP32 kernels changed predictions
+beyond the existing tolerance. An alternative probe-chunk diagnostic also failed
+source parity, so the original eight-probe chunk and all 32 probes are retained.
+Those failures are preserved, not relabelled as passes or overwritten.
 
-The checks are queued on the existing US worker, taking GPUs 1 and 2 only after
-their respective combined-development shards have completed and released memory.
-No confirmation outcomes or new simulator policies are opened by this queue.
-Actual selected-candidate CEM integration, combined-transfer parity if needed,
-prospective exposure verification and the final policy-analysis freeze remain gates.
+Fit-only v3 passed both MW tasks: H2/H5 true-native behavior, H6 unchanged-source
+corrections, exact full-population native/zero identity and independent full-batch
+source-hook checks for 19 and 300 candidates. Repeated fit-action timing at 300
+candidates is about 102 seconds for rank4 versus 2.9 seconds native. This is not an
+actual CEM/closed-loop throughput measurement. Local verified report hashes:
+
+- Reach: `10d5352901f44fc8898aa26ae7ea095545f746ef7fc1d59ddc5261bd1bbb1faf`.
+- Reach-Wall: `3c9cc26a1dc3c2491e0cc61a7291785bb7e649b7ca8b20526b8fe3bdc7502253`.
+
+Four follow-up checks completed on GPUs 0–3 of the same US worker: exact Reach
+combined and its random control, plus Reach-Wall rank4 and its random control.
+They cycle all contiguous H6 action sequences from the existing fit-only fixture,
+retaining 300 candidates and a 19-candidate tail test. Their reference assembles
+unchanged source rank fields and uses the original static coupling compiler.
+No physical targets are attributed to these candidate actions; no new outcomes or
+confirmation cohort is opened. The first launch failed at source staging before
+Python could import the module; its logs remain under `planning-selected-transfer-fit-v1-*`.
+The verified source snapshot is `code-v25`; new `planning-selected-transfer-fit-v2`
+outputs all pass, with 52 distinct fit action sequences cycled to 300 candidates.
+These repetitions are engineering coverage, not independent observations. Full
+candidate predictions match independently assembled source hooks bitwise. The
+completed reports and contracts have been checksum-verified in local durable storage:
+
+- Reach combined: `e40c3421f8b3e4fd823538caad99fa70967d89310482193d5a8d94fb1457853e`.
+- Reach combined random: `b28336c4c9379eac1ae6d2e5e9501b3efbe7226acea44c583fa3b321c3f0be42`.
+- Reach-Wall rank4: `c9c20732f474ce54f35aa2ab6fa8bc968da5ea5a1e82caa4b15eaad1cd4357c8`.
+- Reach-Wall random: `37de0eeccdae62483f65e82aa8616479d280ae083bb4b7397c755ee4ad5a50da`.
+
+Actual selected-candidate CEM integration, prospective exposure verification and
+the final policy-analysis freeze remain separate gates.

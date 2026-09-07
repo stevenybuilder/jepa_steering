@@ -70,3 +70,32 @@ independent shard, no collectives or trajectory padding. The coordinator automat
 verifies coverage and analyzes both precisions after all shards finish. New output
 directories preserve failed checks and prior evidence. Runtime caps are execution
 safety limits, never permission to call incomplete coverage a completed study.
+
+## Completed measurements and non-routed selection
+
+All eight shards and both complete analyses finished, retaining 33 trajectories,
+3,960 H6 prefixes per arm per precision, all ten arms and all registered contrasts.
+Analysis report hashes:
+
+- BF16: `846672dfd91f361ebb9baf90bae94b82b09d8537433c09bf1b1a2c6f3afdff76`.
+- FP32: `66bf550e6d42bbaa8428a27db70e35a6b430e787e3b51170fcfff24b633d2c4b`.
+
+The primary combined recipe reduces H6 proprioceptive embedding MSE by 4.824%
+against native, with simultaneous 95% interval [3.668%, 5.980%]. It also beats
+its combined random control and each component-removal arm by the frozen fit-only
+minimum. Removing rank capacity to rank1 has a 0.968% difference, interval
+[0.700%, 1.236%], scaled by observed native error. This does NOT establish a
+minimum-useful rank4-versus-rank1 advantage; neither does it establish rank1
+equivalence. Retain the previously selected rank4 under the existing equivalence
+rule, not a new point-estimate or precision tie breaker. FP32 sensitivity gives
+3.965% combined improvement, interval [2.885%, 5.046%]; it cannot change selection.
+
+`offline_study.combined_advancement` independently verifies durable shard hashes,
+all arm/prefix/trajectory identities, source banks and the prior parsimony evidence.
+The completed audit checks 88 artifact hashes. Its report SHA256 is
+`79a5bc8b7f42042df26480bb238057ad3df740df39f437aad50ec0f7a924b965`, under
+`artifacts/offline_study/primary-durable-20260907/combined-advancement-20260907-v1/`.
+The non-routed choices are Reach combined, Reach-Wall rank4 and Push-T native.
+The audit does not authorize confirmation or policy launches. Conditional temporal
+routing eligibility is still unresolved; the final exposure/analysis contract is
+not frozen. These remain development embedding-error results, not task success.

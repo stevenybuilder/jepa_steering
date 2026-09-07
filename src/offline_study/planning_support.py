@@ -26,6 +26,7 @@ TRANSFER_POLICY = {
     "target_and_fit": "unchanged BF16-primary bank evaluated in strict FP32",
     "common_degeneracy": "retain all source rank probes and all source rank arms",
     "candidate_chunk_size": 8,
+    "chunking_scope": "response-operator construction only; actual native and edited forecasts retain the full candidate batch",
     "candidate_reordering_or_padding": False,
     "outcome_dependent_execution": False,
 }
@@ -46,7 +47,25 @@ def context_values(context, batch, start, stop):
 
 def select_context(context, batch, start, stop):
     from tensordict import TensorDict
-    return TensorDict(context_values(context, batch, start, stop), batch_size=[])
+    # Validate layout, but preserve the official singleton broadcast/strides.
+    # Materializing a singleton before unroll can change FP32 kernel selection.
+    values = context_values(context, batch, start, stop)
+    return TensorDict({k: context[k] if context[k].shape[0] == 1 else v
+                       for k, v in values.items()}, batch_size=[])
+
+
+class SupportRolloutBackend:
+    """Keep the shared initial context singleton during candidate/probe expansion."""
+    def __init__(self, backend):
+        self.backend, self.device, self.predictor = backend, backend.device, backend.predictor
+
+    def predict(self, context, actions):
+        return self.backend.predict(context, actions)
+
+    def expand_context(self, context, repeats):
+        if all(context[k].shape[0] == 1 for k in ("visual", "proprio")):
+            return context  # Upstream unroll broadcasts to the action batch itself.
+        return self.backend.expand_context(context, repeats)
 
 
 def selected_support_fields(edits, names, arm, batch):
@@ -95,16 +114,20 @@ class PlanningSupportIntervention:
                 "requested_squared_l2_sum": 0., "realized_squared_l2_sum": 0., "response_probe_rollouts": 0})
             return result
         from tensordict import TensorDict
-        outputs = {k: [] for k in ("visual", "proprio")}
+        # Probe construction can be bounded by candidate slices. The ACTUAL
+        # forecast must keep the official full candidate batch: GPU GEMM choices
+        # can otherwise change FP32 predictions even without an intervention.
+        staged = {}
         record = {"horizon": horizon, "candidates": batch, "edited_candidates": 0,
                   "requested_squared_l2_sum": 0., "realized_squared_l2_sum": 0.,
-                  "response_probe_rollouts": 0, "native_shadow_rollouts": 0}
+                  "response_probe_rollouts": 0, "native_shadow_rollouts": 0,
+                  "final_forecast_candidate_batch": batch, "final_forecasts_chunked": False}
         size = TRANSFER_POLICY["candidate_chunk_size"]
         for start in range(0, batch, size):
             stop = min(start + size, batch)
             z = select_context(context, batch, start, stop)
             actions = act_suffix[:, start:stop].contiguous()
-            all_edits, diagnostics = prepare_support(self.backend, z, actions, self.protocol, self.bank)
+            all_edits, diagnostics = prepare_support(SupportRolloutBackend(self.backend), z, actions, self.protocol, self.bank)
             fields = selected_support_fields(all_edits, [a["name"] for a in self.protocol["arms"]], self.arm, stop - start)
             if self.coupling is not None:
                 coupling_protocol, coupling_bank, coupling_arm = self.coupling
@@ -112,36 +135,38 @@ class PlanningSupportIntervention:
             keys = [(e.site, e.block, e.horizon, e.token_start, e.token_end) for e in fields]
             if len(set(keys)) != len(keys):
                 raise ValueError("Combined planning hooks overlap without a composition rule")
-            active = torch.stack([e.delta.flatten(1).ne(0).any(1) for e in fields]).any(0)
-            # Source-degenerate candidates are retained as true native no-ops;
-            # this is computed before prediction, never from success or errors.
-            if active.all():
-                with PredictorIntervention(self.backend.predictor, fields):
-                    result = self.backend.predict(z, actions)
-            elif not active.any():
-                result = self.backend.predict(z, actions)
-                fields = []
+            for key, field in zip(keys, fields):
+                staged.setdefault(key, []).append(field)
+            record["response_probe_rollouts"] += sum(r["response_probe_rollouts"] for r in diagnostics)
+            record["native_shadow_rollouts"] += sum(r["native_shadow_rollouts"] for r in diagnostics)
+        fields = []
+        for values in staged.values():
+            delta = torch.cat([e.delta for e in values], dim=0).contiguous()
+            if len(delta) != batch:
+                raise ValueError("Missing or duplicated constructed candidate edits")
+            fields.append(replace(values[0], delta=delta,
+                delivered_l2=delta.double().flatten(1).norm(dim=1).cpu().tolist(), applications=0, realized_l2=None))
+        active = torch.stack([e.delta.flatten(1).ne(0).any(1) for e in fields]).any(0)
+        record["edited_candidates"] = int(active.sum())
+        # Decide zero-treatment dispatch BEFORE forecasting. Both paths retain
+        # the full population; this is not an after-the-fact parity correction.
+        native = self.backend.predict(context, act_suffix) if not active.all() else None
+        if active.any():
+            with PredictorIntervention(self.backend.predictor, fields):
+                changed = self.backend.predict(context, act_suffix)
+            if native is None:
+                result = changed
             else:
-                result = self.backend.predict(z, actions)
-                active_z = TensorDict({k: z[k][active].contiguous() for k in outputs}, batch_size=[])
-                fields = [replace(e, delta=e.delta[active].contiguous(),
-                    delivered_l2=e.delta[active].double().flatten(1).norm(dim=1).cpu().tolist(),
-                    applications=0, realized_l2=None) for e in fields]
-                with PredictorIntervention(self.backend.predictor, fields):
-                    changed = self.backend.predict(active_z, actions[:, active].contiguous())
-                for key in outputs:
-                    result[key][:, active] = changed[key]
+                result = TensorDict({key: torch.where(active.reshape(1, batch, *([1] * (changed[key].ndim - 2))),
+                    changed[key], native[key]) for key in ("visual", "proprio")}, batch_size=[])
             for edit in fields:
                 if edit.realized_l2 is None or not torch.isfinite(edit.realized_l2).all():
                     raise ValueError("Missing/nonfinite delivered planning energy")
                 record["requested_squared_l2_sum"] += sum(x*x for x in edit.delivered_l2)
                 record["realized_squared_l2_sum"] += float(edit.realized_l2.double().square().sum())
-            record["edited_candidates"] += int(active.sum())
-            record["response_probe_rollouts"] += sum(r["response_probe_rollouts"] for r in diagnostics)
-            record["native_shadow_rollouts"] += sum(r["native_shadow_rollouts"] for r in diagnostics)
-            for key in outputs:
-                if not torch.isfinite(result[key]).all():
-                    raise ValueError("Nonfinite planning predictions; do not discard candidates")
-                outputs[key].append(result[key])
+        else:
+            result = native
+        if any(not torch.isfinite(result[key]).all() for key in ("visual", "proprio")):
+            raise ValueError("Nonfinite planning predictions; do not discard candidates")
         self.energy.append(record)
-        return TensorDict({key: torch.cat(values, dim=1) for key, values in outputs.items()}, batch_size=[])
+        return result

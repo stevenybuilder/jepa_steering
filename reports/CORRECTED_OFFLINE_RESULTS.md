@@ -2,7 +2,8 @@
 
 All five frozen sweeps completed in BF16 (primary) and FP32 (sensitivity) on all three
 primary author-validation pools. Exact upstream input, context, rollout and metric
-checks passed. This finishes the corrected offline phase, **not the end-to-end study**.
+checks passed. This finishes those corrected offline comparisons, **not the entire
+offline confirmation/routing work or end-to-end study**.
 The governing design is [EXPERIMENT_PLAN.md](../docs/EXPERIMENT_PLAN.md), with its
 explicit author-validation correction in [author_correction.json](../configs/author_correction.json).
 
@@ -30,7 +31,7 @@ the complete export retains all 672 arm/endpoint/precision comparisons, includin
 
 | Task | Frozen arm | Error reduction vs native | Simultaneous 95% interval | Frozen advancement gates |
 |---|---|---:|---:|---|
-| Reach | Equal-budget joint vision/action | 2.035% | [1.298%, 2.773%] | Selected coupling efficacy arm; combined development running |
+| Reach | Equal-budget joint vision/action | 2.035% | [1.298%, 2.773%] | Selected coupling efficacy component; combined development complete |
 | Reach | Unscaled joint vision/action | 2.877% | [1.872%, 3.883%] | Factorial interaction arm, not the equal-budget efficacy choice |
 | Reach | Rank 4 | 2.887% | [2.276%, 3.499%] | Eligible; explicit rank-parsimony rule selects rank 4 |
 | Reach | Single block 0 | 3.026% | [2.124%, 3.929%] | Eligible; does not uniquely localize the mechanism |
@@ -39,6 +40,13 @@ the complete export retains all 672 arm/endpoint/precision comparisons, includin
 | Push-T | Joint vision/action | −0.638% | [−1.214%, −0.062%] | Worse than native; not eligible |
 | Push-T | Rank 4 | 0.198% | [−0.059%, 0.455%] | Not eligible |
 
+The separately frozen Reach combined/drop-one stage is now also complete:
+equal-budget coupling plus rank4 improves the primary error by **4.824%**, interval
+**[3.668%, 5.980%]**, against its paired native arm. It passes the frozen minimum
+against matched-random combined and both component-removal arms. This secondary
+development stage uses its own simultaneous contrast family; do not merge its
+intervals into the original one-factor family. See [combined evidence](../docs/COMBINED_DEVELOPMENT.md).
+
 BF16 native H6 errors are 0.0008585703183 (Reach), 0.0008200658457 (Reach-Wall),
 and 0.0002192615816 (Push-T). All listed comparisons delivered energy within the
 already-frozen FP32 tolerance; the tolerance was not adjusted to obtain this result.
@@ -46,8 +54,8 @@ already-frozen FP32 tolerance; the tolerance was not adjusted to obtain this res
 No geometry arm qualifies on any task. No Push-T intervention qualifies in the
 primary analysis; retain native, without selecting a more favorable FP32 result.
 On Reach-Wall, only rank 4 qualifies across the five sweeps. Reach has eligible
-coupling, rank, layer and all-patch choices, requiring the planned combination and
-drop-one work. Pairwise uncertainty and unregistered comparisons must not be
+coupling, rank, layer and all-patch choices; the planned compatible combination and
+drop-one work has now completed. Pairwise uncertainty and unregistered comparisons must not be
 silently resolved by a new purportedly predeclared tie breaker.
 
 The plan explicitly assigns the unscaled coupling factorial to interaction estimation
@@ -81,13 +89,17 @@ and all six raw native-fit captures. The verification report is in
 
 ## Remaining work
 
-Combined-recipe/drop-one checks, any eligible layer/position compatibility check,
-prospective cohort/exposure verification and a frozen policy-analysis contract remain.
+Final confirmation recipe/analysis/access freezing, conditional temporal-routing
+eligibility, and prospective cohort/exposure verification remain. The conditional
+layer/position check has no eligible non-global spatial input and is not invented.
 The native official CEM has passed non-confirmatory simulator checks on all tasks.
 Ninety-six candidate-independent initial/goal scenarios per MW task are prepared;
 these used only the official expert to define goals, not learned-policy outcomes.
 Static BF16-primary banks also pass fit-only transfer to strict-FP32 planning.
-Dynamic rank/support planning transfer is still unverified and must not be bypassed.
+Dynamic rank/support transfer passed fit-only full-population checks on both MW
+tasks; diverse-action and exact combined transfer checks also passed and their
+receipts are locally checksum-verified. Actual
+selected-candidate CEM integration remains a separate gate.
 
 No closed-loop success benefit, fresh confirmation, three-trained-seed replication,
 or last-ten-epoch aggregation is established by these offline results.

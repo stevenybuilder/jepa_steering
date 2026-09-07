@@ -1,6 +1,6 @@
 # Frozen-model offline study: active plan
 
-Status (2026-09-07, approximately 11:04 EDT): the corrected primary offline phase is
+Status (2026-09-07, approximately 12:35 EDT): the corrected primary offline comparisons are
 complete, verified across all 30 task/category/precision scopes: 33 Reach, 27 Reach-Wall,
 and 21 Push-T trajectories. All six refits exclude validation families; the seven added
 MetaWorld rows and 21 Push-T rows were separately authorized without altering their
@@ -8,14 +8,18 @@ historical exposure registries. The original custom runs remain historical devel
 evidence. Broad unsteered coverage remains 1,120/1,260 rows across 42 MetaWorld tasks.
 This is full **primary-task released-pool offline replication**, not reconstruction of
 the authors' training histories, full 42-task validation coverage, or end-to-end study
-completion. Combined/drop-one work and prospective policy evaluation remain unfinished.
+completion. Combined/drop-one measurements are also complete. Conditional temporal-routing
+eligibility, untouched offline confirmation and prospective policy evaluation remain unfinished.
 See [corrected results and exact completion evidence](../reports/CORRECTED_OFFLINE_RESULTS.md).
 
-At approximately 11:52 EDT, the predeclared Reach combined/drop-one stage launched
-on all eight US GPUs after both precision-specific fit-only checks passed. Its exact
+The predeclared Reach combined/drop-one stage completed on all eight US GPUs after
+both precision-specific fit-only checks passed. Its exact
 ten arms, source component bindings, complete 33-row previously exposed population
 and fixed analysis are recorded in [COMBINED_DEVELOPMENT.md](COMBINED_DEVELOPMENT.md).
 This does not open another untouched reserve or establish closed-loop efficacy.
+The subsequent durable audit verifies 88 artifact hashes and all 33 paired trajectories.
+It selects the unchanged non-routed coupling-plus-rank4 recipe for Reach, retains rank4
+for Reach-Wall and native for Push-T. This is not the final confirmation-access contract.
 
 ## Author-validation correction requested on 2026-09-07
 
@@ -40,12 +44,15 @@ overlap, and verify cohort access against the preserved exposure registry. Prote
 trajectories cannot be relabelled development to bypass these checks. Do not silently
 drop protected trajectories and claim complete official validation coverage.
 
-The authors' full available validation pool has 1,260 MetaWorld rows (33 Reach and
+The released loaders' full available validation pool has 1,260 MetaWorld rows (33 Reach and
 27 Reach-Wall) and 21 Push-T rows. A complete pass over that pool is a stated extension
 of their batch-wise validation monitoring, not a reconstruction of the exact samples
 behind a published curve. Author-split replication and untouched confirmation remain
 different claims. The legacy `authors_split_reproduced: false` remains correct until
 new executable parity checks and completed run receipts support a narrower claim.
+In particular, the paper's general 90/10 description and the released Push-T loader's
+separate 21-row `val/` pool are not identical specifications. Loader replication does
+not establish the exact unique-trajectory count behind the paper's validation curves.
 
 ### Protected-preserving execution amendment
 

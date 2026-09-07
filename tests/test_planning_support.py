@@ -4,9 +4,21 @@ import torch
 
 from offline_study.interventions import CompiledEdit
 from offline_study.planning_support import TRANSFER_POLICY, context_values, selected_support_fields
+from offline_study.planning_support_check import fit_candidate_actions
 
 
 class PlanningSupportTests(unittest.TestCase):
+    def test_diverse_actions_preserve_recorded_sequence_order(self):
+        actions = torch.arange(28.).reshape(2, 7, 2)
+        actual = fit_candidate_actions(actions, 19)
+        self.assertEqual(actual.shape, (6, 19, 2))
+        self.assertTrue(torch.equal(actual[:, 0], actions[0, :6]))
+        self.assertTrue(torch.equal(actual[:, 1], actions[0, 1:7]))
+        self.assertTrue(torch.equal(actual[:, 2], actions[1, :6]))
+        self.assertTrue(torch.equal(actual[:, 18], actions[1, :6]))
+        with self.assertRaises(ValueError):
+            fit_candidate_actions(torch.zeros(2, 7, 2), 19)
+
     def test_disjoint_singleton_expansion_and_nonpadded_tail(self):
         context = {k: torch.arange(6.).reshape(1, 1, 2, 3) for k in ("visual", "proprio")}
         result = context_values(context, 19, 16, 19)
