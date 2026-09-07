@@ -1,0 +1,136 @@
+# Benchmark runbook
+
+The current executable is an unedited recorded-action H6 baseline. It establishes
+throughput and trajectory-level forecast errors. It does not yet benchmark intervention
+arms, run a planner, or establish statistical efficacy.
+
+## Environment
+
+Use the upstream-supported **Python3.10** environment for real JEPA-WM execution.
+The lightweight package/tests also run on newer Python, but that does not validate
+the upstream dependency stack. Install upstream per its README (Torch/torchvision
+versions must be compatible), then install this package in the same environment.
+
+```bash
+git clone https://github.com/facebookresearch/jepa-wms.git vendor/jepa-wms
+git -C vendor/jepa-wms checkout 13cf1d9c7e476f53c17714d2e0f1dc239a883ce0
+python -m pip install -e vendor/jepa-wms
+python -m pip install -e .
+```
+
+Follow the upstream download instructions for the MetaWorld/Push-T datasets and the
+jepa_wm_metaworld / jepa_wm_pusht checkpoints. Record the downloaded dataset revision
+and checkpoint SHA256. The model loader can still fetch the frozen DINO backbone on
+first initialization: preload it before timing and record its resolved cache provenance.
+Dataset transfer and model setup are not prediction throughput.
+
+## Inventory
+
+Substitute actual paths and the downloaded dataset revision below. Push-T root must
+contain train/ and val/; MetaWorld root must contain the released parquet files.
+
+```bash
+jepa-inventory --vendor vendor/jepa-wms --dataset metaworld \
+  --data-root data/metaworld --data-revision DATA_REVISION \
+  --output runs/metaworld-inventory
+jepa-inventory --vendor vendor/jepa-wms --dataset pusht \
+  --data-root data/pusht --data-revision DATA_REVISION \
+  --output runs/pusht-inventory
+```
+
+Inspect inventory.json before running. Count discrepancies are reported rather than
+silently truncating or duplicating data. Source file content hashes and historical
+exposure reconciliation are outstanding launch requirements; a declared revision alone
+is not proof that local raw media are intact. Keep old protected trajectories out of
+timing/development even if their provisional new split differs.
+
+The real benchmark requires a reviewed exposure registry bound to the manifest:
+
+```json
+{
+  "manifest_sha256": "SHA256_OF_TRAJECTORIES_JSONL",
+  "review_basis": "Source-ID mapping to prior protected manifests and exposure logs",
+  "trajectories": {
+    "metaworld:all:ROW_INDEX": {
+      "use": "development",
+      "evidence": "Specific record demonstrating this source is not in a protected cohort"
+    }
+  }
+}
+```
+
+This is a schema example, not evidence for any actual row. Unmapped sources are
+rejected. This prevents a new 90/10 split from accidentally opening an old holdout.
+
+## Initial GPU commands
+
+Supply checksums obtained from verified checkpoint files (for example `sha256sum`).
+Use separate processes/output directories for the two task-trained checkpoints.
+
+```bash
+jepa-benchmark --vendor vendor/jepa-wms \
+  --checkpoint data/checkpoints/jepa_wm_metaworld.pth.tar \
+  --checkpoint-sha256 METAWORLD_CHECKPOINT_SHA256 \
+  --manifest runs/metaworld-inventory/trajectories.jsonl --data-root data/metaworld \
+  --exposure-registry data/metaworld-exposure.json \
+  --tasks mw-reach mw-reach-wall --max-trajectories 12 \
+  --batch-size 8 --device cuda:0 --output runs/benchmark-metaworld-b8
+
+jepa-benchmark --vendor vendor/jepa-wms \
+  --checkpoint data/checkpoints/jepa_wm_pusht.pth.tar \
+  --checkpoint-sha256 PUSHT_CHECKPOINT_SHA256 \
+  --manifest runs/pusht-inventory/trajectories.jsonl --data-root data/pusht \
+  --exposure-registry data/pusht-exposure.json \
+  --tasks pusht --max-trajectories 12 \
+  --batch-size 8 --device cuda:0 --output runs/benchmark-pusht-b8
+```
+
+Budget a maximum of 0.5 GPU-hours for the initial measurement, supervised by the job
+runtime. Do not leave all eight GPUs leased during setup/download. The CLI caps the
+default selected trajectory count, but is not a scheduler or billing stop mechanism.
+
+Run a separate invocation with `--write-cache` to measure encoded-cache I/O. Without it,
+cache_write_seconds is zero and the report must not be extrapolated to a full capture
+job. The initial cache contains final encoded targets only, not every internal block.
+
+The `--split` choices are fit/development only. There is no protected-holdout override.
+Future confirmation needs an audited frozen registry and a dedicated evaluator.
+
+## Metrics and extrapolation
+
+report.json contains:
+
+- Synchronized encode and recursive-rollout wall time, data-load/decode time, and pipeline throughput.
+- Setup and warmup time separately; peak allocated/reserved GPU memory.
+- Visual/proprio embedding MSE at H1/H3/H6, first averaged within each trajectory,
+  then equally across trajectories within each task. These are not physical-state errors.
+- Requested/actually measured task and trajectory counts; immutable selection/config hashes.
+- Exact zero-dose identity. No success rate or p-value is produced by the timing harness.
+
+For a measured real workload: hours = target_windows / measured_windows_per_second / 3600.
+Project each task and stage separately. Baseline throughput does not measure donor
+generation, extra shadow rollouts, nonlinear fitting, or repeated intervention passes.
+Measure a representative pass for each category before pricing the full suite.
+
+## Multiple GPUs
+
+The benchmark supports disjoint trajectory shards, without DDP/padded duplicate samples.
+Launch one process per GPU with the same arguments plus `--num-shards 2 --shard-index 0`
+or 1 and different output directories. Use the same overall selection/max-trajectories.
+For eight GPUs use shards 0..7 only after the two-GPU result demonstrates storage scaling.
+Empty shards are errors, not zero-throughput successes. No orchestration is automatic.
+
+Aggregate window_metrics.json across shards only after checking common config/source,
+disjoint trajectory IDs, and complete expected coverage. The protocol aggregation helper
+rejects duplicate windows. A multi-host aggregation CLI is not yet implemented.
+
+## Available local validation
+
+```bash
+python -m unittest discover -s tests -v
+jepa-benchmark --backend toy --device cpu --output runs/toy-smoke
+```
+
+The report says synthetic_smoke_only and gpu_benchmark_valid=false. This checks H6
+bookkeeping, task coverage, metric alignment, and instrumentation. It is not JEPA-WM
+and must not be used to estimate A100/H100 throughput or scientific prediction quality.

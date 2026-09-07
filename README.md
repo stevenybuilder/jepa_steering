@@ -1,20 +1,53 @@
-# JEPA-WM causal geometry and steering
+# JEPA-WM offline intervention study
 
-The active focus is this morning's plan: discover task-relevant geometry in the frozen JEPA-WM on Reach-Wall, test whether that geometry affects planning, and derive the simplest supported intervention.
+PyTorch experiments on frozen JEPA-WM checkpoints. The primary task suite is
+**MetaWorld Reach, MetaWorld Reach-Wall, and Push-T**. The broader unedited
+baseline covers all 42 released MetaWorld tasks and Push-T.
 
-Start here:
+The active design is [EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md), with machine-readable
+settings in [study.json](configs/study.json). The [benchmark runbook](docs/BENCHMARK.md)
+contains setup, commands, metrics, and the measurement-based compute estimate.
 
-1. [Geometry Map Experiment](<Geometry Map Experiment.md>) — active execution plan, evidence, splits, and causal gates.
-2. [Morning Ideation](<morning ideation.md>) — motivation, cached replay, paired behavioral evaluation, and statistical limits.
-3. [Physics Emergence Zone](<physics emergence zone.md>) — layer/subspace hypotheses and the practical steering objective.
-4. [Geometry code guide](scripts/geometry_map/README.md) and [artifact map](artifacts/README.md).
+## Current state
 
-The current geometry plan and frozen [on-policy manifest](docs/manifests/geometry-map-reach-wall-v1/on_policy_bank_manifest.json) govern execution. The earlier ideation's static/HMM arm proposal is conditional; HMM routing does not enter the first test without evidence that it is needed.
+- Implemented: real-dataset inventory, a pinned PyTorch JEPA-WM adapter, recorded-action
+  H6 baseline benchmark, per-trajectory/per-task metrics, immutable run receipts,
+  zero-dose instrumentation check, and nonoverlapping trajectory sharding.
+- Executed here: CPU synthetic smoke and unit checks only; see [validation](reports/VALIDATION.md).
+- Not executed here: official dataset inventory, real checkpoint inference, or GPU throughput.
+- Not yet implemented in the new harness: the four intervention experiment runners.
+  Their historical implementations remain available for carefully scoped reuse.
+- No GPU rental, CEM search, simulator rollout, weight training, or protected-holdout
+  evaluation is triggered by the current benchmark.
 
-Geometry needs controls: held-out trajectories and collection seeds, shuffled or nuisance-variable comparisons, simple readouts, and matched causal patches. Steering compares the same frozen checkpoint and planner unsteered, with a matched sham to distinguish a specific mechanism from generic perturbation. Native simulator success remains the behavioral endpoint.
+## Four research categories
 
-Compute remains a planned later evaluation: record discovery GPU-hours and cost, runtime overhead, and paired task success. After a first behavioral effect, compare with a small LoRA/adapter under explicit adaptation and inference budgets. No compute-efficiency claim is supported until measured. See the [deferred work register](docs/archive/deferred-threads-2026-09-05/README.md).
+| Category | Main alternatives |
+|---|---|
+| Vision–action coupling | Visual-only, action-condition-only, joint, permuted joint |
+| Action-response geometry | Equal-anchor linear, cubic, projected cubic, reflected curvature |
+| Routing through imagined time | Constant, memoryless, HMM-filtered gate |
+| Intervention distribution | Spatial concentration and block distribution, tested separately |
 
-Push-T is replication after the Reach-Wall mapping rules are frozen. Data preparation may proceed under existing resource leases. The broad Frankenstein composition, DINO-WM Reach campaign, driving, RoboCasa, and VLA branches are historical or deferred; they do not govern this experiment.
+Every category includes an unedited baseline, exact zero-dose check, and relevant
+matched controls. It is not a Cartesian product of every setting.
 
-[Archive index](docs/archive/README.md) preserves the old plans and their locations. [Math techniques](math_techniques.md) and [VLA math insights](math_insights_for_vlas.md) remain reference notes, not additional execution requirements.
+## Previous work
+
+The entire previous committed workspace is preserved byte-for-byte at
+[archive/2026-09-07-workspace](archive/2026-09-07-workspace/). It is the tree from
+commit `bf8d9b47214718be3e851573bde68f84b69eba7d`, including old code, plans,
+manifests, and lightweight results. [Archive provenance](docs/ARCHIVE.md) explains
+what this does and does not preserve. Historical completion flags and instructions
+do not govern the new study.
+
+## CPU harness check
+
+```bash
+python -m pip install -e .
+python -m unittest discover -s tests -v
+jepa-benchmark --backend toy --device cpu --output runs/cpu-smoke
+```
+
+The toy fixture is **not JEPA-WM**. Its errors and speed are useful only for checking
+the pipeline. Use the real-data commands in the runbook for a GPU benchmark.

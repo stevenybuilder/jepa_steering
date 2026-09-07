@@ -1,0 +1,49 @@
+# --- credentials / secrets (never commit) ---
+.env
+.env.*
+*.pem
+*.key
+*.p12
+*.pfx
+id_rsa*
+id_ed25519*
+*token*.json
+*credential*
+*secret*
+service_account*.json
+rclone.conf
+.netrc
+.huggingface/
+.cache/
+
+# --- python / tooling ---
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+.ipynb_checkpoints/
+.DS_Store
+
+# --- archived workspaces (nested git repo + venv + env, 4 GB) ---
+archive/
+
+# --- heavy binary artifacts (25 GB) — keep small JSON/MD/SVG summaries ---
+*.npz
+*.npy
+*.pt
+*.pth
+*.ckpt
+*.safetensors
+*.bin
+*.pkl
+*.h5
+*.hdf5
+*.mat
+*.so
+*.tar
+*.tar.gz
+*.zip
+*.mp4
+artifacts/**/latent_cache*
+artifacts/**/*.png
