@@ -26,11 +26,11 @@ Implementation: `src/offline_study/planning_contract.py`, `planning_env_smoke.py
 |---|---|---|
 | Offline batch | Four validation clips per device; sampled repeatedly during training | Four clips per device, all valid clips/prefixes in the authorized pool; not the original training-time sample history |
 | Offline context | Three, H6; MW 18-frame and Push-T 8-frame clips, stride five | Implemented and checked against actual upstream inputs and rollout |
-| Primary released validation pool | Split seed 234 yields Reach 33, Reach-Wall 27; Push-T opens separate 21-row `val/` | Original 29/24 MW rows running; seven-row addition authorized and queued; all 21 Push-T rows running |
+| Primary released validation pool | Split seed 234 yields Reach 33, Reach-Wall 27; Push-T opens separate 21-row `val/` | All 33/27/21 rows complete and verified in BF16 and FP32, including the authorized seven-row addition |
 | Planning episode count | Paper G.2 says 96; full MW release config and MW training config say 48 | Prepared 96 per task/condition following the paper; the 48-to-96 change is explicit |
 | Training seeds/history | Three independently trained seeds for final models; aggregate last ten epochs for these tasks | One released checkpoint per task model; extra environment/planner seeds cannot reproduce training variability |
 | Planning seeds | Example base seed 1, local seed = base + rank × H × 1000; separate CPU sampling and CUDA planning streams | Same formulas in prepared contract; eight fixed logical streams independent of physical scheduling; not claimed to recover unpublished actual episode identities |
-| Simulator, Reach / Reach-Wall | Official MetaWorld V3 wrapper, MuJoCo, expert policy goal generation | Same official wrapper and goal-generation methods; isolated simulator environment being checked |
+| Simulator, Reach / Reach-Wall | Official MetaWorld V3 wrapper, MuJoCo, expert policy goal generation | Same official wrapper and goal-generation methods; initial/goal pairing and native CEM checks passed |
 | Simulator, Push-T | Official PushTEnv, Pymunk 6.8.0, Pygame rendering; dataset-based initial/goal setup | Same implementation and dataset replay path; no substitution of PyBullet |
 
 ### Table 10 planning settings
@@ -114,8 +114,42 @@ on its native CPU implementation; GPU inference and modest graphics work are sep
 These are applications of the [GPU chapter](https://jax-ml.github.io/scaling-book/gpus/),
 not permission to change candidate counts, precision, or planner settings mid-study.
 
-Offline work is being redistributed without changing shard membership: the Utah
-worker finishes its existing BF16 Push-T jobs; six primary-host GPUs take the untouched
-FP32 Push-T jobs after MetaWorld diagnostic completion. Finished shards are checksum
-verified and reused. The original two-GPU scheduler is paused only to prevent it from
-starting those same FP32 jobs; its live BF16 children finish normally.
+The offline redistribution completed without changing shard membership: Utah finished
+BF16 Push-T; six primary-host GPUs executed the untouched FP32 shards. Finished shards
+were checksum-verified and reused. The superseded Utah scheduler was terminated only
+after its BF16 children completed, and Utah is now stopped. All primary offline pools
+are complete; see [corrected results](CORRECTED_OFFLINE_RESULTS.md).
+
+### Subsequent planning preparation (approximately 11:05 EDT)
+
+`planning_scenarios.py` prepared 96 initial/goal scenarios each for Reach and Reach-Wall,
+with 96 distinct simulator random-state vectors per task. It invokes the authors'
+expert-goal helper, retains expert failures without filtering and does not run a learned
+policy. Eight logical seed streams are independent of physical GPU assignment. The
+released local-RNG configuration retains global NumPy/Torch seed zero while dedicated
+streams use each rank's local seed. These artifacts prepare inputs; they do not certify
+an exposure audit, freeze an intervention or constitute confirmation results.
+
+Input-preparation report hashes:
+
+- Reach: `31461954ff88586fcb343ec681eebf0207c05c8015ab3b001c7f0efbfbc7f080`.
+- Reach-Wall: `5680fe26a65e5b0c3154473fcc78823c82be15d0bedb7adc7e389a716b835089`.
+
+Static planning transfer now has an additional fit-only check: the **same BF16-primary
+fit tensors** on the FP32 planner must match their unchanged hook compilation. A
+separately fitted FP32 sensitivity bank is not a substitute for the primary intervention.
+Each MW task passes 90 arm/horizon/fit-bank/inference-precision checks, including H2/H5/H6
+and all ten frozen arms. Cross-precision transfer report hashes:
+
+- Reach: `52dfac1061e7db5714c76932ce92695a192f6b229d1da9e1e8c4fbe0f0aa2688`.
+- Reach-Wall: `67c2a7352a3d0f0cbfe94d2a581813f7cad61ab774dfdcf3eab6e9002fed605a`.
+
+The static adapter completed all four real-CEM integration checks on the already-used,
+excluded smoke seed, with joint and matched-random arms on each MW task. Each retained
+the published candidate/iteration counts and completed 210 adapter calls in approximately
+280–288 seconds. These checks measure integration and throughput only; their task
+outcomes cannot select a candidate. Durable, checksum-verified reports are under
+`artifacts/offline_study/primary-durable-20260907/planning-static-cem-smoke-v1/`.
+They do not promote a Reach-Wall coupling arm that failed its offline advancement gate.
+Dynamic support/rank operators still need separate transfer validation, including an
+explicit policy for the planner's shortened horizons.

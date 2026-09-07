@@ -35,9 +35,13 @@ def main():
             raise ValueError("This gate must not use evaluation outcomes")
         inputs = torch.load(args.fixture / "inputs.pt", weights_only=True, map_location="cpu")
         checks, bindings = [], {}
-        for precision in ("bfloat16", "float32"):
-            fit = args.fit_root / precision / cohort["task"].removeprefix("mw-") / "vision_action_coupling"
-            receipt, protocol = verify_fit(fit, fixture["source_cohort_sha256"], args.checkpoint_sha256, precision)
+        # BF16-primary offline operators must remain the SAME tensors if the
+        # standalone paper planner runs FP32. The FP32-fitted sensitivity bank
+        # is not an interchangeable replacement for the primary intervention.
+        for bank_precision, precision in (("bfloat16", "bfloat16"), ("float32", "float32"),
+                                          ("bfloat16", "float32")):
+            fit = args.fit_root / bank_precision / cohort["task"].removeprefix("mw-") / "vision_action_coupling"
+            receipt, protocol = verify_fit(fit, fixture["source_cohort_sha256"], args.checkpoint_sha256, bank_precision)
             bank = torch.load(fit / "operator_bank.pt", weights_only=True, map_location="cpu")
             backend = AuthorBackend(args.vendor, args.checkpoint, args.checkpoint_sha256, cohort["dataset"], "cuda:0", precision)
             from tensordict import TensorDict
@@ -73,15 +77,17 @@ def main():
                                 difference = (native[modality].float() - actual[modality].float()).abs().max().item()
                                 close = torch.allclose(native[modality].float(), actual[modality].float(), atol=1e-6, rtol=1e-5)
                                 raise ValueError(f"Native/zero-dose/short-horizon identity failed: {precision}/{arm['name']}/H{horizon}/{modality}; maximum_difference={difference}; within_existing_native_fidelity_tolerance={close}")
-                    checks.append({"precision": precision, "arm": arm["name"], "horizon": horizon,
+                    checks.append({"precision": precision, "bank_precision": bank_precision,
+                                   "arm": arm["name"], "horizon": horizon,
                                    "predictions_bitwise_equal": True})
-            bindings[precision] = {"protocol_sha256": sha256(fit / "protocol.json"),
+            bindings[bank_precision + "_bank_to_" + precision] = {"protocol_sha256": sha256(fit / "protocol.json"),
                                   "bank_sha256": sha256(fit / "operator_bank.pt")}
             del backend, encoded, context, actions, expected, actual, native, adapter, bank
             torch.cuda.empty_cache()
         write_json(args.output / "report.json", {"status": "static_coupling_planning_transfer_fit_only_parity_passed",
             "checks": checks, "source_bindings": bindings, "fixture_report_sha256": done["report_sha256"],
             "planning_context": 2, "checkpoint_sha256": args.checkpoint_sha256,
+            "primary_bfloat16_bank_on_float32_planner_verified": True,
             "development_or_protected_outcomes_accessed": False, "scientific_efficacy_measurement": False,
             "dynamic_operator_transfer_validated": False, "confirmation_jobs_launched": False})
         write_json(args.output / "DONE.json", {"report_sha256": sha256(args.output / "report.json")})

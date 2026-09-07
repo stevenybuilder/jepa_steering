@@ -1,14 +1,15 @@
 # Frozen-model offline study: active plan
 
-Status (2026-09-07 alignment audit): custom strict-FP32 baselines and fixed intervention
-sweeps have run; individual executable protocols and completion evidence live in their
-run receipts. Push-T and MetaWorld lineage corrections are implemented. These results
-are custom offline development evidence, not author-matched validation or confirmation.
-Author-validation runtime parity and all six task/precision refits are complete.
-Protected-excluded MetaWorld replacement evaluations are active. Push-T's separately
-authorized, cohort-bound 21-row frozen replication sweep is now active on a second US
-worker; the original protected registry is preserved. Completion is established by verified run
-receipts, not this status paragraph. No full author-pool replication is complete.
+Status (2026-09-07, approximately 11:04 EDT): the corrected primary offline phase is
+complete, verified across all 30 task/category/precision scopes: 33 Reach, 27 Reach-Wall,
+and 21 Push-T trajectories. All six refits exclude validation families; the seven added
+MetaWorld rows and 21 Push-T rows were separately authorized without altering their
+historical exposure registries. The original custom runs remain historical development
+evidence. Broad unsteered coverage remains 1,120/1,260 rows across 42 MetaWorld tasks.
+This is full **primary-task released-pool offline replication**, not reconstruction of
+the authors' training histories, full 42-task validation coverage, or end-to-end study
+completion. Combined/drop-one work and prospective policy evaluation remain unfinished.
+See [corrected results and exact completion evidence](../reports/CORRECTED_OFFLINE_RESULTS.md).
 
 ## Author-validation correction requested on 2026-09-07
 
@@ -59,8 +60,10 @@ fitting algorithms and dose rules. There is no autonomous successor search. Repo
 requested and realized edit energy because low-precision rounding can prevent exact
 equal-delivered-energy comparisons.
 
-Authorized replacement coverage is 29 of 33 Reach rows and 24 of 27 Reach-Wall rows.
-The four and three protected rows respectively stay unopened. The broad unsteered
+The initial protected-excluded replacement covered 29 of 33 Reach rows and 24 of 27
+Reach-Wall rows. At that stage, four and three protected rows respectively stayed
+unopened; the subsequently authorized additive completion is documented below.
+The broad unsteered
 baseline includes 1,120 of 1,260 official-validation rows across all 42 MetaWorld tasks,
 excluding 140 protected rows. Label these partial author-split development replications,
 never complete official validation or untouched confirmation.
