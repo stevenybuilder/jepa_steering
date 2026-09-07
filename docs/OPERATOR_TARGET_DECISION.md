@@ -1,7 +1,9 @@
 # Shared target for the remaining rank and support comparisons
 
-Status: proposal prepared while geometry development runs; awaiting the user's
-target choice. No rank/layer/spatial fitting or evaluation has been launched.
+Status: the user authorized execution of the remaining tests on all existing
+instances. Recorded-future correction is the announced shared objective; exact
+fixed implementation choices are in `SUPPORT_SWEEPS.md`. The alternatives below
+are retained as proposal history, not a pending search or concurrent experiment.
 
 The active plan fixes ranks 1/4/8, singleton/all-block and spatial supports, and
 matched controls, but leaves the semantic target and correction rule unspecified.

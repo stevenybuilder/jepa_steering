@@ -59,10 +59,13 @@ def frozen_family_analysis(report, protocol):
                   "zero_observed_variance": summary["zero_observed_variance"][i]}
                  for i, contrast in enumerate(contrasts)]
     eligible = []
-    for name in ("equal_anchor_linear", "cubic", "projected_cubic", "reflected_curvature"):
+    required_controls = plan.get("mechanism_controls", {
+        name: ["native", "matched_random"]
+        for name in ("equal_anchor_linear", "cubic", "projected_cubic", "reflected_curvature")})
+    for name, required in required_controls.items():
         controls = {item["control"]: item for item in intervals if item["candidate"] == name}
         if all(control in controls and controls[control]["improves_by_smallest_useful_effect"]
-               for control in ("native", "matched_random")):
+               for control in required):
             eligible.append(name)
     return {"endpoint": endpoint, "independent_lineage_groups": len(group_ids),
             "interval_method": plan["interval"], "bootstrap_seed": plan["bootstrap_seed"],

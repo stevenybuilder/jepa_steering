@@ -290,6 +290,10 @@ def execute(args, backend, selected, protocol, bank):
                 from .action_geometry import prepare_geometry
                 (compiled, geometry_diagnostics), seconds = elapsed_call(
                     lambda: prepare_geometry(backend, context, actions, protocol, bank), device)
+            elif "support_operator" in protocol:
+                from .support_operator import prepare_support
+                (compiled, geometry_diagnostics), seconds = elapsed_call(
+                    lambda: prepare_support(backend, context, actions, protocol, bank), device)
             else:
                 compiled, seconds = elapsed_call(
                     lambda protocol=protocol, bank=bank, meta=meta: compile_edits(
@@ -319,6 +323,15 @@ def execute(args, backend, selected, protocol, bank):
 
             predicted, seconds = elapsed_call(edited_rollout, device)
             timings["rollout_seconds"] += seconds
+            if "support_operator" in protocol:
+                realized = torch.stack([edit.realized_l2 for edit in compiled], 1).square().sum(1).sqrt()
+                requested = torch.tensor([
+                    sum(value * value for value in norms.values()) ** .5 for norms in edit_norms
+                ], device=device)
+                if not torch.allclose(realized, requested, atol=1e-5, rtol=1e-3):
+                    raise RuntimeError("Realized FP32 edit energy differs from the frozen requested dose")
+                for norms, value in zip(edit_norms, realized.cpu().tolist(), strict=True):
+                    norms["realized_total_l2"] = value
             native_positions = [i * arm_count + native_index for i in range(len(meta))]
             zero_positions = [i * arm_count + zero_index for i in range(len(meta))]
             for key in ("visual", "proprio"):

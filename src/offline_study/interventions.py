@@ -268,6 +268,7 @@ class CompiledEdit:
     delta: torch.Tensor
     delivered_l2: list[float] | None = None
     applications: int = 0
+    realized_l2: torch.Tensor | None = None
 
 
 def _resolve_tensor(bank: dict, row: dict, name: str) -> torch.Tensor:
@@ -408,10 +409,13 @@ class PredictorIntervention:
                     changed, edit.delta, f"block_output/P{block}/H{self.horizon}")
             else:
                 token_slice = slice(edit.token_start, edit.token_end)
-                changed[:, token_slice] = self._replace(
-                    changed[:, token_slice], edit.delta,
+                before = changed[:, token_slice]
+                replacement = self._replace(
+                    before, edit.delta,
                     f"block_output/P{block}/H{self.horizon}/tokens",
                 )
+                edit.realized_l2 = (replacement - before).float().flatten(1).norm(dim=1)
+                changed[:, token_slice] = replacement
             edit.applications += 1
         return changed
 
