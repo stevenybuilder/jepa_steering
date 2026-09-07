@@ -79,11 +79,20 @@ not by itself a power calculation.
 
 ## Runtime reproducibility and efficiency
 
-Update at approximately 10:07 EDT: official simulator initial/goal setup passed on
+Update at approximately 10:30 EDT: official simulator initial/goal setup passed on
 all three tasks in `planning-env-smoke-v2`; repeated smoke seeds reproduce byte-identical
 initial and goal observations. The unmodified native CEM + simulator loop has also
-completed its non-confirmatory smoke on Push-T and Reach-Wall; Reach is running.
+completed its non-confirmatory smoke on Push-T, Reach-Wall and Reach.
 These are runtime checks, not efficacy estimates or a 96-episode evaluation.
+
+The static vision-action planning adapter also passed 60 fit-only comparisons on
+Push-T (ten frozen arms, H2/H5/H6, both precisions). Active edits match the existing
+frozen hook compilation bitwise. Native, zero-dose and edits outside the realized
+horizon match the unsteered rollout exactly. Initial failed checks are preserved:
+the standalone zero-dose path needed to skip zero-valued edits entirely because
+cloning the context could alter striding and FP32 accumulation at H5. No identity
+tolerance was relaxed. This does not validate dynamic geometry/support operators,
+select a candidate, or authorize a confirmation reveal.
 
 The released standalone planning entrypoint does not enable an outer mixed-precision
 context. Native planning smoke therefore uses strict FP32 with TF32 disabled; do not

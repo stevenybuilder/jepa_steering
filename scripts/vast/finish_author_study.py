@@ -3,6 +3,7 @@
 Never starts confirmation from an incomplete summary. Failed and partial records
 remain on their originating workers. This coordinator does not terminate rentals.
 """
+import argparse
 import json
 import shlex
 import shutil
@@ -45,17 +46,15 @@ def collect_bfloat16():
         if Path(name).is_absolute() or ".." in Path(name).parts:
             raise ValueError("Invalid remote artifact path")
     temporary = Path(tempfile.mkdtemp(prefix="pusht-bf16-transfer-", dir=RUNTIME))
-    source = subprocess.Popen(SSH + ["tar -czf - -C " + str(PUSHT) +
-                               " evaluation-v1/bfloat16 analysis-v1/bfloat16"], stdout=subprocess.PIPE)
-    try:
-        result = subprocess.run(["tar", "-xzf", "-", "-C", str(temporary)], stdin=source.stdout, timeout=600)
-        source.stdout.close()
-        if result.returncode or source.wait(timeout=30):
-            raise RuntimeError("Peer artifact transfer failed; partial directory retained")
-    finally:
-        if source.poll() is None:
-            source.terminate()
-            source.wait(timeout=10)
+    # SFTP avoids the pipe/compressor stall observed with this provider's reverse
+    # SSH tar stream. Verify every byte against the source manifest before install.
+    for directory in ("evaluation-v1", "analysis-v1"):
+        target = temporary / directory
+        target.mkdir()
+        command = ["scp", "-q", "-r", "-C", "-o", "BatchMode=yes", "-o", "ConnectTimeout=10",
+            "-i", str(RUNTIME / "transfer-to-50159352"), "-P", "17784",
+            "root@136.36.139.116:" + str(PUSHT / directory / "bfloat16"), str(target)]
+        subprocess.run(command, check=True, timeout=600)
     for name, expected in manifest.items():
         if sha256(temporary / name) != expected:
             raise ValueError("Peer artifact transfer changed bytes")
@@ -71,6 +70,10 @@ def collect_bfloat16():
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--local-relay-only", action="store_true",
+                        help="Wait for verified relay receipt without contacting an already-stopped source worker")
+    args = parser.parse_args()
     OUTPUT.mkdir(exist_ok=False)
     started, transferred = time.monotonic(), False
     try:
@@ -80,9 +83,22 @@ def main():
             for failure in (MW / "closure-v1/FAILED.json", PUSHT / "logs/rebalance-primary-FAILED.json"):
                 if failure.exists():
                     raise RuntimeError("A prerequisite failed: " + str(failure))
-            if not transferred and remote_ready():
-                collect_bfloat16()
-                transferred = True
+            if not transferred:
+                relay = PUSHT / "relay-verification"
+                if (relay / "DONE.json").exists():
+                    done = json.loads((relay / "DONE.json").read_text())
+                    if sha256(relay / "report.json") != done["report_sha256"]:
+                        raise ValueError("Relayed artifact receipt changed")
+                    receipt = json.loads((relay / "report.json").read_text())
+                    if receipt["bf16_analysis_scopes"] != 5 or receipt["bf16_completed_shards"] != 10:
+                        raise ValueError("Incomplete relayed evidence")
+                    for name, expected in receipt["artifacts_sha256"].items():
+                        if sha256(PUSHT / name) != expected:
+                            raise ValueError("Relayed artifact checksum mismatch")
+                    transferred = True
+                elif not args.local_relay_only and remote_ready():
+                    collect_bfloat16()
+                    transferred = True
             ready = transferred and (MW / "closure-v1/DONE.json").exists() and (PUSHT / "logs/rebalance-primary-DONE.json").exists()
             write_json(OUTPUT / "progress.json", {"bf16_collected": transferred,
                 "full_metaworld_analysis_complete": (MW / "closure-v1/DONE.json").exists(),
