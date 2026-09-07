@@ -60,6 +60,7 @@ The real benchmark requires a reviewed exposure registry bound to the manifest:
   "trajectories": {
     "metaworld:all:ROW_INDEX": {
       "use": "development",
+      "lineage_group": "metaworld:trajectory:ROW_INDEX",
       "evidence": "Specific record demonstrating this source is not in a protected cohort"
     }
   }

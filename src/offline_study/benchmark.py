@@ -80,7 +80,8 @@ def filter_reviewed_development(rows, registry, manifest_sha256):
     eligible = []
     for row in rows:
         entry = registry.get("trajectories", {}).get(row["trajectory_id"], {})
-        if entry.get("use") == "development" and entry.get("evidence"):
+        if (entry.get("use") == "development" and entry.get("evidence") and
+                entry.get("lineage_group") == row["lineage_group"]):
             eligible.append(row)
     eligible_ids = {row["trajectory_id"] for row in eligible}
     blocked_groups = {

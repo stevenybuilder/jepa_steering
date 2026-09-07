@@ -77,8 +77,10 @@ class BenchmarkTests(unittest.TestCase):
             "manifest_sha256": "manifest",
             "review_basis": "test audit",
             "trajectories": {
-                "toy:0": {"use": "development", "evidence": "reviewed"},
-                "toy:1": {"use": "protected", "evidence": "legacy holdout"},
+                "toy:0": {"use": "development", "lineage_group": "toy:0",
+                          "evidence": "reviewed"},
+                "toy:1": {"use": "protected", "lineage_group": "toy:1",
+                          "evidence": "legacy holdout"},
             },
         }
         filtered = filter_reviewed_development(rows, registry, "manifest")
@@ -116,7 +118,8 @@ class BenchmarkTests(unittest.TestCase):
             "manifest_sha256": "manifest",
             "review_basis": "test audit",
             "trajectories": {
-                "toy:0": {"use": "development", "evidence": "reviewed"},
+                "toy:0": {"use": "development", "lineage_group": rows[0]["lineage_group"],
+                          "evidence": "reviewed"},
             },
         }
         self.assertEqual(filter_reviewed_development(rows, registry, "manifest"), [])
