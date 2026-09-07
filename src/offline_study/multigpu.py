@@ -119,7 +119,9 @@ def aggregate_shards(output: Path, shard_count: int, wall_seconds: float) -> dic
         precision=reports[0]["execution"]["precision"],
         allow_tf32=reports[0]["execution"]["allow_tf32"],
         shards=shard_count,
-        independent_trajectories=len(measured_ids),
+        rollout_trajectories=len(measured_ids),
+        independent_lineage_groups=len({row["lineage_group"] for row in windows}),
+        independence_unit="lineage_group",
         windows=len(windows),
         wall_seconds=wall_seconds,
         measured_concurrent_pipeline_seconds=pipeline_seconds,
@@ -132,7 +134,8 @@ def aggregate_shards(output: Path, shard_count: int, wall_seconds: float) -> dic
             report=f"shard-{index:03d}/report.json",
             report_sha256=sha256(output / f"shard-{index:03d}" / "report.json"),
             windows=item["windows"],
-            independent_trajectories=item["independent_trajectories"],
+            rollout_trajectories=item["rollout_trajectories"],
+            independent_lineage_groups=item["independent_lineage_groups"],
             measured_pipeline_seconds=item["measured_pipeline_seconds"],
             peak_reserved_gpu_bytes=item["peak_reserved_gpu_bytes"],
         ) for index, item in enumerate(reports)],
@@ -143,6 +146,7 @@ def aggregate_shards(output: Path, shard_count: int, wall_seconds: float) -> dic
             "GPU shards communicate no tensors and contain disjoint trajectories",
             "End-to-end throughput includes per-process model setup; pipeline throughput does not",
             "Do not assume scaling beyond the measured device count",
+            "A split label alone does not establish that a lineage group is historically untouched",
         ],
     )
     write_json(output / "window_metrics.json", windows)
@@ -248,7 +252,8 @@ def main():
             "window_metrics_sha256": sha256(args.output / "window_metrics.json"),
         })
         print(json.dumps({key: report[key] for key in (
-            "status", "devices", "windows", "independent_trajectories",
+            "status", "devices", "windows", "rollout_trajectories",
+            "independent_lineage_groups",
             "wall_seconds", "end_to_end_windows_per_second")}), flush=True)
     except BaseException as exc:
         if any(process.poll() is None for process in processes):

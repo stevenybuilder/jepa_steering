@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "status": "design_agreed_baseline_and_executor_implemented_intervention_protocols_not_frozen",
+  "status": "real_baselines_executed_pusht_lineage_corrected_intervention_protocols_not_frozen",
   "framework": "pytorch",
   "vendor_commit": "13cf1d9c7e476f53c17714d2e0f1dc239a883ce0",
   "primary_tasks": ["mw-reach", "mw-reach-wall", "pusht"],
@@ -12,10 +12,14 @@
     "predictor_context_capacity": 2, "frame_stride": 5, "windows_per_trajectory": 4,
     "recorded_actions_only": true, "cem_calls": 0, "simulator_calls": 0},
   "data": {"paper_targets": {"metaworld": 12600, "pusht": 18500},
-    "study_split": "90_percent_outer_fit_10_percent_holdout",
+    "study_split": "90_percent_outer_fit_10_percent_holdout_by_lineage_group",
     "inner_development_fraction_of_outer_fit": 0.1, "split_seed": 234,
     "authors_split_reproduced": false,
     "pusht_supplied_validation_policy": "external_reserve_not_resplit",
+    "pusht_lineage_group": "exact_initial_state_sha256_185_groups_of_101_released_rollouts",
+    "pusht_released_train_family_exposure": "all_185_families_development_exposed_by_initial_row_split_baseline",
+    "pusht_current_confirmation_eligibility": false,
+    "pusht_confirmation_requirement": "new_independent_initial_state_families_with_prospectively_frozen_manifest",
     "confirmation_exposure_audit_required": true},
   "categories": {
     "vision_action_coupling": {"arms": ["native", "visual_only", "action_condition_only", "joint", "permuted_joint"],

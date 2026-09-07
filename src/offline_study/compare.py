@@ -56,10 +56,15 @@ def compare_runs(
     def keyed(rows):
         result = {}
         for row in rows:
+            if not row.get("lineage_group"):
+                raise ValueError(f"Comparison row lacks lineage group: {row.get('trajectory_id')}")
             key = (row["task"], row["trajectory_id"], row["start"])
             if key in result:
                 raise ValueError(f"Duplicate window in comparison: {key}")
-            result[key] = row["metrics"]
+            result[key] = {
+                "lineage_group": row["lineage_group"],
+                "metrics": row["metrics"],
+            }
         return result
     reference = keyed(reference_rows)
     candidate = keyed(candidate_rows)
@@ -67,11 +72,15 @@ def compare_runs(
         raise ValueError("Reference and candidate windows differ")
     samples = defaultdict(list)
     for key in sorted(reference):
-        if set(reference[key]) != set(candidate[key]):
+        if reference[key]["lineage_group"] != candidate[key]["lineage_group"]:
+            raise ValueError(f"Lineage group differs for {key}")
+        reference_metrics = reference[key]["metrics"]
+        candidate_metrics = candidate[key]["metrics"]
+        if set(reference_metrics) != set(candidate_metrics):
             raise ValueError(f"Metric keys differ for {key}")
-        for metric in reference[key]:
-            base = float(reference[key][metric])
-            changed = float(candidate[key][metric])
+        for metric in reference_metrics:
+            base = float(reference_metrics[metric])
+            changed = float(candidate_metrics[metric])
             absolute = abs(changed - base)
             relative = absolute / max(abs(base), relative_floor)
             samples[metric].append((absolute, relative))
@@ -95,7 +104,10 @@ def compare_runs(
         status="precision_candidate_measured_not_adjudicated",
         same_windows=True,
         windows=len(reference),
-        independent_trajectories=len({key[1] for key in reference}),
+        rollout_trajectories=len({key[1] for key in reference}),
+        independent_lineage_groups=len({
+            value["lineage_group"] for value in reference.values()
+        }),
         reference_execution=reference_execution,
         candidate_execution=candidate_report.get("execution", {}),
         metric_drift=drift,

@@ -127,7 +127,9 @@ def summarize_interventions(rows: list[dict], protocol: dict) -> dict:
     names = [arm["name"] for arm in protocol["arms"]]
     by_arm = {
         name: summarize_metrics([
-            {key: row[key] for key in ("task", "trajectory_id", "start", "metrics")}
+            {key: row[key] for key in (
+                "task", "trajectory_id", "lineage_group", "start", "metrics"
+            )}
             for row in rows if row["arm"] == name
         ])
         for name in names
@@ -135,40 +137,62 @@ def summarize_interventions(rows: list[dict], protocol: dict) -> dict:
     contrasts = []
     for contrast in protocol["primary_contrasts"]:
         candidate = {
-            (row["task"], row["trajectory_id"]): row["metrics"]
+            (row["task"], row["trajectory_id"]): row
             for row in by_arm[contrast["candidate"]]["per_trajectory"]
         }
         control = {
-            (row["task"], row["trajectory_id"]): row["metrics"]
+            (row["task"], row["trajectory_id"]): row
             for row in by_arm[contrast["control"]]["per_trajectory"]
         }
         if set(candidate) != set(control):
             raise ValueError(f"Unpaired trajectories in contrast: {contrast['name']}")
-        per_trajectory, task_values = [], defaultdict(list)
+        per_trajectory, group_values = [], defaultdict(list)
         for key in sorted(candidate):
-            if set(candidate[key]) != set(control[key]):
+            if candidate[key]["lineage_group"] != control[key]["lineage_group"]:
+                raise ValueError(f"Unpaired lineage groups in contrast: {contrast['name']}/{key}")
+            candidate_metrics = candidate[key]["metrics"]
+            control_metrics = control[key]["metrics"]
+            if set(candidate_metrics) != set(control_metrics):
                 raise ValueError(f"Unpaired metrics in contrast: {contrast['name']}/{key}")
             difference = {
-                metric: candidate[key][metric] - control[key][metric]
-                for metric in sorted(candidate[key])
+                metric: candidate_metrics[metric] - control_metrics[metric]
+                for metric in sorted(candidate_metrics)
             }
+            lineage_group = candidate[key]["lineage_group"]
             per_trajectory.append({
-                "task": key[0], "trajectory_id": key[1],
+                "task": key[0], "trajectory_id": key[1], "lineage_group": lineage_group,
                 "candidate_minus_control": difference,
             })
-            task_values[key[0]].append(difference)
+            group_values[(key[0], lineage_group)].append(difference)
+        per_lineage_group, task_group_values = [], defaultdict(list)
+        for (task, lineage_group), values in sorted(group_values.items()):
+            mean = {
+                metric: sum(value[metric] for value in values) / len(values)
+                for metric in values[0]
+            }
+            per_lineage_group.append({
+                "task": task,
+                "lineage_group": lineage_group,
+                "trajectories": len(values),
+                "candidate_minus_control": mean,
+            })
+            task_group_values[task].append(mean)
         per_task = {
             task: {
                 metric: sum(value[metric] for value in values) / len(values)
                 for metric in values[0]
             }
-            for task, values in sorted(task_values.items())
+            for task, values in sorted(task_group_values.items())
         }
         contrasts.append({
             **contrast,
-            "difference_definition": "candidate_minus_control after equal weighting within trajectory",
+            "difference_definition": (
+                "candidate_minus_control after windows within rollout, then rollouts within "
+                "lineage group, then equal lineage-group weighting"
+            ),
             "per_trajectory": per_trajectory,
-            "per_task_mean": per_task,
+            "per_lineage_group": per_lineage_group,
+            "per_task_group_weighted_mean": per_task,
         })
     return {"per_arm": by_arm, "primary_contrasts": contrasts}
 
@@ -298,7 +322,9 @@ def execute(args, backend, selected, protocol, bank):
         "category": protocol["category"],
         "arms": arm_names,
         "primary_tasks": protocol["tasks"],
-        "independent_trajectories": len({row["trajectory_id"] for row in measurements}),
+        "rollout_trajectories": len({row["trajectory_id"] for row in measurements}),
+        "independent_lineage_groups": len({row["lineage_group"] for row in measurements}),
+        "independence_unit": "lineage_group",
         "windows": window_count,
         "arm_evaluations": len(measurements),
         "batches": batch_count,
@@ -328,7 +354,7 @@ def execute(args, backend, selected, protocol, bank):
         "execution": {
             "precision": "float32", "allow_tf32": False,
             "arm_batching": "window-major; every registered arm in one predictor unroll",
-            "parallelism": "independent trajectories; no model collectives",
+            "parallelism": "disjoint rollout trajectories; no model collectives",
             "prefetch_batches": args.prefetch_batches,
         },
         "limitations": [
@@ -336,6 +362,7 @@ def execute(args, backend, selected, protocol, bank):
             "Operator fitting and frozen-protocol validity are upstream of this executor",
             "Forecast embedding error is not closed-loop physical behavior",
             "No simulator, CEM, autonomous method search, or parameter training occurs",
+            "A split label alone does not establish that a lineage group is historically untouched",
         ],
     }, measurements
 
@@ -397,7 +424,8 @@ def main():
         if len({row["dataset"] for row in selected}) != 1:
             raise ValueError("One dataset/checkpoint is required per intervention process")
         selected_meta = [
-            {"trajectory_id": row["trajectory_id"], "task": row["task"],
+            {"trajectory_id": row["trajectory_id"], "lineage_group": row["lineage_group"],
+             "task": row["task"],
              "start": start, "split": "development"}
             for row in selected for start in row["starts"]
         ]
@@ -444,7 +472,8 @@ def main():
             "fit_receipt_sha256": sha256(args.output / "fit_receipt.json"),
         })
         print(json.dumps({key: report[key] for key in (
-            "status", "category", "arms", "windows", "independent_trajectories",
+            "status", "category", "arms", "windows", "rollout_trajectories",
+            "independent_lineage_groups",
             "measured_pipeline_seconds")}), flush=True)
     except Exception as exc:
         write_json(args.output / "FAILED.json", {"status": "failed", "error": str(exc)})

@@ -12,12 +12,16 @@ precision comparisons, and the read-only Vast offer workflow.
 
 ## Current state
 
-- Implemented: real-dataset inventory, a pinned PyTorch JEPA-WM adapter, recorded-action
-  H6 baseline benchmark, per-trajectory/per-task metrics, immutable run receipts,
+- Implemented: lineage-aware real-dataset inventory, a pinned PyTorch JEPA-WM adapter,
+  recorded-action H6 baseline benchmark, rollout/family/task metrics, immutable run receipts,
   zero-dose instrumentation check, nonoverlapping trajectory sharding, and a
   [frozen-protocol intervention executor](docs/INTERVENTIONS.md) that batches arms.
-- Executed here: CPU synthetic smoke and unit checks only; see [validation](reports/VALIDATION.md).
-- Not executed here: official dataset inventory, real checkpoint inference, or GPU throughput.
+- Executed remotely: official-data strict-FP32 baseline inference on Push-T and all 42
+  MetaWorld tasks, after bounded 1/2-GPU scaling checks. Receipts remain runtime artifacts.
+- Correction: the first Push-T run used a row-level split. It is retained only as
+  throughput/descriptive evidence; all released train families are now development-exposed,
+  and fresh independent Push-T families are required for confirmation. See the
+  [lineage correction report](reports/PUSHT_LINEAGE_CORRECTION.md).
 - Not yet frozen/fitted: the category-specific operator banks and remaining scientific
   choices. Historical implementations remain available for carefully scoped reuse;
   the new executor refuses to invent or tune those choices on development outcomes.

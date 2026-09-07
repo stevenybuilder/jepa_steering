@@ -11,6 +11,7 @@ from offline_study.benchmark import (
     toy_rows,
 )
 from offline_study.protocol import validate_manifest
+from offline_study.inventory import assign_study_splits
 
 
 class BenchmarkTests(unittest.TestCase):
@@ -84,6 +85,41 @@ class BenchmarkTests(unittest.TestCase):
         self.assertEqual([row["trajectory_id"] for row in filtered], ["toy:0"])
         with self.assertRaisesRegex(ValueError, "Exposure registry"):
             filter_reviewed_development(rows, registry, "different")
+
+    def test_lineage_groups_never_cross_splits(self):
+        rows = [
+            {"trajectory_id": f"pusht:train:{group * 3 + variant}", "source_pool": "train",
+             "lineage_group": f"group-{group}"}
+            for group in range(20) for variant in range(3)
+        ]
+        rows.append({"trajectory_id": "pusht:val:0", "source_pool": "val",
+                     "lineage_group": "external"})
+        membership = assign_study_splits(rows, 234)
+        self.assertEqual(len(membership), 20)
+        for group in range(20):
+            self.assertEqual(len({
+                row["split"] for row in rows if row["lineage_group"] == f"group-{group}"
+            }), 1)
+        self.assertEqual(rows[-1]["split"], "external_reserve")
+
+    def test_manifest_rejects_lineage_leakage_across_splits(self):
+        rows = toy_rows(2)
+        rows[1]["lineage_group"] = rows[0]["lineage_group"]
+        rows[1]["split"] = "holdout"
+        with self.assertRaisesRegex(ValueError, "Lineage group crosses study splits"):
+            validate_manifest(rows)
+
+    def test_exposure_filter_fails_closed_for_partial_development_family(self):
+        rows = toy_rows(2)
+        rows[1]["lineage_group"] = rows[0]["lineage_group"]
+        registry = {
+            "manifest_sha256": "manifest",
+            "review_basis": "test audit",
+            "trajectories": {
+                "toy:0": {"use": "development", "evidence": "reviewed"},
+            },
+        }
+        self.assertEqual(filter_reviewed_development(rows, registry, "manifest"), [])
 
 
 if __name__ == "__main__":

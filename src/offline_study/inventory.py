@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 from collections import Counter
 from pathlib import Path
@@ -9,6 +10,27 @@ from pathlib import Path
 from .protocol import sha256, study_split, validate_manifest, window_starts, write_json
 from .vendor import open_dataset, use_vendor
 from . import VENDOR_COMMIT
+
+
+def _initial_state_group(value) -> str:
+    """Stable Push-T family ID from the exact released initial state."""
+    array = value.detach().cpu().contiguous().numpy()
+    return f"pusht:initial-state:{hashlib.sha256(array.tobytes()).hexdigest()}"
+
+
+def assign_study_splits(rows: list[dict], seed: int) -> dict[str, str]:
+    """Split lineage groups, never individual correlated rollout variants."""
+    eligible_groups = sorted({
+        row["lineage_group"] for row in rows if row["source_pool"] != "val"
+    })
+    membership = study_split(eligible_groups, seed)
+    for row in rows:
+        row["split"] = (
+            membership[row["lineage_group"]]
+            if row["source_pool"] != "val"
+            else "external_reserve"
+        )
+    return membership
 
 
 def main():
@@ -32,19 +54,22 @@ def main():
             dset = open_dataset(args.dataset, args.data_root, pool)
             # Reading a non-video column avoids decoding media just to inventory task names.
             tasks = list(dset.dataset["task"]) if args.dataset == "metaworld" else ["pusht"] * len(dset)
+            lineage_groups = (
+                [_initial_state_group(dset.states[i, 0]) for i in range(len(dset))]
+                if args.dataset == "pusht"
+                else [f"metaworld:trajectory:{i}" for i in range(len(dset))]
+            )
             for i in range(len(dset)):
                 length = int(dset.get_seq_length(i))
                 rows.append(dict(trajectory_id=f"{args.dataset}:{pool}:{i}", dataset=args.dataset,
                                  source_pool=pool, index=i, task=tasks[i], length=length,
+                                 lineage_group=lineage_groups[i],
                                  horizon=6, stride=5, windows_requested=args.windows,
                                  starts=window_starts(length, count=args.windows),
                                  exposure_status="unverified", world_model_exposure="unknown",
                                  source_revision=args.data_revision))
             del dset
-        eligible = [r["trajectory_id"] for r in rows if r["source_pool"] != "val"]
-        membership = study_split(eligible, args.seed)
-        for row in rows:
-            row["split"] = membership.get(row["trajectory_id"], "external_reserve")
+        membership = assign_study_splits(rows, args.seed)
         validate_manifest(rows)
         manifest = args.output / "trajectories.jsonl"
         manifest.write_text("".join(json.dumps(r, sort_keys=True) + "\n" for r in rows))
@@ -54,14 +79,21 @@ def main():
             split_policy="study_hash_90_10_with_inner_development; not exact authors' split",
             manifest_sha256=sha256(manifest), trajectories=len(rows),
             split_counts=dict(Counter(r["split"] for r in rows)),
+            lineage_group_counts=dict(Counter(membership.values())),
+            lineage_group_size_counts=dict(Counter(
+                Counter(r["lineage_group"] for r in rows if r["source_pool"] != "val").values()
+            )),
             task_counts=dict(Counter(r["task"] for r in rows)),
             eligible_window_counts=dict(Counter(r["split"] for r in rows for _ in r["starts"])),
             too_short_ids=[r["trajectory_id"] for r in rows if not r["starts"]],
             paper_total_targets={"metaworld": 12600, "pusht": 18500},
             source_trajectory_contents_hashed=False,
+            lineage_policy=("exact_initial_state_sha256_family" if args.dataset == "pusht"
+                            else "whole_trajectory"),
             limitations=["Source revision and row order must be preserved; raw-media checksums not yet verified",
                          "No claim that provisional holdout is historically unseen",
-                         "Push-T supplied val is external_reserve; 90/10 is applied to supplied train only"]
+                         "Push-T supplied val is external_reserve; 90/10 is applied to train lineage groups only",
+                         "Push-T rollout rows sharing an exact initial state are repeated observations within one family"]
         ))
         print(json.dumps({"status": "metadata_inventory_complete", "output": str(args.output), "trajectories": len(rows)}))
     except Exception as exc:

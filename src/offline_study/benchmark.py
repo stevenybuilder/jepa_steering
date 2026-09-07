@@ -74,20 +74,29 @@ def select_rows(rows, tasks, split, max_trajectories, shard_index, num_shards):
 
 
 def filter_reviewed_development(rows, registry, manifest_sha256):
-    """Remove anything not explicitly cleared for development before selection/sharding."""
+    """Keep only complete lineage groups explicitly cleared for development."""
     if registry.get("manifest_sha256") != manifest_sha256 or not registry.get("review_basis"):
         raise ValueError("Exposure registry must identify this manifest and its historical review basis")
-    cleared = []
+    eligible = []
     for row in rows:
         entry = registry.get("trajectories", {}).get(row["trajectory_id"], {})
         if entry.get("use") == "development" and entry.get("evidence"):
-            cleared.append(row)
-    return cleared
+            eligible.append(row)
+    eligible_ids = {row["trajectory_id"] for row in eligible}
+    blocked_groups = {
+        row["lineage_group"] for row in rows
+        if row["split"] == "development" and row["trajectory_id"] not in eligible_ids
+    }
+    return [
+        row for row in eligible
+        if row["split"] != "development" or row["lineage_group"] not in blocked_groups
+    ]
 
 
 def toy_rows(count):
     return [dict(trajectory_id=f"toy:{i}", dataset="toy", source_pool="fixture", index=i,
                  task=("mw-reach", "mw-reach-wall", "pusht")[i % 3], split="development",
+                 lineage_group=f"toy:{i}",
                  length=61, horizon=6, stride=5, windows_requested=4,
                  starts=window_starts(61), exposure_status="synthetic") for i in range(count)]
 
@@ -128,7 +137,8 @@ def batches(rows, batch_size, backend, data_root, pin_memory=False):
 
 
 def collate(items, pin_memory=False):
-    meta = [{"trajectory_id": x[0]["trajectory_id"], "task": x[0]["task"], "start": x[1]} for x in items]
+    meta = [{"trajectory_id": x[0]["trajectory_id"], "lineage_group": x[0]["lineage_group"],
+             "task": x[0]["task"], "start": x[1]} for x in items]
     tensors = tuple(torch.stack([x[i] for x in items]) for i in (2, 3, 4))
     if pin_memory:
         tensors = tuple(value.pin_memory() for value in tensors)
@@ -236,7 +246,8 @@ def execute(args, backend, rows):
     report = dict(
         status="synthetic_smoke_only" if backend.synthetic else "real_baseline_benchmark_complete",
         gpu_benchmark_valid=not backend.synthetic and device.type == "cuda",
-        efficacy_claim=False, backend=backend.provenance, independent_trajectories=actual_units,
+        efficacy_claim=False, backend=backend.provenance,
+        rollout_trajectories=actual_units,
         windows=len(measurements), batches=batch_id, horizon=6, initial_observed_frames=1,
         frame_stride=5, actual_future_frames_fed_to_predictor=False,
         zero_dose_identity=identity, measured_pipeline_seconds=measured, timing=timings,
@@ -264,12 +275,15 @@ def execute(args, backend, rows):
         shard_index=args.shard_index, num_shards=args.num_shards,
         task_trajectory_counts=dict(Counter(r["task"] for r in rows)),
         task_measured_trajectory_counts=dict(Counter(r["task"] for r in summarize_metrics(measurements)["per_trajectory"])),
+        independent_lineage_groups=len({r["lineage_group"] for r in measurements}),
+        independence_unit="lineage_group; rollout trajectories are repeated observations within group when IDs differ",
         aggregation=summarize_metrics(measurements),
         limitations=["Unedited baseline only; ablation throughput is not measured",
                      "Startup/model loading are recorded separately; downloads are excluded",
                      "Cache timing covers encoded tensors only when --write-cache is enabled",
                      "Reduced precision or TF32 requires a separately reviewed float32 parity comparison",
-                     "Synthetic timings must not be extrapolated to JEPA-WM or GPUs"])
+                     "Synthetic timings must not be extrapolated to JEPA-WM or GPUs",
+                     "A split label alone does not establish that a lineage group is historically untouched"])
     return report
 
 
@@ -358,7 +372,10 @@ def main():
             "selection_sha256": sha256(args.output / "selection.json"),
             "config_sha256": sha256(args.output / "config.json"),
         })
-        print(json.dumps({k: report[k] for k in ("status", "gpu_benchmark_valid", "windows", "independent_trajectories", "measured_pipeline_seconds")}))
+        print(json.dumps({k: report[k] for k in (
+            "status", "gpu_benchmark_valid", "windows", "rollout_trajectories",
+            "independent_lineage_groups", "measured_pipeline_seconds"
+        )}))
     except Exception as exc:
         write_json(args.output / "FAILED.json", {"status": "failed", "error": str(exc)})
         raise

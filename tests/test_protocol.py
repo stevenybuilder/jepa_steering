@@ -29,11 +29,17 @@ class ProtocolTests(unittest.TestCase):
         self.assertEqual(sum(map(len, shards)), len(ids))
 
     def test_equal_trajectory_weighting(self):
-        rows = [{"task": "reach", "trajectory_id": "a", "start": i, "metrics": {"error": 0.}} for i in range(4)]
-        rows.append({"task": "reach", "trajectory_id": "b", "start": 0, "metrics": {"error": 10.}})
+        rows = [{"task": "reach", "trajectory_id": "a", "lineage_group": "g1",
+                 "start": i, "metrics": {"error": 0.}} for i in range(4)]
+        rows.append({"task": "reach", "trajectory_id": "b", "lineage_group": "g1",
+                     "start": 0, "metrics": {"error": 10.}})
+        rows.append({"task": "reach", "trajectory_id": "c", "lineage_group": "g2",
+                     "start": 0, "metrics": {"error": 20.}})
         summary = summarize_metrics(rows)
-        self.assertEqual(summary["per_task"]["reach"]["metrics"]["error"], 5.)
-        self.assertEqual(summary["per_task"]["reach"]["trajectories"], 2)
+        self.assertEqual(summary["per_task"]["reach"]["metrics"]["error"], 10.)
+        self.assertEqual(summary["per_task"]["reach"]["trajectories"], 3)
+        self.assertEqual(summary["per_task_group_weighted"]["reach"]["metrics"]["error"], 12.5)
+        self.assertEqual(summary["per_task_group_weighted"]["reach"]["lineage_groups"], 2)
         with self.assertRaises(ValueError):
             summarize_metrics(rows + [rows[0]])
 

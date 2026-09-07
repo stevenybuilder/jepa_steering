@@ -144,6 +144,8 @@ def validate_operator_bank(bank: dict, protocol_sha256: str, selected_meta: list
             raise ValueError(f"Operator bank is missing selected window: {key}")
         if row.get("trajectory_id") != meta["trajectory_id"] or row.get("start") != meta["start"]:
             raise ValueError(f"Operator bank row identity mismatch: {key}")
+        if row.get("lineage_group") != meta.get("lineage_group"):
+            raise ValueError(f"Operator bank row lineage mismatch: {key}")
         if row.get("split") != "development":
             raise ValueError(f"Operator bank row is not development-only: {key}")
         if not isinstance(row.get("tensors", {}), dict):

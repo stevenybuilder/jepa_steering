@@ -37,11 +37,11 @@ class PrecisionComparisonTests(unittest.TestCase):
             "batch_size": 8, "prefetch_batches": 2,
         }, rate=4., memory=60)
         reference_rows = [{
-            "task": "reach", "trajectory_id": "a", "start": 0,
+            "task": "reach", "trajectory_id": "a", "lineage_group": "group-a", "start": 0,
             "metrics": {"visual_mse_h1": 2., "proprio_mse_h1": 1.},
         }]
         candidate_rows = [{
-            "task": "reach", "trajectory_id": "a", "start": 0,
+            "task": "reach", "trajectory_id": "a", "lineage_group": "group-a", "start": 0,
             "metrics": {"visual_mse_h1": 2.02, "proprio_mse_h1": 1.},
         }]
         result = compare_runs(strict, reference_rows, candidate, candidate_rows)
@@ -51,7 +51,8 @@ class PrecisionComparisonTests(unittest.TestCase):
         self.assertAlmostEqual(result["metric_drift"]["visual_mse_h1"]["max_absolute"], .02)
 
     def test_rejects_non_strict_reference_and_changed_selection(self):
-        row = [{"task": "reach", "trajectory_id": "a", "start": 0, "metrics": {"m": 1.}}]
+        row = [{"task": "reach", "trajectory_id": "a", "lineage_group": "group-a",
+                "start": 0, "metrics": {"m": 1.}}]
         with self.assertRaisesRegex(ValueError, "strict float32"):
             compare_runs(
                 report({
@@ -100,14 +101,17 @@ class MultiGpuTests(unittest.TestCase):
                 child.mkdir()
                 child_report = report(
                     {"precision": "float32", "allow_tf32": False},
-                    shard_index=index, num_shards=2, windows=1, independent_trajectories=1,
+                    shard_index=index, num_shards=2, windows=1, rollout_trajectories=1,
+                    independent_lineage_groups=1,
                     measured_pipeline_seconds=2 + index, peak_reserved_gpu_bytes=100,
                     environment={"device": f"cuda:{index}"},
                 )
                 config = {"device": f"cuda:{index}", "output": str(child), "shard_index": index,
                           "num_shards": 2, "batch_size": 8}
-                selection = [{"trajectory_id": trajectory, "task": "reach"}]
-                windows = [{"trajectory_id": trajectory, "task": "reach", "start": 0,
+                selection = [{"trajectory_id": trajectory, "lineage_group": f"group-{trajectory}",
+                              "task": "reach"}]
+                windows = [{"trajectory_id": trajectory, "lineage_group": f"group-{trajectory}",
+                            "task": "reach", "start": 0,
                             "metrics": {"visual_mse_h1": float(index)}}]
                 write_json(child / "config.json", config)
                 write_json(child / "selection.json", selection)
@@ -121,7 +125,8 @@ class MultiGpuTests(unittest.TestCase):
                 })
             result = aggregate_shards(root, 2, wall_seconds=4.)
             self.assertEqual(result["windows"], 2)
-            self.assertEqual(result["independent_trajectories"], 2)
+            self.assertEqual(result["rollout_trajectories"], 2)
+            self.assertEqual(result["independent_lineage_groups"], 2)
             self.assertEqual(result["task_measured_trajectory_counts"], {"reach": 2})
             self.assertAlmostEqual(result["end_to_end_windows_per_second"], .5)
 

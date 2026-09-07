@@ -75,8 +75,10 @@ class InterventionTests(unittest.TestCase):
     def test_operator_bank_binding_and_arm_batch_compilation(self):
         protocol = frozen_protocol()
         meta = [
-            {"trajectory_id": "trajectory-a", "task": "mw-reach", "start": 5},
-            {"trajectory_id": "trajectory-b", "task": "mw-reach", "start": 10},
+            {"trajectory_id": "trajectory-a", "lineage_group": "family-a",
+             "task": "mw-reach", "start": 5},
+            {"trajectory_id": "trajectory-b", "lineage_group": "family-b",
+             "task": "mw-reach", "start": 10},
         ]
         bank = {
             "schema_version": 1,
@@ -85,6 +87,7 @@ class InterventionTests(unittest.TestCase):
             "rows": {
                 f"{row['trajectory_id']}:{row['start']}": {
                     "trajectory_id": row["trajectory_id"], "start": row["start"],
+                    "lineage_group": row["lineage_group"],
                     "split": "development", "tensors": {},
                 }
                 for row in meta
@@ -153,18 +156,24 @@ class InterventionTests(unittest.TestCase):
             }],
         }
         rows = []
-        for trajectory, native, candidate in (("a", 1., 2.), ("b", 3., 2.)):
+        for trajectory, family, native, candidate in (
+            ("a", "g1", 1., 2.), ("b", "g1", 3., 2.), ("c", "g2", 5., 8.)
+        ):
             for start in (0, 5):
                 rows.extend([
-                    {"task": "reach", "trajectory_id": trajectory, "start": start,
+                    {"task": "reach", "trajectory_id": trajectory, "lineage_group": family,
+                     "start": start,
                      "arm": "native", "metrics": {"error": native}},
-                    {"task": "reach", "trajectory_id": trajectory, "start": start,
+                    {"task": "reach", "trajectory_id": trajectory, "lineage_group": family,
+                     "start": start,
                      "arm": "candidate", "metrics": {"error": candidate}},
                 ])
         summary = summarize_interventions(rows, protocol)
         contrast = summary["primary_contrasts"][0]
-        self.assertEqual(contrast["per_task_mean"]["reach"]["error"], 0.)
-        self.assertEqual(len(contrast["per_trajectory"]), 2)
+        # g1 averages (+1,-1) to zero; g2 is +3; groups receive equal weight.
+        self.assertEqual(contrast["per_task_group_weighted_mean"]["reach"]["error"], 1.5)
+        self.assertEqual(len(contrast["per_trajectory"]), 3)
+        self.assertEqual(len(contrast["per_lineage_group"]), 2)
 
     def test_vision_action_output_and_score_interactions_are_separated(self):
         arms = ["native", "visual_only", "action_condition_only", "joint"]

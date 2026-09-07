@@ -44,6 +44,13 @@ exposure reconciliation are outstanding launch requirements; a declared revision
 is not proof that local raw media are intact. Keep old protected trajectories out of
 timing/development even if their provisional new split differs.
 
+Push-T is split by exact-initial-state family, not by rollout row. Manifest validation
+fails if one lineage group crosses study splits, and the exposure filter excludes an
+entire development family if even one of its rows lacks explicit clearance. The released
+Push-T train pool is already development-exposed at the family level in this study; its
+holdout-labelled groups must not be presented as untouched confirmation. See the dated
+correction in the experiment plan.
+
 The real benchmark requires a reviewed exposure registry bound to the manifest:
 
 ```json
@@ -115,9 +122,12 @@ report.json contains:
 
 - Synchronized encode and recursive-rollout wall time, data-load/decode time, and pipeline throughput.
 - Setup and warmup time separately; peak allocated/reserved GPU memory.
-- Visual/proprio embedding MSE at H1/H3/H6, first averaged within each trajectory,
-  then equally across trajectories within each task. These are not physical-state errors.
-- Requested/actually measured task and trajectory counts; immutable selection/config hashes.
+- Visual/proprio embedding MSE at H1/H3/H6, first averaged within each rollout, then
+  within lineage family, then equally across families within each task. Per-rollout
+  summaries remain available but are not the independent-unit analysis. These are not
+  physical-state errors.
+- Requested/actually measured task, rollout, and lineage-family counts; immutable
+  selection/config hashes.
 - Exact zero-dose identity. No success rate or p-value is produced by the timing harness.
 
 For a measured real workload: hours = target_windows / measured_windows_per_second / 3600.
@@ -136,8 +146,9 @@ GPUs use devices 0..7 only after the two-GPU result demonstrates storage scaling
 shards are errors, not zero-throughput successes.
 
 The launcher checks common config/source, disjoint trajectory IDs, report hashes, and
-duplicate windows. Multi-host execution remains out of scope: avoiding model collectives
-is intentional because each trajectory is an independent unit and the model fits on one GPU.
+duplicate windows. Multi-host execution remains out of scope. Avoiding model collectives
+is intentional because rollout computation is separable and the model fits on one GPU;
+this compute sharding does not imply that correlated rollouts are statistically independent.
 
 ## Available local validation
 

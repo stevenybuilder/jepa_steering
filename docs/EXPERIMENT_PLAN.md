@@ -1,8 +1,9 @@
 # Frozen-model offline study: active plan
 
-Status: scope agreed; baseline benchmark implemented; real GPU execution pending.
-Intervention arm families are agreed, but their executable scientific protocols are
-not frozen. The baseline benchmark is the first job, not an efficacy experiment.
+Status: scope agreed; real strict-FP32 baselines have run; Push-T lineage correction
+is active. Intervention arm families are agreed, but their executable scientific
+protocols are not frozen. Completed baseline jobs are throughput/descriptive evidence,
+not efficacy experiments or power calculations.
 
 ## Objective and task coverage
 
@@ -55,10 +56,34 @@ The requested study design is an outer 90% fitting / 10% provisional holdout spl
 with 10% of the outer fitting pool reserved internally for development (approximately
 81/9/10 overall). The inventory names this `study_hash_90_10_with_inner_development`,
 not an exact reproduction of the paper's split. It uses deterministic SHA256 ordering
-with seed234. For Push-T, the supplied val set remains an external reserve and the
-study split is applied to supplied train. Counts are reported separately.
+with seed234. Splits are assigned to lineage groups, never individual correlated rows.
+For Push-T, the released train data contains exactly 185 initial-state families of 101
+distinct action/state rollouts each. A family is defined by the SHA256 of its exact
+initial state; this was verified directly from the released tensors. The resulting
+structural partition is 149 fit, 17 development, and 19 holdout-labelled families. The
+supplied val set contains 21 additional initial-state families with no exact initial-state
+overlap with train and remains an external reserve. Counts are reported separately.
 
-No tuning or efficiency benchmarking on provisional holdout. Previous exposure must
+### Push-T correction and exposure status (2026-09-07)
+
+The first Push-T inventory incorrectly applied that hash split to individual rollout
+row IDs. Its development baseline consequently included 1,682 rollouts drawn from all
+185 train families. The run remains valid for throughput and descriptive per-rollout
+forecast error, but it is not a family-independent efficacy sample or power calculation.
+
+This exposure cannot be undone by recomputing a group split. For this study, the entire
+released Push-T train pool is now development-exposed at the family level. In any
+corrected manifest, the 19 `holdout` labels record the deterministic structural split
+only; they are **not** evidence of untouched confirmation eligibility. The supplied val
+pool was accessed by historical work and likewise is not silently promoted to a fresh
+confirmation cohort. Push-T confirmation therefore requires newly collected independent
+initial-state families with a prospectively frozen manifest. Until those exist, Push-T
+is development/replication evidence only. MetaWorld confirmation remains governed by
+its separately audited, protected trajectory split. Exact affected receipt hashes and
+implemented safeguards are recorded in
+[the Push-T lineage correction report](../reports/PUSHT_LINEAGE_CORRECTION.md).
+
+No tuning or efficiency benchmarking on a genuinely provisional holdout. Previous exposure must
 be reconciled using source trajectory IDs before any confirmation claim. Previously
 protected legacy trajectories remain protected even if the new hash split would place
 them in development: the exposure registry must filter them before real execution.
@@ -71,9 +96,11 @@ Record separately whether the world model was trained on a trajectory. An interv
 holdout can still have been seen during base-model training. No claim of unseen-world-
 model generalization follows from the intervention split.
 
-Push-T noisy replays may share original demonstrations. Trajectory count is not proof
-of independent replay families; group by source demonstration where lineage exists.
-Do not use our current nominal trajectory counts as a power calculation until this is audited.
+Push-T rows within an initial-state family are repeated observations, not independent
+generalization units. Aggregate windows within rollout and rollouts within family;
+cluster uncertainty and power calculations by the 185 verified families. The released
+files do not identify these families as source demonstrations, so call them
+initial-state families rather than making a stronger provenance claim.
 
 Four evenly spaced valid H6 windows per trajectory is the initial throughput budgeting
 assumption. All eligible trajectories are retained; too-short trajectories and fewer
@@ -159,11 +186,13 @@ multi-block edits consistently from a specified native reference.
 3. Fit one bounded, explicit operator protocol per category on fitting data.
 4. Development comparisons with paired trajectory aggregation, retaining every arm.
 5. Freeze primary contrasts, smallest useful effects, sample size, and analysis.
-6. Open verified untouched offline evaluation once; later physical forks and closed-loop
-   confirmation assess behavior, not just embedding error.
+6. Open verified untouched offline evaluation once. For current MetaWorld data this
+   means its protected trajectory split; for Push-T it requires prospectively collected
+   independent families because the released train/val pools are development-exposed.
+   Later physical forks and closed-loop confirmation assess behavior, not just embedding error.
 
-Use continuous per-trajectory differences, confidence intervals clustered by independent
-source trajectory/family, and multiplicity handling for the predeclared primary contrasts.
+Use continuous per-rollout differences aggregated within lineage family, confidence
+intervals over independent families, and multiplicity handling for the predeclared primary contrasts.
 Estimate variance from development data; never set n by copying total training size or
 by interpreting thousands of windows as thousands of independent samples. No power
 claim is currently justified by the old small-state pilots.
