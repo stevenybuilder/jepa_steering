@@ -99,6 +99,9 @@ class PlanningSupportIntervention:
         self.backend, self.protocol, self.bank, self.arm, self.coupling = backend, protocol, bank, arm, coupling
         self.calls, self.energy = 0, []
 
+    def _prepare_support(self, backend, context, actions):
+        return prepare_support(backend, context, actions, self.protocol, self.bank)
+
     @torch.no_grad()
     def __call__(self, context, act_suffix=None, **kwargs):
         if act_suffix is None or kwargs:
@@ -127,7 +130,7 @@ class PlanningSupportIntervention:
             stop = min(start + size, batch)
             z = select_context(context, batch, start, stop)
             actions = act_suffix[:, start:stop].contiguous()
-            all_edits, diagnostics = prepare_support(SupportRolloutBackend(self.backend), z, actions, self.protocol, self.bank)
+            all_edits, diagnostics = self._prepare_support(SupportRolloutBackend(self.backend), z, actions)
             fields = selected_support_fields(all_edits, [a["name"] for a in self.protocol["arms"]], self.arm, stop - start)
             if self.coupling is not None:
                 coupling_protocol, coupling_bank, coupling_arm = self.coupling
