@@ -19,6 +19,17 @@ from .planning_native_smoke import CHECKPOINTS
 from .protocol import sha256, write_json
 
 
+PREDICTOR_FEATURE_DIMENSION = 400  # Pinned MW hidden field includes proprio features.
+
+
+def history_tensor(values, batch_size):
+    history = torch.stack([values[h] for h in range(1, 7)], 1)
+    expected = (batch_size, 6, PREDICTOR_FEATURE_DIMENSION)
+    if history.shape != expected or not torch.isfinite(history).all():
+        raise ValueError(f"Invalid native history: expected {expected}, got {tuple(history.shape)}; finite={bool(torch.isfinite(history).all())}")
+    return history
+
+
 class NativeHistoryCapture:
     """Read only the B3 output, pooled over the newest 256 visual tokens."""
     def __init__(self, predictor):
@@ -80,6 +91,8 @@ def main():
             "source_fit_receipt_sha256": sha256(args.fit / "fit_receipt.json"),
             "checkpoint_sha256": CHECKPOINTS["metaworld"], "precision": "bfloat16",
             "site": "B3_block_output_newest_256_visual_tokens_float32_mean",
+            "hidden_features": PREDICTOR_FEATURE_DIMENSION,
+            "hidden_feature_scope": "all 400 predictor features, including proprioceptive feature conditioning; no projection/truncation",
             "horizons": [1, 2, 3, 4, 5, 6], "routing_decision_may_use_only": [1, 2],
             "later_horizons": "fit-only emission-model training if subsequently frozen; never future input to an H3 routing decision",
             "shard_index": args.shard_index, "shard_count": 4,
@@ -89,6 +102,8 @@ def main():
             "evaluation_or_confirmation_access_authorized": False})
         backend = AuthorBackend(args.vendor, args.checkpoint, CHECKPOINTS["metaworld"],
                                 "metaworld", "cuda:0", "bfloat16")
+        if tuple(backend.predictor.predictor_norm.normalized_shape) != (PREDICTOR_FEATURE_DIMENSION,):
+            raise ValueError("Pinned MW predictor hidden dimension changed")
         versions = _model_versions(backend.model)
         dataset = open_normalized_dataset("metaworld", args.data_root, cohort["reference_config"], True)
         metadata, histories, identity_checks = [], [], 0
@@ -101,9 +116,7 @@ def main():
                     captured = backend.predict(context, actions)
                 if any(not torch.equal(native[k], captured[k]) for k in ("visual", "proprio")):
                     raise ValueError("Passive history capture changes the native forecast")
-                history = torch.stack([capture.values[h] for h in range(1, 7)], 1)
-                if history.shape != (len(meta), 6, 384) or not torch.isfinite(history).all():
-                    raise ValueError("Invalid pooled history shape/values")
+                history = history_tensor(capture.values, len(meta))
                 histories.append(history)
                 metadata.extend(meta)
                 identity_checks += 1

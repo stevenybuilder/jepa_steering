@@ -2,7 +2,7 @@ import unittest
 
 import torch
 
-from offline_study.routing_history import NativeHistoryCapture
+from offline_study.routing_history import NativeHistoryCapture, history_tensor
 
 
 class Predictor(torch.nn.Module):
@@ -17,6 +17,15 @@ class Predictor(torch.nn.Module):
 
 
 class RoutingHistoryTests(unittest.TestCase):
+    def test_actual_hidden_width_includes_proprio_features(self):
+        values = {h: torch.full((2, 400), float(h)) for h in range(1, 7)}
+        self.assertEqual(history_tensor(values, 2).shape, (2, 6, 400))
+        with self.assertRaises(ValueError):
+            history_tensor({h: v[:, :384] for h, v in values.items()}, 2)
+        values[2][0, 399] = float("nan")
+        with self.assertRaises(ValueError):
+            history_tensor(values, 2)
+
     def test_passive_capture_keeps_outputs_and_horizon_identity(self):
         model = Predictor()
         with NativeHistoryCapture(model) as capture:

@@ -10,6 +10,12 @@ Incremental history value and treatment separation must also be established.
 `offline_study.routing_history` captures the unedited predictor B3 output at H1–H6,
 pooling the newest 256 visual tokens in float32. Capture hooks do not alter tensors;
 each captured rollout is checked bitwise against a separate uninstrumented forward.
+The pooled field retains all 400 predictor features, including proprioceptive
+feature conditioning; it is not the 384-dimensional visual encoder output. The
+initial v1 runtime correctly stopped on an erroneous 384-feature shape assertion
+before producing a completed capture. Its failed receipts are retained. The repair
+checks the pinned predictor normalization width and retains all features without
+truncation; a regression test covers the actual 400-dimensional shape.
 The official corrected offline context, preprocessing, recorded actions and BF16
 precision remain fixed. No target-error score is computed by this command.
 
