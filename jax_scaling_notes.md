@@ -422,3 +422,30 @@ A second disk-full fallback relocated42 large window-metric duplicates (1.71GB)
 only after verifying original and second US copies against historical receipts.
 No original data or unrelated local files were deleted, and no GPU was rented as
 storage. Local receipt downloads work again; large assets stay remote.
+
+### Measured follow-through at21:42 UTC
+
+Wall's five-update GPU pilot passed exact local-reference gradient-mean,
+parameter/optimizer/scaler and RNG checks. Updates2–5 cost1.374–1.678 seconds
+on the96GB GPU. With418 updates/epoch and50 epochs, multiplying those four timings
+by20,900 gives roughly8.0–9.7 GPU-hours per training seed, **before** checkpoint
+I/O, validation/planning, any slowdown and engineering. This is an extrapolation
+from four timed updates, not a completed run or a three-seed end-to-end ETA.
+
+The larger batch experiment illustrates why memory capacity is not throughput.
+Keeping all32 rank-response probes and all300 CEM candidates, chunks16/32 used
+more memory but did not consistently beat chunk8. They also changed edit fields
+and forecasts, failing the fixed exact acceptance gate; neither was adopted.
+Increasing arithmetic intensity can help only until another resource limits
+the operation. The empirical roofline matters more than a full memory gauge.
+[GPU compute and memory balance](https://jax-ml.github.io/scaling-book/gpus/).
+
+DROID64 completed, and the exclusive queue automatically advanced through the Wall
+pilot and PointMaze engineering. The next96-episode PointMaze native job is running.
+One additional US4090 was rented for ready navigation offline/fit work. The first
+offer's US label conflicted with a CN IP and was cancelled before research transfer;
+its Indiana replacement brings projected aggregate to$6.928815/hour before bandwidth.
+To reduce staging latency and disk needs,
+initial transfer includes only checksum-bound fitting/validation videos plus the
+existing runtime, not every raw training video or archive. This is less input
+movement, not fewer evaluation trajectories. No GPU was rented solely for storage.

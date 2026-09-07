@@ -84,6 +84,17 @@ MetaWorld or Push-T. Use raw archives, not the small Hugging Face preview parque
 
 ## Training variability and checkpoint histories
 
+Navigation execution addition (2026-09-07): `navigation_replication` freezes a
+96-episode native development reference on the same new base2026090721 and eight
+logical streams, before candidate outcomes; base1 remains reserved. It names the
+existing seven-condition coupling/rank4/combination/control panel, but does not
+pretend that new-task fit bindings or candidate gates are complete. Native results
+must not alter this registry. Complete planned actions are retained as secondary
+diagnostics. `navigation_cohort` separately binds128 author-train-only fitting
+families and all192 Wall/200 PointMaze author-validation rows. `navigation_offline`
+reuses the corrected H6/context3 metrics and unchanged five-sweep fit algorithm,
+with BF16 primary and FP32 sensitivity. No completed older run is rewritten.
+
 The three-training-seed robustness/replication track is REQUIRED by the user, not
 an optional follow-up. The six-task suite uses five environment-trained models
 because Reach/Reach-Wall share MetaWorld. Use three training seeds and the final

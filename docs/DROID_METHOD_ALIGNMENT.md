@@ -3,8 +3,13 @@
 Decision: **implement**. User authorization: 2026-09-07, after 14:00 EDT.
 RoboCasa is excluded; no RoboCasa data, kitchen assets or simulator installation.
 Scope is six tasks: Reach, Reach-Wall, Push-T, PointMaze, Wall and DROID.
-The existing five-task work continues independently. This document does not claim
-that DROID's baseline, interventions or confirmation have already run.
+The existing five-task work continues independently. The released native baseline
+completed at21:14 UTC and verified locally:64 episodes,15 recording families,
+58 unique recording/goal segments, mean XYZ action error0.03612544, score51.09965.
+This is not a percentage success rate, intervention comparison, exact16-recording
+paper-population replication or a three-training-seed/checkpoint-history result.
+Receipt: `artifacts/offline_study/droid-native-replication-verification-20260907-v1`.
+Intervention fitting/comparisons and confirmation remain unfinished.
 
 ## Reference and claim
 

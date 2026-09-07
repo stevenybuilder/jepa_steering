@@ -1,4 +1,4 @@
-# Execution checkpoint — 2026-09-07, 20:55 UTC
+# Execution checkpoint — 2026-09-07, 21:49 UTC
 
 The six-task study is **not complete**. The governing documents remain
 [EXPERIMENT_PLAN.md](../docs/EXPERIMENT_PLAN.md),
@@ -11,15 +11,21 @@ RoboCasa is excluded. No new method search or partial-outcome selection is autho
 | US instance | GPUs | Assignment | Hourly rate |
 |---|---:|---|---:|
 | 50125440 | 8 RTX5090 | Four native MetaWorld development shards; four fixed coupling/control shards | $2.953889 |
-| 50189244 | 1 RTX PRO6000 Blackwell Server | DROID native 64-episode recorded-plan replication; Wall training pilot queued after process exit | $1.884000 |
+| 50189244 | 1 RTX PRO6000 Blackwell Server | PointMaze native96 development; DROID64 and queued engineering completed | $1.884000 |
 | 50195621 | 4 RTX5090 | Four remaining disjoint coupling/control scientific shards; hardware checks passed | $1.641667 |
+| 50205763 | 1 RTX4090 | Indiana replacement booting; reserved for Wall/Maze full offline baselines and unchanged fits | $0.343704 projected |
 
-Including retained stopped disks, projected aggregate is **$6.585111/hour**,
+Including retained stopped disks and the booting worker, projected aggregate is **$6.928815/hour**,
 before usage-based bandwidth. Latest user ceiling is $7/hour, US-only. New
 California staging took time and initially suffered an interrupted transfer;
 those GPUs were not counted as scientifically active while staging. Direct
 keepalive-enabled runtime transfer completed; no local large archive was needed.
 The board and live provider/process checks supersede this timestamped snapshot.
+
+The preceding new rental50205255 was destroyed before staging any research data,
+source or job: its US label conflicted with a reported CN IP. No research result
+was removed or lost; provider absence was verified. The replacement's published
+IP independently geolocates toIndianaUS. Live endpoint checks still precede staging.
 
 ## What actually completed
 
@@ -40,7 +46,14 @@ The board and live provider/process checks supersede this timestamped snapshot.
   `4587522fcab5c518465545f524b88b3b4cd28dd780640d765bf7fb1d58ecd7c8`.
   It records the source file, five sampled raw frames, four-frame goal segment,
   and checks the native CPU RNG without consuming it. The subsequent 64-episode
-  baseline is running, not yet a completed score.
+  baseline completed all64 episodes in5,206 seconds. All64 episode hashes, stream
+  identities, full15x300 call schedules and XYZ/orientation/gripper metrics were
+  reconstructed locally. Native score **51.09965**, mean XYZ error **0.03612544**;
+  this is not a percentage success rate (the scale's maximum is80). The sample
+  contains15 recording families and58 distinct recording/goal segments. Report SHA
+  `31ff18bb63d54876ccc4ec300b89957bc133253746b2d994f932b655231355f4`;
+  verification: `artifacts/offline_study/droid-native-replication-verification-20260907-v1`.
+  No steering comparison, physical robot execution or training-history claim follows.
 - Initial pairing audit: 17 completed MetaWorld candidate episodes exactly
   matched their baseline initial-state vectors and initial/goal image hashes.
   This is partial **stimulus verification**, not a favorable-outcome finding.
@@ -53,7 +66,15 @@ The board and live provider/process checks supersede this timestamped snapshot.
   `58e5fe06fb2ecb20da1c88255f9d908f01837655b56d253c32c1b84f84941508`.
   A prior logging-helper error is preserved; simulator physics were not modified.
   The verified isolated runtime is staged on Virginia for its own CPU check and
-  full native GPU planning after the current DROID job and training pilot exit.
+  full native GPU planning then passed on Virginia: two exact repetitions,171.5s,
+  report SHA `59ae7730d7304a86e36e763ce9224b8ee9ef64a37575eef8e59e6c5fd2017b19`.
+  PointMaze native96 development is now running with immutable code-v13; first
+  complete episodes passed action/forecast/count checks. Base1 confirmation stays closed.
+- Wall/Maze offline cohort preparation completed without model outcomes:128 fitting
+  families/task; all192/200 validation trajectories;2112/12200 clips and4224/24400
+  H6 prefixes. Metadata and all accessed videos are checksum-bound. The existing
+  five-sweep fitting algorithms, precision roles and controls are unchanged.
+  Full new-task offline model comparisons have **not** completed yet.
 
 ## Exact running panel
 
@@ -85,19 +106,29 @@ eligibility, and all required three-seed histories remain unfinished. DROID's
 paper-8,000-training-trajectory subset identity is still unresolved; the released
 evaluation recordings must not be repurposed as its training set.
 
-The new [training pilot](../src/offline_study/training_pilot.py) is queued, **not
-validated or a completed training run**. The original waiting queue was replaced
+The new [training pilot](../src/offline_study/training_pilot.py) **passed five Wall
+updates**, not a complete training history. The original waiting queue was replaced
 before execution when a missing reference-function namespace variable was caught
 by review. The corrected full training control-flow unit passes; pilot-v2 uses
-immutable code-v11. It compares an actual source-extracted
+immutable code-v11. GPU parameter/optimizer/scaler/RNG parity passed, with updates
+2–5 taking1.374–1.678 seconds and peak9.17GB. Report SHA
+`d643d668850fd81839f13d67762e2d26a3b2663024d3dad809221dd3f9ea98f0`.
+It compares an actual source-extracted
 training step against 16x8 accumulated gradients, with one optimizer/scheduler
 update per effective batch. It retains native sampler/drop-last layout and loss
 weights; it does not claim reconstruction of the authors' exact random streams
 or hardware collective reduction order. PointMaze's isolated Python3.10,
-MuJoCo2.1/mujoco-py2.1.2.14 and D4RL native CPU simulator check passes; full model
-planning remains a separate queued check. The frozen seven-arm behavioral analyzer
+MuJoCo2.1/mujoco-py2.1.2.14 and D4RL native CPU and full-model checks pass.
+The frozen seven-arm behavioral analyzer
 is implemented and tested, but refuses partial coverage and has **not** produced
-a comparative result yet.
+a comparative result yet. The v1 MetaWorld episode logger does not retain planned
+action magnitudes, so that secondary diagnostic is unavailable for those running
+shards; do not claim otherwise. New navigation episodes retain complete planned actions.
+
+The completed larger-response-batch engineering test rejected chunks16/32 for
+adoption: no consistent throughput gain, and edit fields/forecast/energy differed
+numerically from chunk8. No scientific source, precision or tolerance was changed.
+Its report SHA is `57279c2e9fad855d48ed60cf7726a073c708fd64e25d899d1cee502d04407560`.
 
 ## Storage recovery
 

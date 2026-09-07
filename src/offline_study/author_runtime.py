@@ -197,6 +197,13 @@ def open_normalized_dataset(kind, root, config, fitting):
         from app.plan_common.datasets.pusht_dset import PushTDataset
         return PushTDataset(data_path=str(root / ("train" if fitting else "val")),
                             n_rollout=None, transform=transform, normalize_action=True, with_velocity=True)
+    if kind in ("wall", "pointmaze"):
+        from app.plan_common.datasets.wall_dset import WallDataset
+        from app.plan_common.datasets.point_maze_dset import PointMazeDataset
+        cls = WallDataset if kind == "wall" else PointMazeDataset
+        return cls(data_path=str(root), n_rollout=None, transform=transform, normalize_action=True)
+    if kind != "metaworld":
+        raise ValueError("Unaudited offline dataset kind")
     from app.plan_common.datasets.metaworld_hf_dset import MetaworldHFDataset
     return MetaworldHFDataset(data_path=str(root), n_rollout=None, transform=transform,
                              normalize_action=True, filter_tasks=None, with_reward=False)
