@@ -103,6 +103,14 @@ or model collectives. Each command fails at the first batch boundary reached aft
 runtime cap. A rental supervisor should still impose its own process-level timeout and
 copy each shard receipt to durable storage before instance termination.
 
+`jepa-intervention-multigpu` provides that supervisor for GPUs on one host. It launches
+one process per device, preserves global shard indices, validates every child receipt,
+and aggregates only when the local shard set is globally complete. `--shard-offset`
+and `--num-shards` support a Push-T split across hosts; such a partial host writes a
+partial receipt rather than misreporting a complete result. After all shard directories
+are gathered under one root, `jepa-aggregate-interventions` verifies exact global
+coverage and builds the combined report.
+
 The receipt reports each arm separately, paired candidate-minus-control differences
 after equal within-trajectory aggregation, delivered L2 norm per edit site, throughput,
 peak memory, input hashes, and frozen parameter/buffer version checks. It produces no
@@ -112,3 +120,32 @@ For vision/action coupling, it additionally forms the output-space residual
 `joint - visual_only - action_condition_only + native` before reducing it to MSE. The
 receipt separates this from the additive quadratic cross-term and the full factorial
 MSE interaction, so score curvature is not mislabeled as a nonadditive model mechanism.
+
+## Fit-only vision/action protocol
+
+`jepa-fit-coupling` implements the first bounded protocol from the plan. It selects one
+deterministic released row per fit lineage group, captures the native H3 newest visual
+field and P3 (zero-indexed predictor block 3) action condition, and fits one rank-one
+maximum-covariance direction pair. It never loads development or holdout outcomes.
+
+The component dose is fixed at 0.1 robust fit-score standard deviations before any
+development execution. The joint arm retains both component doses. The matched-random
+arm uses orthogonal unit directions at the same per-site doses, and the spatial sham
+uses a fixed permutation of the 256 visual patches, which preserves visual L2 norm.
+The fit receipt is written and hashed before the protocol; the resulting operator bank
+is then bound to the frozen protocol hash.
+
+Run one fit process per task/checkpoint:
+
+```bash
+jepa-fit-coupling --vendor vendor/jepa-wms \
+  --checkpoint CHECKPOINT --checkpoint-sha256 CHECKPOINT_SHA256 \
+  --manifest trajectories.jsonl --exposure-registry exposure.json \
+  --data-root DATA_ROOT --task mw-reach --max-fit-lineage-groups 128 \
+  --batch-size 4 --dose-fraction 0.1 --device cuda:0 \
+  --output DURABLE_RUN_ROOT/mw-reach-coupling-fit
+```
+
+The output contains `fit_selection.json`, `fit_receipt.json`, `protocol.json`,
+`operator_bank.pt`, and `DONE.json`. A script exit is only a fit/protocol milestone;
+it is not an intervention result or confirmation claim.
