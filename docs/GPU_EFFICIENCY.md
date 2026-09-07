@@ -56,10 +56,11 @@ Run the read-only offer search:
 scripts/vast/search_offers.sh > offers.json
 ```
 
-The query requires a full GPU (`gpu_frac>=0.99`, plus Vast's verified and rentable
-default filters) so a deceptively cheap fractional offer cannot enter the timing
-baseline. Treat the returned price as ephemeral and re-run the query immediately before
-an explicitly budget-authorized rental.
+`gpu_frac` is intentionally not constrained: on Vast it describes the fraction of the
+host's GPU count included by an offer, not fractional access to one physical GPU. For
+example, a one-GPU slice of an eight-GPU host may report `gpu_frac=0.125`. Treat the
+returned price as ephemeral and re-run the query immediately before an explicitly
+budget-authorized rental, including the requested disk in the final price check.
 
 The query asks for one reliable CUDA-capability-8.0+ GPU with at least 24 GB VRAM,
 100 GB disk, and reasonable download bandwidth. It does not rent anything. Select a
