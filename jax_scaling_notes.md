@@ -393,4 +393,32 @@ their prior receipts and two existing US copies. Small reports and recovery maps
 remain local. No extra GPU was bought as a disk. Storage relocation changes the
 location of evidence, not the sample size or experiment design; the historical
 full-local verification must not be presented as a current claim that every raw
-capture remains on the laptop. See[execution status](reports/EXECUTION_STATUS.md).
+capture remains on the laptop. See [execution status](reports/EXECUTION_STATUS.md).
+
+### Follow-through at 20:55 UTC
+
+All 13 GPUs are executing useful evaluations. The second worker's first completed
+candidate episodes passed cross-host initial-state/goal pairing checks; 64 total
+candidate episodes were verified without inspecting success outcomes for selection.
+CPU simulator setup and the fixed analysis implementation proceed alongside them.
+
+The training pilot now explicitly checks the unchanged CUDA RNG as well as the
+CPU streams. Its arithmetic is `g = (g_0 + ... + g_15) / 16`, with eight examples
+in each logical microbatch and **one** optimizer/scheduler update per global128.
+This keeps the effective training batch fixed while changing physical scheduling;
+it is not automatically faster than data parallelism, and the GPU pilot must
+measure that. No three-seed training history has completed yet.
+
+The practical completion-time model is `staging + queueing + slowest shard + analysis`.
+Consequently, preparation happens while evaluations run, and the next GPU jobs are
+queued behind explicit process-exit checks. GPU utilization alone does not measure
+useful throughput. These are applications of the book's compute/memory/network
+balance and training-parallelism reasoning, not permission to change scientific
+precision, sample counts or CEM budgets.
+[GPU rooflines](https://jax-ml.github.io/scaling-book/gpus/),
+[training parallelism](https://jax-ml.github.io/scaling-book/training/).
+
+A second disk-full fallback relocated42 large window-metric duplicates (1.71GB)
+only after verifying original and second US copies against historical receipts.
+No original data or unrelated local files were deleted, and no GPU was rented as
+storage. Local receipt downloads work again; large assets stay remote.

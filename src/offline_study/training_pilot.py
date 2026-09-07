@@ -84,7 +84,8 @@ def native_step(vendor, model, scheduler, wd):
         raise ValueError("Native training step is missing or ambiguous")
     namespace = dict(torch=torch, np=np, defaultdict=defaultdict, world_model=model,
         scheduler=scheduler, wd_scheduler=wd, predictor=model.predictor,
-        train_predictor=True, train_heads=False, dtype=torch.bfloat16, mixed_precision=True,
+        train_predictor=True, train_heads=False, train_heads_on_predictor=False,
+        dtype=torch.bfloat16, mixed_precision=True,
         rollout_steps=2, do_sequential_rollout=True, do_parallel_rollout=False,
         train_rollout_prefixes="random", rollout_stop_gradient=True, ctxt_window_train_rollout=3)
     exec(compile(ast.Module(body=[matches[0]], type_ignores=[]), str(path), "exec"), namespace)
@@ -148,6 +149,7 @@ def verify_accumulation(vendor, model, scheduler, wd, batch, rng_states):
     reference.optimization_step = lambda: (None, None)
     run = native_step(vendor, reference, FixedRate(lr), FixedRate(decay))
     reference_rngs = [state.clone() for state in rng_states]
+    cuda_rng = torch.cuda.get_rng_state(0)
     losses = []
     for rank, (obs, action, state, reward) in enumerate(microbatches(batch)):
         torch.set_rng_state(reference_rngs[rank])
@@ -159,7 +161,11 @@ def verify_accumulation(vendor, model, scheduler, wd, batch, rng_states):
             parameter.grad.div_(16)
     reference.optimization_step = original_step
     original_step()
+    if not torch.equal(cuda_rng, torch.cuda.get_rng_state(0)):
+        raise ValueError("Native training consumed CUDA RNG; independent logical GPU streams required")
     actual = accumulated_update(model, scheduler, wd, batch, rng_states)
+    if not torch.equal(cuda_rng, torch.cuda.get_rng_state(0)):
+        raise ValueError("Accumulated training consumed CUDA RNG unexpectedly")
     assert_same(reference.state_dict(), model.state_dict())
     assert_same(reference.optimizer.state_dict(), model.optimizer.state_dict())
     assert_same(reference.scaler.state_dict(), model.scaler.state_dict())
@@ -168,6 +174,7 @@ def verify_accumulation(vendor, model, scheduler, wd, batch, rng_states):
         raise ValueError("Native training loss differs")
     return {"native_source_step_used": True, "all_parameters_optimizer_moments_scaler_and_rng_bitwise": True,
             "logical_ranks": 16, "microbatch": 8, "global_batch": 128,
+            "cuda_rng_unchanged_in_both_paths": True,
             "source_collective_reduction_not_reproduced_bitwise": True,
             "reference": "sum native per-rank scaled gradients then divide16; hardware all-reduce order not claimed",
             "loss": actual["loss"]}
@@ -186,6 +193,12 @@ def main():
     if (assets["status"] != "official_navigation_assets_staged_and_verified" or
             inputs["status"] != "navigation_metadata_and_selected_frame_parity_passed"):
         raise ValueError("Require completed input provenance and exact native loader parity")
+    input_protocol = json.loads((args.input_check / "protocol.json").read_text())
+    if (inputs["protocol_sha256"] != sha256(args.input_check / "protocol.json") or
+            input_protocol["assets_report_sha256"] != assets_hash or
+            input_protocol["source_sha256"] != sha256(Path(__file__).with_name("navigation_input_check.py")) or
+            input_protocol["native_configs_sha256"][args.task] != sha256(args.vendor / CONFIGS[args.task])):
+        raise ValueError("Input audit must bind these exact assets, source and task config")
     args.output.mkdir(parents=True, exist_ok=False)
     started = time.monotonic()
     try:

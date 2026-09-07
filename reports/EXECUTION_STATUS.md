@@ -1,4 +1,4 @@
-# Execution checkpoint — 2026-09-07, 20:23 UTC
+# Execution checkpoint — 2026-09-07, 20:55 UTC
 
 The six-task study is **not complete**. The governing documents remain
 [EXPERIMENT_PLAN.md](../docs/EXPERIMENT_PLAN.md),
@@ -12,7 +12,7 @@ RoboCasa is excluded. No new method search or partial-outcome selection is autho
 |---|---:|---|---:|
 | 50125440 | 8 RTX5090 | Four native MetaWorld development shards; four fixed coupling/control shards | $2.953889 |
 | 50189244 | 1 RTX PRO6000 Blackwell Server | DROID native 64-episode recorded-plan replication; Wall training pilot queued after process exit | $1.884000 |
-| 50195621 | 4 RTX5090 | Hardware-specific coupling engineering, then remaining disjoint MetaWorld candidate streams automatically | $1.641667 |
+| 50195621 | 4 RTX5090 | Four remaining disjoint coupling/control scientific shards; hardware checks passed | $1.641667 |
 
 Including retained stopped disks, projected aggregate is **$6.585111/hour**,
 before usage-based bandwidth. Latest user ceiling is $7/hour, US-only. New
@@ -44,6 +44,16 @@ The board and live provider/process checks supersede this timestamped snapshot.
 - Initial pairing audit: 17 completed MetaWorld candidate episodes exactly
   matched their baseline initial-state vectors and initial/goal image hashes.
   This is partial **stimulus verification**, not a favorable-outcome finding.
+- Subsequent cross-worker audit verified **64 paired candidate episodes**, including
+  the California streams. All matched native initial vectors and initial/goal image
+  hashes; no success outcomes were extracted for that audit. Its compact receipt is
+  `behavioral-pairing-audit-20260907-v2`. All 13 GPUs were running scientific jobs at
+  the latest check: twelve MetaWorld shards and one DROID baseline.
+- PointMaze's native CPU simulator passed two exact 30-step repetitions, report SHA
+  `58e5fe06fb2ecb20da1c88255f9d908f01837655b56d253c32c1b84f84941508`.
+  A prior logging-helper error is preserved; simulator physics were not modified.
+  The verified isolated runtime is staged on Virginia for its own CPU check and
+  full native GPU planning after the current DROID job and training pilot exit.
 
 ## Exact running panel
 
@@ -76,13 +86,18 @@ paper-8,000-training-trajectory subset identity is still unresolved; the release
 evaluation recordings must not be repurposed as its training set.
 
 The new [training pilot](../src/offline_study/training_pilot.py) is queued, **not
-validated or a completed training run**. It compares an actual source-extracted
+validated or a completed training run**. The original waiting queue was replaced
+before execution when a missing reference-function namespace variable was caught
+by review. The corrected full training control-flow unit passes; pilot-v2 uses
+immutable code-v11. It compares an actual source-extracted
 training step against 16x8 accumulated gradients, with one optimizer/scheduler
 update per effective batch. It retains native sampler/drop-last layout and loss
 weights; it does not claim reconstruction of the authors' exact random streams
 or hardware collective reduction order. PointMaze's isolated Python3.10,
-MuJoCo2.1/mujoco-py2.1.2.14 and D4RL environment imports pass; simulator rendering
-and full model planning are separate checks.
+MuJoCo2.1/mujoco-py2.1.2.14 and D4RL native CPU simulator check passes; full model
+planning remains a separate queued check. The frozen seven-arm behavioral analyzer
+is implemented and tested, but refuses partial coverage and has **not** produced
+a comparative result yet.
 
 ## Storage recovery
 
@@ -95,6 +110,13 @@ Recovery maps are in
 the second remote copies. The old full-local-bundle verification is historical;
 rerunning it now requires restoring these captures or auditing their remote paths.
 No GPU instance was rented solely for storage.
+
+When free space fell again, **42 additional bulk window-metric duplicates totaling
+1,710,558,874 bytes** were relocated under the same two-copy SHA-verification rule.
+Recovery maps are in `artifacts/offline_study/window-metrics-storage-relocation-20260907-v1/`.
+All original metrics remain on50125440 and a second verified copy on50189244;
+summary reports, protocols and banks stay local. The cause of the repeated local
+disk growth is not established; no unrelated cache or user files were removed.
 
 Measured optimizations and limitations are recorded in
 [jax_scaling_notes.md](../jax_scaling_notes.md).

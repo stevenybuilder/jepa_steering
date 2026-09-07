@@ -39,14 +39,27 @@ def main():
     parser.add_argument("--key", required=True)
     parser.add_argument("--fixtures-only", action="store_true")
     parser.add_argument("--tar-stream", action="store_true", help="Fallback if rsync is unavailable")
+    parser.add_argument("--pointmaze-to-training-worker", action="store_true",
+                        help="Stage the verified isolated CA simulator/runtime to the US training worker")
     args = parser.parse_args()
     paths = (["workspace/jepa-runtime/reach-worker-fit-fixture-v1",
               "workspace/jepa-runtime/reach-wall-worker-fit-fixture-v1",
               "workspace/jepa-runtime/planning-env-smoke-v2"] if args.fixtures_only else PATHS)
     instances = json.loads(subprocess.check_output([VAST, "show", "instances", "--raw"], text=True))
     by_id = {row["id"]: row for row in instances}
-    source = endpoint(by_id[SOURCE_ID])
-    destination = endpoint(by_id[DESTINATION_ID])
+    source_id, destination_id = SOURCE_ID, DESTINATION_ID
+    if args.pointmaze_to_training_worker:
+        if args.fixtures_only:
+            raise ValueError("Fixture and navigation-runtime modes are separate")
+        source_id, destination_id = 50195621, 50189244
+        paths = ["workspace/jepa-python", "workspace/jepa-planning-python", "workspace/jepa-maze-python",
+                 "root/.local/share/uv/python/cpython-3.10.18-linux-x86_64-gnu", "root/.cache/torch/hub",
+                 "root/.mujoco/mujoco210", "workspace/jepa-runtime/pointmaze-setup-v1/D4RL",
+                 "workspace/jepa-runtime/pointmaze-env-check-20260907-v2", "workspace/jepa-runtime/code-v37"]
+        # All these destination paths were checked absent before reservation.
+        # In particular, do not replace the running DROID environment or vendor.
+    source = endpoint(by_id[source_id])
+    destination = endpoint(by_id[destination_id])
     if sum(float(row["instance"]["totalHour"]) for row in instances) > 7:
         raise ValueError("Current aggregate cost exceeds the authorized cap")
     agent_output = subprocess.check_output(["ssh-agent", "-s"], text=True)
@@ -72,8 +85,8 @@ def main():
                         "-o", "ServerAliveInterval=15", "-o", "ServerAliveCountMax=6",
                         "-p", str(source[1]), "root@" + source[0], command],
                        env=env, check=True, timeout=1800)
-        print(json.dumps({"status": "runtime_stream_copied_not_yet_gpu_validated", "source": SOURCE_ID,
-                          "destination": DESTINATION_ID, "paths": paths}), flush=True)
+        print(json.dumps({"status": "runtime_stream_copied_not_yet_gpu_validated", "source": source_id,
+                          "destination": destination_id, "paths": paths}), flush=True)
     finally:
         subprocess.run(["ssh-agent", "-k"], env=env, check=False, stdout=subprocess.DEVNULL)
 
