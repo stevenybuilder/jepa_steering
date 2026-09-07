@@ -19,5 +19,9 @@ Read docs/EXPERIMENT_PLAN.md and configs/study.json before scientific changes.
   Multiple windows/candidates from one trajectory are not independent samples.
 - Never rent compute or send messages automatically. GPU spending needs the user's
   authorized budget and a verified current execution environment.
+- GPU geography is US-only. Do not start, stage workloads on, or restart the
+  Shanghai instances 50135088/50135089/50135090. The user's request to use all
+  instances does not override this location restriction. Check live geography
+  before any future rental or restart; confirm replacement cost before rental.
 - Keep caches/checkpoints/raw video out of git. Record source/checkpoint hashes and
   persist new run artifacts to configured durable storage before terminating a worker.
