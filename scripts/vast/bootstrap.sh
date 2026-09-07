@@ -48,7 +48,9 @@ if [[ ! -x "${environment_dir}/bin/python" ]]; then
 fi
 source "${environment_dir}/bin/activate"
 
-if [[ ! -d "${project_dir}/.git" ]]; then
+if [[ -f "${project_dir}/pyproject.toml" && ! -d "${project_dir}/.git" ]]; then
+  echo "Using pre-staged project source snapshot at ${project_dir}."
+elif [[ ! -d "${project_dir}/.git" ]]; then
   git clone --branch "${project_branch}" --single-branch "${project_url}" "${project_dir}"
 else
   git -C "${project_dir}" fetch origin "${project_branch}"
@@ -56,11 +58,21 @@ else
   git -C "${project_dir}" merge --ff-only "origin/${project_branch}"
 fi
 
-if [[ ! -d "${project_dir}/vendor/jepa-wms/.git" ]]; then
+if [[ -f "${project_dir}/vendor/jepa-wms/pyproject.toml" && ! -d "${project_dir}/vendor/jepa-wms/.git" ]]; then
+  if [[ ! -f "${project_dir}/vendor/jepa-wms/.source-commit" ]] || \
+      [[ "$(<"${project_dir}/vendor/jepa-wms/.source-commit")" != "${vendor_commit}" ]]; then
+    echo "Pre-staged upstream snapshot does not match pinned commit ${vendor_commit}." >&2
+    exit 1
+  fi
+  echo "Using pre-staged upstream snapshot at pinned commit ${vendor_commit}."
+elif [[ ! -d "${project_dir}/vendor/jepa-wms/.git" ]]; then
   git clone --filter=blob:none "${vendor_url}" "${project_dir}/vendor/jepa-wms"
+  git -C "${project_dir}/vendor/jepa-wms" fetch origin "${vendor_commit}"
+  git -C "${project_dir}/vendor/jepa-wms" checkout --detach "${vendor_commit}"
+else
+  git -C "${project_dir}/vendor/jepa-wms" fetch origin "${vendor_commit}"
+  git -C "${project_dir}/vendor/jepa-wms" checkout --detach "${vendor_commit}"
 fi
-git -C "${project_dir}/vendor/jepa-wms" fetch origin "${vendor_commit}"
-git -C "${project_dir}/vendor/jepa-wms" checkout --detach "${vendor_commit}"
 
 uv pip install -e "${project_dir}/vendor/jepa-wms"
 uv pip install -e "${project_dir}"
