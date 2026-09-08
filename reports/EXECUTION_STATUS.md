@@ -19,8 +19,14 @@ California50245262 was externally restarted by14:33; aggregate account rate now
 $6.962593/hour before bandwidth. Six provider instances are running, but CA is
 quarantined from this schedule and its utilization is unverified. No new lease,
 CAcontact, GPU sharing, scientific precision change or sample-size reduction.
-Optional cache successor remains engineering-only. New compact launch/control
-records are being archived to privateDrive, fullreadback pending.
+Optional cache successor remains engineering-only. At14:38UTC the new compact
+launch/control archive passed full compressed and90-member readback onprivateDrive
+(350961bytes, SHA4276a321b61c0a3ed0b772e21146127cf64c971f997088efe81cace4aec3b488).
+Active collection/11logs excluded; no checkpoint/completed-study backup claim.
+
+Texas14:36 readback: DROID511/576 published endpoint/trace pairs,65remaining;
+all four navigation supervisors still waiting. Corrected PointMaze5576–5578
+exact identities healthy, CPU-only and childless. No current queue/shard failures.
 
 ## Historical checkpoint — 14:19 UTC
 

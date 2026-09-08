@@ -45,6 +45,14 @@ the extra California device is not part of our allocation or verified utilizatio
 claim. It remains untouched by this schedule. No further lease fits meaningfully
 under the remaining budget without first releasing other costs.
 
+Durability check at 14:38 UTC: a compact private Google Drive archive passed full
+compressed-file and all 90 member hash/size readback. It preserves the new
+navigation controls/failure records, corrected PointMaze plans/launch records and
+small frozen source bundle, cache CPU audit, and HMM status observation. This is
+not an archive of every ongoing result or checkpoint. Active collection files and
+11 logs were explicitly excluded; nothing was deleted locally. Archive SHA256:
+`4276a321b61c0a3ed0b772e21146127cf64c971f997088efe81cace4aec3b488`.
+
 ## Activated schedule — September 8, 14:19 UTC
 
 **The redistribution is running.** The exact committed partition contains 39
