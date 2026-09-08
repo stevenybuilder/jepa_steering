@@ -65,6 +65,15 @@ Push-T's first256 rank-ordered training clips passed actual native whole-reader
 versus selected-frame pixel/modality/RNG parity onCPU. This is not full-loader
 parity: full initialization/monitoring/resume, MetaWorld inputs and receiving
 GPU numerical checks remain.
+Next receiving check: prepare one disposable Push-T model on Indiana only after
+its complete15-stream/180-endpoint navigation assignment verifies and releases
+GPU0. Use the already verified first256 training clips for one exact native-versus-
+accumulated update comparison and four timed engineering updates. Preserve32x8,
+native BF16, separate logical RNG states and one optimizer step per global batch.
+The logical RNG initialization is explicitly arithmetic-engineering-only, not
+native persistent-loader/LPIPS initialization. A20-minute internal bound, separate
+CPU/GPU timings, immutable source/input receipts and no automatic retry limit the
+check. Passing does not authorize a training history or protected validation.
 These implementations are not full-history launch authorization. The140 still-
 protected MetaWorld validation rows remain unresolved. The report also records
 the MetaWorld training-YAML 48 versus existing paper-matched 96-total behavioral

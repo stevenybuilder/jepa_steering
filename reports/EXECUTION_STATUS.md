@@ -1,4 +1,22 @@
-# Execution checkpoint — 2026-09-08, 16:16 UTC
+# Execution checkpoint — 2026-09-08, after 16:50 UTC
+
+Native32 receiving arithmetic/timing check is staged and CPU-tested, with a live
+Indiana CPU waiterPID16910/start18343560. Exact launch/source/input/authorization
+bindings and all nine immutable preparation records passed local byte/hash
+readback. PLANdd0458843f14a1672184f275040f3d2f4c977886ee0bfbe46870930a32cef09d;
+source48e02a7cc2ff6fcb4673fda10d18a15f5e4813de9ac388a89274334e3c703e33.
+It waits for all15in0navigation streams/180endpoints, exact predecessor exit and
+stable-emptyGPU, then runs only one disposable native-versus-accumulated proof
+and four timed updates. GPU numerical/history/validation/resume proof is still
+pending; no active scientific worker was interrupted. All504localtests pass(two
+existing skips),109receivingCPUtests pass(one unstaged archival fixture).
+[Exact receipt readback](../artifacts/offline_study/robotics-training-gpu-check-20260908-v1/PREPARATION_READBACK.json).
+Full-loader/history implementation and other previously listed study work remain.
+At16:50 provideraggregate was$6.962593/hour beforebandwidth because quarantinedCA
+was externallyrunning again. NoCAcontact, rental, providertransition or sourceedit
+to a running scientific snapshot occurred in this implementation turn.
+
+## Historical checkpoint — 16:16 UTC
 
 HMM16:13 audit: all72/72 engineering cases and8/8 complete suites passed the
 unchanged frozen verifier. All eight devices have bound scientific children;

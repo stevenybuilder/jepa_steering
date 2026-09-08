@@ -12,6 +12,7 @@ import hashlib
 import inspect
 import json
 import random
+import struct
 from collections import defaultdict
 from contextlib import contextmanager
 from pathlib import Path
@@ -45,6 +46,49 @@ SOURCE_HASHES = {
     "src/utils/schedulers.py": "7d006141e10fd260850bd0e6d67deb1f4dfb23f6fe4d253f07df2f8971fdee48",
 }
 RANKS = 32
+
+
+def assert_bitwise(a, b):
+    """Exact represented bytes for the native32 proof, including signed zero.
+
+    Kept separate from shared historical value-equality helpers. This compares
+    dense numerical contents and metadata, not unused allocator storage bytes.
+    """
+    if type(a) is not type(b):
+        raise ValueError("Changed bitwise state type")
+    if isinstance(a, dict):
+        if [(type(k), k) for k in a] != [(type(k), k) for k in b]:
+            raise ValueError("Changed bitwise mapping keys/order")
+        for key in a:
+            assert_bitwise(a[key], b[key])
+    elif isinstance(a, (list, tuple)):
+        if len(a) != len(b):
+            raise ValueError("Changed bitwise sequence length")
+        for left, right in zip(a, b):
+            assert_bitwise(left, right)
+    elif isinstance(a, torch.Tensor):
+        if (a.layout != torch.strided or b.layout != torch.strided or
+                a.dtype != b.dtype or a.shape != b.shape or a.device != b.device or
+                a.stride() != b.stride()):
+            raise ValueError("Changed bitwise tensor metadata")
+        raw = lambda t: t.detach().cpu().contiguous().reshape(-1).view(torch.uint8)
+        if not torch.equal(raw(a), raw(b)):
+            raise ValueError("Changed bitwise tensor contents")
+    elif isinstance(a, np.ndarray):
+        if (a.dtype.hasobject or a.dtype != b.dtype or a.shape != b.shape or
+                a.strides != b.strides or a.tobytes(order="C") != b.tobytes(order="C")):
+            raise ValueError("Changed bitwise array contents/metadata")
+    elif isinstance(a, np.generic):
+        if a.dtype != b.dtype or a.tobytes() != b.tobytes():
+            raise ValueError("Changed bitwise NumPy scalar")
+    elif isinstance(a, float):
+        if struct.pack("!d", a) != struct.pack("!d", b):
+            raise ValueError("Changed bitwise scalar")
+    elif a is None or type(a) in (str, int, bool):
+        if a != b:
+            raise ValueError("Changed bitwise value")
+    else:
+        raise ValueError("Unsupported bitwise state type")
 
 
 def _config(vendor, task):
@@ -472,7 +516,13 @@ def _runtime(model, rng, contract=None):
             raise ValueError("Actual native model loss/input/encoding configuration differs")
     if torch.backends.cuda.matmul.allow_tf32 or torch.backends.cudnn.allow_tf32:
         raise ValueError("No unregistered TF32 precision change")
+    if not torch.backends.cudnn.benchmark:
+        raise ValueError("Native training enables cuDNN benchmark algorithm selection")
     return {"torch": torch.__version__, "cuda": torch.version.cuda,
+        "backend_policy": {"cudnn_benchmark": True,
+            "cudnn_deterministic": torch.backends.cudnn.deterministic,
+            "deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
+            "cuda_matmul_allow_tf32": False, "cudnn_allow_tf32": False},
         "device_uuid": str(torch.cuda.get_device_properties(rng.device).uuid),
         "module_modes": {name: m.training for name, m in model.named_modules()},
         "model_structure": {name: [list(p.shape), str(p.dtype), p.requires_grad]
@@ -525,14 +575,14 @@ def verify_native_update(contract, model, scheduler, wd, batch, rng, *, input_pr
     batches = _receiving_batches(batch, torch.device("cuda", rng.device))
     left = _drive_update(contract, reference, rs, rw, batches, rr, mean_after=True)
     right = _drive_update(contract, actual, actual_s, actual_w, batches, ar)
-    assert_same(left, right)
-    assert_same(reference.state_dict(), actual.state_dict())
-    assert_same(reference.optimizer.state_dict(), actual.optimizer.state_dict())
-    assert_same(reference.scaler.state_dict(), actual.scaler.state_dict())
-    assert_same(rr.state_dict(), ar.state_dict())
-    assert_same({k: v for k, v in vars(rs).items() if k != "optimizer"},
+    assert_bitwise(left, right)
+    assert_bitwise(reference.state_dict(), actual.state_dict())
+    assert_bitwise(reference.optimizer.state_dict(), actual.optimizer.state_dict())
+    assert_bitwise(reference.scaler.state_dict(), actual.scaler.state_dict())
+    assert_bitwise(rr.state_dict(), ar.state_dict())
+    assert_bitwise({k: v for k, v in vars(rs).items() if k != "optimizer"},
                 {k: v for k, v in vars(actual_s).items() if k != "optimizer"})
-    assert_same({k: v for k, v in vars(rw).items() if k != "optimizer"},
+    assert_bitwise({k: v for k, v in vars(rw).items() if k != "optimizer"},
                 {k: v for k, v in vars(actual_w).items() if k != "optimizer"})
     return {"status": "native32_receiving_update_bitwise_passed", "task": contract["task"],
         "model_seed": contract["model_seed"],

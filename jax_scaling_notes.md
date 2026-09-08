@@ -5,6 +5,42 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
+## Next measured dependency — September 8, 16:35 UTC preparation
+
+Activation update after16:50UTC: the isolated CPU waiter is now live
+(PID16910/start18343560). All504 local tests passed(two existing skips), and109
+receiving CPU tests passed(one unstaged local archival fixture). The complete
+receiving test log and nine immutable preparation/launch records passed byte/hash
+readback. The GPU check has not run: Indiana's full navigation assignment retains
+the device. No active scientific snapshot or planner setting was changed.
+Review strengthened the new arithmetic proof to compare represented bytes
+(including signed zero) and explicitly set/record/restore native
+`cudnn.benchmark=True`, while preserving the registered TF32-disabled policy.
+No new speedup or training ETA is claimed by passing these CPU tests.
+[Exact activation evidence](artifacts/offline_study/robotics-training-gpu-check-20260908-v1/PREPARATION_READBACK.json).
+
+The32-rank arithmetic/timing check is separate from the live rollouts.
+It will follow Indiana's entire180-endpoint navigation assignment, not
+interrupt its current child. The existing verified617MB training batch stays on
+the same host. This section records preparation, not a launched or passed GPU check.
+
+| Gap | Cause | Correction being implemented | What must not be inferred |
+|---|---|---|---|
+| No measured MetaWorld/Push-T training ETA. | Native global256 batches differ from navigation's global128; CPU input tests do not measure backpropagation. | One native-vs-accumulated arithmetic check and four timed disposable Push-T updates on the verified batch; preserve32 eight-clip forwards and average gradients by32. | One batch does not prove full-loader, validation/resume or three-seed histories; Push-T timing is not a MetaWorld benchmark. |
+| Verification overhead could be reported as model compute. | Rehashing inputs and synchronizing state occupy CPU/transfer time around an update. | Record CPU input-gate wall time separately from synchronized update wall time and CUDA-event intervals, plus peak memory. | CUDA-event elapsed time includes stream gaps and is not summed kernel-busy time or model FLOPs utilization. |
+| A future check could contend with current scientific rollouts. | A completed child is not completion of a worker's whole queued assignment. | CPU-only waiter binds the exact navigation launch, all180 endpoints, supervisor exit and stable-empty physical GPU before the bounded child. | A waiting process is not GPU work; a checked queue is not a completed experiment. |
+
+The [training chapter](https://jax-ml.github.io/scaling-book/training/) explains
+that parallel hardware and global batch are distinct, and that communication can
+limit scaling. Our local accumulation preserves the intended global update but
+does not remove its FLOPs; this is a baseline for measured scheduling, not evidence
+that one GPU per training seed is optimal. The
+[roofline chapter](https://jax-ml.github.io/scaling-book/roofline/) motivates
+separating compute from data movement. The
+[profiling chapter](https://jax-ml.github.io/scaling-book/profiling/) motivates
+measuring actual execution; its TPU tooling is not being presented as PyTorch GPU
+tooling. No unmeasured cache, precision or kernel change is enabled by this check.
+
 ## Processing validation completed — September 8, 16:16 UTC
 
 The proposed Push-T selected-frame input path now has **real first-batch parity**:

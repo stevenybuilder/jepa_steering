@@ -1,15 +1,37 @@
 # MetaWorld and Push-T native 32-rank history readiness
 
-September 8, 2026; implementation update at 16:16 UTC. **Push-T's first native
+September 8, 2026; implementation update after 16:50 UTC. **Push-T's first native
 256-clip batch now passes real-input pixel/modality/RNG parity. The receiving core,
 model factory and complete raw-input byte audit also exist; full native loader/
 history implementation and launch authorization do not.** This documents the existing required three-seed/history track;
 it does not alter frozen experiments, authorize protected access, introduce a new
 method, or make feature caching a prerequisite. Current-checkpoint behavioral
 work remains independent. No new model outputs or GPU timings were collected
-for this track.
+for this track. A receiving GPU check is now queued after Indiana's complete
+navigation assignment.
 
 ## Implemented since the initial readiness audit
+
+- **Bounded receiving arithmetic check staged and queued.**
+  [GPU check](../src/offline_study/robotics_training_gpu_check.py),
+  [CPU waiter](../scripts/vast/robotics_gpu_check_queue.py) and
+  [staging/activation](../scripts/vast/stage_robotics_gpu_check.py) are isolated
+  from all live scientific snapshots. One clone-only native-versus-accumulated
+  proof precedes four disposable timed updates of the same first256 Push-T clips.
+  Exact-byte comparison includes signed zero; the native cuDNN benchmark flag is
+  explicit and restored, with the registered TF32-disabled policy unchanged.
+  CPU input gates, synchronized update wall time, CUDA stream intervals and peak
+  memory are distinct measurements. No full-history or validation authorization.
+  All504 local tests pass(two existing skips);109 receiving CPU tests pass(one
+  unstaged local archival-readback fixture). The full receiving log and nine
+  immutable activation records passed byte/hash readback. Indiana waiter
+  PID16910/start18343560 was verified live, CPU-only, with no current failure.
+  PLAN SHA256 `dd0458843f14a1672184f275040f3d2f4c977886ee0bfbe46870930a32cef09d`.
+  It verifies all15 original navigation streams/180 endpoints and exact supervisor
+  exit/stable-empty GPU before the one1210-second child. Internal alarm1200seconds,
+  owned-child cleanup5seconds, no retry. Arithmetic RNG states explicitly duplicate
+  post-constructor state; native loader/LPIPS/RNG/resume and GPU parity remain
+  unproven until separately measured. [Activation readback](../artifacts/offline_study/robotics-training-gpu-check-20260908-v1/PREPARATION_READBACK.json).
 
 - **Real Push-T first-batch input proof passed on Indiana.** The new
   [producer](../src/offline_study/robotics_training_batch.py) compares actual native
@@ -230,6 +252,7 @@ snapshots unchanged; no history launch is implied by this table.
 | Native reader/order/transformed-input parity | `src/offline_study/robotics_training_batch.py`, `tests/test_robotics_training_batch.py` | Push-T first256 real clips passed receiving parity; full-loader/history and MetaWorld reader still missing |
 |32-rank update, logical RNGs and receiving numerical pilot | `src/offline_study/robotics_training_pilot.py`, `tests/test_robotics_training_pilot.py` | Implemented and CPU-tested; native GPU proof pending |
 | Native model/optimizer construction | `src/offline_study/robotics_training_model.py`, `tests/test_robotics_training_model.py` | Implemented;11 CPU tests; no receiving CUDA construction or first-update RNG parity claimed |
+| Bounded receiving arithmetic/timing CLI and whole-assignment handoff | `src/offline_study/robotics_training_gpu_check.py`, `scripts/vast/robotics_gpu_check_queue.py` | Staged/receiving-CPU-tested; live CPU waiter after complete Indiana navigation; GPU result pending |
 | Task-specific monitoring, histories, epoch resume | `src/offline_study/robotics_training_history.py`, `tests/test_robotics_training_history.py` | Not yet implemented |
 
 ## Reproduce the count checks locally
