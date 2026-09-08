@@ -5,7 +5,7 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
-## Practical implementation summary — September 8, 14:39 UTC
+## Practical implementation summary — September 8, 14:35 UTC
 
 The enhanced plan is implemented and its scheduling changes are active. This does
 **not** mean the experiments are complete or the pipeline is computationally optimal.

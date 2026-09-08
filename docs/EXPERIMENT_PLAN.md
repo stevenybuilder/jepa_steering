@@ -44,7 +44,7 @@ The affected Indiana training and Texas continuation waiters have been stopped.
 The corrected implementation tests the actual native caller/loader, rejects the
 old sampler binding, and requires fresh initialization for all three seeds.
 See [sampler correction](../reports/POINTMAZE_TRAINING_SAMPLER_CORRECTION.md).
-At14:39UTC the corrected queue is staged, receiving-tested and activated as three
+At14:35UTC the corrected queue is staged, receiving-tested and activated as three
 CPU waiters onTexas. Actualnavigation dependencies are bound separately for
 seeds234/235/236; uncached training starts only after their full assigned streams
 verify and the exact predecessor/GPU releases. Shared inputs do not share optimizer
