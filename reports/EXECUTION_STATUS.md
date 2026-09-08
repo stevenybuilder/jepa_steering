@@ -1,4 +1,21 @@
-# Execution checkpoint — 2026-09-08, 15:12 UTC
+# Execution checkpoint — 2026-09-08, 15:36 UTC
+
+Latest read-only allocation audit: all seven navigation workers have receipt-bound
+scientific children; all13 newly completed12-episode streams passed raw/receipt
+verification. Per-worker completion: ne0=3/16,ne1=3/16,in0=4/15,tx0=1/11,
+tx1=1/10,tx2=1/11,tx3=0/10. Including39 preserved streams gives52/128complete,
+76remaining;22 current partial episodefiles are not counted as completedstreams.
+TX3 was11/12 through its first stream. No new worker/shard/engineering failures.
+AllfourTXreceiving suites are finished; navigation is doing scientific work.
+PointMaze5576/5577/5578 remain healthy CPU-only waiters. NJ235 has23complete
+epochs/current24;236has33complete/current34; latest checkpoint hashes match.
+No41–50 historywindow is complete on those seeds yet. The independent HMM
+eight-GPU allocation continues; last detailedHMMcheck was15:12,44/72engineering.
+
+Full integration rerun after added archive/readback code:419tests,2existing skips.
+No new scientificGPUlaunch/sourcechange/providertransition in this status check.
+
+## Verified completion and preparation — 15:12 UTC
 
 **DROID coupling is complete and independently verified:**576/576 endpoints,
 72/72 shards,64 paired endpoints per arm from15 recordings. All1,152 raw

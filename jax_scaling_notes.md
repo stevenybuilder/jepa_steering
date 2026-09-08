@@ -5,6 +5,21 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
+## Live handoff check — September8,15:36UTC
+
+All seven navigation workers now have scientific children, including all four
+Texas workers after their receiving checks.52/128 candidate streams are complete:
+39 preserved plus13 newly verified streams;76 remain, including currently partial
+streams. Each stream still has12 episodes and each task/arm96 total. No new
+navigation failure was observed. Wall seeds235/236 have23/33 complete epochs;
+three corrected PointMaze waiters remain healthy. The HMM eight-GPU allocation
+is independent. This is evidence the expanded schedule is doing real work, not a
+claim that the full study or all ablations are complete.
+
+After all code additions, the complete local suite ran**419 tests with two existing
+skips**. Scientific GPU sources/precision/planners and fixed sample counts were
+not altered by the input-verification or archive work.
+
 ## Verified execution update — September8,15:12UTC
 
 - **Automatic reuse is happening:** the entire DROID coupling panel finished
