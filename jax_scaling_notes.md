@@ -5,6 +5,53 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
+## Avoid repeated data preparation — September8,18:22UTC
+
+The combined engineering input now reuses the authors' published MetaWorld
+normalization constants instead of constructing a full dataset to recompute
+statistics. Only one already-authorized fitting row is decoded. All126 parquet
+files are byte-verified, and their footer row counts preserve the original global
+row mapping; metadata checks are not additional independent observations.
+The selected-row tensors and transform RNG match the actual native reader.
+This removes a redundant full-pool state scan and keeps protected data unopened.
+It is a new engineering-input freeze, not claimed bitwise equality to earlier
+recomputed statistics or a change to either fitted intervention bank.
+
+Keep this on CPU while GPUs execute rollouts: work sharing and data locality
+help only if they remove work from the critical path. The first receiving test
+attempt missed the existing Python dependency overlay; it failed at import,
+before any input decoding or GPU use. Reusing the correct installed overlay
+passed44 tests; no installation or active runtime edit was needed. The full
+local suite also passed612 tests(two pre-existing skips). These are engineering
+checks, not evidence of improved task success.
+
+## Work count versus averaging — September8,17:55UTC
+
+The user's requested late-epoch averaging is a cheap CPU reduction of saved
+scores, not a GPU optimization. Its cost is dominated by producing the missing
+checkpoint evaluations. Keep the two quantities separate:
+`remaining_GPU_hours = sum(remaining_episodes * measured_seconds_per_episode)/3600`,
+while wall time is the slowest dependency/worker path, not simply that sum.
+[The measured estimate](reports/ETA_COST_20260908.md) records current panel scope,
+allocation and assumptions; [the averaging contract](docs/CHECKPOINT_AGGREGATION.md)
+requires96TOTAL per simulation condition/checkpoint and does not count GPUs as
+samples. A smaller final-checkpoint report is different scope, not faster math.
+
+The combined successor now has an explicit native-prefix engineering adapter:
+40 predictor-block executions instead of72 for a full two-pass same-map reference.
+This applies work reuse to the shared unedited prefix, preserving the native H3
+features. Four extra blocks plus predictor input work remain; one backend call
+does not mean zero overhead. Local tests are not a measured GPU speedup, and no
+running scientific snapshot was replaced by this adapter.
+
+Operational gap: Indiana's container restarted, removing its navigation process
+and the later native32 CPU waiter. All saved evidence survived. Recovery uses
+the unchanged source/seeds, a verified native repeat and whole interrupted RNG
+stream replay; it does not duplicate partial records in the sample. That recovery
+is now active. The old native32 waiter is no longer live and was not restarted.
+The replacement CPU collector observes transient SSH failures without treating
+them as scientific-job failure or permission to restart a model run.
+
 ## Next measured dependency — September 8, 16:35 UTC preparation
 
 Activation update after16:50UTC: the isolated CPU waiter is now live
