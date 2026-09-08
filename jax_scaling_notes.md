@@ -93,6 +93,49 @@ Decision: retain strict arithmetic for ongoing comparisons and prioritize the
 already identified redundant work and uneven scheduling. Do not delay current
 experiments for speculative precision/compilation experiments.
 
+Durability/cost follow-up at13:11UTC: all six processing-audit files, including the
+full trace, passed private Drive download/readback verification. The initial
+shared-client query-quota403 was resolved on a bounded retry using the already
+verified parent ID and one transfer/checker. No local data was deleted. Separately,
+[the retained-storage audit](reports/RETAINED_STORAGE_AUDIT_20260908.md) identified
+$0.737037/hour in stopped/created disks. These are not idle-GPU compute charges.
+Some preserve ~10.47GB of raw-fit/metric objects whose exact coverage is not
+established by the reviewed Drive manifests; deleting both remaining source disks
+would be unsafe. The newest provider total is$6.962593/hour after an external
+California restart; that resource remains quarantined, not available to our queues.
+
+### Implementation checks that did not pass (September 8, 13:32 UTC)
+
+- The first navigation cutover checked GPU idleness once immediately after its
+  child became terminal. It found the GPU still occupied, aborted before assigning
+  any work, and resumed the original schedulers without killing their scientific
+  children. It did not record the occupied PID, so delayed driver/NVML release is
+  plausible, **not proven**. The v2 correction records device/process identities
+  and waits a bounded interval for stable emptiness. Independent receiving
+  engineering should overlap the old-stream drain instead of waiting for it.
+- The initial transfer sent the770.5MB frozen packet through the laptop back to
+  its Nebraska source as well as to receivers. That origin round trip was wasteful.
+  v2 preparation reuses and re-verifies the existing payload in place; no repeated
+  source/runtime download or scientific rerun is needed for an operations fix.
+- Texas lacked four public OSMesa dependencies. Only absent library paths were
+  populated with exact Nebraska bytes; existing libraries/driver were not upgraded.
+  A generated object from the failed fallback build was preserved, then restored
+  to its original verified bytes. The prebuilt MuJoCo extension never changed.
+- The bounded native cache pilot ended after160.27seconds, safely releasing its
+  GPU. It preserved1023 unique FP32 frame embeddings (~404MB) and passed both
+  independent-composition comparisons. It **did not pass full-update parity or
+  produce a speedup measurement**: upstream validation subsequently calls
+  `world_model.train()`, flipping the frozen DINO encoder's mode, while our cache
+  guard required eval mode. Silently forcing eval would change the upstream
+  lifecycle. A successor must audit deterministic train/eval behavior and preserve
+  native modes; until then corrected histories retain uncached native execution.
+
+Evidence: [cache pilot receipts](artifacts/offline_study/visual-cache-engineering-20260908-v1/RECEIPTS.json),
+[navigation preparation](artifacts/offline_study/navigation-redistribution-20260908-v1/DONE.json).
+These are excluded engineering observations and software corrections, not negative
+task-success findings or reasons to change an intervention/sample. A failed
+optimization check must not block the otherwise valid baseline/behavioral runs.
+
 ## September8: overlap independent work, avoid duplicate experiments
 
 At10:18UTC, a further HMM execution optimization is CPU-validated and queued with

@@ -1,4 +1,26 @@
-# Execution checkpoint — 2026-09-08, 13:02 UTC
+# Execution checkpoint — 2026-09-08, 13:32 UTC
+
+Navigationv1 preparation passed18CPUtests/receiver and exactsource/input/runtime
+checks. Its boundary6864 then failed an immediate GPU-empty check after a child
+exited. No ownership plan was committed; original parents4253/4104 resumed safely
+and their scientific work continues. v2 operations repair/staging reuses the frozen
+payload and adds stable-empty observations plus independent early IndianaWall
+engineering; no v2 scientific activation yet. No scientific child was killed.
+
+Indiana cache pilot9472/9473 ended after160.27s and GPUemptiness verified13:30UTC.
+29receivingCPUtests and independent frame-composition parity passed; full-update
+check stopped because upstream validation returns the frozen encoder to train mode
+and the cache guard requires eval. No cache speedup or scientific activation.
+15receipts/598,166bytes SHA-verified locally;~404MBcache retained onworker. Corrected
+PointMaze histories do not depend on an optional cache optimization passing.
+
+Latest provider check13:20:$6.732593/hour after California externally stopped again;
+quarantine remains. New operations/source committed throughcaa41aa;348localtests
+passed with2existing runtime skips. The six profiling files passed fullDrive
+readback. See[scaling notes](../jax_scaling_notes.md) and
+[retained-storage audit](RETAINED_STORAGE_AUDIT_20260908.md).
+
+## Historical checkpoint — 13:02 UTC
 
 The bounded receiving-GPU processing audit completed in149.46seconds and released
 IndianaGPU0. Ten warmed forecasts/mode: strictFP32median3.13847s,TF32 2.85019s,
