@@ -1,4 +1,21 @@
-# Completion-preservation preparation — 2026-09-08,20:28 UTC
+# Completion collector active — 2026-09-08,20:29 UTC
+
+Local CPU collector78689 is active,with tool session61132 and log
+`/tmp/jepa-core-completion-preserver-20260908-v1.log`. Its first live check found
+856/960 records,32/40 complete shards,no failures,and all eight original queues
+plus coordinator5929 live.104 records remain. It is waiting,not claiming a
+completed archive or analysis. Output/launch binding:
+`artifacts/offline_study/core-completion-preservation-20260908-v1/`.
+The tested implementation is committed and pushed as`1022e33`.
+
+Provider readback confirms the four ancillary owned rentals stopped/exited.
+LA alone remains running for this core panel,$2.482963/hour including storage.
+Whole-account current-state cost is$3.412593/hour before bandwidth; this includes
+retained storage and any unrelated account resources. No outside-owned resource
+was contacted or changed. LA will remain on until core verification and durable
+preservation pass,then requires the separate fresh root shutdown review.
+
+## Completion-preservation preparation — 2026-09-08,20:28 UTC
 
 The original core queues remain the only authorized scientific work. At20:23,
 848/960 episode records were published,32/40 shards complete,with no required
