@@ -1,0 +1,42 @@
+{
+  "status": "receiving_cpu_bindings_complete_gpu_check_not_launched_or_queued",
+  "instance": 50205763,
+  "gpu_uuid": "GPU-1541ee72-c8fc-ca75-7fea-470ae793c81e",
+  "source_root": "/workspace/jepa-runtime/combined-fit-stimulus-preparation-20260908-v1/src",
+  "source_sha256": "014cf59678fea3105db0d8d16292228030f593555e55a4b60e2b603ecee84351",
+  "module": "offline_study.fixed_combined_check",
+  "arguments": {
+    "task": "mw-reach",
+    "vendor": "/workspace/jepa_steering/vendor/jepa-wms",
+    "fit": "/workspace/jepa-runtime/fixed-response-fit-20260908-v1/reach",
+    "coupling-fit": "/workspace/jepa-runtime/combined-fit-stimulus-preparation-20260908-v1/coupling-evidence/reach/vision_action_coupling",
+    "checkpoint": "/workspace/jepa-runtime/fixed-response-assets-20260908-v1/jepa_wm_metaworld.pth.tar",
+    "checkpoint-sha256": "c3297772c7af4e84c28bd0c0937e22398a888848305014bb3ab3f1508a310bd8",
+    "data-root": "/workspace/jepa-runtime/fixed-response-assets-20260908-v1/metaworld/data",
+    "stimulus": "/workspace/jepa-runtime/combined-fit-stimulus-preparation-20260908-v1/stimulus",
+    "stimulus-sha256": "b44823daf3e47ec688e185fb9f6b67b8c56a5ebcd31235284fecdb203a50028c",
+    "output": "/workspace/jepa-runtime/combined-fit-stimulus-preparation-20260908-v1/gpu-check"
+  },
+  "receiving_cpu_checks": {
+    "original_same128_family_fixed_and_coupling_fits_verified": true,
+    "all18_bound_files_verified_including_checkpoint": true,
+    "new_fit_or_normalization_fit_performed": false,
+    "protected_or_development_decoding": false
+  },
+  "gpu_handoff_requirement": {
+    "recovery_root": "/workspace/jepa-runtime/navigation-recovery-in0-20260908-v1",
+    "recovery_plan_sha256": "f2e85b90f1ef255eee99f92cb23a59acf01e8aa1a49292e368159a0b10250b4f",
+    "recovery_script_sha256": "c2362e748217a9f4b4746beab68cfae03cbceaf4104ea6530cfae9a264ec15c5",
+    "whole180_endpoint_completion_required": true,
+    "predecessor_pid": 483,
+    "predecessor_starttime": 18705307,
+    "exact_predecessor_exit_and_empty_device_required": true,
+    "shared_ownership_lock_and_fresh_budget_check_required": true,
+    "legacy_native32_waiter_must_not_be_assumed_live": true
+  },
+  "internal_seconds": 1200,
+  "outer_child_seconds": 1210,
+  "automatic_retry": false,
+  "behavioral_launch_ready": false,
+  "full_planner_validation_still_required": true
+}
