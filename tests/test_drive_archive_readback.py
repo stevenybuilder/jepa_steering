@@ -80,6 +80,41 @@ class DriveReadbackTests(unittest.TestCase):
         with self.assertRaises(FileExistsError): self.run_readback()
         self.assertEqual((self.output / 'VERIFIED.json').read_bytes(), before)
 
+    def split_spec(self):
+        bodies = [self.body[:50], self.body[50:]]
+        parts = [{'name': 'source.tar.gz.part-' + str(i), 'bytes': len(body),
+                  'sha256': hashlib.sha256(body).hexdigest(), 'drive_file_id': 'partfile_00000' + str(i)}
+                 for i, body in enumerate(bodies)]
+        spec = {'archive_name': self.archive.name, 'archive_bytes': len(self.body),
+                'archive_sha256': self.metadata['sha256Checksum'],
+                'member_manifest_sha256': reader.digest(self.manifest), 'parts_in_join_order': parts}
+        path = self.root / 'PARTS.json'; path.write_text(json.dumps(spec))
+        return path, spec, bodies
+
+    def test_split_readback_rejoins_all_bytes_and_verifies_members(self):
+        path, spec, bodies = self.split_spec(); responses = []
+        for part, body in zip(spec['parts_in_join_order'], bodies):
+            metadata = {'id': part['drive_file_id'], 'name': part['name'],
+                'size': str(part['bytes']), 'sha256Checksum': part['sha256'],
+                'parents': ['folder_1234567890']}
+            responses += [io.BytesIO(json.dumps(metadata).encode()), io.BytesIO(body)]
+        with patch.object(reader.configparser, 'ConfigParser', return_value=self.config), \
+                patch.object(reader.urllib.request, 'urlopen', side_effect=responses), \
+                patch.object(reader.shutil, 'disk_usage', return_value=type('Disk', (), {'free': 10 << 30})()):
+            reader.verify_parts(path, 'folder_1234567890', self.archive, self.manifest, self.output)
+        report = json.loads((self.output / 'VERIFIED.json').read_text())
+        self.assertEqual(len(report['parts']), 2)
+        self.assertEqual((self.output / self.archive.name).read_bytes(), self.body)
+
+    def test_split_duplicate_identity_rejected_before_credentials(self):
+        path, spec, _ = self.split_spec()
+        spec['parts_in_join_order'][1]['drive_file_id'] = spec['parts_in_join_order'][0]['drive_file_id']
+        path.write_text(json.dumps(spec))
+        with patch.object(reader.configparser, 'ConfigParser') as config:
+            with self.assertRaises(ValueError):
+                reader.verify_parts(path, 'folder_1234567890', self.archive, self.manifest, self.output)
+            config.assert_not_called()
+
 
 if __name__ == '__main__':
     unittest.main()

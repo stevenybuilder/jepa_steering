@@ -56,6 +56,14 @@ reliability fix, not a model throughput improvement. Exact
 [archive](https://drive.google.com/file/d/13fiIpPZrsyv7xs6dOe1W4vFIOpT3IR3w/view?usp=drivesdk)
 and [full readback proof](artifacts/offline_study/live-20260908T151000Z/instance-50259194-droid-parallel/direct-readback/VERIFIED.json).
 
+Geometry preservation15:33UTC:431 immutable files/959.3MB raw were archived into
+125.5MB with full local member verification and unchanged before/after source
+hashes. To respect Drive's100MiB per-file connector limit, two checksum-tracked
+parts and restoration instructions were uploaded privately. The first part passed
+full direct readback; the second hitHTTP403 quota, so complete cloud readback
+remains pending and all source copies remain. This avoids a needless GPU rerun
+but does not claim to reduce the still-required behavioral geometry work.
+
 ## Practical implementation summary — September 8, 14:35 UTC
 
 The enhanced plan is implemented and its scheduling changes are active. This does

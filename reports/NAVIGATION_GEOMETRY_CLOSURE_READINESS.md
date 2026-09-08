@@ -68,7 +68,31 @@ target remains the recorded future of the original action. Protocols explicitly
 warn that armwise energy normalization does not preserve raw projection/reflection
 geometry. No current pending-template setting was substituted for those freezes.
 
-## Safe next CPU step
+## Preservation completed locally; Drive publication status
+
+At15:25:41UTC the exact431 selected files (959,303,006 raw bytes) were archived
+without remote writes, GPU calls or scientific recomputation. The125,518,931-byte
+archive passed full compressed/member hash verification; complete source manifests
+and pinned source selection were identical before and after transfer.
+Archive SHA256 `63ff98086d7be6534494a4d45075b02d05eea52f4d9395e30a93c5e3cfffcb1a`.
+[Local verified archive receipt](../artifacts/offline_study/navigation-geometry-closure-preservation-20260908-v1/VERIFIED.json).
+
+The connected Drive uploader rejected the unsplit file above its100MiB limit.
+Two ordinary byte parts now exist in the verified private
+[geometry folder](https://drive.google.com/drive/folders/1BOFRj7xdDWfD6yVkO-_drPtqb3Sp3CDp),
+along with `PARTS.json`, `RESTORE.md`, `FILES.json` and the local verification
+receipt. All six file sizes/parents/private permissions were checked. Local
+rejoining preserves the exact original archive hash; splitting does not change
+results or archive members. This is a transfer-format change, not a GPU speedup.
+
+Direct Drive readback verified all67,108,864 bytes and providerSHA256 of part-aa.
+Part-ab then hitHTTP403 quota; **full Drive rejoined/member readback is still
+pending**, and the partial readback/failure evidence remains intact. Do not infer
+permission to delete local or worker data from successful upload alone. Nothing
+was deleted. A later bounded readback can complete this check independently of
+GPU execution; no geometry result rerun is required.
+
+## Historical safe next CPU step from the initial audit
 
 Do **not** restart `run_navigation_nonrank_remaining.py`, `navigation_evaluate`,
 or the five-category analyzer loop. Geometry aggregation already exists. Preserve
