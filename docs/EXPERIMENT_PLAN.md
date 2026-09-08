@@ -1,5 +1,14 @@
 # Frozen-model offline study: active plan
 
+Refined combined engineering addition (September8): implement the already
+requested cheaper Reach combination using its unchanged coupling and fixed-map
+banks, with native B3/H3 features captured by a four-block predictor-prefix
+replay. [The engineering contract](FIXED_COMBINED_ENGINEERING.md) distinguishes
+this extra prefix work from a full native shadow and from the old online-probe
+operator. Local tests pass; receiving equivalence, fitting-stimulus provenance,
+full-planner validation and a new behavioral freeze remain required. No old
+efficacy result, protected access or completed behavioral claim is inherited.
+
 DROID preparation addition (September8): native-eligible raw fitting inputs and
 their exact loader/identity audit are separate from the15Franka evaluation files.
 Prepare the pre-existing vision/action factorial for the DROID12-block/H3 model
