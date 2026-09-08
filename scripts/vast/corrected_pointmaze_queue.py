@@ -6,7 +6,7 @@ historical extra-shuffled runs. Each invocation owns exactly one of seeds234–2
 
 PLAN fields: schema=1, source_root/source_sha256, vendor, python, overlay,
 driver/driver_sha256, output_root, assets, input_check, input_receipt, data_root,
-fixed_files={absolute_path:sha256}, performance_approval={path,sha256}, and
+fixed_files={absolute_path:sha256}, execution_approval={path,sha256}, and
 assignments=[{seed,instance,gpu,gpu_uuid,predecessor:{pid,start_ticks,argv,
 done,failed,launch,launch_sha256,expected_done,verifier:{python,script,
 script_sha256,args,expected_result}}}]. All three seeds must occur exactly once.
@@ -14,8 +14,9 @@ script_sha256,args,expected_result}}}]. All three seeds must occur exactly once.
 The parent freezes the predecessor adapter only after navigation redistribution
 is finalized. Its hash-bound CPU verifier must independently validate all assigned
 scientific shards and emit one JSON object. No tentative assignment is runnable.
-The performance approval binds this exact corrected source, sampler, seed triplet,
-and a completed bounded profiling receipt. It is not inferred from elapsed time.
+The execution approval binds this exact corrected source, sampler and seed triplet
+to the already reviewed native uncached path. Optional cache experiments do not
+gate these required histories and are never silently substituted for that path.
 """
 import argparse
 import fcntl
@@ -35,7 +36,7 @@ POLICY = {'version': 'dataset_specific_native_sampler_v1', 'task': 'pointmaze',
     'logical_ranks': 16, 'train_shuffle': False, 'validation_shuffle': False,
     'validation_sampler_epoch': 0, 'slice_permutation_seed': 234,
     'training_drop_last': True, 'validation_drop_last': False}
-APPROVAL_STATUS = 'corrected_pointmaze_execution_approved_after_performance_audit'
+APPROVAL_STATUS = 'corrected_pointmaze_native_uncached_execution_approved'
 
 
 def digest(path):
@@ -128,7 +129,7 @@ def environment(plan, gpu=None):
         PYTHONPATH=str(Path(plan['source_root']) / 'src') + ':' + plan['overlay'],
         LD_LIBRARY_PATH='/opt/conda/lib', LD_PRELOAD=plan['driver'],
         JEPA_VERIFIED_LOCAL_DINO='1', OMP_NUM_THREADS='1', MKL_NUM_THREADS='1',
-        OPENBLAS_NUM_THREADS='1')
+        OPENBLAS_NUM_THREADS='1', PYTHONDONTWRITEBYTECODE='1')
 
 
 def verify_static(plan):
@@ -137,15 +138,13 @@ def verify_static(plan):
     for path, expected in plan['fixed_files'].items():
         if not Path(path).is_absolute() or digest(path) != expected:
             raise ValueError('Pinned runtime/input/test file changed: ' + path)
-    approval = plan['performance_approval']
+    approval = plan['execution_approval']
     if digest(approval['path']) != approval['sha256']:
-        raise ValueError('Performance decision is not frozen')
+        raise ValueError('Native uncached execution decision is not frozen')
     decision = read(approval['path'])
     require_fields(decision, {'status': APPROVAL_STATUS, 'source_sha256': plan['source_sha256'],
         'sampler_policy': POLICY, 'training_seeds': SEEDS,
-        'execution': 'native_accumulation_uncached'}, 'Performance approval')
-    if digest(decision['profiling_receipt']) != decision['profiling_receipt_sha256']:
-        raise ValueError('Bounded performance audit receipt changed')
+        'execution': 'native_accumulation_uncached', 'cache_pilot_required': False}, 'Execution approval')
     vendor = plan['vendor']
     if (subprocess.check_output(['git', '-C', vendor, 'rev-parse', 'HEAD'], text=True).strip() != VENDOR_COMMIT or
             subprocess.check_output(['git', '-C', vendor, 'status', '--porcelain'], text=True).strip()):

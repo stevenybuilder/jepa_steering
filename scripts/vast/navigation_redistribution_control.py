@@ -162,9 +162,9 @@ print(json.dumps({'frozen_contracts_verified':2,'encoder':encoder,'torch':torch.
     print(json.dumps({'ready_sha256': c.digest(c.CONTROL / 'READY.json'), 'instance': instance}))
 
 
-def children(parent):
+def children(parent, include_terminal=False):
     ids = (Path('/proc') / str(parent['pid']) / 'task' / str(parent['pid']) / 'children').read_text().split()
-    return [p for p in (c.process(int(pid)) for pid in ids) if p and p['state'] not in ('Z', 'X')]
+    return [p for p in (c.process(int(pid)) for pid in ids) if p and (include_terminal or p['state'] not in ('Z', 'X'))]
 
 
 def wait_terminal(binding, timeout=7200):
@@ -229,8 +229,9 @@ def boundary():
         # Pause both producers before any long drain. Reinspect their child after
         # suspension, including any final exec race, rather than using a stale PID.
         for worker in paused:
-            live = children(worker['parent'])
-            if len(live) > 1:
+            bound = children(worker['parent'], include_terminal=True)
+            live = [child for child in bound if child['state'] not in ('Z', 'X')]
+            if len(bound) > 1:
                 raise ValueError('Unexpected original independent child overlap')
             if live:
                 child = live[0]
@@ -242,11 +243,20 @@ def boundary():
                             break
                 if child and child['state'] not in ('Z', 'X'):
                     job, target = validate_child(child, worker)
+                    # Bind the verified post-exec argv, not an earlier empty
+                    # fork snapshot, for the subsequent identity/release guard.
+                    bound = [child]
                     c.write(status / ('ne' + str(worker['gpu']) + '-DRAIN.json'), {'child': child, 'job': job})
                     wait_terminal(child)
                     c.verify_shard(target, job)
-            if c.gpu_processes(worker['gpu']):
-                raise ValueError('Original GPU still occupied after drain')
+            observations = []
+            try:
+                release = c.wait_gpu_release(worker['gpu'], worker['gpu_uuid'], bound,
+                    paused_parent=worker['parent'], observations=observations)
+                c.write(status / ('ne' + str(worker['gpu']) + '-GPU_RELEASE.json'), release)
+            finally:
+                c.write(status / ('ne' + str(worker['gpu']) + '-GPU_RELEASE_OBSERVATIONS.json'),
+                    {'observations': observations, 'production_signals_in_release_guard': 0})
         completed, pristine = c.inventory()
         plan = {'status': 'intact_navigation_redistribution_frozen', 'source_sha256': c.SOURCE,
             'freeze_sha256': c.FREEZES, 'completed': completed, 'workers': c.allocation(pristine, all_ready),
@@ -295,6 +305,108 @@ p=pathlib.Path(sys.argv[1]); protocol=json.loads((p/'protocol.json').read_text()
 print(json.dumps({'report_sha256':validate_engineering(pathlib.Path(sys.argv[2]),protocol,sys.argv[3])}))
 '''
     return python_check(instance, program, c.freeze_path(task), path, c.FREEZES[task])['report_sha256']
+
+
+def early_root():
+    return c.CONTROL / 'early' / 'in0-wall'
+
+
+def early_command():
+    return [c.PYTHON, '-u', '-m', 'offline_study.navigation_coupling_behavior', 'engineer'] + c.arguments('wall') + ['--output', str(early_root() / 'engineering')]
+
+
+def profile_release(worker):
+    release = c.read(c.CONTROL / 'PROFILE_RELEASE.json')
+    if (release.get('owner') != 'rep_geometry_transcoder/root' or
+            release.get('gpu_uuid') != worker['gpu_uuid'] or release.get('profiling_finished') is not True):
+        raise ValueError('Root profiling/cache pilot must explicitly release Indiana first')
+
+
+def validate_early_binding(launch, worker, ready_hash):
+    if (launch.get('status') != 'early_original_wall_engineering' or launch.get('worker') != 'in0' or
+            any(launch.get(k) != worker[k] for k in ('instance', 'gpu', 'gpu_uuid')) or
+            launch.get('instance') != 50205763 or launch.get('gpu') != 0 or
+            launch.get('source_sha256') != c.SOURCE or launch.get('freeze_sha256') != c.FREEZES['wall'] or
+            launch.get('ready_sha256') != ready_hash or launch.get('original_engineering_only') is not True):
+        raise ValueError('Early proof belongs to another source/task/device/preparation')
+
+
+def run_early():
+    """Exactly the original 11-case Wall suite once; no PLAN or science needed."""
+    ready_hash = c.digest(c.CONTROL / 'READY.json')
+    c.require_authority('early', ready_hash=ready_hash)
+    ready = c.read(c.CONTROL / 'READY.json')
+    if ready['instance'] != 50205763:
+        raise ValueError('Only Indiana Wall early engineering is authorized')
+    worker = ready['workers']['in0']
+    profile_release(worker)
+    c.verify_source()
+    if c.gpu_uuid(0) != worker['gpu_uuid'] or c.gpu_processes(0):
+        raise ValueError('Indiana device changed or is still occupied')
+    root = early_root(); root.mkdir(parents=True, exist_ok=False)
+    identity, running = c.process(os.getpid()), None
+    c.write(root / 'LAUNCH.json', {'status': 'early_original_wall_engineering', 'worker': 'in0',
+        **{k: worker[k] for k in ('instance', 'gpu', 'gpu_uuid')}, 'identity': identity,
+        'source_sha256': c.SOURCE, 'freeze_sha256': c.FREEZES['wall'], 'ready_sha256': ready_hash,
+        'original_engineering_only': True, 'scientific_episodes_started': False})
+    def cancelled(signum, frame):
+        raise RuntimeError('Early engineering cancelled; preserve and drain its original suite')
+    signal.signal(signal.SIGTERM, cancelled); signal.signal(signal.SIGINT, cancelled)
+    try:
+        with (root / 'engineering.log').open('x') as log:
+            running = subprocess.Popen(early_command(), env=c.environment(50205763, 0),
+                stdin=subprocess.DEVNULL, stdout=log, stderr=subprocess.STDOUT, start_new_session=True)
+            child = c.started(running.pid, early_command())
+            c.write(root / 'CHILD.json', child)
+            if running.wait(timeout=7200):
+                raise ValueError('Original receiving engineering failed; no automatic retry')
+        release = c.wait_gpu_release(0, worker['gpu_uuid'], [child])
+        c.write(root / 'GPU_RELEASE.json', release)
+        proof_hash = engineering_proof(50205763, 'wall', root / 'engineering')
+        c.write(root / 'DONE.json', {'status': 'early_navigation_engineering_complete',
+            'launch_sha256': c.digest(root / 'LAUNCH.json'), 'child_sha256': c.digest(root / 'CHILD.json'),
+            'gpu_release_sha256': c.digest(root / 'GPU_RELEASE.json'), 'engineering_report_sha256': proof_hash,
+            'source_sha256': c.SOURCE, 'freeze_sha256': c.FREEZES['wall'], 'gpu_uuid': worker['gpu_uuid']})
+    except BaseException as error:
+        c.write(root / 'FAILED.json', {'error': str(error), 'automatic_retry': False,
+            'child_not_killed': True, 'child_pid': None if running is None else running.pid})
+        raise
+    finally:
+        if running is not None and running.poll() is None:
+            signal.signal(signal.SIGTERM, signal.SIG_IGN); signal.signal(signal.SIGINT, signal.SIG_IGN)
+            running.wait()
+
+
+def wait_early_proof(worker, ready_hash):
+    """The final worker waits for its owned early suite and reuses it, never repeats."""
+    root = early_root()
+    launch = c.read(root / 'LAUNCH.json')
+    validate_early_binding(launch, worker, ready_hash)
+    deadline = time.monotonic() + 7200
+    while not (root / 'DONE.json').exists():
+        if (root / 'FAILED.json').exists():
+            raise ValueError('Early receiving suite failed; do not duplicate/retry it')
+        if not c.alive(launch['identity']) or time.monotonic() > deadline:
+            if not (root / 'DONE.json').exists():
+                raise ValueError('Early supervisor ended without verified completion')
+        time.sleep(2)
+    if (root / 'FAILED.json').exists():
+        raise ValueError('Failed early suite cannot authorize science')
+    wait_terminal(launch['identity'], 60)
+    done, child = c.read(root / 'DONE.json'), c.read(root / 'CHILD.json')
+    if (done['status'] != 'early_navigation_engineering_complete' or
+            done['launch_sha256'] != c.digest(root / 'LAUNCH.json') or done['child_sha256'] != c.digest(root / 'CHILD.json') or
+            done['gpu_release_sha256'] != c.digest(root / 'GPU_RELEASE.json') or
+            done['source_sha256'] != c.SOURCE or done['freeze_sha256'] != c.FREEZES['wall'] or
+            done['gpu_uuid'] != worker['gpu_uuid'] or child['ppid'] != launch['identity']['pid'] or
+            child['command'] != early_command()):
+        raise ValueError('Early completion/child identity changed')
+    c.wait_gpu_release(worker['gpu'], worker['gpu_uuid'], [child])
+    proof_hash = engineering_proof(50205763, 'wall', root / 'engineering')
+    if proof_hash != done['engineering_report_sha256']:
+        raise ValueError('Early scientific engineering proof changed')
+    return {'path': str(root / 'engineering'), 'report_sha256': proof_hash,
+            'gpu_uuid': worker['gpu_uuid'], 'early_done_sha256': c.digest(root / 'DONE.json')}
 
 
 def droid_gate(worker):
@@ -369,9 +481,11 @@ def run_worker(name):
         if name.startswith('tx'):
             c.write(status / 'PREDECESSOR_VERIFIED.json', droid_gate(worker))
         if name == 'in0':
-            release = c.read(c.CONTROL / 'PROFILE_RELEASE.json')
-            if release.get('owner') != 'rep_geometry_transcoder/root' or release.get('gpu_uuid') != worker['gpu_uuid'] or release.get('profiling_finished') is not True:
-                raise ValueError('Root bounded profiling must explicitly release Indiana first')
+            profile_release(worker)
+        early_proofs = {}
+        if name == 'in0' and early_root().exists():
+            early_proofs['wall'] = wait_early_proof(worker, c.digest(c.CONTROL / 'READY.json'))
+            c.write(status / 'EARLY_ENGINEERING_REUSED.json', early_proofs['wall'])
         if c.gpu_processes(worker['gpu']):
             raise ValueError('Assigned device not released')
         proofs = {}
@@ -379,8 +493,9 @@ def run_worker(name):
             selected = [j for j in worker['jobs'] if j['task'] == task]
             if not selected:
                 continue
-            path = c.ORIGINAL / task / 'engineering' if name.startswith('ne') else status / ('engineering-' + task)
-            if not name.startswith('ne'):
+            path = (Path(early_proofs[task]['path']) if task in early_proofs else
+                    c.ORIGINAL / task / 'engineering' if name.startswith('ne') else status / ('engineering-' + task))
+            if not name.startswith('ne') and task not in early_proofs:
                 execute([c.PYTHON, '-u', '-m', 'offline_study.navigation_coupling_behavior', 'engineer'] + c.arguments(task) + ['--output', str(path)], 'engineering-' + task)
             proof_hash = engineering_proof(worker['instance'], task, path)
             if name.startswith('ne') and proof_hash != worker['engineering_report_sha256']:
@@ -543,7 +658,7 @@ def analyze():
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('command', choices=('inventory-inputs', 'export-inputs', 'receive-inputs', 'prepare', 'boundary', 'run', 'verify-completed', 'export-result', 'import-result', 'analyze'))
+    parser.add_argument('command', choices=('inventory-inputs', 'export-inputs', 'receive-inputs', 'prepare', 'boundary', 'early', 'run', 'verify-completed', 'export-result', 'import-result', 'analyze'))
     parser.add_argument('--instance', type=int, choices=(50231985, 50205763, 50259194))
     parser.add_argument('--worker', choices=tuple(c.WORKERS))
     parser.add_argument('--job', type=json.loads)
@@ -554,6 +669,7 @@ def main():
     elif args.command == 'receive-inputs': receive_inputs()
     elif args.command == 'prepare': prepare(args.instance)
     elif args.command == 'boundary': boundary()
+    elif args.command == 'early': run_early()
     elif args.command == 'run': run_worker(args.worker)
     elif args.command == 'verify-completed': print(json.dumps(verify_completed(args.worker)))
     elif args.command == 'export-result': export_result(args.job, args.original)

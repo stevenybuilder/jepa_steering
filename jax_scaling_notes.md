@@ -5,6 +5,43 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
+## Deployment update — September 8, 13:47 UTC
+
+The enhanced scheduling implementation is now **partly activated**, not yet a
+measured completed speedup. The v2 operations passed27receiving tests on each of
+Nebraska, Indiana andTexas; the full local suite passed364tests with2existing
+runtime skips. Scientific source and both task freezes are unchanged.
+
+- **Independent work overlaps:** Indiana supervisor9839/child9845 is executing
+  the original11-case Wall receiving suite now, while Nebraska finishes its
+  current scientific streams. Its eventual worker reuses the same device-bound
+  proof; it does not run this suite twice.
+- **Safe boundary is active:** Nebraska supervisor7242 has paused the two original
+  producers, not their scientific children. Wall started another intact stream
+  just before the pause; this stream must finish too. No stream is restarted or
+  truncated for the schedule. The seven-device partition is published only after
+  both complete and the actual remaining-work inventory verifies.
+- **No770MB retransfer:** allthree hosts reverified their existing payload in
+  place. The v2 staging receipt records zero copied payload bytes. Only small
+  operations/test files changed; Texas's repaired runtime stays unchanged.
+- **Training preparation overlaps too:** corrected PointMaze seeds234/235/236
+  have a source-bound native-uncached queue proposal. CPU staging onTexas may
+  happen duringDROID; final activation requires the actual navigation launch
+  identities. The optional cache pilot is explicitly not a prerequisite.
+
+This separates three different savings: scheduling removes waiting, immutable
+input reuse removes transfers, and an accepted arithmetic cache would remove
+model work. The third is still unproven; don't add an assumed cache speedup to
+the first two. Whole-stream boundary delays and receiving checks belong in ETA
+arithmetic even though they don't change scientific sample size.
+
+Code: [stable handoff and proof reuse](scripts/vast/navigation_redistribution_control.py),
+[source-bound activation](scripts/vast/activate_navigation_redistribution.py),
+[corrected history preparation](scripts/vast/corrected_pointmaze_prepare.py).
+Evidence: [v2 receiving completion](artifacts/offline_study/navigation-redistribution-20260908-v2/DONE.json).
+The cache pilot's16local files also passed full privateDrive readback at13:46UTC
+under `live-20260908T134200Z/visual-cache-engineering`; no local files were deleted.
+
 ## September 8, 12:51 UTC: gaps, causes, and the enhanced processing plan
 
 This section answers the user's cost/throughput concern explicitly. We have **not**

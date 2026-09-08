@@ -14,7 +14,7 @@ import time
 import navigation_redistribution_common as c
 
 PROJECT = Path(__file__).resolve().parents[2]
-PROOF = PROJECT / 'artifacts/offline_study/navigation-redistribution-20260908-v1'
+PROOF = PROJECT / 'artifacts/offline_study/navigation-redistribution-20260908-v2'
 HOSTS = {50231985: ('jepa-fixed-offline-us-v1', 'Nebraska, US'),
          50205763: ('jepa-navigation-offline-indiana', 'Indiana, US'),
          50259194: ('jepa-droid-parallel-us-v3', 'Texas, US')}
@@ -22,7 +22,7 @@ HOSTS = {50231985: ('jepa-fixed-offline-us-v1', 'Nebraska, US'),
 
 def connections():
     board = Path('/Users/stevenyang/Documents/GPU_RESOURCE_BOARD.md').read_text()
-    if 'navigation-redistribution-20260908-v1' not in board or 'rep_geometry_transcoder/root' not in board:
+    if 'navigation-redistribution-20260908-v2' not in board or 'rep_geometry_transcoder/root' not in board:
         raise ValueError('Explicit board reservation required')
     rows = json.loads(subprocess.check_output(['/Users/stevenyang/.local/bin/vastai', 'show', 'instances', '--raw'], text=True))
     total = sum(row['instance']['totalHour'] for row in rows)
@@ -78,7 +78,9 @@ def stage():
     ssh, authority = connections()
     PROOF.mkdir(exist_ok=False)
     c.write(PROOF / 'AUTHORITY.json', authority)
-    members = {p.name: p for p in (PROJECT / 'scripts/vast').glob('navigation_redistribution_*.py')}
+    names = ('navigation_redistribution_common.py', 'navigation_redistribution_control.py',
+             'navigation_redistribution_stage.py', 'navigation_redistribution_collect.py')
+    members = {name: PROJECT / 'scripts/vast' / name for name in names}
     members['routing_priority_common.py'] = PROJECT / 'scripts/vast/routing_priority_common.py'
     members['test_navigation_redistribution.py'] = PROJECT / 'tests/test_navigation_redistribution.py'
     manifest = {name: {'bytes': path.stat().st_size, 'sha256': c.digest(path)} for name, path in members.items()}
@@ -86,34 +88,49 @@ def stage():
     with ThreadPoolExecutor(max_workers=3) as pool:
         receipts = list(pool.map(lambda n: (n, stage_operations(ssh[n], manifest, members)), HOSTS))
     c.write(PROOF / 'OPERATIONS_STAGED.json', dict(receipts))
-    source_manifest = json.loads(get(ssh[50231985], command('inventory-inputs')))
-    c.write(PROOF / 'INPUTS.json', source_manifest)
-    # One source read/download, then the same verified packet for all three hosts.
-    # The file is an owned temporary transport artifact, never a scientific output.
-    with tempfile.TemporaryFile() as packet:
-        subprocess.run(ssh[50231985] + [shlex.join(command('export-inputs'))], stdout=packet, check=True, timeout=1200)
-        packet.seek(0)
-        with tarfile.open(fileobj=packet, mode='r:gz') as archive:
-            embedded = json.load(archive.extractfile('INPUTS.json'))
-        if embedded != source_manifest:
-            raise ValueError('Source export manifest changed')
-        # Dup the file descriptor is not an independent seek offset; reopen the
-        # transport via /dev/fd only sequentially to avoid corrupt parallel reads.
-        for number in HOSTS:
-            packet.seek(0)
-            subprocess.run(ssh[number] + [shlex.join(command('receive-inputs'))], stdin=packet, check=True, timeout=1200)
-            print(json.dumps({'instance': number, 'payload_received_verified': True, 'gpu_calls': 0}), flush=True)
-    if json.loads(get(ssh[50231985], command('inventory-inputs'))) != source_manifest:
-        raise ValueError('Original frozen source changed during staging')
+    reuse = '''import json,pathlib,shutil,sys
+sys.path.insert(0,sys.argv[1]); import navigation_redistribution_common as c
+old=c.ROOT/'navigation-redistribution-20260908-v1'
+expected='bb0ed47174561ce10896176736928b1d17d0e184ce5cd6911a1e9dcf95082c91'
+assert c.digest(old/'INPUTS.json')==expected
+c.verify_members(old,c.read(old/'INPUTS.json'))
+assert c.read(old/'READY.json')['source_sha256']==c.SOURCE
+(c.CONTROL/'payload').symlink_to(old/'payload',target_is_directory=True)
+for name in ('INPUTS.json','INPUTS_VERIFIED.json'):
+ with (old/name).open('rb') as src,(c.CONTROL/name).open('xb') as dst:shutil.copyfileobj(src,dst)
+if (old/'runtime-repair/VERIFIED.json').exists():
+ (c.CONTROL/'runtime-repair').symlink_to(old/'runtime-repair',target_is_directory=True)
+c.write(c.CONTROL/'PAYLOAD_REUSED.json',{'previous_root':str(old),'input_manifest_sha256':expected,'payload_bytes_copied':0,'all_original_members_reverified':True,'old_attempt_preserved':True,'gpu_calls':0})
+print(json.dumps({'instance':int(sys.argv[2]),'payload_bytes_copied':0,'verified_reuse':True}))
+'''
+    with ThreadPoolExecutor(max_workers=3) as pool:
+        reused = list(pool.map(lambda n: json.loads(get(ssh[n], ['/usr/bin/python3', '-c', reuse, str(c.CONTROL), str(n)])), HOSTS))
+    c.write(PROOF / 'PAYLOAD_REUSED.json', {'workers': reused})
     all_ready = {}
-    for number in HOSTS:
+    # Indiana can start its separately authorized excluded suite while the
+    # other CPU preparations finish and Nebraska later drains intact streams.
+    for number in (50205763, 50231985, 50259194):
         test_command = ['env', 'CUDA_VISIBLE_DEVICES=', 'PYTHONDONTWRITEBYTECODE=1',
             '/usr/bin/python3', '-m', 'unittest', 'discover', '-s', str(c.CONTROL), '-p', 'test_navigation_redistribution.py', '-v']
         tests = subprocess.check_output(ssh[number] + [shlex.join(test_command)],
             stderr=subprocess.STDOUT, text=True, timeout=600)
         with (PROOF / f'tests-{number}.log').open('x') as output:
             output.write(tests)
-        result = get(ssh[number], command('prepare', '--instance', number))
+        if number == 50259194:
+            wrapper = '''import sys
+sys.path.insert(0,sys.argv[1]); import navigation_redistribution_common as c
+import navigation_redistribution_control as control
+original=c.write
+def write(path,value):
+ if path==c.CONTROL/'READY.json':value={**value,'runtime_supplement_sha256':c.digest(c.CONTROL/'runtime-repair/VERIFIED.json')}
+ original(path,value)
+c.write=write
+control.prepare(50259194)
+'''
+            result = get(ssh[number], ['env', 'CUDA_VISIBLE_DEVICES=', 'PYTHONDONTWRITEBYTECODE=1',
+                '/usr/bin/python3', '-c', wrapper, str(c.CONTROL)])
+        else:
+            result = get(ssh[number], command('prepare', '--instance', number))
         ready = json.loads(get(ssh[number], ['cat', str(c.CONTROL / 'READY.json')]))
         all_ready[str(number)] = ready
         c.write(PROOF / f'READY-{number}.json', ready)

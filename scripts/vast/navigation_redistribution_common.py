@@ -6,11 +6,12 @@ from pathlib import Path
 import signal
 import subprocess
 import sys
+import time
 
 import routing_priority_common as lifecycle
 
 ROOT = Path('/workspace/jepa-runtime')
-CONTROL = ROOT / 'navigation-redistribution-20260908-v1'
+CONTROL = ROOT / 'navigation-redistribution-20260908-v2'
 PAYLOAD = CONTROL / 'payload'
 CODE = PAYLOAD / 'code'
 EVIDENCE = PAYLOAD / 'evidence/artifacts/offline_study'
@@ -52,6 +53,73 @@ def digest(path):
 
 def gpu_uuid(gpu):
     return 'GPU-' + lifecycle.gpu_uuid(gpu)
+
+
+def gpu_rows(gpu):
+    """Retain PID and physical UUID; never infer release from one numeric PID list."""
+    output = subprocess.check_output(['nvidia-smi', '-i', str(gpu),
+        '--query-compute-apps=pid,gpu_uuid', '--format=csv,noheader'], text=True)
+    rows = []
+    for line in output.splitlines():
+        parts = [item.strip() for item in line.split(',')]
+        if len(parts) != 2 or not parts[0].isdigit():
+            raise ValueError('Unexpected NVML process row')
+        lifecycle.normalize_nvml_uuid(parts[1])
+        rows.append({'pid': int(parts[0]), 'gpu_uuid': parts[1]})
+    return rows
+
+
+def wait_gpu_release(gpu, expected_uuid, known_children=(), paused_parent=None,
+                     timeout=120., interval=.5, empty_samples=2, observations=None,
+                     query=None, reader=None, clock=None, sleeper=None, device=None):
+    """Wait for terminal children AND stable empty NVML, with no process signals.
+
+    NVIDIA context teardown can lag /proc exit. Unknown *live* work, PID reuse,
+    parent resume or changed GPU identity fail closed. Unattributed already-exited
+    NVML rows can drain within the same finite deadline; they never authorize use.
+    """
+    if timeout <= 0 or interval <= 0 or empty_samples < 2:
+        raise ValueError('Require a bounded multi-sample release guard')
+    query, reader = query or gpu_rows, reader or process
+    clock, sleeper, device = clock or time.monotonic, sleeper or time.sleep, device or gpu_uuid
+    records = [] if observations is None else observations
+    known = {row['pid']: row for row in known_children}
+    started_at, stable = clock(), 0
+    while True:
+        elapsed = clock() - started_at
+        if device(gpu) != expected_uuid:
+            raise ValueError('Physical GPU changed during release wait')
+        if paused_parent is not None:
+            if not alive(paused_parent, reader) or reader(paused_parent['pid'])['state'] not in ('T', 't'):
+                raise ValueError('Original parent resumed/changed before release')
+        children_terminal = not any(alive(child, reader) for child in known.values())
+        rows = query(gpu)
+        samples = []
+        unknown_live = False
+        for row in rows:
+            if row['gpu_uuid'] != expected_uuid:
+                raise ValueError('NVML query returned another GPU')
+            current = reader(row['pid'])
+            samples.append({**row, 'process_state': None if current is None else current['state'],
+                'process_starttime': None if current is None else current['starttime'],
+                'known_child': row['pid'] in known})
+            if row['pid'] in known:
+                # Check even a terminal PID's starttime, not only CUDA visibility.
+                alive(known[row['pid']], reader)
+            elif current is not None and current['state'] not in ('Z', 'X'):
+                unknown_live = True
+        records.append({'elapsed_seconds': elapsed, 'children_terminal': children_terminal,
+                        'nvml_processes': samples})
+        if unknown_live:
+            raise ValueError('Unknown live GPU process; no handoff authorized')
+        stable = stable + 1 if children_terminal and not rows else 0
+        if stable >= empty_samples:
+            return {'gpu': gpu, 'gpu_uuid': expected_uuid, 'elapsed_seconds': elapsed,
+                'known_child_pids': sorted(known), 'stable_empty_samples': stable,
+                'process_and_gpu_release_verified': True, 'observations': records}
+        if elapsed >= timeout:
+            raise TimeoutError('GPU release deadline; preserve original ownership')
+        sleeper(interval)
 
 
 def key(job):

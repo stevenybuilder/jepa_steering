@@ -141,10 +141,109 @@ class RedistributionTests(unittest.TestCase):
             with patch.object(c, 'require_authority'), patch.object(c, 'verify_source'), patch.object(c, 'gpu_uuid', return_value=UUID), \
                     patch.object(c, 'alive', return_value=True), patch.object(c, 'process', side_effect=lambda pid: parents[pid]), \
                     patch.object(c, 'send', side_effect=send), patch.object(control, 'children', return_value=[]), \
-                    patch.object(c, 'gpu_processes', return_value=[]), patch.object(c, 'inventory', side_effect=ValueError('partial shard')):
+                    patch.object(c, 'gpu_processes', return_value=[]), patch.object(c, 'wait_gpu_release', return_value={'verified': True}), \
+                    patch.object(c, 'inventory', side_effect=ValueError('partial shard')):
                 with self.assertRaises(ValueError): control.boundary()
             self.assertEqual(calls, [(4253, signal.SIGSTOP), (4104, signal.SIGSTOP), (4253, signal.SIGCONT), (4104, signal.SIGCONT)])
             self.assertFalse((c.CONTROL / 'PLAN.json').exists())
+
+    def test_terminal_child_nvml_lag_waits_for_two_empty_samples(self):
+        child = binding(123)
+        zombie = {**child, 'state': 'Z', 'command': []}
+        query = Mock(side_effect=[[{'pid': 123, 'gpu_uuid': UUID}], [{'pid': 123, 'gpu_uuid': UUID}], [], []])
+        times = iter([0, 0, .5, 1, 1.5])
+        observations = []
+        result = c.wait_gpu_release(0, UUID, [child], query=query, reader=lambda pid: zombie,
+            clock=lambda: next(times), sleeper=Mock(), device=lambda gpu: UUID, observations=observations)
+        self.assertEqual(result['stable_empty_samples'], 2)
+        self.assertEqual(len(observations), 4)
+        self.assertEqual(result['elapsed_seconds'], 1.5)
+
+    def test_empty_nvml_does_not_skip_still_live_original_child(self):
+        child = binding(123)
+        reader = Mock(side_effect=[child, {**child, 'state': 'Z', 'command': []}, None])
+        times = iter([0, 0, .5, 1])
+        result = c.wait_gpu_release(0, UUID, [child], query=lambda gpu: [], reader=reader,
+            clock=lambda: next(times), sleeper=Mock(), device=lambda gpu: UUID)
+        self.assertFalse(result['observations'][0]['children_terminal'])
+        self.assertEqual(result['elapsed_seconds'], 1)
+
+    def test_unknown_live_gpu_process_fails_without_wait_or_signal(self):
+        sleep = Mock(); observations = []
+        with self.assertRaisesRegex(ValueError, 'Unknown live GPU process'):
+            c.wait_gpu_release(0, UUID, query=lambda gpu: [{'pid': 888, 'gpu_uuid': UUID}],
+                reader=lambda pid: binding(888), sleeper=sleep, device=lambda gpu: UUID, observations=observations)
+        sleep.assert_not_called()
+        self.assertEqual(observations[0]['nvml_processes'][0]['pid'], 888)
+
+    def test_release_guard_pid_reuse_and_parent_resume_fail_closed(self):
+        child = binding(123)
+        with self.assertRaisesRegex(ValueError, 'PID reused'):
+            c.wait_gpu_release(0, UUID, [child], query=lambda gpu: [],
+                reader=lambda pid: {**child, 'starttime': 999}, device=lambda gpu: UUID)
+        parent = binding(4253, 'T')
+        with self.assertRaisesRegex(ValueError, 'parent resumed'):
+            c.wait_gpu_release(0, UUID, paused_parent=parent, query=lambda gpu: [],
+                reader=lambda pid: {**parent, 'state': 'S'}, device=lambda gpu: UUID)
+
+    def test_release_deadline_preserves_stale_nvml_rows_for_diagnosis(self):
+        times = iter([0, 0, .5, 1]); observations = []
+        with self.assertRaises(TimeoutError):
+            c.wait_gpu_release(0, UUID, timeout=1, query=lambda gpu: [{'pid': 123, 'gpu_uuid': UUID}],
+                reader=lambda pid: None, clock=lambda: next(times), sleeper=Mock(), device=lambda gpu: UUID,
+                observations=observations)
+        self.assertEqual(len(observations), 3)
+        self.assertIsNone(observations[-1]['nvml_processes'][0]['process_state'])
+
+    def test_an_empty_interval_followed_by_nvml_lag_resets_stability(self):
+        query = Mock(side_effect=[[], [{'pid': 123, 'gpu_uuid': UUID}], [], []])
+        times = iter([0, 0, .5, 1, 1.5])
+        result = c.wait_gpu_release(0, UUID, query=query, reader=lambda pid: None,
+            clock=lambda: next(times), sleeper=Mock(), device=lambda gpu: UUID)
+        self.assertEqual(len(result['observations']), 4)
+
+    def test_early_engineering_binding_is_exact_task_device_source_and_ready(self):
+        worker = receiving()['50205763']['workers']['in0']
+        launch = {'status': 'early_original_wall_engineering', 'worker': 'in0', **worker,
+            'source_sha256': c.SOURCE, 'freeze_sha256': c.FREEZES['wall'],
+            'ready_sha256': 'ready', 'original_engineering_only': True}
+        control.validate_early_binding(launch, worker, 'ready')
+        for changes in ({'gpu': 1}, {'source_sha256': 'other'}, {'freeze_sha256': c.FREEZES['pointmaze']}, {'ready_sha256': 'stale'}):
+            with self.assertRaises(ValueError): control.validate_early_binding({**launch, **changes}, worker, 'ready')
+
+    def test_completed_early_suite_is_verified_and_reused_without_launch(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(c, 'CONTROL', Path(directory)):
+            root = control.early_root(); root.mkdir(parents=True)
+            worker = receiving()['50205763']['workers']['in0']
+            launch = {'status': 'early_original_wall_engineering', 'worker': 'in0', **worker,
+                'source_sha256': c.SOURCE, 'freeze_sha256': c.FREEZES['wall'], 'ready_sha256': 'ready',
+                'original_engineering_only': True, 'identity': binding(999)}
+            c.write(root / 'LAUNCH.json', launch)
+            c.write(root / 'CHILD.json', {**binding(123), 'ppid': 999, 'command': control.early_command()})
+            c.write(root / 'GPU_RELEASE.json', {'stable_empty_samples': 2})
+            c.write(root / 'DONE.json', {'status': 'early_navigation_engineering_complete',
+                'launch_sha256': c.digest(root / 'LAUNCH.json'), 'child_sha256': c.digest(root / 'CHILD.json'),
+                'gpu_release_sha256': c.digest(root / 'GPU_RELEASE.json'), 'source_sha256': c.SOURCE,
+                'freeze_sha256': c.FREEZES['wall'], 'gpu_uuid': UUID, 'engineering_report_sha256': 'proof'})
+            with patch.object(control, 'wait_terminal'), patch.object(c, 'wait_gpu_release'), \
+                    patch.object(control, 'engineering_proof', return_value='proof') as check, \
+                    patch.object(control.subprocess, 'Popen') as launch_process:
+                proof = control.wait_early_proof(worker, 'ready')
+                self.assertEqual(proof['report_sha256'], 'proof')
+                self.assertEqual(proof['path'], str(root / 'engineering'))
+                check.assert_called_once(); launch_process.assert_not_called()
+
+    def test_failed_early_suite_is_not_retried_or_accepted(self):
+        with tempfile.TemporaryDirectory() as directory, patch.object(c, 'CONTROL', Path(directory)):
+            root = control.early_root(); root.mkdir(parents=True)
+            worker = receiving()['50205763']['workers']['in0']
+            c.write(root / 'LAUNCH.json', {'status': 'early_original_wall_engineering', 'worker': 'in0', **worker,
+                'source_sha256': c.SOURCE, 'freeze_sha256': c.FREEZES['wall'], 'ready_sha256': 'ready',
+                'original_engineering_only': True, 'identity': binding(999)})
+            c.write(root / 'FAILED.json', {'error': 'preserved failure'})
+            with patch.object(control.subprocess, 'Popen') as launch_process:
+                with self.assertRaisesRegex(ValueError, 'failed'): control.wait_early_proof(worker, 'ready')
+                launch_process.assert_not_called()
 
     def test_original_child_requires_entire_expected_argv(self):
         worker = receiving()['50231985']['workers']['ne0']

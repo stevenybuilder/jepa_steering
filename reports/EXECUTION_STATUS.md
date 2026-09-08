@@ -1,4 +1,27 @@
-# Execution checkpoint — 2026-09-08, 13:32 UTC
+# Execution checkpoint — 2026-09-08, 13:47 UTC
+
+Navigation v2 is staged/verified onNE,IN,TX:27receivingtests each, zero repeated
+payload bytes; local364tests pass(2existing skips). Root authorized and launched
+Indiana earlyWall engineer supervisor9839/child9845 onGPU0 and Nebraska boundary
+7242. OriginalNEparents4253/4104 are paused; their current scientific children
+remain intact. Wall advanced to joint/rank3 just beforepause, so that whole stream
+must drain too. NoPLAN/CUTOVER yet and no new scientificredistributionworker yet.
+Indiana's eventualworker verifies/reuses its early11-case proof, not repeats it.
+
+CorrectedPointMaze scientific sourcecaa41aa and uncachedqueue preparation are
+reviewed; CPUstaging onTX is authorized, not a new training launch. Threefresh
+seeds234/235/236 follow actualcomplete navigationassignments onTXGPUs0/1/2.
+The failedcachepilot cannot block validuncached training. CurrentDROID GPUwork and
+Wallhistories are unchanged. Louisiana's eightGPUs remain busy draining their
+originalcouplingchildren before HMM; oldqueue FAILED files are administrative
+cancellations, not newly failedHMMscientific trials.
+
+Code/docs throughdc9c981 pushed toGitHub; v2operationalchanges remain being
+validated/deployed. Cacheengineering16files passedDrive fullreadback13:46UTC;
+navigationv1 failure/control archive upload complete, readbackpending. No local
+deletion, newinstance, or scientificprecision/sample reduction.
+
+## Historical checkpoint — 13:32 UTC
 
 Navigationv1 preparation passed18CPUtests/receiver and exactsource/input/runtime
 checks. Its boundary6864 then failed an immediate GPU-empty check after a child

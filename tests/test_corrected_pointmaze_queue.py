@@ -22,7 +22,7 @@ def plan_fixture():
         'assets': '/runtime/assets', 'input_check': '/runtime/input-check',
         'input_receipt': '/runtime/input-receipt', 'data_root': '/runtime/data',
         'fixed_files': {'/runtime/corrected-code/tests/test_native_training_sampler.py': 'c' * 64},
-        'performance_approval': {'path': '/runtime/approval.json', 'sha256': 'd' * 64}}
+        'execution_approval': {'path': '/runtime/approval.json', 'sha256': 'd' * 64}}
     for gpu, seed in enumerate(queue.SEEDS):
         plan['assignments'].append({'seed': seed, 'instance': 50259194, 'gpu': gpu,
             'gpu_uuid': 'GPU-test-' + str(gpu), 'predecessor': {'pid': 1000 + gpu,
