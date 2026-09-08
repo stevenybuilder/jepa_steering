@@ -22,13 +22,14 @@ from .pointmaze_training_inputs import verify_inputs
 from .protocol import sha256, write_json
 from .training_history import checkpoint_payload, validation_step, verify_validation_reader
 from .training_pilot import (VirtualRankBatchSampler, build_model, accumulated_update,
-                             verify_accumulation)
+                             verify_accumulation, native_sampler_policy)
 from .vendor import use_vendor
 
 SEEDS = (234, 235, 236)
 UPDATES = 1139
 VALIDATIONS_PER_EPOCH = 5
 CONFIG_SHA = "c666b4251f72f56c08c69ab223cfe645625f39705f1c84285320edc98c205a66"
+SAMPLER_POLICY = native_sampler_policy('pointmaze')
 
 
 def training_config(vendor):
@@ -39,14 +40,14 @@ def training_config(vendor):
 
 
 def validation_batches(length=12200):
-    """Native per-rank shuffle/padding, including the final partial batch.
+    """Native static per-rank ordering/padding, including the final partial batch.
 
     Padding is replicated only for native training monitoring; it does not
     increase independent n or change the separate disjoint behavioral schedule.
     Native validation samplers keep epoch=0 as the upstream training loop does.
     """
     streams = [list(BatchSampler(DistributedSampler(range(length), num_replicas=16,
-        rank=rank, shuffle=True), batch_size=4, drop_last=False)) for rank in range(16)]
+        rank=rank, shuffle=SAMPLER_POLICY['validation_shuffle']), batch_size=4, drop_last=False)) for rank in range(16)]
     if len({len(s) for s in streams}) != 1:
         raise ValueError("Native validation streams have different lengths")
     return [[stream[step] for stream in streams] for step in range(len(streams[0]))]
@@ -86,6 +87,8 @@ class ValidationFrames:
 def restore_checkpoint(data, model, cfg, scheduler, wd, loader_rng, binding):
     state = data["study_resume"]
     epoch = data["epoch"]
+    if binding.get('sampler_policy') != SAMPLER_POLICY or state['binding'].get('sampler_policy') != SAMPLER_POLICY:
+        raise ValueError('PointMaze sampler policy mismatch: historical extra-shuffled checkpoints cannot resume the corrected native run')
     if (state["binding"] != binding or not state["epoch_boundary_only"] or state["epoch"] != epoch or
             not isinstance(epoch, int) or not 1 <= epoch < 50 or
             state["scheduler_step"] != UPDATES * epoch or state["wd_step"] != UPDATES * epoch or
@@ -194,6 +197,7 @@ def main():
     ip = json.loads((args.input_receipt / "protocol.json").read_text())
     if (pilot["status"] != "native_training_accumulation_pilot_passed" or pilot["task"] != "pointmaze" or
             pilot["updates_per_epoch"] != UPDATES or pilot["training_clips"] != 145800 or
+            pilot.get('sampler_policy') != SAMPLER_POLICY or pp.get('sampler_policy') != SAMPLER_POLICY or
             pilot["protocol_sha256"] != sha256(args.pilot / "protocol.json") or
             pilot["parity_sha256"] != sha256(args.pilot / "PARITY.json") or
             pp["source_sha256"] != sha256(Path(__file__).with_name("training_pilot.py")) or
@@ -204,13 +208,15 @@ def main():
         raise ValueError("Missing PointMaze-specific input/objective/config proof")
     binding = {"task": "pointmaze", "seed": args.seed, "input_report_sha256": input_hash,
         "native_config_sha256": CONFIG_SHA, "source_sha256": source_bindings(args.vendor),
-        "pilot_report_sha256": pilot_hash, "input_check_report_sha256": audit_hash}
+        "pilot_report_sha256": pilot_hash, "input_check_report_sha256": audit_hash,
+        "sampler_policy": SAMPLER_POLICY}
     if not args.engineering_only:
         proof, _ = verified_report(args.engineering_proof)
         ep = json.loads((args.engineering_proof / "protocol.json").read_text())
         if (proof["status"] != "one_epoch_pointmaze_training_engineering_complete" or proof["seed"] != args.seed or
                 proof["protocol_sha256"] != sha256(args.engineering_proof / "protocol.json") or
                 proof["resume_parity_sha256"] != sha256(args.engineering_proof / "RESUME_PARITY.json") or
+                ep.get('sampler_policy') != SAMPLER_POLICY or
                 any(ep[key] != value for key, value in binding.items())):
             raise ValueError("No matching complete seed-specific engineering proof")
     args.output.mkdir(parents=True, exist_ok=False)
@@ -242,7 +248,8 @@ def main():
         if ((len(dataset), len(train), len(val), len(train_clips), len(val_clips)) != (2000,1800,200,145800,12200) or
                 list(train.indices) != audited["native_train_indices"] or list(val.indices) != audited["native_validation_indices"]):
             raise ValueError("PointMaze split/clip population changed")
-        sampler, batches = VirtualRankBatchSampler(len(train_clips)), validation_batches(len(val_clips))
+        sampler = VirtualRankBatchSampler(len(train_clips), shuffle=SAMPLER_POLICY['train_shuffle'])
+        batches = validation_batches(len(val_clips))
         if len(sampler) != UPDATES or len(batches) != 191 or sum(map(len, batches[-1])) != 48:
             raise ValueError("Native PointMaze sampler schedule changed")
         validation = ValidationFrames(val_clips)

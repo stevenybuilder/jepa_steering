@@ -27,10 +27,11 @@ eight-frame validation clips. Clips are not independent trajectories.
 | Training seeds | 234, 235, 236; only 234 is published, not the exact unpublished author triplet |
 | Complete training budget | 50 epochs, 1,139 optimizer updates per epoch |
 | Effective training batch | Native 16 logical ranks × 8 examples = 128 |
+| Training sampler | Native PointMaze `DistributedSampler(..., shuffle=False)`, padded before per-rank batch `drop_last=True`; do not inherit Wall's shuffle setting |
 | Native model/loss | Frozen DINOv2-S/14, six-block predictor, BF16, original teacher-forced plus two-step rollout objective |
 | Optimizer | Original AdamW, betas 0.9/0.999, gradient clipping, LR/weight-decay schedules unchanged |
 | Validation monitoring | Every 200 within-epoch updates: five events per epoch, 250 total |
-| Validation sampler | Native 16-rank shuffle/padding; no `drop_last`; 190 batches of 64 followed by one of 48 per complete cycle |
+| Validation sampler | Native 16-rank **nonshuffled** ordering/padding; no `drop_last`; 190 batches of 64 followed by one of 48 per complete cycle |
 | Validation metrics | Actual upstream `step_model(train=False)`, H6/context3, recorded and noisy-action rollouts |
 | Checkpoint retention | Every epoch saved immutably, optimizer/scaler/scheduler and logical RNG/cursor state included |
 | Behavioral primary history window | Epochs 41–50, 96 total episodes per checkpoint/condition, three training seeds |
@@ -71,7 +72,23 @@ authors' undocumented cross-GPU reduction order or exact historical RNG sequence
 The GPU-specific numerical checks are required before scientific advancement.
 Full training completion alone does not complete the behavioral history comparison.
 
-## Resource assignments at preparation
+## Sampler correction and current execution status (September 8, 12:38 UTC)
+
+The initial implementation incorrectly shuffled PointMaze's train and validation
+samplers. Regression tests now execute the actual pinned upstream caller and
+loader instead of reproducing a manually assumed shuffle setting. The original
+seed234/235 histories remain available but cannot be resumed as corrected-native
+histories. The Indiana job and Texas continuation waiters have been stopped;
+seed236 had not trained. Corrected histories for234/235/236 must initialize afresh,
+each retain its own first-epoch/resume proof, and preserve the complete schedule.
+See [the correction record](../reports/POINTMAZE_TRAINING_SAMPLER_CORRECTION.md).
+
+The corrected queue is local-only pending frozen receiving and navigation-completion
+bindings. Prior resource assignments below are historical, not active launch
+instructions. Required training histories have not been dropped to accelerate the
+nearer-term released-checkpoint behavioral comparisons.
+
+## Historical resource assignments at preparation
 
 Virginia 50189244 GPU0 is reserved for seed234 after Wall234 finishes and all 50
 Wall checkpoint hashes verify. Its CPU queue is live; it does not interrupt Wall.

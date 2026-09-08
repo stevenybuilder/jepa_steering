@@ -25,8 +25,9 @@ from .vendor import use_vendor
 
 class VirtualRankBatchSampler:
     """Exact upstream DistributedSampler + drop_last batches, without padding evals."""
-    def __init__(self, length, ranks=16, microbatch=8, epoch=0):
+    def __init__(self, length, ranks=16, microbatch=8, epoch=0, shuffle=True):
         self.length, self.ranks, self.microbatch, self.epoch = length, ranks, microbatch, epoch
+        self.shuffle = shuffle
 
     def __len__(self):
         return ((self.length + self.ranks - 1) // self.ranks) // self.microbatch
@@ -35,12 +36,28 @@ class VirtualRankBatchSampler:
         from torch.utils.data import DistributedSampler
         streams = []
         for rank in range(self.ranks):
-            sampler = DistributedSampler(range(self.length), num_replicas=self.ranks, rank=rank, shuffle=True)
+            sampler = DistributedSampler(range(self.length), num_replicas=self.ranks, rank=rank, shuffle=self.shuffle)
             sampler.set_epoch(self.epoch)
             streams.append(list(sampler))
         for step in range(len(self)):
             yield [index for stream in streams for index in
                    stream[step * self.microbatch:(step + 1) * self.microbatch]]
+
+
+def native_sampler_policy(task):
+    """Pinned init_data selects these flags after the seeded slice permutation.
+
+    Wall retains its existing shuffled sampler. PointMaze's slice list is already
+    seed-permuted once; its native distributed train AND validation samplers do
+    not perform the extra permutation introduced by the historical adapter.
+    """
+    if task not in ('wall', 'pointmaze'):
+        raise ValueError('No frozen native sampler policy for task: ' + str(task))
+    return {'version': 'dataset_specific_native_sampler_v1', 'task': task,
+        'logical_ranks': 16, 'train_shuffle': task == 'wall',
+        'validation_shuffle': task == 'wall', 'validation_sampler_epoch': 0,
+        'slice_permutation_seed': 234, 'training_drop_last': True,
+        'validation_drop_last': False}
 
 
 def build_model(cfg, dataset, ipe):
@@ -186,6 +203,7 @@ def main():
         parser.add_argument("--" + name, required=True, type=Path)
     parser.add_argument("--task", choices=("wall", "pointmaze"), required=True)
     args = parser.parse_args()
+    sampler_policy = native_sampler_policy(args.task)
     use_vendor(args.vendor)
     cfg = yaml.safe_load((args.vendor / CONFIGS[args.task]).read_text())
     assets, assets_hash = verified_report(args.assets)
@@ -208,6 +226,7 @@ def main():
             "native_config_sha256": sha256(args.vendor / CONFIGS[args.task]),
             "assets_report_sha256": assets_hash, "input_check_report_sha256": input_hash,
             "initialization_seed": 234, "updates": 5, "global_batch": 128,
+            "sampler_policy": sampler_policy,
             "logical_rank_microbatches": "16x8, exact source sampler and drop-last; one optimizer/scheduler update",
             "rng": "separate retained logical CPU streams initialized to same post-construction RNG; no diagnostic outcomes feed training",
             "no_author_exact_training_rng_or_collective_reduction_claim": True,
@@ -231,7 +250,7 @@ def main():
         train, validation, train_clips, _ = get_train_val_sliced(dataset, train_fraction=.9,
             random_seed=234, num_frames=4, num_frames_val=cfg["data"]["validation"]["num_frames_val"],
             frameskip=5, action_skip=1)
-        sampler = VirtualRankBatchSampler(len(train_clips))
+        sampler = VirtualRankBatchSampler(len(train_clips), shuffle=sampler_policy['train_shuffle'])
         loader = torch.utils.data.DataLoader(SelectedFrameSlicer(train_clips), batch_sampler=sampler,
             num_workers=4, pin_memory=True, persistent_workers=False,
             generator=torch.Generator().manual_seed(2026090725))
@@ -262,6 +281,7 @@ def main():
         write_json(args.output / "report.json", {"status": "native_training_accumulation_pilot_passed",
             "protocol_sha256": sha256(args.output / "protocol.json"), "parity_sha256": sha256(args.output / "PARITY.json"),
             "task": args.task, "training_rows": len(train), "unopened_validation_rows": len(validation),
+            "sampler_policy": sampler_policy,
             "training_clips": len(train_clips), "updates_per_epoch": len(sampler),
             "updates_complete": 5, "timings": timings, "seconds": time.monotonic() - started,
             "peak_gpu_memory_bytes": torch.cuda.max_memory_allocated(), "encoder_unchanged": True,

@@ -37,10 +37,24 @@ sampler retains its final partial batch; checkpoint resumes retain its cursor.
 See [the PointMaze training-history contract](POINTMAZE_TRAINING_HISTORY.md).
 Receiving input/CPU checks do not establish completed training, late-checkpoint
 behavioral comparisons or confirmation. Seeds234/235/236 remain required.
-Seed235 is training onIndiana. The preserved234 epoch3 resume and236's separate
-initialization/first-epoch proof/full history are queued onTexasGPUs0/1 after their
-complete DROID assignments and receiving numerical checks. Shared input staging
-does not share seeds' optimizer state or substitute234 weights for236.
+Correction at12:38UTC: the actual pinned upstream PointMaze train AND validation
+samplers are nonshuffled. Earlier wrappers inherited Wall's shuffle setting;
+those234/235 histories are preserved but not valid author-native resume points.
+The affected Indiana training and Texas continuation waiters have been stopped.
+The corrected implementation tests the actual native caller/loader, rejects the
+old sampler binding, and requires fresh initialization for all three seeds.
+See [sampler correction](../reports/POINTMAZE_TRAINING_SAMPLER_CORRECTION.md).
+The corrected queue is implemented locally; final receiving/dependency bindings
+are pending. Shared inputs do not share optimizer state or substitute234 for236.
+
+Execution-only processing amendment (September8): rebalance intact unstarted
+navigation RNG streams across already rented US devices as other assignments
+finish. Do not change96TOTAL, arms, fits, scenarios or the strict-FP32 planner.
+The [scaling notes](../jax_scaling_notes.md) distinguish implemented, activated and
+measured optimizations. A bounded precision diagnostic found only1.10x/1.13x
+forecast speedups and changed outputs, so no scientific precision switch follows.
+Frozen visual-feature caching is preparation only until numerical/RNG/update
+equivalence is established. It must not gate or silently alter ongoing panels.
 
 Execution addition (September8): the native Push-T replication now has a separate
 receiving-device full native/repeat check in`offline_study.pusht_planning_check`,

@@ -12,7 +12,7 @@ from torch.utils.data import DataLoader, DistributedSampler
 from offline_study.droid_native import assert_same
 from offline_study.navigation_input_check import rng_state, restore_rng
 from offline_study.pointmaze_training_history import (
-    ValidationFrames, restore_checkpoint, training_config, validation_batches, UPDATES)
+    ValidationFrames, restore_checkpoint, training_config, validation_batches, UPDATES, SAMPLER_POLICY)
 from offline_study.pointmaze_training_inputs import required_files, verify_inputs, ARCHIVE_SHA, REVISION
 from offline_study.protocol import sha256, write_json
 from offline_study.training_history import checkpoint_payload
@@ -46,7 +46,7 @@ class PointMazeTrainingTests(unittest.TestCase):
         self.assertEqual([len(ids) for ids in batches[-1]], [3]*16)
         for rank in range(16):
             native = DataLoader(range(12200), batch_size=4, drop_last=False,
-                sampler=DistributedSampler(range(12200), num_replicas=16, rank=rank, shuffle=True))
+                sampler=DistributedSampler(range(12200), num_replicas=16, rank=rank, shuffle=False))
             self.assertEqual([x.tolist() for x in native], [x[rank] for x in batches])
         self.assertEqual(sum(len(ids) for batch in batches for ids in batch), 12208)
         self.assertEqual(len(VirtualRankBatchSampler(145800)), UPDATES)
@@ -66,7 +66,7 @@ class PointMazeTrainingTests(unittest.TestCase):
         schedule, wd = SimpleNamespace(_step=1139), SimpleNamespace(_step=1139)
         rngs = [torch.Generator().manual_seed(i).get_state() for i in range(16)]
         loader = torch.Generator().manual_seed(6)
-        binding = {"task": "pointmaze", "seed": 234}
+        binding = {"task": "pointmaze", "seed": 234, "sampler_policy": SAMPLER_POLICY}
         data = copy.deepcopy(checkpoint_payload(model, cfg, 1, rngs, rngs, schedule, wd, loader, binding, 5))
         cpu, cuda, events = restore_checkpoint(data, model, cfg, schedule, wd, loader, binding)
         assert_same(cpu, rngs); assert_same(cuda, rngs)
@@ -79,6 +79,14 @@ class PointMazeTrainingTests(unittest.TestCase):
                 restore_checkpoint(bad, model, cfg, schedule, wd, loader, binding)
         with self.assertRaises(ValueError):
             restore_checkpoint(data, model, cfg, schedule, wd, loader, {**binding, "seed": 235})
+        historical = copy.deepcopy(data)
+        del historical['study_resume']['binding']['sampler_policy']
+        with self.assertRaisesRegex(ValueError, 'historical extra-shuffled'):
+            restore_checkpoint(historical, model, cfg, schedule, wd, loader, binding)
+        changed = copy.deepcopy(data)
+        changed['study_resume']['binding']['sampler_policy']['train_shuffle'] = True
+        with self.assertRaisesRegex(ValueError, 'historical extra-shuffled'):
+            restore_checkpoint(changed, model, cfg, schedule, wd, loader, binding)
 
     def test_inputs_require_complete_population_and_source_bound_bytes(self):
         self.assertEqual(len(required_files()), 2003)
