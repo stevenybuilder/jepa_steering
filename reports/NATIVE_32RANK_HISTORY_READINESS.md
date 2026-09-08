@@ -1,10 +1,39 @@
 # MetaWorld and Push-T native 32-rank history readiness
 
-September 8, 2026. **Read-only preparation, not an implemented adapter or launch
-authorization.** This documents the existing required three-seed/history track;
+September 8, 2026; implementation update at 15:12 UTC. **A CPU-tested receiving
+core and complete raw-input byte audit now exist; full native reader/history
+implementation and launch authorization do not.** This documents the existing required three-seed/history track;
 it does not alter frozen experiments, authorize protected access, introduce a new
 method, or make feature caching a prerequisite. Current-checkpoint behavioral
-work remains independent. No new model outputs or GPU timings were collected.
+work remains independent. No new model outputs or GPU timings were collected
+for this track.
+
+## Implemented since the initial readiness audit
+
+- [Raw-input verifier](../src/offline_study/robotics_training_inputs.py): all126
+  MetaWorld parquets (737,175,770 bytes) and all18,718 Push-T extracted files
+  (7,370,447,305 bytes), plus the original2,785,304,515-byte ZIP, verified against
+  pinned original download/extraction manifests. Existing complete assets were
+  found on Indiana50205763; no new dataset transfer was required. The71.61-second
+  receiving audit used low-priority CPU/I/O, no Torch import, and zero GPU calls.
+  Thirteen compact source/test/protocol/report/DONE files passed local hash readback.
+  [Readback proof](../artifacts/offline_study/robotics-input-verification-20260908-v2/READBACK.json).
+- Preserve the failed v1 verifier attempt: MetaWorld passed, then Push-T manifest
+  preflight rejected our mistaken `shapes.pkl` assumption. The pinned release
+  actually contains `tokens.pth` in both pools; shapes remain native defaults.
+  v2 corrected this check and passed all11 receiving CPU tests. The failure did
+  not establish data corruption, interrupt a scientific run, or require reruns.
+- [32-rank receiving core](../src/offline_study/robotics_training_pilot.py): actual
+  pinned caller/sampler and native `step_model`, 32 eight-clip microbatches,
+  independent logical CPU/CUDA/Python/NumPy RNG streams, and one averaged
+  optimizer/scheduler update. Nineteen local CPU tests pass, including failure
+  and provenance guards. The public numerical entrypoints require real native
+  CUDA/model/input evidence; synthetic tests cannot authorize execution.
+- The complete integration suite ran401 tests with two existing skips. Neither
+  these tests nor byte verification establish transformed-input, GPU numerical,
+  validation-cursor or epoch-resume equivalence. The native input parity reader
+  and complete history orchestration remain missing. Existing behavioral and
+  corrected-navigation queues do not wait for this work.
 
 ## Pinned evidence
 
@@ -131,12 +160,12 @@ three MetaWorld plus three Push-T histories, not a separate Reach-Wall model.
 
 ## Readiness gates and protected scope
 
-- **Full inputs are not yet verified for these new runners.** The recent
+- **Full raw bytes now verified; native transformed inputs still pending.** The recent
   `artifacts/offline_study/pusht-native-recovery-20260908-v1/PUBLIC_INPUTS.json`
   contains 31 files: only one training video and all 21 validation videos. It is
-  a planning recovery bundle, not the 18,685-video training pool. Locate and hash
-  complete worker/archive inputs; this audit did not conclude they are missing
-  everywhere or perform remote checks.
+  a planning recovery bundle, not the18,685-video training pool. The separate
+  complete pool was found and verified on Indiana in the update above. No need
+  to redownload it. Byte identity alone is not native pixels/actions/RNG parity.
 - **The 140 other protected MetaWorld validation rows remain protected.** Complete
   native monitoring eventually reads all 1,260 validation rows. Existing approval
   for the seven primary rows is not approval for these other 140. Resolve the
@@ -156,16 +185,17 @@ three MetaWorld plus three Push-T histories, not a separate Reach-Wall model.
 These are dependencies of the already required study, as described in the
 [behavioral amendment](../docs/BEHAVIORAL_EVALUATION_AMENDMENT.md), not new goals.
 
-## Proposed implementation ownership
+## Implementation ownership and remaining files
 
-No files below are created by this report and no worker is assigned implicitly.
-Keep the current navigation runners and frozen snapshots unchanged.
+The first two modules/tests now exist. Keep current navigation runners and frozen
+snapshots unchanged; no history launch is implied by this table.
 
-| Responsibility | Proposed new files |
-|---|---|
-| Complete raw-input binding, native reader/order parity | `src/offline_study/robotics_training_inputs.py`, `tests/test_robotics_training_inputs.py` |
-| 32-rank update, logical RNGs and receiving numerical pilot | `src/offline_study/robotics_training_pilot.py`, `tests/test_robotics_training_pilot.py` |
-| Task-specific monitoring, histories, epoch resume | `src/offline_study/robotics_training_history.py`, `tests/test_robotics_training_history.py` |
+| Responsibility | Files | Status |
+|---|---|---|
+| Complete raw-input binding | `src/offline_study/robotics_training_inputs.py`, `tests/test_robotics_training_inputs.py` | Implemented; full receiving byte audit passed |
+| Native reader/order/transformed-input parity | Separate reader module/tests still required | Not implemented by the byte verifier |
+|32-rank update, logical RNGs and receiving numerical pilot | `src/offline_study/robotics_training_pilot.py`, `tests/test_robotics_training_pilot.py` | Implemented and CPU-tested; native GPU proof pending |
+| Task-specific monitoring, histories, epoch resume | `src/offline_study/robotics_training_history.py`, `tests/test_robotics_training_history.py` | Not yet implemented |
 
 ## Reproduce the count checks locally
 

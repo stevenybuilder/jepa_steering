@@ -1,4 +1,43 @@
-# Execution checkpoint — 2026-09-08, 14:35 UTC
+# Execution checkpoint — 2026-09-08, 15:12 UTC
+
+**DROID coupling is complete and independently verified:**576/576 endpoints,
+72/72 shards,64 paired endpoints per arm from15 recordings. All1,152 raw
+episode/trace hashes and full frozen aggregate bindings passed; recomputation
+matched the report. All16 simultaneous95% contrast intervals include zero—no
+established benefit over native in this panel. Native score51.10, joint50.85,
+equal-energy joint51.07. These are recorded-plan action scores, not robot/task
+success rates. Other DROID ablations, histories and fresh recordings remain.
+
+All four Texas DROID queues and coordinator are terminal. Exact navigation
+supervisors3491–3494 handed their GPUs to receiving checks (Wall0/1,
+PointMaze2/3); three additional navigation workers remain assigned onNE/IN.
+Corrected PointMaze waiters5576/5577/5578 are healthy, CPU-only and wait for the
+entire navigation assignment before uncached training. No failures or duplicate
+scientific launches were observed in this readback. Local collector43961 remains
+alive. Latest NJ readback14:48: Wall235 had20 complete epochs,236 had30; late41–50
+coverage not yet complete.
+
+HMM15:12 readback:44/72 engineering cases published,0/768 routed endpoints,
+all eight GPUs100% at the final sample and one verified engineering child each.
+Original5202–5209 remain correctly paused; no new failures.595–613s native/zero
+and843–868s active-gate engineering episodes include extra validation passes and
+must not be extrapolated as scientific rollout timings.
+
+Full MetaWorld/Push-T raw bytes verified onIndiana:126parquets and18,718extracted
+files plus the pinnedZIP;71.61s low-priority CPU, noTorch/GPU/loader calls.
+Thirteen evidence/source/test records passed local hash readback. Failedv1
+sidecar assumption retained; v2 fixed `tokens.pth` versus `shapes.pkl`. No data
+corruption or affected scientific rerun was established. Separate32-rank
+receiving core implemented/CPU-tested; native transformed-input/GPU/resume
+proofs and fullhistory orchestration still missing. Fullsuite401tests,2skips.
+
+Navigation geometry offline status corrected: allfour task/precision aggregates
+were already complete.32shards/all bindings freshly verified; preservation is
+required, not rerunning or recomputing their results. Latest provider check15:04
+was$6.962593/h before bandwidth including externally running quarantinedCA.
+Our fiveUSinstances/17GPUs stay assigned; no CAcontact/new leases in this update.
+
+## Historical checkpoint — 14:35 UTC
 
 Enhanced processing schedule is active. Three navigation workers are executing;
 four Texas CPU waiters follow their complete DROID assignments. Corrected

@@ -1,14 +1,14 @@
-# Ablation coverage — latest verified execution, 2026-09-08, 12:21 UTC
+# Ablation coverage — latest verified execution, 2026-09-08, 15:12 UTC
 
 The historical inventory below remains evidence of prior state. Current additions:
 
 | Comparison | Completed | Running or prepared | Still missing |
 |---|---|---|---|
-| Refined fixed-response edit, Reach/Reach-Wall | Corrected successor offline scopes; all receiving-GPU checks;96 native+96 refined episodes/task | Matched-random reference finishing; two coupling comparator arms follow | Complete registered five-arm analysis; fresh confirmation and seed/checkpoint-history comparisons |
-| HMM, Reach/Reach-Wall | Separate fits; frozen causal same-pass implementation;16 receiving scientific CPU tests;11 receiving scheduling tests;576 references verified | Eight priority supervisors activated; current whole coupling streams finish, then HMM checks/arms, then remaining controls resume | Nine full-GPU engineering episodes/device,768 routed scientific episodes, paired analysis; no HMM efficacy yet |
-| Static coupling, Wall/PointMaze |96 native and96 visual-only episodes/task | Action-condition-only and remaining fixed factorial arms | Full factorial paired analysis and confirmation |
+| Refined fixed-response edit, Reach/Reach-Wall | Corrected successor offline scopes; all receiving-GPU checks;96 native, refined, matched-random edit and coupling-only episodes/task | Last matched-random coupling control follows HMM priority work | Complete registered five-arm analysis; fresh confirmation and seed/checkpoint-history comparisons |
+| HMM, Reach/Reach-Wall | Separate fits; frozen causal same-pass implementation;16 receiving scientific CPU tests;11 receiving scheduling tests;576 references verified |44/72 excluded full-GPU engineering cases completed; eight GPUs busy, no new failures | Remaining engineering,768 routed scientific episodes (currently0), paired analysis; no HMM efficacy yet |
+| Static coupling, Wall/PointMaze |96 native and96 visual-only episodes/task;39 whole candidate streams preserved at redistribution | Seven assigned GPUs: three navigation workers plus four Texas receiving checks after all DROID assignments finished | Full factorial paired analysis and confirmation |
 | Static coupling, Push-T |96 native reference; full11 engineering checks; six completed12-episode candidate streams preserved | California lease externally stopped; continuation unresolved | Remaining candidate streams, full paired analysis and confirmation |
-| Static coupling, DROID | Separate128-recording/512-prefix fit; all11 full engineering checks on each of4 receiving GPUs; first32 new native episodes | Four disjoint paired queues,64TOTAL/arm and9arms | Complete recorded-action comparison, other interventions, histories and fresh-recording evidence |
+| Static coupling, DROID | Separate128-recording/512-prefix fit; all44 receiving checks;576/576 endpoints,72/72 shards and complete frozen paired analysis independently verified | All four DROID workers terminal; GPUs automatically handed to navigation | Other interventions, histories and fresh-recording evidence; this completed coupling panel establishes no improvement over native |
 
 DROID is the existing vision/action coupling factorial mapped explicitly to its
 12-block/H3 architecture, **not** the MetaWorld fixed-response/HMM bank and **not**
@@ -16,6 +16,19 @@ a physical-robot success experiment. Those banks are not silently transferred.
 No completed full-panel intervention task-success gain or untouched confirmation
 is established by this execution update. Other layer/spatial/geometry/revised
 combined behavioral comparisons remain missing as detailed below.
+
+DROID uses64 paired endpoints from15 recordings per arm, nine arms total. All16
+simultaneous95% contrast intervals include zero. Native recorded-plan score51.10,
+joint50.85, equal-energy joint51.07; these are not physical success percentages.
+All1,152 raw episode/trace hashes, device/stimulus/RNG pairing, engineering links
+and aggregate bindings passed an independent read-only audit at15:05UTC. The
+frozen aggregate was reproduced without changing outcomes or selecting arms.
+Report SHA256 `b998218db8f1b87d18150bed04b9eec29731ef50af5e8c203f7ba028b9f83de8`.
+
+Geometry offline closure has also been freshly verified for all four navigation
+task/precision scopes:32/32 shards, existing aggregates, and all bound raw records.
+This needs preservation, not recomputation. See
+[exact coverage/evidence audit](NAVIGATION_GEOMETRY_CLOSURE_READINESS.md).
 
 ## Historical inventory — 08:53 UTC
 
@@ -55,22 +68,24 @@ permitted histories. This is not a completed behavioral comparison or proof of H
 benefit. The new user-requested behavioral registry is in
 `docs/HMM_FIXED_RESPONSE_BEHAVIOR.md`; old capture-only statements below are historical.
 
-## Expanded tasks
+## Expanded tasks — corrected September8,15:12UTC
 
 - Wall and PointMaze: native offline baselines and all five category fits complete.
-  Coupling comparisons complete in both precisions. Geometry BF16 shards complete
-  for both tasks; Wall FP32 shards complete and PointMaze FP32 continues on Indiana.
-  Aggregate geometry verification/analysis is still distinct from shard completion.
+  Coupling and geometry comparisons complete and aggregated in both precisions.
+  Geometry includes192Wall and200PointMaze source trajectories, reused across
+  precisions;32 complete shards with all existing aggregate bindings verified.
   Native planning96 per task complete. The full coupling factorial is separately
-  frozen and in GPU engineering; no intervention success comparison complete.
-- DROID: native64-segment recorded-action planning endpoint complete; intervention
-  offline/behavioral comparisons unfinished. This is not physical robot execution.
-- Push-T: corrected primary offline complete; native96 planning and intervention
-  planning not complete. Released-family replication is not fresh confirmation.
+  frozen and distributed over seven GPU assignments; full factorial unfinished.
+- DROID: full576-endpoint coupling recorded-plan comparison complete and verified;
+  no established improvement in its simultaneous comparisons. Other categories,
+  histories and fresh recordings remain. This is not physical robot execution.
+- Push-T: corrected primary offline and96native planning complete; candidate
+  continuation unresolved under California quarantine. Released-family replication
+  is not fresh confirmation.
 - No category has completed untouched behavioral confirmation. No complete
   three-training-seed/late-checkpoint comparison exists.
 
-## Action authorized after identifying the gap
+## Historical action record — superseded by the latest verified table above
 
 The user explicitly requests experimental coverage of the other ablations. Offline
 significance is not an admission gate. Start with all existing static coupling arms,

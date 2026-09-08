@@ -5,6 +5,47 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
+## Verified execution update — September8,15:12UTC
+
+- **Automatic reuse is happening:** the entire DROID coupling panel finished
+  (576 endpoints/72 shards), its frozen analysis passed independent raw-record
+  verification, and all four Texas GPUs handed directly to the assigned Wall or
+  PointMaze receiving checks. Navigation therefore has seven device assignments;
+  Texas did not remain idle waiting for a manual launch. Corrected PointMaze's
+  three CPU waiters remain behind the *complete* navigation assignments.
+- **HMM validation is progressing, not yet efficacy:**44/72 excluded engineering
+  cases complete; all eight devices sampled busy with one verified child each.
+  No new failures;0/768 routed behavioral endpoints so far. Engineering timings
+  include extra parity passes and are not estimates of scientific throughput.
+- **Overlapped data preparation finished without a download:** complete native
+  MetaWorld/Push-T raw pools were already on Indiana. The71.61-second low-priority
+  CPU audit verified126 parquets,18,718 Push-T files and the original ZIP. It used
+  no Torch/GPU/loader calls and did not grant validation/confirmation access.
+  Thirteen compact evidence files passed local hash readback. The initial
+  verifier's mistaken `shapes.pkl` expectation was preserved as a failed attempt;
+  the pinned release actually has `tokens.pth`. This was not a failed experiment.
+- **Required training core implemented, not silently launched:** separate32-rank
+  code preserves32×8 native microbatches, averaged gradients, individual RNG
+  streams and one optimizer/scheduler step.19 new CPU tests pass; native tensor
+  parity, receiving-GPU numerical proof, monitoring and resume orchestration are
+  still required. Complete local integration:401 tests, two existing skips.
+
+### Further gaps, causes and applied fixes
+
+| Gap | Cause | Scaling Book connection | Actual fix and limitation |
+|---|---|---|---|
+| Full training-input availability was unclear despite a small recovered planning bundle. | Planning recovery inputs were being used to describe training readiness; those are different populations. | [Rooflines and overlap](https://jax-ml.github.io/scaling-book/roofline/): avoid unnecessary transfers and keep CPU/I/O preparation off the GPU critical path. This is an engineering application, not a new theorem. | Located and byte-verified existing complete raw pools during ongoing navigation. No dataset retransfer. Pixel/action/preprocessing parity still needs its own test. |
+| The navigation training adapter could not directly reproduce MetaWorld/Push-T updates. | Navigation uses16 logical ranks/global128; these author configs use32×8/global256 and task-specific sampler policies. | [Training math](https://jax-ml.github.io/scaling-book/training/): distinguish effective global batch from physical devices; accumulation trades parallel hardware for sequential local work. | Separate CPU-tested32-rank receiving core uses `g = sum(g_r)/32` and one optimizer/scheduler step, with independent RNG streams. This preserves the requested update design without requiring32 physical GPUs, but does not reduce its FLOPs or prove exact unpublished DDP reduction order. No receiving GPU proof or full history launch claimed. |
+| A completed offline comparison still appeared unfinished in the status table. | Aggregate verification and the human-readable inventory had fallen out of sync. | [Profiling/measurement](https://jax-ml.github.io/scaling-book/profiling/) motivates measuring real work; completed-result inventory is the scheduling analogue. | Reverified all32 geometry shards/four existing aggregates and corrected coverage. Preserve completed evidence; do not rerun it. This saves a needless rerun, not the cost of missing behavioral geometry experiments. |
+
+Source/evidence: [raw-byte verifier](src/offline_study/robotics_training_inputs.py),
+[receiving core](src/offline_study/robotics_training_pilot.py),
+[input readback](artifacts/offline_study/robotics-input-verification-20260908-v2/READBACK.json),
+[explicit remaining training gates](reports/NATIVE_32RANK_HISTORY_READINESS.md),
+[corrected ablation coverage](reports/ABLATION_COVERAGE_STATUS.md).
+The provenance skill was used only to audit existing completion/evidence, not to
+choose methods or authorize scientific execution.
+
 ## Practical implementation summary — September 8, 14:35 UTC
 
 The enhanced plan is implemented and its scheduling changes are active. This does
