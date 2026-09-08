@@ -5,6 +5,94 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
+## September 8, 12:51 UTC: gaps, causes, and the enhanced processing plan
+
+This section answers the user's cost/throughput concern explicitly. We have **not**
+established that the pipeline is computationally optimal. High GPU utilization
+shows activity, not useful FLOPs, correct methodology, or minimum cost to a complete
+result. The older dated entries below are historical; this table distinguishes
+deployed changes from checks still pending. Do not count an implemented file as a
+verified speedup or a completed experiment.
+
+### What went wrong, and what changes address it
+
+| Gap and evidence | What caused it | Scaling Book connection | Concrete correction and current status | What the saving would mean |
+|---|---|---|---|---|
+| Navigation had about 19–20 hours left with one GPU per task, despite independent unstarted streams. Measured episodes take about 118 seconds. | Fixed task-to-device queues were not rebalanced against the time needed to finish the full behavioral panel. Other GPUs were doing different useful work; being busy did not make this allocation optimal for the user's priority. | [Training parallelism, Ch. 5](https://jax-ml.github.io/scaling-book/training/) and [inference objectives, Ch. 7](https://jax-ml.github.io/scaling-book/inference/): choose the split and latency/throughput objective explicitly. Our inference jobs need no gradient synchronization. | **Implementation/CPU staging underway:** distribute only untouched whole 12-episode streams over Nebraska, Indiana and Texas after its DROID assignments finish. Preserve current children and the original source, freezes, seeds and 96-total population. Receiving native/source parity is mandatory. Projected navigation completion is roughly 7.5–8 hours under the audited seven-device allocation; not a measured achieved speedup. | Primarily shorter wall time. Approximately the same scientific GPU-hours, plus receiving checks. It is not automatically a lower total invoice. |
+| The old intervention repeated expensive forecasts for every CEM population. | Online response estimation and a native shadow multiplied model work; the small rank solve was not the dominant cost. | [Transformer work accounting, Ch. 4](https://jax-ml.github.io/scaling-book/transformers/) and [rooflines, Ch. 1](https://jax-ml.github.io/scaling-book/roofline/): reducing total required operations can matter more than buying faster hardware. | **Deployed:** user-approved, separately named fixed-response replacement composes its map offline and makes one forecast, with no online probes/shadow. Current native/refined MetaWorld episodes are both approximately 300–303 seconds. The replacement has its own fits/evaluations and does not inherit the old method's efficacy. | Removes recurring model work, reducing GPU-hours as well as latency relative to that old algorithm. These are not hardware-matched measurements establishing an exact speedup factor. |
+| HMM originally waited for two coupling/control arms it does not depend on. It also initially required a full native shadow per scientific forecast. | An unnecessarily broad queue dependency and duplicated calculation of an already-native H1/H2 prefix. | [Inference reuse, Ch. 7](https://jax-ml.github.io/scaling-book/inference/) plus [overlap/critical bottlenecks, Ch. 1](https://jax-ml.github.io/scaling-book/roofline/). This is same-pass prefix reuse, not an LLM KV-cache transplanted into JEPA. | **Priority handoff activated:** finish the current whole coupling child, perform HMM work, then resume the last original control. **Same-pass scientific implementation queued behind exact full-GPU parity:** reuse native H1/H2 before the H3 edit. Reuse 576 verified native/constant/random reference episodes instead of collecting duplicates; retain 768 new routed episodes. | Reordering saves waiting time, not total scientific work. Reference reuse and eliminating the shadow reduce work. A two-to-one call reduction is not proof of a twofold full-episode speedup. |
+| We lacked a current kernel-level breakdown showing why a full 300-candidate forecast costs what it does. | Episode timers and GPU-utilization samples were being asked to answer questions they cannot answer: matrix compute versus memory traffic, synchronization or launch overhead. | [Profiling, Ch. 9](https://jax-ml.github.io/scaling-book/profiling/) explains why theoretical rooflines need actual traces. | **Executed and verified at 12:56 UTC:** the bounded first-CEM-population audit finished in 149.46 seconds. Ten warmed unprofiled forwards per precision, unchanged inputs/parameters, exact strict-FP32 repeat and full CUDA trace. The process exited and released IndianaGPU0. See measured audit below. | We now have actual timing/error evidence. Matrix operations, softmax and elementwise/mask work all appear; profiler overhead and duplicate attribution prevent interpreting the raw operator table as an additive time budget. |
+| Strict FP32 planning may leave faster matrix hardware unused. | Conservative arithmetic was frozen for native parity. Faster precision is not automatically the same numerical planner: changed rankings can change actions. | [GPU matrix units, Ch. 12](https://jax-ml.github.io/scaling-book/gpus/), [arithmetic intensity, Ch. 1](https://jax-ml.github.io/scaling-book/roofline/) and [inference, Ch. 7](https://jax-ml.github.io/scaling-book/inference/). | **Measured, not adopted:** this actual forecast took 3.13847s strict FP32, 2.85019s TF32 and 2.77808s BF16 (medians). Both faster paths changed predictions. Existing panels stay strict FP32; a changed numerical path needs a separately bound paired policy and full-planner checks. Compilation/fusion remains unimplemented. | Approximately 1.10x/1.13x forecast throughput in this diagnostic, not a full-episode speedup and not enough alone to explain away a 20-hour queue. |
+| Training repeatedly encodes overlapping images with a frozen visual encoder. | We reuse features within an objective, but not across overlapping clips and epochs. Full updates mix this fixed encoder cost with trainable predictor work. | [Inference caching, Ch. 7](https://jax-ml.github.io/scaling-book/inference/) and [compute/memory tradeoffs, Ch. 4](https://jax-ml.github.io/scaling-book/transformers/). | **Cache implementation being prepared, not active:** cache only deterministic frozen visual embeddings, retain original transform calls/RNG and all trainable action/proprioception/predictor computation. Conservative FP32 capacity is 31.26 GB for Wall or 67.95 GB for PointMaze. Actual dtype, batch-composition parity, full updates and validation-boundary RNG must be checked. Use worker-local storage, not Drive in the training loop. | Could remove repeated encoder FLOPs across epochs/seeds, but creates storage/read traffic. Savings depend on measured encoder fraction; 135×/169× frame reuse does not imply that end-to-end speedup. |
+| New PointMaze histories were not author-native despite sampler tests passing. | The wrapper inherited Wall's `shuffle=True`; PointMaze's actual upstream train and validation samplers use `False`. Earlier tests compared against the same manually chosen assumption. | **This is a methodology/testing defect, not a Scaling Book theorem.** Efficient execution must preserve the intended optimizer/data experiment; faster incorrect work has no scientific throughput value. | **Affected jobs stopped and queued continuations cancelled; local fix tested:** execute the actual pinned upstream caller/loader in regression tests, bind explicit per-task sampler policy, reject old shuffled checkpoints as corrected-native resume points. Existing histories are retained and labelled; corrected histories must initialize afresh. Released-checkpoint offline/behavioral results are unaffected by this training defect. See [correction record](reports/POINTMAZE_TRAINING_SAMPLER_CORRECTION.md). | Prevents further invalidly labelled training spend. It does not recover sunk cost, and required corrected histories still cost compute. |
+| Slow staging and backup transfers extended time-to-results and retained-disk charges. | Oversized input copies, stalled uploads and treating transfer/storage work as part of the GPU dependency path. | [Bandwidth/overlap, Ch. 1](https://jax-ml.github.io/scaling-book/roofline/) and [profiling, Ch. 9](https://jax-ml.github.io/scaling-book/profiling/). | **Deployed in named paths:** copy verified required inputs, overlap CPU staging with current GPU work, use bounded upload retries/8 MiB chunks and full Drive readback. Retain only justified worker disks after verified release audits. No new destructive cleanup is claimed here. | Less waiting/retransmission and potentially less retained-storage cost. The successful 29-second backup retry is an operational observation, not a controlled chunk-size benchmark. |
+
+### The arithmetic behind the allocation and cost decisions
+
+- Roofline lower bound: `T >= max(F / C, Q / W)`, where `F` is operations,
+  `C` is arithmetic throughput, `Q` is bytes moved and `W` is bandwidth. Launches,
+  synchronization and serial dependencies can make real time longer. Optimize the
+  measured limiting term rather than assuming the GPU price predicts performance.
+- At the navigation snapshot, six remaining arms per task imply
+  `6 × 96 × 118 / 3600 = 18.88 GPU-hours/task`. With two task GPUs this is about
+  18.9 elapsed hours, **not** 37.8 elapsed hours; the tasks run concurrently.
+  More devices divide intact streams; they never multiply the 96-per-arm sample.
+- For independent jobs, an ideal equal-speed estimate is
+  `T ≈ remaining_GPU_hours / assigned_GPUs`, then add staging, engineering and
+  dependency delays. Seven devices are not immediately available: Texas must
+  finish its complete DROID assignments first. This explains why the operational
+  proposal is about 8 hours rather than the naive `37.8 / 7 = 5.4 hours`.
+- GPU cost is approximately `GPU_hours × price_per_GPU_hour`, plus storage,
+  bandwidth and preparation. Parallelizing identical work can shorten latency
+  without making that work cheaper. Arithmetic reuse can reduce both.
+- At the verified aggregate rate of approximately **$6.73/hour**, retaining the
+  same fleet for another 24 hours would cost approximately **$161.58**, before
+  usage bandwidth. This is a run-rate projection, not an audited past invoice or
+  a promise that the fleet remains unchanged for 24 hours.
+- For a frozen-encoder fraction `f` of update time, an ideal zero-cost cache gives
+  a ceiling of `1 / (1 - f)` speedup. Real cache reads and preprocessing reduce it.
+  A cache is worthwhile only when construction/verification cost is recovered by
+  subsequent avoided encoder work; measure that before scheduling full generation.
+
+Acceptance criteria for this enhanced plan: unchanged scientific populations and
+planners; exclusive per-device work; exact stream coverage and no duplicates;
+receiving fidelity checks; measured seconds per completed episode/update and
+GPU-hours per completed comparison; explicit readiness and failure receipts. Do
+not introduce extra outcome-selected arms, smaller CEM budgets, changed seeds,
+or reduced episode counts merely to obtain a shorter ETA. Corrected PointMaze
+training and other required histories remain follow-on work, not silently removed
+when GPUs are reassigned to the nearer-term behavioral results.
+
+### Measured receiving-GPU processing audit (September 8, 12:56 UTC)
+
+Implementation: [bounded profiler](scripts/vast/profile_native_forecast.py).
+Evidence: [report](artifacts/offline_study/processing-audit-20260908-v1/report.json),
+[input identities](artifacts/offline_study/processing-audit-20260908-v1/INPUTS.json).
+This was the first actual H6-by-300 CEM population of the excluded Reach engineering
+scenario 2026090719 on an RTX4090, not a completed episode or an intervention result.
+Two warmups and five timings per block, forward then reverse mode order, yielded
+ten timings per mode; the instrumented trace was collected separately.
+
+| Arithmetic | Median forecast seconds | Strict/alternative throughput ratio | Visual relative L2 difference | Bitwise same as strict? |
+|---|---:|---:|---:|---|
+| Strict FP32 | 3.13847 | 1.000 | 0 | Yes |
+| TF32 diagnostic | 2.85019 | 1.101 | 0.000333 | No |
+| BF16 diagnostic | 2.77808 | 1.130 | 0.004496 | No |
+
+Maximum absolute visual differences were 0.03804 and 0.64981 respectively.
+Neither error magnitude proves unchanged candidate rankings or task outcomes.
+The trace includes matrix multiplies, softmax, masks and substantial elementwise
+work; it also contains `Command Buffer Full` instrumentation events. CPU operator
+attribution and underlying GPU kernels overlap, so summing both would double-count.
+Profiler FLOP counters are incomplete and are not the model's total operation count.
+No inference of a memory-bound percentage or achieved peak-FLOP efficiency is made.
+
+Report SHA256: `fba9b63ba9555ff0b6265e71fc230e15203103661532224d70d8411998a8efbc`.
+Trace SHA256: `b364e8e17be5ccefde94637140bb5c40e55d48d29a76d9d26b67f1381426955f`.
+Decision: retain strict arithmetic for ongoing comparisons and prioritize the
+already identified redundant work and uneven scheduling. Do not delay current
+experiments for speculative precision/compilation experiments.
+
 ## September8: overlap independent work, avoid duplicate experiments
 
 At10:18UTC, a further HMM execution optimization is CPU-validated and queued with

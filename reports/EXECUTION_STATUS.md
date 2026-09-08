@@ -1,4 +1,38 @@
-# Execution checkpoint — 2026-09-08, 12:21 UTC
+# Execution checkpoint — 2026-09-08, 13:02 UTC
+
+The bounded receiving-GPU processing audit completed in149.46seconds and released
+IndianaGPU0. Ten warmed forecasts/mode: strictFP32median3.13847s,TF32 2.85019s,
+BF16 2.77808s; both alternatives changed predictions. These are1.10x/1.13x
+forecast-only speedups, not task-success or full-episode evidence. Strict arithmetic
+stays unchanged. ReportSHAfba9b63ba9555ff0b6265e71fc230e15203103661532224d70d8411998a8efbc.
+Navigation redistribution is implemented/staged in parallel; no parent signaling
+or extra receiving GPU launch yet. Planned seven-device allocation remains
+conditional on exact receiving checks and complete original DROID assignments.
+Current fleet verification:$6.732593/hour including retained stopped disks,
+fiveUSinstances/17GPUs leased;16scientific GPUs plus one temporary staging handoff.
+Corrected PointMaze source/queue passed the current304-test suite with2existing
+runtime skips; no corrected history started. All original outputs preserved.
+
+## Historical checkpoint — 12:38 UTC
+
+PointMaze training sampler mismatch confirmed against actual pinned upstream
+init_data: both native samplers are nonshuffled, whereas our pilot/history wrappers
+shuffled. The existing234/235 histories are not author-native and must not be resumed
+as corrected histories. Indiana queue7843/child8167 stopped; Texas CPU waiters1830/2061
+cancelled before training; DROID and released-checkpoint behavioral runs untouched.
+All outputs preserved. See[correction record](POINTMAZE_TRAINING_SAMPLER_CORRECTION.md).
+FiveUSinstances remain leased/running at$6.732593/hour;16GPUs are doing work and one
+Indiana GPU is temporarily idle while corrected-source/reassignment is prepared.
+
+At12:34UTC DROID had128 completed scientific episodes plus a partial next shard,
+with measured74seconds/episode on4GPUs. Wall visual/action-only96each complete;
+PointMaze visual96/action-only93, about118seconds/episode ononeGPU/task. Rough
+current-allocation remaining navigation panel cost is38GPU-hours/~20wallhours,
+not an unavoidable minimum or a96-per-GPU sample requirement. HMM timing audit
+estimates11–13hours including drain/fullengineering/science, conditional on checks;
+the final original MetaWorld control follows for~2morehours. None is a full-study ETA.
+
+## Historical checkpoint — 12:21 UTC
 
 HMM priority scheduling is activated, not merely implemented. All24 required
 reference shards/576native+refined+random episodes and raw traces/source/device
