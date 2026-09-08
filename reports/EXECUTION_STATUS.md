@@ -1,4 +1,31 @@
-# Execution checkpoint — 2026-09-08,20:02 UTC
+# Completion-preservation preparation — 2026-09-08,20:28 UTC
+
+The original core queues remain the only authorized scientific work. At20:23,
+848/960 episode records were published,32/40 shards complete,with no required
+shard failures. This is collection progress,not a completed efficacy comparison.
+
+The final collector is implemented and receiving-preflight checked. It waits
+for all40 shards,the existing analysis receipt,and terminal original queues;
+then independently reloads all960 raw records and recomputes the exact frozen
+paired analysis. It will preserve core outputs,source,fits,checkpoint,launch
+receipts and the paused HMM evidence. HMM remains incomplete. No new GPU work,
+scientific change,extension successor or automatic rental stop is introduced.
+
+Local disk is down to3.4GiB free. The collector therefore creates its archive
+on LA's66GiB-free volume and uploads directly to the existing private GCS bucket.
+The local account token stays local; only a single-object upload capability
+crosses encrypted SSH stdin,never argv or logs. Destination overwrite is disabled.
+The small audit-record transfer passed full compressed/member cloud readback
+and source rehash. [Transfer proof](../artifacts/offline_study/core-completion-preservation-transfer-check-20260908-v1/VERIFIED.json).
+This tests the path,not the future full archive or its throughput. Full cloud
+readback and a fresh ownership/empty-GPU review are still required before LA stop;
+all source volumes remain retained. Drive quota limitations remain as below.
+
+All643 local tests pass(two existing skips),74.494seconds. Log:
+`/tmp/jepa-core-preservation-validation-20260908T2030.log`,SHA256
+`24e2a80430ae6e89b57f78cfae64893d948b3cba281ee7bbcd2bd9b789b41c43`.
+
+## Prior execution checkpoint — 2026-09-08,20:02 UTC
 
 The outcome-blind receiving audit verified808 published core episodes and32
 complete shards against their frozen raw action/model-call traces and paired

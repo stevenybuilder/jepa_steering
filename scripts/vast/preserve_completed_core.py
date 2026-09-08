@@ -1,20 +1,21 @@
-"""Wait for the existing core panel, reverify it, and stream its evidence to GCS.
+"""Wait for the existing core panel, reverify it, and upload its evidence to GCS.
 
 No GPU launch, method change, outcome-based selection, rental restart or deletion.
 The root agent must separately review the completed backup before stopping LA.
 """
 import argparse
 import hashlib
+import inspect
 import json
 import os
 from pathlib import Path
 import shlex
 import subprocess
-import tempfile
 import time
 
 from backup_results_to_google import verify_archive
 from snapshot_live_results import HASH_FILES
+from direct_gcs_archive import build_archive, create_session, upload_file, validate_session
 
 PROJECT = Path(__file__).resolve().parents[2]
 ROOT = '/workspace/jepa-runtime/'
@@ -60,6 +61,7 @@ if (published['input_reports_sha256']!=inputs or published['freeze_sha256']!=sha
 print(json.dumps({'status':'all960_core_records_and_frozen_analysis_recomputed_exact',
  'report_sha256':digest,'freeze_sha256':published['freeze_sha256'],
  'analysis_source_sha256':published['analysis_source_sha256'],'input_reports_sha256':inputs,
+ 'analysis_report':published,
  'new_gpu_jobs':0,'full_six_task_study_complete':False}))
 '''
 
@@ -71,6 +73,7 @@ roots=['fixed-response-behavior-20260908-v1','fixed-response-behavior-analysis-2
  'fixed-response-behavior-evidence-20260908-v1','fixed-response-assets-20260908-v1/jepa_wm_metaworld.pth.tar',
  'hmm-fixed-response-behavior-20260908-v3','hmm-fixed-response-code-20260908-v3',
  'hmm-fixed-response-evidence-20260908-v3','routing-priority-20260908-v3',
+ 'fixed-response-behavior-launch-20260908-v1','core-priority-audit-20260908T2000',
  'core-priority-pause-20260908-v1','finish_fixed_behavior_panel_v1.py','pause_hmm_for_core.py']
 names=set()
 for name in roots:
@@ -88,7 +91,7 @@ def remote(code, *, research=False, stdin=None, timeout=180):
     command = (['env', 'CUDA_VISIBLE_DEVICES=', 'PYTHONDONTWRITEBYTECODE=1',
         'OMP_NUM_THREADS=1', 'OPENBLAS_NUM_THREADS=1', 'MKL_NUM_THREADS=1',
         'PYTHONPATH=' + ROOT + 'fixed-response-code-20260908-v4/src:/workspace/jepa-python/lib/python3.10/site-packages',
-        'nice', '-n', '19', '/workspace/jepa-planning-python/bin/python'] if research else ['/usr/bin/python3'])
+        'nice', '-n', '19', '/workspace/jepa-planning-python/bin/python'] if research else ['nice', '-n', '19', '/usr/bin/python3'])
     return json.loads(subprocess.check_output(SSH + [shlex.join(command + ['-c', code])],
                       input=stdin, text=True, timeout=timeout))
 
@@ -98,11 +101,14 @@ def main():
     parser.add_argument('--output', type=Path, required=True)
     parser.add_argument('--wait', action='store_true')
     args = parser.parse_args()
+    if not args.output.name.startswith('core-completion-preservation-'):
+        raise ValueError('Use a unique core-completion-preservation-* output')
     args.output.mkdir(parents=True, exist_ok=False)
     def write(name, value):
         with (args.output / name).open('x') as f: json.dump(value, f, indent=2, sort_keys=True)
     write('LAUNCH.json', {'operation':'existing_core_collection_no_gpu_or_lifecycle_changes',
         'instance':50233992,'pid':os.getpid(),'time':time.time(),
+        'upload_helper_sha256':hashlib.sha256((Path(__file__).parent/'direct_gcs_archive.py').read_bytes()).hexdigest(),
         'source_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest()})
     deadline = time.monotonic() + 6 * 3600
     while True:
@@ -122,6 +128,7 @@ def main():
         if not status['live']: raise ValueError('Expected workers terminal before required completion')
         time.sleep(45)
     verified = remote(VERIFY, research=True, timeout=1800)
+    write('ANALYSIS_REPORT.json', verified.pop('analysis_report'))
     write('SCIENCE_VERIFIED.json', verified)
     names = remote(SELECT)
     manifest = remote(HASH_FILES, stdin=json.dumps(names), timeout=900)
@@ -129,27 +136,28 @@ def main():
     cloud = 'gs://rgt-jepa-archive-2026/rep_geometry_transcoder/' + args.output.name + '/core-and-paused-hmm.tar.gz'
     write('PLAN.json', {'cloud_uri':cloud,'selected_roots_only':True,'source_volume_retained':True,
         'files':len(names),'bytes':sum(x['bytes'] for x in manifest.values()),'hmm_is_partial_not_complete':True})
-    tar = upload = None
-    hashed, size = hashlib.sha256(), 0
-    try:
-        with tempfile.TemporaryFile() as listing:
-            listing.write(b'\0'.join(n.encode() for n in names)+b'\0'); listing.seek(0)
-            tar = subprocess.Popen(SSH + ['nice -n 19 tar -C /workspace/jepa-runtime --hard-dereference --no-recursion --null -czf - -T -'],stdin=listing,stdout=subprocess.PIPE)
-            upload = subprocess.Popen(['gcloud','storage','cp','--if-generation-match=0','-',cloud],stdin=subprocess.PIPE)
-            for block in iter(lambda:tar.stdout.read(4<<20),b''):
-                hashed.update(block); size+=len(block); upload.stdin.write(block)
-            upload.stdin.close()
-            if tar.wait() or upload.wait(): raise ValueError('Evidence stream upload incomplete')
-    finally:
-        for process in (tar,upload):
-            if process is not None and process.poll() is None: process.terminate(); process.wait()
-    verify_archive(['gcloud','storage','cat',cloud],hashed.hexdigest(),size,manifest)
+    archive_code = 'import json,sys\n' + inspect.getsource(build_archive)
+    archive_code += '\nprint(json.dumps(build_archive(**json.load(sys.stdin))))'
+    archive = remote(archive_code, stdin=json.dumps({'root':ROOT, 'output':ROOT+args.output.name,
+        'names':names, 'source_bytes':sum(x['bytes'] for x in manifest.values())}), timeout=1800)
+    write('WORKER_ARCHIVE.json', archive)
+    # Account credentials stay local. Only this one object's upload capability
+    # crosses encrypted SSH stdin; no capability URI is persisted or logged.
+    payload = {**create_session(cloud, archive['bytes']), 'path':archive['path'], 'sha256':archive['sha256']}
+    upload_code = 'import json,sys\n' + inspect.getsource(validate_session) + '\n' + inspect.getsource(upload_file)
+    upload_code += '\nprint(json.dumps(upload_file(json.load(sys.stdin))))'
+    uploaded = remote(upload_code, stdin=json.dumps(payload), timeout=1800)
+    del payload
+    write('UPLOADED.json', uploaded)
+    verify_archive(['gcloud','storage','cat',cloud],archive['sha256'],archive['bytes'],manifest)
     if remote(HASH_FILES,stdin=json.dumps(names),timeout=900)!=manifest: raise ValueError('Source files changed during preservation')
     write('VERIFIED.json',{'status':'completed_core_and_paused_hmm_full_cloud_member_readback_verified',
-        'cloud_uri':cloud,'archive_sha256':hashed.hexdigest(),'archive_bytes':size,'files':len(names),
+        'cloud_uri':cloud,'archive_sha256':archive['sha256'],'archive_bytes':archive['bytes'],'files':len(names),
         'report_sha256':verified['report_sha256'],'new_gpu_jobs':0,'rental_stopped':False,'full_study_complete':False})
-    subprocess.run(['gcloud','storage','cp','--if-generation-match=0',str(args.output/'FILES.json'),
-        str(args.output/'SCIENCE_VERIFIED.json'),str(args.output/'VERIFIED.json'),cloud.rsplit('/',1)[0]+'/receipts/'],check=True)
+    receipts = ['LAUNCH.json','FILES.json','SCIENCE_VERIFIED.json','ANALYSIS_REPORT.json',
+                'PLAN.json','WORKER_ARCHIVE.json','UPLOADED.json','VERIFIED.json']
+    subprocess.run(['gcloud','storage','cp','--if-generation-match=0',
+        *[str(args.output/name) for name in receipts],cloud.rsplit('/',1)[0]+'/receipts/'],check=True)
     print(json.dumps({'status':'verified_core_ready_for_root_shutdown_review','cloud_uri':cloud}),flush=True)
 
 
