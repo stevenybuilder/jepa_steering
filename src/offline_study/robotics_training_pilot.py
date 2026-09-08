@@ -341,13 +341,13 @@ def _batch_digest(batch):
 
 
 def _input_gate(contract, batch, root):
-    """Future reader receipt contract; does not create permission or read raw data."""
+    """Check native batch and supporting evidence; no raw-data decode/access grant."""
     root = Path(root)
     if (root / "FAILED.json").exists():
         raise ValueError("Failed input proof cannot authorize engineering")
     report, digest = verified_report(root)
     protocol = json.loads((root / "protocol.json").read_text())
-    from .robotics_training_inputs import DATA_REVISION, MANIFEST_HASHES, COUNTS
+    from .robotics_training_inputs import DATA_REVISION, MANIFEST_HASHES, COUNTS, bound_manifest
     raw_root = Path(protocol["raw_inputs_receipt"])
     if (raw_root / "FAILED.json").exists():
         raise ValueError("Raw input verification failed")
@@ -372,8 +372,68 @@ def _input_gate(contract, batch, root):
     indices = protocol.get("training_clip_indices")
     if not isinstance(indices, list) or len(indices) != 256 or any(type(i) is not int or i < 0 for i in indices):
         raise ValueError("Missing exact rank-ordered 256-clip input identity")
+    # Only Push-T currently has a registered real-input producer. MetaWorld
+    # needs its separate protected-row-aware reader receipt, not generic flags.
+    if contract["task"] != "pusht":
+        raise ValueError("Native MetaWorld input-parity producer is not yet registered")
+    expected_indices = [rank + 32 * offset for rank in range(32) for offset in range(8)]
+    if (indices != expected_indices or protocol.get("epoch") != 0 or
+            protocol.get("global_update_index") != 0 or protocol.get("task") != "pusht" or
+            protocol.get("role") != "training_only_first_update_input_parity" or
+            protocol.get("version") != 1):
+        raise ValueError("Input proof is not the registered first native 32x8 update")
+    for filename, expected in (("comparisons.json", report.get("comparisons_sha256")),
+                               ("selected_inputs.json", protocol.get("selected_inputs_sha256"))):
+        path = root / filename
+        if path.is_symlink() or not path.is_file() or sha256(path) != expected:
+            raise ValueError("Missing or changed native batch supporting evidence: " + filename)
+    source = Path(__file__).with_name("robotics_training_batch.py")
+    if protocol.get("runtime", {}).get("producer_sha256") != sha256(source):
+        raise ValueError("Native input proof producer source changed")
+    manifest = bound_manifest("pusht", Path(protocol["provenance"]))
+    selected = json.loads((root / "selected_inputs.json").read_text())
+    if not isinstance(selected, dict) or any(not name.startswith("train/") or
+            name not in manifest or record != manifest[name] for name, record in selected.items()):
+        raise ValueError("Selected inputs must be exact original-manifest training bytes")
+    comparisons = json.loads((root / "comparisons.json").read_text())
+    records = comparisons.get("clips")
+    if not isinstance(records, list) or len(records) != 256:
+        raise ValueError("Require exactly 256 native comparison records")
+    needed = {"train/" + name for name in
+              ("states.pth", "rel_actions.pth", "velocities.pth", "seq_lengths.pkl")}
+    previous_rng = comparisons.get("initial_rng_sha256")
+    for position, record in enumerate(records):
+        identity = record.get("identity")
+        if (not isinstance(identity, list) or len(identity) != 3 or
+                any(type(i) is not int for i in identity) or
+                not 0 <= identity[0] < COUNTS["pusht"][0] or identity[1] < 0 or
+                identity[2] != identity[1] + 20 or record.get("rank") != position // 8 or
+                record.get("rank_offset") != position % 8 or
+                record.get("native_clip_index") != indices[position]):
+            raise ValueError("Native rank/clip/row/frame comparison identity changed")
+        for key in ("rng_before_sha256", "rng_after_sha256", "sample_sha256"):
+            value = record.get(key)
+            if not isinstance(value, str) or len(value) != 64 or any(c not in "0123456789abcdef" for c in value):
+                raise ValueError("Missing exact comparison byte/RNG digest")
+        if record["rng_before_sha256"] != previous_rng:
+            raise ValueError("Native comparison RNG chain changed")
+        previous_rng = record["rng_after_sha256"]
+        needed.add(f"train/obses/episode_{identity[0]:03d}.mp4")
+    if previous_rng != comparisons.get("final_rng_sha256") or set(selected) != needed:
+        raise ValueError("Incomplete native RNG chain or selected-input population")
+    obs, action, state, reward = batch
+    shapes = {"visual": (256, 4, 3, 224, 224), "proprio": (256, 4, 4)}
+    if (set(obs) != set(shapes) or any(tuple(obs[k].shape) != v for k, v in shapes.items()) or
+            tuple(action.shape) != (256, 4, 10) or tuple(state.shape) != (256, 4, 7) or
+            tuple(reward.shape) != (256, 4) or
+            any(t.dtype != torch.float32 for t in [*obs.values(), action, state, reward])):
+        raise ValueError("Native first-update CPU batch shape/dtype changed")
     if protocol.get("batch_sha256") != _batch_digest(batch):
         raise ValueError("Engineering batch differs from native input-parity evidence")
+    for position, record in enumerate(records):
+        sample = ({k: v[position] for k, v in obs.items()}, action[position], state[position], reward[position])
+        if record["sample_sha256"] != _batch_digest(sample):
+            raise ValueError("Comparison sample differs from actual supplied batch tensors")
     return digest
 
 

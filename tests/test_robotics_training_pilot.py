@@ -310,6 +310,122 @@ class Native32Tests(unittest.TestCase):
                 *[v.to(torch.bfloat16) for v in batch[1:]])
         self.assertNotEqual(before, p._batch_digest(bf16))
 
+    def input_evidence_fixture(self, directory):
+        """Private gate fixture only; original-manifest producer stays unpatched."""
+        from offline_study.robotics_training_inputs import DATA_REVISION, MANIFEST_HASHES, COUNTS
+        from offline_study.protocol import write_json
+        base = Path(directory); raw = base / "raw"; root = base / "native"
+        raw.mkdir(); root.mkdir()
+        write_json(raw / "protocol.json", {"role": "CPU_test_fixture_not_real_raw_verification"})
+        raw_report = {"status": "complete_robotics_raw_inputs_verified", "task": "pusht",
+            "data_revision": DATA_REVISION, "raw_manifest_sha256": MANIFEST_HASHES["pusht"],
+            "training_rows": COUNTS["pusht"][0], "validation_rows": COUNTS["pusht"][1],
+            "data_root": "/explicit/CPU/test/fixture/not/real/data",
+            "training_or_validation_authorized": False, "native_reader_parity_established": False,
+            "model_or_data_loader_initialized": False, "protocol_sha256": p.sha256(raw / "protocol.json")}
+        write_json(raw / "report.json", raw_report)
+        write_json(raw / "DONE.json", {"report_sha256": p.sha256(raw / "report.json")})
+        # Zero-stride views keep fixture storage small; hashing still verifies
+        # the full exact native-shape bytes rather than weakening the shape gate.
+        sample = ({"visual": torch.zeros(4, 3, 224, 224), "proprio": torch.zeros(4, 4)},
+                  torch.zeros(4, 10), torch.zeros(4, 7), torch.zeros(4))
+        batch = ({k: v.unsqueeze(0).expand(256, *v.shape) for k, v in sample[0].items()},
+                 *[v.unsqueeze(0).expand(256, *v.shape) for v in sample[1:]])
+        selected = {"train/" + n: {"bytes": 1, "sha256": "0" * 64} for n in
+            ("states.pth", "rel_actions.pth", "velocities.pth", "seq_lengths.pkl", "obses/episode_000.mp4")}
+        indices = [rank + 32 * offset for rank in range(32) for offset in range(8)]
+        sample_hash = p._batch_digest(sample)
+        comparisons = {"initial_rng_sha256": "1" * 64, "final_rng_sha256": "1" * 64,
+            "clips": [{"rank": i // 8, "rank_offset": i % 8, "native_clip_index": index,
+                "identity": [0, i, i + 20], "sample_sha256": sample_hash,
+                "rng_before_sha256": "1" * 64, "rng_after_sha256": "1" * 64}
+                for i, index in enumerate(indices)]}
+        write_json(root / "selected_inputs.json", selected)
+        write_json(root / "comparisons.json", comparisons)
+        protocol = {"role": "training_only_first_update_input_parity", "version": 1,
+            "task": "pusht", "epoch": 0, "global_update_index": 0,
+            "raw_inputs_receipt": str(raw), "raw_input_report_sha256": p.sha256(raw / "report.json"),
+            "data_root": raw_report["data_root"], "training_clip_indices": indices,
+            "provenance": str(base / "fixture_manifest_not_official.json"),
+            "runtime": {"producer_sha256": p.sha256(Path(p.__file__).with_name("robotics_training_batch.py"))},
+            "batch_sha256": p._batch_digest(batch)}
+        report = {"status": "native32_training_batch_input_parity_verified", "task": "pusht",
+            "native_config_sha256": self.contracts["pusht"]["config_sha256"], "native_source_sha256": p.SOURCE_HASHES,
+            "native_pixels_actions_proprio_states_rewards_rng_equal": True,
+            "all_selected_inputs_content_verified": True, "permitted_training_rows_only": True,
+            "validation_or_confirmation_access": False, "engineering_only": True,
+            "global_batch": 256, "sampler_policy": self.contracts["pusht"]["sampler"]}
+
+        def reseal():
+            protocol["selected_inputs_sha256"] = p.sha256(root / "selected_inputs.json")
+            report["comparisons_sha256"] = p.sha256(root / "comparisons.json")
+            write_json(root / "protocol.json", protocol)
+            report["protocol_sha256"] = p.sha256(root / "protocol.json")
+            write_json(root / "report.json", report)
+            write_json(root / "DONE.json", {"report_sha256": p.sha256(root / "report.json")})
+        reseal()
+        return root, batch, selected, comparisons, protocol, reseal
+
+    def test_supporting_evidence_required_and_hash_bound(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, batch, selected, comparisons, protocol, reseal = self.input_evidence_fixture(directory)
+            for filename in ("comparisons.json", "selected_inputs.json"):
+                saved = (root / filename).read_bytes()
+                (root / filename).unlink()
+                with self.assertRaisesRegex(ValueError, "supporting evidence"):
+                    p._input_gate(self.contracts["pusht"], batch, root)
+                (root / filename).write_bytes(saved + b" ")
+                with self.assertRaisesRegex(ValueError, "supporting evidence"):
+                    p._input_gate(self.contracts["pusht"], batch, root)
+                (root / filename).write_bytes(saved)
+            # A handmade matching report is still not production input evidence:
+            # its absent original manifest fails, even with all auxiliary files.
+            with self.assertRaises(FileNotFoundError):
+                p._input_gate(self.contracts["pusht"], batch, root)
+
+    def test_comparison_identity_rng_path_and_sample_guards(self):
+        from offline_study.protocol import write_json
+        with tempfile.TemporaryDirectory() as directory:
+            root, batch, selected, comparisons, protocol, reseal = self.input_evidence_fixture(directory)
+            original = copy.deepcopy(comparisons)
+            # Private consumer-format test only; real producer never accepts this
+            # patched fixture manifest (see test_robotics_training_batch).
+            with patch("offline_study.robotics_training_inputs.bound_manifest", return_value=selected):
+                self.assertEqual(p._input_gate(self.contracts["pusht"], batch, root),
+                                 p.sha256(root / "report.json"))
+                for key, value, message in (("rank", 7, "comparison identity"),
+                    ("native_clip_index", 999, "comparison identity"),
+                    ("identity", [18685, 0, 20], "comparison identity"),
+                    ("rng_before_sha256", "2" * 64, "RNG chain"),
+                    ("sample_sha256", "3" * 64, "actual supplied batch")):
+                    changed = copy.deepcopy(original)
+                    changed["clips"][0][key] = value
+                    write_json(root / "comparisons.json", changed); reseal()
+                    with self.assertRaisesRegex(ValueError, message):
+                        p._input_gate(self.contracts["pusht"], batch, root)
+                changed = copy.deepcopy(original); changed["clips"].pop()
+                write_json(root / "comparisons.json", changed); reseal()
+                with self.assertRaisesRegex(ValueError, "exactly 256"):
+                    p._input_gate(self.contracts["pusht"], batch, root)
+                write_json(root / "comparisons.json", original)
+                extra = {**selected, "val/states.pth": {"bytes": 1, "sha256": "0" * 64}}
+                write_json(root / "selected_inputs.json", extra); reseal()
+                with self.assertRaisesRegex(ValueError, "original-manifest training"):
+                    p._input_gate(self.contracts["pusht"], batch, root)
+
+    def test_input_producer_source_and_exact_first_update_not_just_flags(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root, batch, selected, comparisons, protocol, reseal = self.input_evidence_fixture(directory)
+            protocol["runtime"]["producer_sha256"] = "0" * 64
+            reseal()
+            with self.assertRaisesRegex(ValueError, "producer source changed"):
+                p._input_gate(self.contracts["pusht"], batch, root)
+            protocol["training_clip_indices"][0], protocol["training_clip_indices"][1] = \
+                protocol["training_clip_indices"][1], protocol["training_clip_indices"][0]
+            reseal()
+            with self.assertRaisesRegex(ValueError, "first native 32x8"):
+                p._input_gate(self.contracts["pusht"], batch, root)
+
     def test_no_global_batch_as_single_forward(self):
         rng = streams(); model = TinyModel(rng.backend); s, w = schedules(model)
         with patch("torch.amp.autocast", side_effect=lambda *args, **kwargs: nullcontext()), patch.object(model, "encode", wraps=model.encode) as encode:
