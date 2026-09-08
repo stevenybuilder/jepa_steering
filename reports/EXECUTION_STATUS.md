@@ -1,4 +1,39 @@
-# Core continuing / paused-worker Drive preservation complete — 2026-09-08,20:52 UTC
+# Core complete, Drive verified, all study compute stopped — 2026-09-08,22:07 UTC
+
+The agreed core panel is complete: **960/960 episodes,40/40shards**, two tasks,
+five arms and96 total episodes per task/arm. An independent reload of all raw
+records reproduced the complete frozen eight-contrast analysis exactly. Neither
+learned method passed the frozen task-success improvement gates. All additional
+experiments remain paused; no fresh confirmation or full six-task/history
+completion is claimed. [Complete results](CORE_METAWORLD_BEHAVIORAL_RESULTS.md).
+
+The user's Google Drive-before-stop requirement is satisfied for the completed
+core and paused LA work: the full14-part archive passed compressed-byte and all
+6,872member readbacks; a supplemental archive passed the same checks for661files
+of extra launcher/worker logs, prior HMM work and exact vendor source. Thirteen
+restoration/analysis documents were independently byte-readback verified too.
+[Private Drive archive](https://drive.google.com/drive/folders/1SoXkmEJmrCZXBnKk3re6mX8WwJiWBokY)
+and [recovery guide](../artifacts/offline_study/core-completion-preservation-20260908-v1/RESTORE.md).
+The Google Drive skill required grounded private destinations and post-upload
+content/access verification; acknowledgements alone were not accepted.
+
+LA50233992 is **stopped/exited**, following fresh live identity,complete-core,
+terminal-queue and empty-GPU checks. TX50259194,NE50231985,IN50205763,NJ50239185
+also remain stopped/exited. Zero study GPU rentals are running. Nothing was
+destroyed and no externalCalifornia/Shanghai resource was changed.
+[Stop and fleet receipts](../artifacts/offline_study/core-completion-preservation-20260908-v1/FLEET_AFTER_STOP.json).
+
+**Storage billing is not zero:** the22:07provider snapshot estimates$0.959259/hour
+across all retained account rentals,before bandwidth; these five account for
+$0.194444/hour. Their selected outputs/logs/latest resume checkpoints are backed
+up; older training histories remain on retained disks. Do not destroy those
+volumes based on the selective archives. No worker results were deleted.
+
+All648 tests pass(two existing skips),79.915seconds, in the completed regression
+run at22:03. Log`/tmp/jepa-core-wrapup-validation-20260908T2203.log`,SHA256
+`e365efa6fbc57e250a0ae970769b99109cd98bd55524a0d65f0d4422f6616c3f`.
+
+## Historical checkpoint — 2026-09-08,20:52 UTC
 
 The live completion collector78689 and all eight original queues plus
 coordinator5929 remain active. At20:49 its check counted888/960 published core

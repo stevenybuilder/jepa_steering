@@ -1,0 +1,291 @@
+{
+  "analysis": {
+    "complete_two_task_five_arm_panel_required": true,
+    "family": 8,
+    "intervals": "paired scenario-cluster percentile bootstrap, Bonferroni simultaneous 95 percent",
+    "minimum_useful_success_gain_percentage_points": 5,
+    "p_values": "exact paired discordance when cluster-homogeneous; Holm across eight",
+    "replicates": 20000,
+    "seed": 2026090722,
+    "selection": "positive native and random simultaneous lower bounds, native gain >=5pp; highest native lower bound then runtime then arm name"
+  },
+  "analysis_source_sha256": "229eea2764034cff7a4a5455ec759d57385c624dcbbbfab15021b699c61540dc",
+  "confirmation_outcomes_authorized": false,
+  "contrasts": [
+    {
+      "arm": "fixed_rank4",
+      "control": "native",
+      "discordant_loss_clusters": 17,
+      "discordant_win_clusters": 23,
+      "episodes": 96,
+      "exact_discordance_p": 0.42959050784338615,
+      "gain_percentage_points": 6.25,
+      "holm_p": 1.0,
+      "scenario_clusters": 96,
+      "simultaneous_95_interval_percentage_points": [
+        -11.458333333333332,
+        23.958333333333336
+      ],
+      "task": "reach"
+    },
+    {
+      "arm": "fixed_rank4",
+      "control": "matched_random_fixed_rank4",
+      "discordant_loss_clusters": 16,
+      "discordant_win_clusters": 17,
+      "episodes": 96,
+      "exact_discordance_p": 1.0,
+      "gain_percentage_points": 1.0416666666666665,
+      "holm_p": 1.0,
+      "scenario_clusters": 96,
+      "simultaneous_95_interval_percentage_points": [
+        -15.625,
+        17.708333333333336
+      ],
+      "task": "reach"
+    },
+    {
+      "arm": "coupling_only",
+      "control": "native",
+      "discordant_loss_clusters": 22,
+      "discordant_win_clusters": 26,
+      "episodes": 96,
+      "exact_discordance_p": 0.6654658120766186,
+      "gain_percentage_points": 4.166666666666666,
+      "holm_p": 1.0,
+      "scenario_clusters": 96,
+      "simultaneous_95_interval_percentage_points": [
+        -15.625,
+        23.958333333333336
+      ],
+      "task": "reach"
+    },
+    {
+      "arm": "coupling_only",
+      "control": "matched_random_coupling",
+      "discordant_loss_clusters": 25,
+      "discordant_win_clusters": 14,
+      "episodes": 96,
+      "exact_discordance_p": 0.10812902140605729,
+      "gain_percentage_points": -11.458333333333332,
+      "holm_p": 0.8650321712484583,
+      "scenario_clusters": 96,
+      "simultaneous_95_interval_percentage_points": [
+        -29.166666666666668,
+        6.25
+      ],
+      "task": "reach"
+    },
+    {
+      "arm": "fixed_rank4",
+      "control": "native",
+      "discordant_loss_clusters": 13,
+      "discordant_win_clusters": 14,
+      "episodes": 96,
+      "exact_discordance_p": 1.0,
+      "gain_percentage_points": 1.0416666666666665,
+      "holm_p": 1.0,
+      "scenario_clusters": 96,
+      "simultaneous_95_interval_percentage_points": [
+        -13.541666666666666,
+        15.625
+      ],
+      "task": "reach-wall"
+    },
+    {
+      "arm": "fixed_rank4",
+      "control": "matched_random_fixed_rank4",
+      "discordant_loss_clusters": 7,
+      "discordant_win_clusters": 14,
+      "episodes": 96,
+      "exact_discordance_p": 0.18924713134765625,
+      "gain_percentage_points": 7.291666666666667,
+      "holm_p": 1.0,
+      "scenario_clusters": 96,
+      "simultaneous_95_interval_percentage_points": [
+        -5.208333333333334,
+        19.791666666666664
+      ],
+      "task": "reach-wall"
+    },
+    {
+      "arm": "coupling_only",
+      "control": "native",
+      "discordant_loss_clusters": 18,
+      "discordant_win_clusters": 14,
+      "episodes": 96,
+      "exact_discordance_p": 0.5966148958541453,
+      "gain_percentage_points": -4.166666666666666,
+      "holm_p": 1.0,
+      "scenario_clusters": 96,
+      "simultaneous_95_interval_percentage_points": [
+        -20.833333333333336,
+        11.458333333333332
+      ],
+      "task": "reach-wall"
+    },
+    {
+      "arm": "coupling_only",
+      "control": "matched_random_coupling",
+      "discordant_loss_clusters": 13,
+      "discordant_win_clusters": 11,
+      "episodes": 96,
+      "exact_discordance_p": 0.8388197422027588,
+      "gain_percentage_points": -2.083333333333333,
+      "holm_p": 1.0,
+      "scenario_clusters": 96,
+      "simultaneous_95_interval_percentage_points": [
+        -15.625,
+        12.5
+      ],
+      "task": "reach-wall"
+    }
+  ],
+  "estimand": "episode-weighted success; paired whole-scenario cluster resampling",
+  "freeze_sha256": "853e8bf6b71c65c1e61d249ba84d8d57d6172ba1bd3a15e0424dc2d9e32cfa1f",
+  "fresh_confirmation": false,
+  "full_study_complete": false,
+  "input_reports_sha256": {
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/coupling_only/shard-gpu4/report.json": "95b7251a936b82c9d457836f8029e95200a073cd1dcff28ab77ff324a6658d89",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/coupling_only/shard-gpu5/report.json": "a7af660febcd4e6b236b0c961b9d7cbb6478be0f958cdf34f93685c93795c98c",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/coupling_only/shard-gpu6/report.json": "6abd6da5680b41caed7dc45a97686c772ddd932d324ee8d9604ba559fd046694",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/coupling_only/shard-gpu7/report.json": "6656af0468cfe2e657cf2c18f45cd1694444b711a3ab279fa12e8fbc84081ae8",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/fixed_rank4/shard-gpu4/report.json": "2e3fa1869de1cb12de8f31a3d33a00aa59eef0fd7f485ad9b3d5d1df5b1b403f",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/fixed_rank4/shard-gpu5/report.json": "d7375fdaff17d2815fd08233999dc0c6ed5f5c93e05ee5cc1e912a3615995006",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/fixed_rank4/shard-gpu6/report.json": "ff1cbc12d43591d073095a4c53b3cccb5175acd05431c1c4410b188c3e963565",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/fixed_rank4/shard-gpu7/report.json": "f42c30a9d2b544362733fbfd5aa3436a2c58caf96879c0d73418f563496b4405",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/matched_random_coupling/shard-gpu4/report.json": "637d0ada03fc102a086069636b4c2a47a35d0ba948858fa8ab6c18ee033c6d5c",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/matched_random_coupling/shard-gpu5/report.json": "d1ca2474a2db86e16a7cc259c19540ff74da28cfbf9467ed6b87f261492271ec",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/matched_random_coupling/shard-gpu6/report.json": "b0d76c91ee1f4d28e1484191e3aeda15b3356aa1c3ed0ff59bf92b2a74d3e1c3",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/matched_random_coupling/shard-gpu7/report.json": "60a9a421277c4974bc5ba154cc2f26c978749cf277c590193056cd596e9ba94a",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/matched_random_fixed_rank4/shard-gpu4/report.json": "9b91f7f7e735d78292b446c7fb837a053b08c581d97558cc44e837a64e75ea37",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/matched_random_fixed_rank4/shard-gpu5/report.json": "6ca933afbdbc7702a45781579f9026a1f0fc5c4d3b2fa1e833faaf1e95bfe5e0",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/matched_random_fixed_rank4/shard-gpu6/report.json": "2143b7ca330ba8138d77f3f02fd9e647091934633e9ef81b3f7ce93895d0a43c",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/matched_random_fixed_rank4/shard-gpu7/report.json": "a35208637aa4996c7c8b4f5a8a1bea8d799d716891aa9d944d07a2137ab48a9e",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/native/shard-gpu4/report.json": "3f5afaf92725b2cbb38d3d3cbf3193e1290cd23f38ad4b7d88562e105ac348de",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/native/shard-gpu5/report.json": "ac2e7ff65d248f4d63175e39f2b640370a75a52af896b6baa6c4915f1bcf5bec",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/native/shard-gpu6/report.json": "8898c62608b519b9972fbabad726b206864136e321c3b5507b3963f53f8296bf",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach-wall/native/shard-gpu7/report.json": "b240d19f0a10a9abfadcf26d843034a26211760b3ec8c6da06047f65b675b5f9",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/coupling_only/shard-gpu0/report.json": "1d36b48026559a7e7893068b91ada76c133e2fcbc3ad43d2ad620175c83433d1",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/coupling_only/shard-gpu1/report.json": "93b2d2ba352cefe8060766919b93c45fe82e535cecf12e154b739a90ba80a60e",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/coupling_only/shard-gpu2/report.json": "312febbe03919484e40192df7e4fb5ce4766f555080542ad4554ac6bcd7e124b",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/coupling_only/shard-gpu3/report.json": "297b1bc228cc69ec9176f0c71140450e0ce10ab842a66e929267eafea5babc5b",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/fixed_rank4/shard-gpu0/report.json": "c4038d48c415d6e443cfda0793ff1b9b6726a00c479bc9529120c372e421dfc4",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/fixed_rank4/shard-gpu1/report.json": "0c6b35bfa821982b7818175a0b5be428beb24494fa2da60a81faa48308e60031",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/fixed_rank4/shard-gpu2/report.json": "204e2462162a7720cf4f72e2aa18245854bff42054c6acc0f6e543e643637f44",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/fixed_rank4/shard-gpu3/report.json": "ac0a75393235caa18210286d6c64eefdd4f46bc260255a96f936107600a3b823",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/matched_random_coupling/shard-gpu0/report.json": "86446513b3ad20b510d925d80b7af19c00e00f331a29fb8be6bdc89d4112f8dd",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/matched_random_coupling/shard-gpu1/report.json": "50d7a91ad14066fe490db5c44ba268083c548cb4f253a586458f3fe487e32a60",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/matched_random_coupling/shard-gpu2/report.json": "c2218262949075c250f94080bf86ad47e0ad686eb8caf8231cc387ca9f85e715",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/matched_random_coupling/shard-gpu3/report.json": "13938fb4194f00f0744ccad660358323839610057d8e23abd8155ba3b8b1f283",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/matched_random_fixed_rank4/shard-gpu0/report.json": "ed4400a28f2a48de4be9675d57c8e4df84a5078fedfd0f8610e6e7c90e8ffbac",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/matched_random_fixed_rank4/shard-gpu1/report.json": "603c26a952b05ea432eeedcc9cc191e76ce65c1c9492a20dcfc624e3dad71bb5",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/matched_random_fixed_rank4/shard-gpu2/report.json": "8dfc6eacfc355cf495761f50eedd1d4f4c84b6407e39cbe763c55bfb00a6f83a",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/matched_random_fixed_rank4/shard-gpu3/report.json": "546c5481debe82af57792aba6ae6c4cfd776dff6ab6c4076cec4e11504bd9cad",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/native/shard-gpu0/report.json": "0b0c7a8b370dcc2a399725c05eb1d794801d00bd643acd9d8bdeceb0c6888d21",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/native/shard-gpu1/report.json": "28330ee2fd8add537263dc2183ad2914b6d2e18cdae75b4baf8bdcc744c5814b",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/native/shard-gpu2/report.json": "8def35c22f2c28d9323e5d42a7c28dd3ad6924b7df7c5f2f0cecdbe26d2de336",
+    "/workspace/jepa-runtime/fixed-response-behavior-20260908-v1/reach/native/shard-gpu3/report.json": "5d7126fc80986362c4aa190a6a6d73fdf48f9e76da90a23e27d5cca6bb6ff670"
+  },
+  "measured_tasks": 2,
+  "requested_tasks": 6,
+  "selection_on_development_only": true,
+  "status": "complete_fixed_response_five_arm_development_analyzed",
+  "tasks": {
+    "reach": {
+      "arms": {
+        "coupling_only": {
+          "episodes": 96,
+          "mean_episode_seconds": 299.8056192858785,
+          "mean_reward": 730.0743039449056,
+          "mean_task_distance": 0.47763489578695345,
+          "success_percent": 48.95833333333333,
+          "successes": 47
+        },
+        "fixed_rank4": {
+          "episodes": 96,
+          "mean_episode_seconds": 301.05427371447877,
+          "mean_reward": 727.3163661956787,
+          "mean_task_distance": 0.46306795448375243,
+          "success_percent": 51.041666666666664,
+          "successes": 49
+        },
+        "matched_random_coupling": {
+          "episodes": 96,
+          "mean_episode_seconds": 299.83186664649355,
+          "mean_reward": 726.5256751378378,
+          "mean_task_distance": 0.4702889313242243,
+          "success_percent": 60.416666666666664,
+          "successes": 58
+        },
+        "matched_random_fixed_rank4": {
+          "episodes": 96,
+          "mean_episode_seconds": 301.0065508688834,
+          "mean_reward": 727.9323800404867,
+          "mean_task_distance": 0.44285839043247205,
+          "success_percent": 50.0,
+          "successes": 48
+        },
+        "native": {
+          "episodes": 96,
+          "mean_episode_seconds": 299.97840877048776,
+          "mean_reward": 725.7262449264526,
+          "mean_task_distance": 0.4517251849368525,
+          "success_percent": 44.79166666666667,
+          "successes": 43
+        }
+      },
+      "duplicate_scenario_clusters": [],
+      "scenario_clusters": 96,
+      "selected_for_later_confirmation_freeze": "native"
+    },
+    "reach-wall": {
+      "arms": {
+        "coupling_only": {
+          "episodes": 96,
+          "mean_episode_seconds": 301.43739368927345,
+          "mean_reward": 567.0498113632202,
+          "mean_task_distance": 0.648827595403418,
+          "success_percent": 26.041666666666668,
+          "successes": 25
+        },
+        "fixed_rank4": {
+          "episodes": 96,
+          "mean_episode_seconds": 302.6098610344537,
+          "mean_reward": 546.7207338015238,
+          "mean_task_distance": 0.6311048914212734,
+          "success_percent": 31.25,
+          "successes": 30
+        },
+        "matched_random_coupling": {
+          "episodes": 96,
+          "mean_episode_seconds": 301.48062907027634,
+          "mean_reward": 557.2539353370667,
+          "mean_task_distance": 0.6740390704168627,
+          "success_percent": 28.125,
+          "successes": 27
+        },
+        "matched_random_fixed_rank4": {
+          "episodes": 96,
+          "mean_episode_seconds": 302.6660923703991,
+          "mean_reward": 556.4983604749044,
+          "mean_task_distance": 0.6695660084563618,
+          "success_percent": 23.958333333333336,
+          "successes": 23
+        },
+        "native": {
+          "episodes": 96,
+          "mean_episode_seconds": 301.5844007784326,
+          "mean_reward": 560.5006182988485,
+          "mean_task_distance": 0.6365478287140528,
+          "success_percent": 30.208333333333332,
+          "successes": 29
+        }
+      },
+      "duplicate_scenario_clusters": [],
+      "scenario_clusters": 96,
+      "selected_for_later_confirmation_freeze": "native"
+    }
+  },
+  "training_seed_histories_complete": false
+}

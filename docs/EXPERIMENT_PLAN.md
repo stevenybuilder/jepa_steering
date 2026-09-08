@@ -1,5 +1,17 @@
 # Frozen-model offline study: active plan
 
+## Core complete; preserve and pause — user approved September 8, 2026
+
+All 960 core episodes and the frozen eight-contrast paired analysis completed.
+Independent raw-record reload exactly reproduced the report. Neither learned
+method passed the frozen improvement gates; no further experiment is scheduled.
+The current task is to verify the complete core, paused work, logs and recovery
+material in **Google Drive**, then stop the remaining owned LA rental. Retain
+source volumes; do not destroy storage containing unarchived older histories.
+The user's pause supersedes all earlier autonomous extension authorizations.
+See [the completed result](../reports/CORE_METAWORLD_BEHAVIORAL_RESULTS.md) and
+[execution status](../reports/EXECUTION_STATUS.md) for preservation/shutdown receipts.
+
 ## Immediate execution priority — user approved September 8, 2026
 
 Finish the **existing five-arm Reach/Reach-Wall behavioral-development panel and
