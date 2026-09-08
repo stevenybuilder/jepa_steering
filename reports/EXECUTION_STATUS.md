@@ -1,4 +1,60 @@
-# Execution checkpoint — 2026-09-08, 13:47 UTC
+# Execution checkpoint — 2026-09-08, 14:39 UTC
+
+Enhanced processing schedule is active. Three navigation workers are executing;
+four Texas CPU waiters follow their complete DROID assignments. Corrected
+PointMaze seeds234/235/236 now also have live CPU waiters5576/5577/5578 behind
+Texas navigation0/1/2. They verify all assigned navigation science, predecessor
+exit and device release before uncached native training; no training starts while
+DROID/navigation own those GPUs. Sourcecaa41aa and PLAN6554fb7e9a3b4e47443fa55eacaa5b05b9d1e79a8604c7450425692e789efa3d
+unchanged. All17 immutable activation/test files read back with exact hashes.
+
+At14:30, Louisiana8/8 GPUs were running HMM engineering (21/72 excluded cases,
+0/768 new routed behavioral endpoints), no new failures. All four original
+native/refined/random/coupling_only arms have96episodes/task; the final192 total
+matched_random_coupling episodes resume afterHMM. New behavioral efficacy is
+not established by the engineering checks. Full local suite371tests,2existing skips.
+
+Our scheduled fleet remains five US instances/17 GPUs, all last sampled busy.
+California50245262 was externally restarted by14:33; aggregate account rate now
+$6.962593/hour before bandwidth. Six provider instances are running, but CA is
+quarantined from this schedule and its utilization is unverified. No new lease,
+CAcontact, GPU sharing, scientific precision change or sample-size reduction.
+Optional cache successor remains engineering-only. New compact launch/control
+records are being archived to privateDrive, fullreadback pending.
+
+## Historical checkpoint — 14:19 UTC
+
+Navigation redistribution is active: NE7668/7669 andIN10073 have scientific
+children; TX3491–3494 areCPUwaiters behind theirentire144-endpointDROID assignments.
+Allseven supervisorsalive, no workerfailure inreadback. Original39streams/468
+candidateepisodes preserved;89streams/1068candidateepisodes uniquelyassigned;
+96TOTALpertaskarmunchanged. PLAN378cec55b21b84cf3d91b35fe0cfbc4f4b793a0f33b4cc6a726d17f1a4a46a63.
+INoriginal11-caseWallengineering passed in1108.32s andits20files/168476bytes
+rehashed locally; no duplicate suite. Fullv2CPUreceivingtests27/hostpassed.
+
+Theboundaryhitawatcher-exitargvcheckafterPLANcommitted. Narrowroot-reviewed
+pidfdrecoveryverifiedoriginalwatcherabsent,bothoriginalparentsstopped/childless,
+thenretiredonlythoseparents andverifiedterminalstates/emptyGPUs. CUTOVER
+f70ee6fdf6a0f6fc418022d033b0fa16a81a1d86ba26fedaf7ff72830a561b6e;
+failedreceiptretained,nochildsignals,reruns,sourcechanges orownershipchanges.
+TheCPUcollector isrunninglocally; anidle-sleepinhibitor isboundtoitsPID43961
+foratmost12hours so automaticcollection cancontinue whiletheuserstepsaway.
+
+PointMaze correctedthree-seedplan nowbindsactualTXnavigationidentities; exact
+sourcecaa41aa/nativeuncached remainsunchanged. CPUplanstaging isunderway;
+historiesarenotyetlaunched. SixLAdevicesenteredHMMengineering at14:03readback;
+twooriginalcouplingchildrenwerestillfinishing. DROID4GPUwork andWallhistories
+continue. FiveownedUSinstances/17GPUs, verifiedtotal$6.732593/hbeforebandwidth.
+
+Newdurability: DROID964newimmutablemembers/447748archivebytes passedfullDrive
+readbackat13:59:42UTC, chainedtoits11:56archive. FullPush-Tnative96plusoriginal
+source/fit/inputsreceipts recoveredfromNJ:353members/3.2MBarchive; all8local
+recoveryfilespassedDrive fullreadback14:05:52UTC. No nativePush-Trerun needed.
+California candidatecoverage/ownership remainsunresolved; unknownstreamsarenot
+automaticallyreassigned. Cachemode successor isCPUtested(371tests,2skips), not
+scientificallyactive. Navigation-onlyprojectedremaining6–8h isnotfull-studyETA.
+
+## Historical checkpoint — 13:47 UTC
 
 Navigation v2 is staged/verified onNE,IN,TX:27receivingtests each, zero repeated
 payload bytes; local364tests pass(2existing skips). Root authorized and launched

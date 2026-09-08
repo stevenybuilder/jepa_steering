@@ -44,8 +44,21 @@ The affected Indiana training and Texas continuation waiters have been stopped.
 The corrected implementation tests the actual native caller/loader, rejects the
 old sampler binding, and requires fresh initialization for all three seeds.
 See [sampler correction](../reports/POINTMAZE_TRAINING_SAMPLER_CORRECTION.md).
-The corrected queue is implemented locally; final receiving/dependency bindings
-are pending. Shared inputs do not share optimizer state or substitute234 for236.
+At14:39UTC the corrected queue is staged, receiving-tested and activated as three
+CPU waiters onTexas. Actualnavigation dependencies are bound separately for
+seeds234/235/236; uncached training starts only after their full assigned streams
+verify and the exact predecessor/GPU releases. Shared inputs do not share optimizer
+state or substitute234 for236. Optional cache checks do not block these histories.
+
+MetaWorld/Push-T history readiness (September 8): the existing required histories
+need separate native 32-rank adapters (global batch 256), with 3,543/7,741 updates per
+epoch and 50 epochs. The [read-only readiness report](../reports/NATIVE_32RANK_HISTORY_READINESS.md)
+records verified schedules, partial validation batches, RNG/resume requirements
+and proposed implementation ownership. It is not implementation or launch
+authorization: full raw-input verification, receiving numerical checks and the
+140 still-protected MetaWorld validation rows remain unresolved. It also records
+the MetaWorld training-YAML 48 versus existing paper-matched 96-total behavioral
+distinction without changing either prior records or current episode counts.
 
 Execution-only processing amendment (September8): rebalance intact unstarted
 navigation RNG streams across already rented US devices as other assignments

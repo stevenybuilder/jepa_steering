@@ -5,6 +5,91 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
+## Practical implementation summary — September 8, 14:39 UTC
+
+The enhanced plan is implemented and its scheduling changes are active. This does
+**not** mean the experiments are complete or the pipeline is computationally optimal.
+The detailed gap/cause/concept/fix table below records the evidence and limitations.
+
+1. **Distribute independent work:** three navigation GPUs are running, with four
+   more workers waiting for DROID to release their devices. Intact RNG streams,
+   existing completed results, and the 96-total episode design are preserved.
+   The seven-worker allocation reduces elapsed waiting without claiming fewer
+   scientific GPU-hours. No additional instances were needed.
+2. **Remove repeated model work where validated:** the approved fixed-response
+   replacement is deployed. HMM's same-pass prefix reuse is undergoing exact
+   engineering validation before routed science; previously verified reference
+   episodes are reused. Optional cross-epoch visual caching is implemented but
+   not scientifically enabled because full-update equivalence remains unproven.
+3. **Overlap preparation and automate handoffs:** the corrected PointMaze seeds
+   234/235/236 have live CPU waiters behind Texas navigation. They automatically
+   verify their full predecessors, process exit, device identity, free GPU and
+   disk, then run native uncached pilot/first epoch/history stages. They never
+   resume the incorrectly shuffled histories. Data/source staging and verified
+   result archival occur while the GPUs perform useful work.
+
+Three-seed waiter PIDs are 5576/5577/5578. Their source, input/runtime, actual
+upstream sampler tests and 17 immutable launch/test records were verified. Texas
+had 114 GiB free at the prelaunch check. The complete local suite ran 371 tests
+with two existing skips. See [activation implementation](scripts/vast/corrected_pointmaze_activate.py)
+and [verified launch records](artifacts/offline_study/pointmaze-corrected-activation-20260908-v1/ACTIVATED.json).
+
+At 14:30 UTC all eight Louisiana GPUs were running HMM engineering, with 21/72
+excluded cases published and no new failures. Routed behavioral endpoints were
+still 0/768; validation progress is not an efficacy result.
+
+At 14:33 UTC another session had restarted the quarantined California instance.
+The account's aggregate rate became **$6.962593/hour**, including retained disks
+but before usage bandwidth. Our five scheduled US instances contain 17 GPUs;
+the extra California device is not part of our allocation or verified utilization
+claim. It remains untouched by this schedule. No further lease fits meaningfully
+under the remaining budget without first releasing other costs.
+
+## Activated schedule — September 8, 14:19 UTC
+
+**The redistribution is running.** The exact committed partition contains 39
+completed and 89 untouched candidate streams, with 12 episodes in each stream.
+This preserves all 128 candidate streams across two tasks/eight arms and
+**96 total episodes per task/arm**, not 96 per GPU. Native references are additional
+reused records, not new candidate streams.
+
+| Worker | Remaining whole streams | GPU handoff |
+|---|---:|---|
+| Nebraska 0 / PointMaze | 16 | Running; reuses same-device engineering |
+| Nebraska 1 / Wall | 16 | Running; reuses same-device engineering |
+| Indiana 0 / Wall then PointMaze | 7 + 8 | Running; original Wall 11-case receiving suite already passed and reused |
+| Texas 0 / Wall | 11 | CPU waiter; complete its 144 DROID endpoints first |
+| Texas 1 / Wall | 10 | Same full-DROID release requirement |
+| Texas 2 / PointMaze | 11 | Same full-DROID release requirement |
+| Texas 3 / PointMaze | 10 | Same full-DROID release requirement |
+
+PLAN SHA `378cec55b21b84cf3d91b35fe0cfbc4f4b793a0f33b4cc6a726d17f1a4a46a63`;
+CUTOVER SHA `f70ee6fdf6a0f6fc418022d033b0fa16a81a1d86ba26fedaf7ff72830a561b6e`.
+The collectors verify whole completed assignments and paired raw records before
+aggregation. Corrected PointMaze histories234/235/236 have real dependency-bound
+plans behindTexas0/1/2; their CPU activation is separate from GPU training start.
+Latest verified aggregate is$6.732593/hour including retained disks, before
+usage bandwidth. No new instances were needed for this redistribution.
+
+Another administrative gap was caught during deployment: after the partition
+committed, the watcher-exit check saw changed process argv and stopped before
+retiring the old parents. Direct checks found the watcher absent, both original
+parents still stopped and both GPUs empty. A narrowly reviewed recovery bound
+the exact parents with pidfds, completedTERM/CONT, and required actual terminal
+states plus stable empty devices. The failed attempt remains preserved; no
+scientific child was killed, no episode restarted and no partition changed.
+Emptyargv is tolerated only while waiting after termination, never as permission
+to signal or claim completion. An owned harmlessCPU lifecycle test passed first.
+This is process-control robustness, not a mathematical acceleration from the book.
+
+The first released navigation GPU waited for the second stream during the joint
+commit; that was real temporary idleness, not scientific throughput. Early
+Indiana engineering overlapped that wait and passed in1108.32seconds; its20files
+were independently copied and rehashed. The new allocation's navigation-only
+projection is roughly6–8hours from activation under the observed~118s/episode
+rate and anticipatedDROID release, not a full-study ETA or achieved speedup.
+Report actual time once allassigned streams finish, including receiving overhead.
+
 ## Deployment update — September 8, 13:47 UTC
 
 The enhanced scheduling implementation is now **partly activated**, not yet a
@@ -68,12 +153,12 @@ verified speedup or a completed experiment.
 
 | Gap and evidence | What caused it | Scaling Book connection | Concrete correction and current status | What the saving would mean |
 |---|---|---|---|---|
-| Navigation had about 19–20 hours left with one GPU per task, despite independent unstarted streams. Measured episodes take about 118 seconds. | Fixed task-to-device queues were not rebalanced against the time needed to finish the full behavioral panel. Other GPUs were doing different useful work; being busy did not make this allocation optimal for the user's priority. | [Training parallelism, Ch. 5](https://jax-ml.github.io/scaling-book/training/) and [inference objectives, Ch. 7](https://jax-ml.github.io/scaling-book/inference/): choose the split and latency/throughput objective explicitly. Our inference jobs need no gradient synchronization. | **Implementation/CPU staging underway:** distribute only untouched whole 12-episode streams over Nebraska, Indiana and Texas after its DROID assignments finish. Preserve current children and the original source, freezes, seeds and 96-total population. Receiving native/source parity is mandatory. Projected navigation completion is roughly 7.5–8 hours under the audited seven-device allocation; not a measured achieved speedup. | Primarily shorter wall time. Approximately the same scientific GPU-hours, plus receiving checks. It is not automatically a lower total invoice. |
+| Navigation had about 19–20 hours left with one GPU per task, despite independent unstarted streams. Measured episodes take about 118 seconds. | Fixed task-to-device queues were not rebalanced against the time needed to finish the full behavioral panel. Other GPUs were doing different useful work; being busy did not make this allocation optimal for the user's priority. | [Training parallelism, Ch. 5](https://jax-ml.github.io/scaling-book/training/) and [inference objectives, Ch. 7](https://jax-ml.github.io/scaling-book/inference/): choose the split and latency/throughput objective explicitly. Our inference jobs need no gradient synchronization. | **Activated at 14:16 UTC:** three scientific workers are running and four CPU waiters will join after their full DROID assignments. The committed partition preserves 39 completed and uniquely assigns 89 remaining whole streams. Source, freezes, seeds and 96-total population are unchanged. Projected navigation-only completion is roughly 6–8 hours from activation, including remaining dependency and receiving checks; not an achieved speedup or full-study ETA. | Primarily shorter wall time. Approximately the same scientific GPU-hours, plus receiving checks. It is not automatically a lower total invoice. |
 | The old intervention repeated expensive forecasts for every CEM population. | Online response estimation and a native shadow multiplied model work; the small rank solve was not the dominant cost. | [Transformer work accounting, Ch. 4](https://jax-ml.github.io/scaling-book/transformers/) and [rooflines, Ch. 1](https://jax-ml.github.io/scaling-book/roofline/): reducing total required operations can matter more than buying faster hardware. | **Deployed:** user-approved, separately named fixed-response replacement composes its map offline and makes one forecast, with no online probes/shadow. Current native/refined MetaWorld episodes are both approximately 300–303 seconds. The replacement has its own fits/evaluations and does not inherit the old method's efficacy. | Removes recurring model work, reducing GPU-hours as well as latency relative to that old algorithm. These are not hardware-matched measurements establishing an exact speedup factor. |
 | HMM originally waited for two coupling/control arms it does not depend on. It also initially required a full native shadow per scientific forecast. | An unnecessarily broad queue dependency and duplicated calculation of an already-native H1/H2 prefix. | [Inference reuse, Ch. 7](https://jax-ml.github.io/scaling-book/inference/) plus [overlap/critical bottlenecks, Ch. 1](https://jax-ml.github.io/scaling-book/roofline/). This is same-pass prefix reuse, not an LLM KV-cache transplanted into JEPA. | **Priority handoff activated:** finish the current whole coupling child, perform HMM work, then resume the last original control. **Same-pass scientific implementation queued behind exact full-GPU parity:** reuse native H1/H2 before the H3 edit. Reuse 576 verified native/constant/random reference episodes instead of collecting duplicates; retain 768 new routed episodes. | Reordering saves waiting time, not total scientific work. Reference reuse and eliminating the shadow reduce work. A two-to-one call reduction is not proof of a twofold full-episode speedup. |
 | We lacked a current kernel-level breakdown showing why a full 300-candidate forecast costs what it does. | Episode timers and GPU-utilization samples were being asked to answer questions they cannot answer: matrix compute versus memory traffic, synchronization or launch overhead. | [Profiling, Ch. 9](https://jax-ml.github.io/scaling-book/profiling/) explains why theoretical rooflines need actual traces. | **Executed and verified at 12:56 UTC:** the bounded first-CEM-population audit finished in 149.46 seconds. Ten warmed unprofiled forwards per precision, unchanged inputs/parameters, exact strict-FP32 repeat and full CUDA trace. The process exited and released IndianaGPU0. See measured audit below. | We now have actual timing/error evidence. Matrix operations, softmax and elementwise/mask work all appear; profiler overhead and duplicate attribution prevent interpreting the raw operator table as an additive time budget. |
 | Strict FP32 planning may leave faster matrix hardware unused. | Conservative arithmetic was frozen for native parity. Faster precision is not automatically the same numerical planner: changed rankings can change actions. | [GPU matrix units, Ch. 12](https://jax-ml.github.io/scaling-book/gpus/), [arithmetic intensity, Ch. 1](https://jax-ml.github.io/scaling-book/roofline/) and [inference, Ch. 7](https://jax-ml.github.io/scaling-book/inference/). | **Measured, not adopted:** this actual forecast took 3.13847s strict FP32, 2.85019s TF32 and 2.77808s BF16 (medians). Both faster paths changed predictions. Existing panels stay strict FP32; a changed numerical path needs a separately bound paired policy and full-planner checks. Compilation/fusion remains unimplemented. | Approximately 1.10x/1.13x forecast throughput in this diagnostic, not a full-episode speedup and not enough alone to explain away a 20-hour queue. |
-| Training repeatedly encodes overlapping images with a frozen visual encoder. | We reuse features within an objective, but not across overlapping clips and epochs. Full updates mix this fixed encoder cost with trainable predictor work. | [Inference caching, Ch. 7](https://jax-ml.github.io/scaling-book/inference/) and [compute/memory tradeoffs, Ch. 4](https://jax-ml.github.io/scaling-book/transformers/). | **Cache implementation being prepared, not active:** cache only deterministic frozen visual embeddings, retain original transform calls/RNG and all trainable action/proprioception/predictor computation. Conservative FP32 capacity is 31.26 GB for Wall or 67.95 GB for PointMaze. Actual dtype, batch-composition parity, full updates and validation-boundary RNG must be checked. Use worker-local storage, not Drive in the training loop. | Could remove repeated encoder FLOPs across epochs/seeds, but creates storage/read traffic. Savings depend on measured encoder fraction; 135×/169× frame reuse does not imply that end-to-end speedup. |
+| Training repeatedly encodes overlapping images with a frozen visual encoder. | We reuse features within an objective, but not across overlapping clips and epochs. Full updates mix this fixed encoder cost with trainable predictor work. | [Inference caching, Ch. 7](https://jax-ml.github.io/scaling-book/inference/) and [compute/memory tradeoffs, Ch. 4](https://jax-ml.github.io/scaling-book/transformers/). | **Implemented, not scientifically active:** the first GPU pilot passed frame-composition parity but stopped at the native validation-to-train-mode guard. A separately source-bound successor passes CPU tests/audit and preserves native modes; receiving-GPU mode/composition, full-update and RNG parity remain required. Corrected uncached histories do not wait for this optional pilot. Conservative full-cache capacity is 31.26 GB for Wall or 67.95 GB for PointMaze. | Could remove repeated encoder FLOPs across epochs/seeds, but creates storage/read traffic. Savings depend on measured encoder fraction; 135×/169× frame reuse does not imply that end-to-end speedup. |
 | New PointMaze histories were not author-native despite sampler tests passing. | The wrapper inherited Wall's `shuffle=True`; PointMaze's actual upstream train and validation samplers use `False`. Earlier tests compared against the same manually chosen assumption. | **This is a methodology/testing defect, not a Scaling Book theorem.** Efficient execution must preserve the intended optimizer/data experiment; faster incorrect work has no scientific throughput value. | **Affected jobs stopped and queued continuations cancelled; local fix tested:** execute the actual pinned upstream caller/loader in regression tests, bind explicit per-task sampler policy, reject old shuffled checkpoints as corrected-native resume points. Existing histories are retained and labelled; corrected histories must initialize afresh. Released-checkpoint offline/behavioral results are unaffected by this training defect. See [correction record](reports/POINTMAZE_TRAINING_SAMPLER_CORRECTION.md). | Prevents further invalidly labelled training spend. It does not recover sunk cost, and required corrected histories still cost compute. |
 | Slow staging and backup transfers extended time-to-results and retained-disk charges. | Oversized input copies, stalled uploads and treating transfer/storage work as part of the GPU dependency path. | [Bandwidth/overlap, Ch. 1](https://jax-ml.github.io/scaling-book/roofline/) and [profiling, Ch. 9](https://jax-ml.github.io/scaling-book/profiling/). | **Deployed in named paths:** copy verified required inputs, overlap CPU staging with current GPU work, use bounded upload retries/8 MiB chunks and full Drive readback. Retain only justified worker disks after verified release audits. No new destructive cleanup is claimed here. | Less waiting/retransmission and potentially less retained-storage cost. The successful 29-second backup retry is an operational observation, not a controlled chunk-size benchmark. |
 
