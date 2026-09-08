@@ -1,6 +1,6 @@
 # MetaWorld and Push-T native 32-rank history readiness
 
-September 8, 2026; implementation update at 15:12 UTC. **A CPU-tested receiving
+September 8, 2026; implementation update at 15:57 UTC. **A CPU-tested receiving
 core and complete raw-input byte audit now exist; full native reader/history
 implementation and launch authorization do not.** This documents the existing required three-seed/history track;
 it does not alter frozen experiments, authorize protected access, introduce a new
@@ -9,6 +9,14 @@ work remains independent. No new model outputs or GPU timings were collected
 for this track.
 
 ## Implemented since the initial readiness audit
+
+- [Native model constructor](../src/offline_study/robotics_training_model.py)
+  now uses the exact upstream dimension/kwargs/model/optimizer/VideoWM call AST.
+  Eleven CPU tests cover both task-specific constructor contracts, native update
+  counts, immutable configs, input-before-CUDA guards, single-visible-device scope
+  and caller RNG restoration on import failure. No native CUDA model was built.
+  Construction is explicitly disposable: post-loader/LPIPS first-update RNG,
+  transformed inputs, numerical updates and full histories remain separate gates.
 
 - [Raw-input verifier](../src/offline_study/robotics_training_inputs.py): all126
   MetaWorld parquets (737,175,770 bytes) and all18,718 Push-T extracted files
@@ -195,6 +203,7 @@ snapshots unchanged; no history launch is implied by this table.
 | Complete raw-input binding | `src/offline_study/robotics_training_inputs.py`, `tests/test_robotics_training_inputs.py` | Implemented; full receiving byte audit passed |
 | Native reader/order/transformed-input parity | Separate reader module/tests still required | Not implemented by the byte verifier |
 |32-rank update, logical RNGs and receiving numerical pilot | `src/offline_study/robotics_training_pilot.py`, `tests/test_robotics_training_pilot.py` | Implemented and CPU-tested; native GPU proof pending |
+| Native model/optimizer construction | `src/offline_study/robotics_training_model.py`, `tests/test_robotics_training_model.py` | Implemented;11 CPU tests; no receiving CUDA construction or first-update RNG parity claimed |
 | Task-specific monitoring, histories, epoch resume | `src/offline_study/robotics_training_history.py`, `tests/test_robotics_training_history.py` | Not yet implemented |
 
 ## Reproduce the count checks locally

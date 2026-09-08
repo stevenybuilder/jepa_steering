@@ -5,12 +5,16 @@ their exact loader/identity audit are separate from the15Franka evaluation files
 Prepare the pre-existing vision/action factorial for the DROID12-block/H3 model
 using the [task-specific coupling contract](DROID_COUPLING_BEHAVIOR.md). This is
 not a six-block/H6 adapter transfer. The separate fit and eleven full-planner
-engineering checks completed on September 8; the candidate comparison is still
-incomplete. A four-device execution freeze retains 64 total episodes per arm and
+engineering checks completed on September 8. The coupling comparison completed
+and its frozen analysis was independently verified at15:12UTC:576 endpoints,
+72 shards,64 total endpoints per arm from15 recordings. No simultaneous95%
+contrast interval excluded zero. This is recorded-plan action evidence, not
+physical task success, and does not complete other DROID ablations or histories.
+A four-device execution freeze retains 64 total episodes per arm and
 collects a new paired native baseline on the receiving GPUs, rather than assuming
 cross-hardware outcome identity. Existing measurements remain separately preserved.
-All four receiving-device full-CEM checks passed; four paired DROID queues are
-executing, with64 total episodes per arm. See the dated execution receipts, not
+All four receiving-device full-CEM checks passed; the four DROID queues are now
+terminal and their devices handed to navigation. See the dated execution receipts, not
 this plan alone, for actual completion counts.
 
 HMM behavioral addition (September8): implement the user's explicit paired
@@ -54,9 +58,12 @@ MetaWorld/Push-T history readiness (September 8): the existing required historie
 need separate native 32-rank adapters (global batch 256), with 3,543/7,741 updates per
 epoch and 50 epochs. The [read-only readiness report](../reports/NATIVE_32RANK_HISTORY_READINESS.md)
 records verified schedules, partial validation batches, RNG/resume requirements
-and proposed implementation ownership. It is not implementation or launch
-authorization: full raw-input verification, receiving numerical checks and the
-140 still-protected MetaWorld validation rows remain unresolved. It also records
+and implementation ownership. Complete raw-input bytes were verified onIndiana
+at15:07UTC and the separate32-rank update core is CPU-tested. A native caller-bound
+model factory is also implemented, but not receiving-GPU validated; native tensor
+parity, full initialization/monitoring/resume and actual numerical checks remain.
+These implementations are not full-history launch authorization. The140 still-
+protected MetaWorld validation rows remain unresolved. The report also records
 the MetaWorld training-YAML 48 versus existing paper-matched 96-total behavioral
 distinction without changing either prior records or current episode counts.
 

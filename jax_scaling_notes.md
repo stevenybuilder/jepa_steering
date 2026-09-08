@@ -5,7 +5,44 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
-## Live handoff check — September8,15:36UTC
+## Live processing follow-through — September 8, 15:57 UTC
+
+Fresh read-only audit: all **17 assigned GPUs on five US instances are busy**;
+16 sampled100% and one99%. Account rate$6.732593/hour before usage bandwidth.
+Utilization is not a claim of optimal kernel efficiency. Navigation now has
+59/128 complete candidate streams;20 new streams passed raw-record verification.
+The remaining69 streams give a measured **4.5–5.5-hour navigation-only** estimate
+under the current seven-GPU allocation. Individual complete streams took
+19.5–23.9minutes; the slowest remaining worker determines the finish time.
+
+HMM has progressed to scientific rollouts:69/72 engineering cases complete,
+five of eight full suites verified, five scientific children, three completed
+scientific endpoints at15:56:49UTC. The first three memoryless episodes took about
+299.25seconds each. `768 / 8 * 299.25 / 3600 = 7.98hours` is an idealized compute
+estimate, **not a measured full-panel speed**: other routed arms, remaining checks,
+queue overhead and imbalance support only a provisional8–10hour range. The last
+192 original coupling controls follow HMM and are additional work. These are not
+full-study estimates or reasons to reduce the frozen sample.
+
+The separate native32 model factory now uses the actual pinned constructor-call
+AST, with task-specific dimensions and3543/7741updates per epoch. Eleven CPU tests
+cover the native configuration, single-visible-GPU guard and failure-path RNG
+restoration. No receiving model was built or trained. This removes implementation
+duplication with the navigation adapter; it is **preparation, not a measured GPU
+speedup**. Native transformed-input, first-update/loader RNG, GPU numerical and
+history-resume checks still gate that separate track, not current rollouts.
+
+Scaling Book connection: [parallel training](https://jax-ml.github.io/scaling-book/training/)
+distinguishes physical hardware from global batch; [inference](https://jax-ml.github.io/scaling-book/inference/)
+distinguishes throughput from latency; [rooflines](https://jax-ml.github.io/scaling-book/roofline/)
+explain why changing allocation does not eliminate the work itself. In this
+application, `T_finish ≈ max(worker_remaining_work / worker_rate)`, not total
+episodes divided by every GPU rented for unrelated work.
+
+Evidence: [live audit](artifacts/offline_study/live-allocation-audit-20260908T1552Z/REPORT.json),
+[native constructor](src/offline_study/robotics_training_model.py).
+
+## Historical live handoff check — September8,15:36UTC
 
 All seven navigation workers now have scientific children, including all four
 Texas workers after their receiving checks.52/128 candidate streams are complete:

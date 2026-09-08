@@ -1,4 +1,32 @@
-# Execution checkpoint — 2026-09-08, 15:36 UTC
+# Execution checkpoint — 2026-09-08, 15:57 UTC
+
+Latest [read-only audit](../artifacts/offline_study/live-allocation-audit-20260908T1552Z/REPORT.json):
+five owned US instances/17 assigned GPUs all busy,0 idle; aggregate$6.732593/hour
+before usage bandwidth. CA remains quarantined; no contact or lifecycle changes.
+
+- Navigation:59/128 complete candidate streams,69 remaining. All20 newly
+  completed streams independently verified, all seven scientific workers healthy.
+  Current measured allocation projects4.5–5.5hours remaining for this panel only.
+- HMM:69/72 engineering cases; five full suites independently verified and five
+  scientific children. Three scientific endpoints completed,0/32 complete shards.
+  First three memoryless episodes took299.24–299.27seconds. Provisional8–10hours
+  for the768-endpoint routed panel assumes comparable later-arm timing; not a
+  measured full-panel speed or full-study ETA. The last192 original matched-random
+  coupling controls follow and add work.
+- Wall histories:235has24complete epochs/current25 (~7.1hours remaining),236has
+  34complete/current35 (~4.4hours), based on recent16.5–16.9minute epochs. Their
+  final41–50 windows are not yet complete. Corrected PointMaze waiters remain
+  healthy behind the complete Texas navigation assignments.
+- DROID coupling remains complete and verified. Push-T candidate continuation,
+  other behavioral ablations, confirmation and full seed/history comparisons
+  remain incomplete; no defensible full-study ETA follows from these panel times.
+
+New native32 model construction code is isolated from scientific GPU snapshots.
+Eleven CPU tests pass; actual CUDA construction/input/numerical/history proof is
+not claimed. The prior full integration run had429tests/two skips, before the
+additional failure-path test. No GPU experiment was restarted for these changes.
+
+## Historical checkpoint — 15:36 UTC
 
 Latest read-only allocation audit: all seven navigation workers have receipt-bound
 scientific children; all13 newly completed12-episode streams passed raw/receipt
