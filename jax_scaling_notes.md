@@ -670,7 +670,9 @@ the same physical GPU. No gradient synchronization is required for these frozen
 models. A rough lower bound is `T ≈ max_g(work_g / measured_throughput_g)`, plus
 staging, engineering and final analysis. Four devices do not guarantee exactly
 four times the speed; hardware-specific timings and the longest shard determine
-the actual finish time. The new receiving-GPU measurements are still pending.
+the actual finish time. Receiving full-planner engineering completed on all four
+devices in900–919 seconds each. This is measured verification cost, not the full
+576-episode scientific panel time or a matched one-versus-four-GPU speed benchmark.
 
 Hardware changes can also change floating-point results. The new freeze therefore
 collects a paired native reference on each receiving device and requires exact
@@ -688,3 +690,20 @@ benchmark of either choice. The source files and failed attempt were preserved.
 This applies the book's compute-versus-data-movement distinction to the complete
 pipeline, while leaving the scientific samples, CEM budgets and doses unchanged.
 See [the roofline model](https://jax-ml.github.io/scaling-book/roofline/).
+
+### Remove unnecessary queue dependencies, not scientific comparisons
+
+The HMM panel reuses three completed arms: native, refined edit and its random
+control. Its first scheduler nevertheless waited for two additional coupling
+arms—384 episodes—that are not HMM inputs. The planned priority handoff removes
+that scheduling edge: finish the current complete stream, run unchanged HMM
+verification/evaluation, then resume the other controls. All comparisons remain
+required. This is critical-path scheduling, not a FLOP reduction or a license to
+skip controls. It can bring the HMM answer forward without another rental; the
+total panel work and full-study completion time need not fall by the same amount.
+
+Likewise, staging compressed PointMaze data and its separate pinned runtime on
+CPU/disk while DROID uses the GPUs overlaps preparation with useful computation.
+The upper bound on benefit comes from the work that can actually overlap; it does
+not turn an I/O-bound preparation step into useful GPU work. Keep the completion
+latency and verified samples/hour alongside GPU utilization when measuring speed.

@@ -10,6 +10,33 @@ from snapshot_live_results import select_files
 
 
 class LiveSnapshotTests(unittest.TestCase):
+    def test_droid_parallel_snapshot_excludes_inflight_and_unpaired_records(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            (root / 'droid-coupling-code-20260908-v3').mkdir()
+            base = root / 'droid-coupling-behavior-20260908-v3'
+            (base / 'freeze').mkdir(parents=True)
+            (base / 'LAUNCH.json').write_text('{}')
+            for gpu in range(4):
+                engineering = base / f'engineering-gpu{gpu}'
+                engineering.mkdir(); (engineering / 'DONE.json').write_text('{}')
+                queue = base / f'queue-gpu{gpu}'
+                queue.mkdir(); (queue / 'LAUNCH.json').write_text('{}')
+                (queue / 'active.log').write_text('mutable')
+            shard = base / 'conditions/native/shard-0'
+            shard.mkdir(parents=True)
+            for name, content in {'protocol.json': '{}', 'episode-000.json': '{}',
+                                  'trace-000.json': '[]', 'episode-001.json': '{}',
+                                  'episode-002.json': '{', 'trace-002.json': '[]',
+                                  'progress.json': '{}'}.items():
+                (shard / name).write_text(content)
+            files = select_files(root, 'droid_parallel')
+            self.assertIn(str((shard / 'trace-000.json').relative_to(root)), files)
+            self.assertFalse(any(x in p for p in files for x in ('001.json', '002.json', 'progress', '.log')))
+            (base / 'engineering-gpu3/DONE.json').unlink()
+            with self.assertRaisesRegex(ValueError, 'incomplete'):
+                select_files(root, 'droid_parallel')
+
     def test_missing_worker_roots_rejected(self):
         with tempfile.TemporaryDirectory() as folder:
             with self.assertRaisesRegex(ValueError, "Missing explicit"):

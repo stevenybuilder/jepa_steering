@@ -17,7 +17,8 @@ import time
 from backup_results_to_google import verify_archive
 
 
-WORKERS = {50189244: "wall", 50231985: "navigation", 50233992: "metaworld", 50239185: "pusht"}
+WORKERS = {50189244: "wall", 50231985: "navigation", 50233992: "metaworld", 50239185: "pusht",
+           50259194: "droid_parallel"}
 
 
 def select_files(root, kind):
@@ -45,7 +46,35 @@ def select_files(root, kind):
             raise ValueError("Required engineering root is incomplete: " + str(path))
         tree(path)
 
-    if kind == "wall":
+    if kind == "droid_parallel":
+        base = root / "droid-coupling-behavior-20260908-v3"
+        tree(root / "droid-coupling-code-20260908-v3")
+        tree(base / "freeze")
+        file(base / "LAUNCH.json")
+        for gpu in range(4):
+            completed(base / f"engineering-gpu{gpu}")
+            file(base / f"queue-gpu{gpu}/LAUNCH.json")
+            if (base / f"queue-gpu{gpu}/DONE.json").is_file():
+                file(base / f"queue-gpu{gpu}/DONE.json")
+        for shard in sorted((base / "conditions").glob("*/shard-*")):
+            if (shard / "DONE.json").is_file():
+                completed(shard)
+            else:
+                # Preserve only published episode/trace pairs, never mutable
+                # progress or a partially serialized active episode.
+                for episode in sorted(shard.glob("episode-*.json")):
+                    trace = episode.with_name(episode.name.replace("episode-", "trace-"))
+                    if not trace.is_file():
+                        continue
+                    try:
+                        json.loads(episode.read_text()); json.loads(trace.read_text())
+                    except json.JSONDecodeError:
+                        continue
+                    file(episode); file(trace); file(shard / "protocol.json")
+        if (base / "PANEL_DONE.json").is_file():
+            completed(base / "analysis")
+            file(base / "PANEL_DONE.json")
+    elif kind == "wall":
         tree(root / "wall-history-code-v1")
         for label in ("navigation-input-check-20260907-v1", "wall-training-inputs-20260907-v1",
                       "wall-training-accumulation-pilot-20260907-v2"):
@@ -228,6 +257,8 @@ def main():
     worker = next(x for x in workers if x["id"] == args.instance)
     if worker["actual_status"] != "running" or not worker["geolocation"].endswith(", US"):
         raise ValueError("Expected owned running US worker")
+    if args.instance == 50259194 and worker["label"] != "jepa-droid-parallel-us-v3":
+        raise ValueError("DROID receiving worker ownership label changed")
     args.output.mkdir(parents=True, exist_ok=False)
     ssh = ["ssh", "-i", "/tmp/jepa_vast_50123620_ed25519", "-o", "BatchMode=yes",
            "-o", "ConnectTimeout=15", "-o", "ServerAliveInterval=15", "-p",

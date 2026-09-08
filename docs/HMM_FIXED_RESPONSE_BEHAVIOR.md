@@ -1,5 +1,19 @@
 # HMM routing around the refined fixed-response edit
 
+## September8 priority scheduling preparation
+
+At11:54UTC the first three reference arms were almost complete, but the original
+CPU scheduler waited for all five arms, including384 coupling/control episodes
+that HMM does not require as references. A prospective scheduler-only handoff is
+being prepared: pause only the original queue parent, allow its current complete
+RNG-stream child to finish, verify native/refined/random-refined shard receipts,
+then run the same v3 engineering and four routed arms on that device. Resume the
+remaining original coupling controls afterward, including after a safe HMM failure.
+No arm is dropped; source/fit/freeze, samples, streams, device pairing and analysis
+remain unchanged. This is prepared prioritization, not a completed handoff or an
+outcome-based candidate choice. The existing waiters remain live until the new
+scheduler passes receiving tests and is explicitly recorded in the resource board.
+
 ## September8 same-pass execution amendment, before routed outcomes
 
 The fitted scientific comparison below is unchanged. A separately named v3 source

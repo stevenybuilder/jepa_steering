@@ -62,6 +62,15 @@ first requires native/repeat/actual-zero and all-arm engineering, then supplies
 its own native streams before paired candidate runs. Cross-device native outcomes
 need not be bitwise identical; stimulus identity and same-device repeat/zero
 identity remain mandatory. Do not pool the partial v2 panel into this comparison.
-This is execution preparation, not a new worker lease or completed v3 GPU proof.
+At 11:54 UTC, all four Texas receiving devices completed all eleven full-CEM
+engineering episodes (900–919 seconds per device). Same-device repeat/zero,
+independent fields at1/300 candidates and unchanged parameters passed. Original
+native engineering also matched exactly, but the new paired-native policy remains
+unchanged. Four scientific queues automatically started native streams0–3, each
+followed by its fixed candidates and second stream. No full-panel efficacy result
+exists yet. The preserved v2 panel contains16 candidate episodes and is not pooled.
+The new source/engineering archive passed full private-Drive member readback:
+`live-20260908T115600Z/droid-parallel`, SHA256
+`7a2978278da32a9fd8b03298be30ba5e89ecc725028d8893e564add7bd869b24`.
 PointMaze234's exact epoch-3 state and earlier history are preserved for required
 resumption after the priority DROID work; no seed or training epoch is discarded.
