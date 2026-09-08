@@ -52,6 +52,11 @@ small frozen source bundle, cache CPU audit, and HMM status observation. This is
 not an archive of every ongoing result or checkpoint. Active collection files and
 11 logs were explicitly excluded; nothing was deleted locally. Archive SHA256:
 `4276a321b61c0a3ed0b772e21146127cf64c971f997088efe81cace4aec3b488`.
+The [exact private archive](https://drive.google.com/file/d/1Q205H8igVFQyO1LTtpsm-miVvgp01Q33/view?usp=drivesdk)
+also passed connector metadata verification. Separate small receipt uploads hit
+Drive's shared-client quota and stopped; their local manifests, successful
+readback proof and failure receipt remain intact. Those receipt uploads are not
+claimed complete, and the archival issue does not gate GPU execution.
 
 ## Activated schedule — September 8, 14:19 UTC
 

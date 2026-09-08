@@ -23,6 +23,9 @@ Optional cache successor remains engineering-only. At14:38UTC the new compact
 launch/control archive passed full compressed and90-member readback onprivateDrive
 (350961bytes, SHA4276a321b61c0a3ed0b772e21146127cf64c971f997088efe81cace4aec3b488).
 Active collection/11logs excluded; no checkpoint/completed-study backup claim.
+Archive metadata/private access also verified. Separate receipt publication hit
+Drive403quota and stopped with local success/failure records preserved; it does
+not block GPU work. No local files were deleted.
 
 Texas14:36 readback: DROID511/576 published endpoint/trace pairs,65remaining;
 all four navigation supervisors still waiting. Corrected PointMaze5576–5578
