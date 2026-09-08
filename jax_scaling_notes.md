@@ -5,7 +5,126 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
+## September8: overlap independent work, avoid duplicate experiments
+
+At10:18UTC, a further HMM execution optimization is CPU-validated and queued with
+a new pre-outcome execution freeze. H1/H2 are unedited; reuse them in the same
+forecast before the sole H3 edit instead of computing an entire native H6 shadow.
+This retains the same gate, fit, dose and candidate definitions. FullGPU
+engineering compares EVERY forecast, gate, posterior and field against the original
+two-pass implementation before adoption. If exact parity passes, scientific fullH6
+work drops from two backend calls to one; short horizons already used one. This is
+an operation-count saving, not a measured2x end-to-end speedup. Extra reference
+calls belong only to excluded engineering episodes and remain separately logged.
+
+Execution addition at10:10UTC: DROID fit-input preparation completed entirely on
+CPU/network while all15GPUs had other jobs. We fetched1.36GB of specifically needed
+left-camera/state/metadata objects, not the entire raw corpus. The prepared coupling
+fit encodes only the first observed frame: its native H3 activation/condition
+capture needs no encoded future target. Its deployment fields remain GPU-resident,
+with one native predictor pass; full receiving-GPU checks still must prove this.
+
+The [roofline chapter](https://jax-ml.github.io/scaling-book/roofline/) gives the
+useful lower-bound model `T >= max(FLOPs / FLOPs_per_second, bytes / bandwidth)`.
+Our application: reduce unnecessary data movement and repeated model work before
+buying peak FLOPs. Whole independent RNG streams require no per-step inter-GPU
+collectives. Keep the original300-candidate CEM batch and all evaluation episodes;
+GPU count partitions work, not sample size. These are implementation choices and
+lower-bound reasoning, not measured end-to-end speedup claims.
+
+Scheduling matters separately from kernel speed. DROID's current-checkpoint panel
+is now queued at a verified training-epoch boundary, with optimizer/RNG-preserving
+resume afterward. It need not wait for all50training epochs. Checkpoint history
+remains required and other seeds continue independently; no trajectory is dropped.
+
+The [GPU chapter](https://jax-ml.github.io/scaling-book/gpus/) distinguishes
+compute capacity from memory/network movement. Our application is to partition
+whole paired RNG streams across GPUs without collectives and stage immutable
+inputs while other experiments run. More workers help only after their dependencies
+are ready; the current extra US4090 adds a Push-T candidate lane independently of
+its native producer. A completed12-episode reference stream can release its paired
+candidate work without waiting for all96 reference episodes. Analysis still needs96.
+
+The small HMM fitting problem already has local512×6×400 native features/task.
+It took1.90seconds for Reach and1.54seconds for Reach-Wall on the CPU, including
+four family-disjoint fitting folds and the final fit. Moving that tiny job to a
+busy remoteGPU would add staging/scheduling overhead. Neural-network rollouts stay
+on the GPUs; fitted gate tensors are staged once and evaluated on whole CEM batches.
+These are measured CPU fitting times, not estimated GPU rollout speedups.
+
+The constant HMM gate is the same refined fixed edit. Subject to full source,
+stimulus, receiving-device and whole-planner equivalence, reuse native/constant/
+random-constant records from the running panel:576 duplicate episodes avoided,
+768 genuinely new paired routed episodes remain. Do not relabel the old raw files
+or claim their one-pass runtime includes the extra HMM native shadow. The original
+v2 HMM implementation pays for a separate native shadow to isolate history
+from intervention feedback; that reference cost remains visible. The v3 same-pass
+implementation above requires exact numerical equivalence first. Additional
+precision/kernel benchmarks are not prerequisites for completing these comparisons.
+
+## September8 execution lesson: move only the model's actual inputs
+
+The Push-T archive contains unused precomputed tokens and thousands of training
+videos not read by the current native planning job. Copying its entire2.785GBarchive
+over a measured~4MB/s peer link delayed an otherwise ready GPU. The source archive
+was already checksum-verified and completely extracted onIndiana, so we transferred
+only the30 unchanged files actually read:333,854,917bytes before transport compression.
+These include all21validation videos,full state/action/velocity/length tensors and
+the one excluded fitting-scenario video. The released model was already onreceiver.
+Every receiving file was checked against the full source manifest;96total planning
+episodes,source-family accounting,stimuli andCEM budget did not change.
+
+For a serial input dependency,`T_transfer >= bytes_sent / effective_network_bandwidth`.
+This is a lower bound,not a measured end-to-end speedup: serialization,compression,
+verification and startup also cost time. Extra idle GPUs do not eliminate a serial
+input dependency. Once inputs/checks are ready,independent task/seed/whole-RNG-stream
+jobs can run concurrently without changing model arithmetic or duplicating episodes.
+This is an operational application of the book's compute-versus-data-movement
+reasoning,not an additional optimization benchmark or a smaller experiment.
+
+## New decision: remove repeated response forecasts with a separately tested method
+
+September 7, late evening EDT: implement the user's **Design 1** in
+[Rank Edit.md](Rank%20Edit.md), specified in [the successor contract](docs/FIXED_RESPONSE_RANK4.md).
+This is a new approximation, not an exact optimization of the old frozen intervention.
+
+The main opportunity is reducing total work: compose a representative response solve
+with the error readout offline. Deployment uses a three-score projection, a 4x4 map,
+and a four-direction expansion in the existing forecast. No 102,400-square matrix,
+32 repeated online probes, extra native rollout, or cross-GPU communication is needed.
+The factors stay on the GPU and the existing candidate population is processed in a
+batch. Memory reuse and matrix shape matter as well as nominal FLOPs, consistent
+with the [GPU chapter](https://jax-ml.github.io/scaling-book/gpus/).
+
+For field width D=102,400, projection plus expansion costs approximately
+`D*(3+4)=716,800 multiply-accumulates/candidate`, excluding centering, normalization,
+hook and logging work. Their FP32 factors occupy `4*D*(3+4)=2,867,200 bytes`
+(2.734 MiB); mean, scales, maps and the separately stored random control add memory.
+These are shape calculations, **not measured latency or a 35x speedup claim**.
+
+The fitting cost must amortize: `N > T_fit / (t_old - t_new)` when `t_old > t_new`,
+using matched hardware and a consistent unit of work. A cheaper map is useful only
+if its task behavior and runtime justify it. Unit tests establish one backend call;
+real calibration, full-planner timing and new efficacy evaluation are still required.
+We do not reduce 96 episodes or the planner's candidate/iteration counts to obtain
+the saving, and we do not equate GPU utilization with useful scientific throughput.
+
 ## The three ideas to remember
+
+Execution note, September8: the fixed map now has real calibration and full-CEM
+engineering measurements. On the original single4090 engineering scenario,
+native/new-map episodes took314.28/313.03seconds. This is feasibility evidence for
+a different operator, not population-wide latency equivalence or preserved old
+efficacy. New corrected offline measurements and separately frozen behavioral
+comparisons are required and are being collected.
+
+The eight-GPU behavioral worker partitions whole12-episode RNG streams across
+devices, with no collectives and no duplicated scientific episodes:96 remains
+the total per task/condition. A CPU coordinator waits for complete receipts before
+analysis. Runtime transport was a real serial bottleneck: four disjoint checksum-
+resumable file streams finished the partial copy without changing any scientific
+arithmetic. Deployment/setup time counts against time-to-results, even when GPU
+FLOPs are plentiful. Optional optimization benchmark studies remain deferred.
 
 1. Find what actually limits completion: model arithmetic, memory traffic, CPU
    preparation, storage, or a prerequisite that has not finished.
@@ -24,7 +143,7 @@ The code is PyTorch; these hardware and mathematical principles do not require J
 | Memory capacity | Weights are only part of the working memory. | Bound probe batches; retain full final CEM populations. |
 | Pipeline overlap | Prepare the next batch while the GPU handles this one. | Original baseline supports bounded prefetch; corrected author-validation path is still synchronous. |
 | Reuse | The cheapest model call is an unnecessary one we can avoid. | Clip encodings are reused across prefixes; verified local encoder/assets are reused. |
-| Independent jobs | Different episodes can run without sharing intermediate tensors. | Disjoint GPU process shards exist; multi-training-seed scheduling is not yet implemented. |
+| Independent jobs | Different episodes can run without sharing intermediate tensors. | Disjoint GPU process shards exist; three Wall training seeds are now assigned to separate GPUs, preserving global128 and native updates. |
 | Training parallelism | Copies learning one model must synchronize updates. | Global batch and optimizer-update equivalence must be preserved before changing the training layout. |
 | Smaller linear algebra | Solve in the small dimension when the algebra permits it. | Sample-space PCA and low-rank response solves already exist. |
 | Critical path and cost | Busy hardware is not the same as earlier scientific completion. | Prioritize ready dependencies and verified results per dollar; do not invent work to fill devices. |
@@ -32,6 +151,25 @@ The code is PyTorch; these hardware and mathematical principles do not require J
 “Implemented” here means the named code path exists, not that every runner uses it
 or that a controlled benchmark has established a speedup. No new speedup is claimed
 by creating this document.
+
+### September8 00:08UTC: scheduling and storage are separate bottlenecks
+
+Two California GPUs finished their coupling jobs around23:46 and were idle until
+their next canonical jobs started00:02. Filling those slots restores14/14 assigned
+GPUs but would at most yield14/12=1.167x aggregate throughput for equal independent
+work; it does not remove the roughly32-probe multiplier in rank-response estimation.
+Utilization alone does not establish efficient computation or a defensible ETA.
+Report work by task, arm and completed episode, not just rented GPU count.
+
+The first Wall seed completed the native validation/checkpoint-resume proof and
+entered epoch2; two other seeds run independently. Gradient accumulation keeps the
+authors' global128 update while fitting on oneGPU perseed. This is distinct from
+silently reducing the batch or treating three evaluation seeds as trained models.
+
+The laptop disk filled, but remote jobs continued. Bulk snapshots now stream
+through bounded RAM to Google Drive and GCS; no extra local tar archive is needed.
+Archive readback hashes and per-member hashes gate deletion of local duplicates.
+Keep scientific originals, compact result summaries, plans and recovery maps.
 
 ## 1. Rooflines: which resource is the bottleneck?
 
@@ -502,3 +640,51 @@ authorized training seeds; it is not evidence that training has started. The
 general lesson remains to measure the whole critical path, including I/O and
 verification, instead of using GPU occupancy alone as a speed metric.
 [GPU resource balance](https://jax-ml.github.io/scaling-book/gpus/).
+
+## Training: preserve the experiment when changing the GPU allocation
+
+PointMaze uses the authors' effective batch `G = R × b = 16 × 8 = 128`.
+The existing accumulation implementation combines the 16 logical microbatches
+before one optimizer/scheduler update: `g = (1/16) Σ g_r`. This keeps batch size,
+loss, update count and optimizer schedule fixed when only one physical GPU is
+available. It does **not** make one GPU as fast as sixteen, or reproduce an
+undocumented hardware reduction order. Actual-upstream gradient/optimizer/RNG
+parity is a gate, not an assumed speedup. Independent training seeds can run on
+different available GPUs without exchanging gradients between seeds.
+
+Data movement also matters: PointMaze's raw archive is about 0.72 GB compressed but
+30.1 GB expanded. Transfer the pinned compressed archive once to a worker, verify
+existing files, and add only missing training inputs. Keep active input bytes
+unchanged. This is an execution choice, not a reduction in trajectories, clips,
+validation batches or planning episodes. No new optimization experiment was added.
+
+These choices apply the book's distinction between compute, data movement and
+communication costs. See [the GPU/data-parallelism discussion](https://jax-ml.github.io/scaling-book/gpus/).
+
+## September 8: parallel DROID execution without changing the sample
+
+The prepared DROID panel has nine arms and 64 total episodes per arm. Four GPUs
+receive two of the eight persistent RNG streams each: `64 / 4 = 16` episodes per
+arm per device, not 64 per GPU. Native and candidate episodes for a stream stay on
+the same physical GPU. No gradient synchronization is required for these frozen
+models. A rough lower bound is `T ≈ max_g(work_g / measured_throughput_g)`, plus
+staging, engineering and final analysis. Four devices do not guarantee exactly
+four times the speed; hardware-specific timings and the longest shard determine
+the actual finish time. The new receiving-GPU measurements are still pending.
+
+Hardware changes can also change floating-point results. The new freeze therefore
+collects a paired native reference on each receiving device and requires exact
+same-device repeat/zero identity. It does not silently reuse a different GPU's
+native outcomes or pool an incomplete earlier panel into the new comparison.
+
+Storage is a separate bottleneck. A verified 8.79 GB DROID input relay and a
+1.36 GB PointMaze checkpoint/input relay use CPU/network and spare disk on an
+already owned worker, without another GPU storage rental. A stalled Drive upload
+was retried over IPv4 with 8 MiB chunks: the 844.5 MB archive uploaded at roughly
+14 MiB/s and passed full readback. Because both connection family and chunk size
+changed, this is an operational recovery measurement, not an isolated causal
+benchmark of either choice. The source files and failed attempt were preserved.
+
+This applies the book's compute-versus-data-movement distinction to the complete
+pipeline, while leaving the scientific samples, CEM budgets and doses unchanged.
+See [the roofline model](https://jax-ml.github.io/scaling-book/roofline/).

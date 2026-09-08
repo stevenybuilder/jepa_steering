@@ -11,6 +11,25 @@ paper-population replication or a three-training-seed/checkpoint-history result.
 Receipt: `artifacts/offline_study/droid-native-replication-verification-20260907-v1`.
 Intervention fitting/comparisons and confirmation remain unfinished.
 
+September8 parallel preparation: the separate128-recording/512-prefix fit-input
+audit passed native pixel/action/state/RNG parity and exact state-overlap checks.
+Selection is frozen from the complete74,970-object public raw-DROID catalogue,
+without success/lab filtering; preserve four missing-camera and two native-length
+exclusions and all failed preparation receipts. This does not prove population
+independence or reconstruct the authors'8,000-row base-training manifest. Follow
+[the separate input contract](DROID_INTERVENTION_FIT_INPUTS.md); validate source
+lineage, native left-camera/frame/action handling and evaluation disjointness before
+any fit or candidate launch. No Franka evaluation recording becomes fit data.
+
+The [DROID-specific coupling contract](DROID_COUPLING_BEHAVIOR.md) now has a fitter,
+native H3/B6 runtime, full-planner engineering, paired64-episode runner and complete
+recording-cluster analysis implemented. At 11:08 UTC September 8, the v2 fit and
+all eleven full-planner engineering episodes passed, and scientific candidate
+episodes are running. This is still an incomplete development comparison. A
+separate four-GPU freeze retains 64 total episodes per arm and requires new
+same-device paired native references; its receiving GPU checks remain pending.
+The original PointMaze epoch-3 checkpoint/history remain verified and preserved.
+
 ## Reference and claim
 
 JEPA-WM v4 is the governing paper, not a stock DROID imitation-learning benchmark.

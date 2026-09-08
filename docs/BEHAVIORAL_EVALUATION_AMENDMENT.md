@@ -2,6 +2,37 @@
 
 ## Decision and scope
 
+September8 HMM addition: the latest explicit user request admits the already named
+constant, memoryless and HMM gates around the refined edit to paired behavioral
+development, without claiming the former conditional history-value eligibility
+test passed. Fit-only results are retained, not used to search for a new estimator.
+[The separate HMM contract](HMM_FIXED_RESPONSE_BEHAVIOR.md) fixes source/fit
+bindings, native-shadow causality, comparable fit budgets, paired controls,
+96-total/task/arm, verified reference reuse and16-contrast analysis before reveal.
+
+Later user authorization (September 7, late evening EDT) selects the cheaper
+replacement proposed in `rank 4 intervention.md` / `Rank Edit.md` for implementation
+before new behavioral launches. [Design 1's contract](FIXED_RESPONSE_RANK4.md) now
+defines a separate one-pass fixed-response operator and controls. This supersedes
+the earlier pause on defining a replacement, **not** the stop on the old expensive
+operator or the requirements for valid inputs, engineering and pre-outcome freezes.
+Do not substitute the successor into an old frozen panel, inherit its statistics,
+or activate a combined hook using changed features. Other-ablation coverage and
+the six-task/multi-seed study remain required work.
+
+Latest execution amendment (2026-09-08,01:08UTC): the user explicitly requests
+actual behavioral tests of the other ablation-table categories, including those
+without significant offline improvements. The initial seven-condition panel is
+not complete coverage. See [the coverage inventory](../reports/ABLATION_COVERAGE_STATUS.md).
+Prepare the complete existing static coupling factorial on Wall/PointMaze first,
+with unchanged task-native planners, paired96-per-condition scenarios and controls.
+The new local adapter is unvalidated/unlaunched; exact receiving-worker native and
+source-compiler parity must pass before scientific execution. Preserve old freezes.
+The expensive operator and combination remain stopped by explicit user request;
+this amendment does not authorize restarting them, bypassing their support machinery,
+or inventing a replacement operator while another thread addresses its definition.
+Geometry, layer/spatial and conditional HMM behavioral coverage remain unfinished.
+
 Implement the user-approved PointMaze, Wall and subsequently approved DROID additions
 and paper-style behavioral design-choice evaluation. Retain Reach, Reach-Wall and
 Push-T: six intended tasks, not six completed behavioral evaluations. RoboCasa is

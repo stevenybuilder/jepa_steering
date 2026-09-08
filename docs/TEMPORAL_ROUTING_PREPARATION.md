@@ -1,5 +1,12 @@
 # Conditional temporal-routing preparation
 
+September8 update: native128-family fits, the archived-math port, family-disjoint
+history diagnostics and causal successor adapter are now implemented. The user's
+explicit request for HMM behavioral ablations supersedes the old eligibility-only
+admission restriction for the new development panel; no positive history-value
+claim follows. See [the separate paired contract](HMM_FIXED_RESPONSE_BEHAVIOR.md).
+Full GPU engineering and paired behavioral results remain required.
+
 The governing question is in [EXPERIMENT_PLAN.md](EXPERIMENT_PLAN.md): does native
 imagined history H1/H2 add useful information beyond H2 alone when deciding a fixed
 intervention at H3? A reproducible non-routed effect is necessary, not sufficient.

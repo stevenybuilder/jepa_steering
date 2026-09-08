@@ -39,6 +39,8 @@ def main():
     parser.add_argument("--key", required=True)
     parser.add_argument("--fixtures-only", action="store_true")
     parser.add_argument("--tar-stream", action="store_true", help="Fallback if rsync is unavailable")
+    parser.add_argument("--canonical-panel-only", action="store_true",
+                        help="Stage only new canonical rank inputs; never replace active environments")
     parser.add_argument("--pointmaze-to-training-worker", action="store_true",
                         help="Stage the verified isolated CA simulator/runtime to the US training worker")
     args = parser.parse_args()
@@ -48,6 +50,14 @@ def main():
     instances = json.loads(subprocess.check_output([VAST, "show", "instances", "--raw"], text=True))
     by_id = {row["id"]: row for row in instances}
     source_id, destination_id = SOURCE_ID, DESTINATION_ID
+    if args.canonical_panel_only:
+        if args.fixtures_only or args.pointmaze_to_training_worker:
+            raise ValueError("Canonical panel staging must be a separate mode")
+        paths = ["workspace/jepa-runtime/" + path for path in (
+            "canonical-panel-code-v1", "author-correction-20260907/code-v28",
+            "planning-selected-full-cem-smoke-20260907-v1",
+            "metaworld-native-goal-bank-20260907-v1",
+            "metaworld-goal-delivery-check-20260907-v2")]
     if args.pointmaze_to_training_worker:
         if args.fixtures_only:
             raise ValueError("Fixture and navigation-runtime modes are separate")
@@ -71,6 +81,9 @@ def main():
         dest_ssh = ["ssh", "-o", "BatchMode=yes", "-o", "StrictHostKeyChecking=accept-new",
                     "-o", "ServerAliveInterval=15", "-o", "ServerAliveCountMax=6",
                     "-o", "ConnectTimeout=15", "-p", str(destination[1]), "root@" + destination[0]]
+        if args.canonical_panel_only:
+            subprocess.run(dest_ssh + [" && ".join("test ! -e " + shlex.quote("/" + path)
+                           for path in paths)], env=env, check=True)
         # Restartable transfer: interrupted files are completed on retry. No
         # --delete, in-place overwrite of running code, or local staging archive.
         command = shlex.join(["rsync", "-a", "--relative", "--partial", "--compress",

@@ -1,5 +1,60 @@
 # Frozen-model offline study: active plan
 
+DROID preparation addition (September8): native-eligible raw fitting inputs and
+their exact loader/identity audit are separate from the15Franka evaluation files.
+Prepare the pre-existing vision/action factorial for the DROID12-block/H3 model
+using the [task-specific coupling contract](DROID_COUPLING_BEHAVIOR.md). This is
+not a six-block/H6 adapter transfer. The separate fit and eleven full-planner
+engineering checks completed on September 8; the candidate comparison is still
+incomplete. A four-device execution freeze retains 64 total episodes per arm and
+collects a new paired native baseline on the receiving GPUs, rather than assuming
+cross-hardware outcome identity. Existing measurements remain separately preserved.
+
+HMM behavioral addition (September8): implement the user's explicit paired
+constant/memoryless/HMM comparison around the refined fixed-response edit while
+non-routed rollouts continue. [The HMM contract](HMM_FIXED_RESPONSE_BEHAVIOR.md)
+supersedes the older conditional eligibility-only admission rule for this new
+behavioral-development comparison. Negative fit-only history diagnostics remain
+reported; no qualified-history, success or confirmation claim is inferred.
+
+Push-T behavioral addition (September8): prepare the complete existing static
+coupling factorial on the same96-total native replication streams. Reuse the
+original128-family fit, keep the full published planner, verify exact source
+segments and receiving-device native/zero/source parity, and cluster uncertainty
+by original initial-state family. See [the Push-T coupling contract](PUSHT_COUPLING_BEHAVIOR.md).
+Preparation is not completed candidate engineering, efficacy or confirmation.
+
+PointMaze history execution (September8): the full native50-epoch/1139-update
+schedule,1800/200train/validation rows,16x8effectivebatch and five native validation
+events per epoch are now implemented separately from Wall. The source validation
+sampler retains its final partial batch; checkpoint resumes retain its cursor.
+See [the PointMaze training-history contract](POINTMAZE_TRAINING_HISTORY.md).
+Receiving input/CPU checks do not establish completed training, late-checkpoint
+behavioral comparisons or confirmation. Seeds234/235/236 remain required.
+
+Execution addition (September8): the native Push-T replication now has a separate
+receiving-device full native/repeat check in`offline_study.pusht_planning_check`,
+including exact repeated actions,complete30step/300candidate/30iteration schedules
+and source/fit-cohort bindings. Its simulator setup must match the original excluded
+fit10810 stimulus hashes. `pusht_planning_replication` retains all21released validation
+rows,96total episodes/eight persistent RNG streams,actual upstream segment sampling
+and family tracking. This supplies a native behavioral reference,not fresh-family
+confirmation or the still-required candidate comparisons. Newsource6528bdc7 is
+separate from the already executing MetaWorld/navigation snapshots. Wall235/236
+histories resume from verified archived epoch2 state,not from reinitialization;
+their50epoch/native-validation/late-checkpoint requirements remain unchanged.
+
+Latest operator amendment (September 7, late evening EDT): the user supplied
+`rank 4 intervention.md` and its linked `Rank Edit.md`, authorizing the cheaper
+replacement before subsequent behavioral launches. The first engineering choice is
+**Design 1: an offline-fitted fixed response map**, separately named
+`fixed_response_rank4_v1`. See [the executable successor contract](FIXED_RESPONSE_RANK4.md).
+It retains B3/H3, four distributed directions and task-specific dose, but removes all
+online response probes and native shadows. It does not inherit old efficacy results
+or the old cross-arm zero rule. The legacy expensive rank/combined panel remains
+stopped; the one-pass combined successor is not yet enabled. No automatic Design 2/3
+search, changed episode counts, or fresh-confirmation access follows from this addition.
+
 Latest user-approved scope (2026-09-07, after 14:00 EDT): six intended tasks --
 Reach, Reach-Wall, Push-T, PointMaze, Wall, and DROID. RoboCasa is explicitly
 excluded. DROID follows the authors' recorded-Franka planning/action-score setup,
