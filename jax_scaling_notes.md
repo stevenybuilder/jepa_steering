@@ -5,7 +5,36 @@ decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.m
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).
 The code is PyTorch; these hardware and mathematical principles do not require JAX.
 
-## Live processing follow-through — September 8, 15:57 UTC
+## Processing validation completed — September 8, 16:16 UTC
+
+The proposed Push-T selected-frame input path now has **real first-batch parity**:
+all256 native rank-ordered clips matched the authors' whole-video reader in
+pixels, normalized actions/proprioception, raw states, rewards and RNG progression.
+The dedicated CPU attempt took116.80seconds including56 receiving tests; the
+input comparison itself took84.41seconds. No GPU was used and no validation or
+confirmation rows were read. Nine compact records passed local hash readback;
+the616.65MB tensor batch stayed on the worker. Full local suite:445tests,2skips.
+
+| Gap | Cause | Applied correction | Limit of the evidence |
+|---|---|---|---|
+| Push-T training preparation could not safely reuse navigation's selected-frame adapter. | Dataset-specific velocity, relative-action scaling, clip ordering and native transforms needed verification. | A separate training-only reader compares four selected frames and independently normalized modalities against the actual whole-video native path for32×8 clips; all pass. | This is one verified engineering batch. Full-loader worker RNG, histories/resume and CUDA update parity remain required; no training speedup factor is measured. |
+| Supporting input-proof files were not rechecked by the model-entry gate. | DONE/report/protocol were bound, but auxiliary comparison/input manifests could disappear or change. | Gate now checks those hashes, original source manifest, exact256 identities, per-sample bytes and RNG continuity. Receiving tests and the real batch passed. | Prevents invalid evidence from authorizing a model check; this is correctness, not a GPU speedup. |
+| Preparation could occupy a GPU or move a large tensor batch back to a nearly full laptop. | Treating decoding/storage as accelerator work would consume capacity without needed model computation. | CPU-only, single-threaded low-priority decoding on the existing data host; no dataset download, no GPU allocation, compact receipts only transferred. | The benefit is overlap/avoided transfer; elapsed verification time is not an inference benchmark. |
+
+These apply the [roofline/overlap principle](https://jax-ml.github.io/scaling-book/roofline/)
+and [inference work-reuse principle](https://jax-ml.github.io/scaling-book/inference/):
+avoid transforming irrelevant frames, but establish equivalent inputs before
+changing a scientific path. The native history runner is not silently switched.
+[Implementation](src/offline_study/robotics_training_batch.py) and
+[receiving proof](artifacts/offline_study/robotics-training-batch-20260908-v1/READBACK.json).
+
+HMM16:13 readback: all72 engineering cases/eight suites passed; all eight GPUs
+now run scientific children.23/768 endpoints are verified (no complete24-episode
+shard yet). Scientific timings298.27–307.79seconds, median299.27seconds; no current
+failures. Lower utilization samples during some observations are not idle leases:
+each device still has its verified running scientific child.
+
+## Historical processing follow-through — September 8, 15:57 UTC
 
 Fresh read-only audit: all **17 assigned GPUs on five US instances are busy**;
 16 sampled100% and one99%. Account rate$6.732593/hour before usage bandwidth.

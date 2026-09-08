@@ -1,4 +1,22 @@
-# Execution checkpoint — 2026-09-08, 15:57 UTC
+# Execution checkpoint — 2026-09-08, 16:16 UTC
+
+HMM16:13 audit: all72/72 engineering cases and8/8 complete suites passed the
+unchanged frozen verifier. All eight devices have bound scientific children;
+23/768 endpoints individually verified,0/32 complete shards at that snapshot.
+No new job/coordinator failures. First23 scientific timings298.27–307.79seconds,
+median299.27seconds. No partial-effect analysis or scientific changes.
+
+Push-T training preparation completed its real first256-clip input parity check
+onIndianaCPU: all pixels/actions/proprio/states/rewards/RNG and selected raw/source
+bytes verified against native;56 receiving tests passed. PID14758 exited, no CUDA
+initialization, model call or validation/confirmation access.116.80seconds including
+tests; nine compact receipts fully hash-readback locally.616.65MB batch remains
+remote. [Proof](../artifacts/offline_study/robotics-training-batch-20260908-v1/READBACK.json).
+This is not training history, worker-resume or GPU numerical parity. Full local
+suite445tests/two existing skips. Code7191fad pushed. Current account rate at16:15
+was$6.732593/hour before bandwidth; no new instances or scientific restarts.
+
+## Historical checkpoint — 15:57 UTC
 
 Latest [read-only audit](../artifacts/offline_study/live-allocation-audit-20260908T1552Z/REPORT.json):
 five owned US instances/17 assigned GPUs all busy,0 idle; aggregate$6.732593/hour

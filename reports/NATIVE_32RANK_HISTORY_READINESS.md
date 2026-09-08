@@ -1,14 +1,36 @@
 # MetaWorld and Push-T native 32-rank history readiness
 
-September 8, 2026; implementation update at 15:57 UTC. **A CPU-tested receiving
-core and complete raw-input byte audit now exist; full native reader/history
-implementation and launch authorization do not.** This documents the existing required three-seed/history track;
+September 8, 2026; implementation update at 16:16 UTC. **Push-T's first native
+256-clip batch now passes real-input pixel/modality/RNG parity. The receiving core,
+model factory and complete raw-input byte audit also exist; full native loader/
+history implementation and launch authorization do not.** This documents the existing required three-seed/history track;
 it does not alter frozen experiments, authorize protected access, introduce a new
 method, or make feature caching a prerequisite. Current-checkpoint behavioral
 work remains independent. No new model outputs or GPU timings were collected
 for this track.
 
 ## Implemented since the initial readiness audit
+
+- **Real Push-T first-batch input proof passed on Indiana.** The new
+  [producer](../src/offline_study/robotics_training_batch.py) compares actual native
+  whole-video slicing against independent selected-frame decoding and raw-sidecar
+  normalization for the first32×8 rank-ordered training clips. All256 comparisons
+  passed exact pixels/actions/proprio/raw states/rewards and RNG checks, including
+  per-sample byte hashes and before/after selected-file/source checks. The batch
+  uses255 released training rows; that is not255 independent initial-state
+  families or a statistical evaluation sample. Validation/confirmation were not
+  opened. The dedicated CPU process exited after116.80seconds including56 passing
+  receiving tests; input verification itself took84.41seconds. No GPU/model calls.
+  Nine compact receipts passed complete local readback; the616,652,800-byte tensor
+  batch remains remote. [Readback](../artifacts/offline_study/robotics-training-batch-20260908-v1/READBACK.json).
+  Report SHA256 `4b14268d293bb708ad8b96c074624a4d52c4b70ca57988c9858273a8eaa1b7aa`.
+- The consumer gate now verifies the auxiliary comparison/selected-input files,
+  original manifest, exact first-update identities, continuous RNG chain, each
+  supplied sample's bytes and producer source. MetaWorld remains closed until its
+  separate access-aware reader exists. These are first-batch engineering proofs,
+  not native worker-base-seed initialization, persistent loader RNG, validation
+  cursor, receiving GPU update or history/resume parity. Full local integration
+  ran445 tests with two existing skips. Scientific GPU snapshots were unchanged.
 
 - [Native model constructor](../src/offline_study/robotics_training_model.py)
   now uses the exact upstream dimension/kwargs/model/optimizer/VideoWM call AST.
@@ -37,11 +59,12 @@ for this track.
   optimizer/scheduler update. Nineteen local CPU tests pass, including failure
   and provenance guards. The public numerical entrypoints require real native
   CUDA/model/input evidence; synthetic tests cannot authorize execution.
-- The complete integration suite ran401 tests with two existing skips. Neither
-  these tests nor byte verification establish transformed-input, GPU numerical,
-  validation-cursor or epoch-resume equivalence. The native input parity reader
-  and complete history orchestration remain missing. Existing behavioral and
-  corrected-navigation queues do not wait for this work.
+- At the earlier raw-byte/core milestone, the integration suite ran401 tests with
+  two existing skips; the latest445-test run and separate real Push-T input proof
+  are recorded above. Byte verification or CPU unit tests alone do not establish
+  GPU numerical, validation-cursor or epoch-resume equivalence. Complete loader/
+  history orchestration remains missing. Existing behavioral and corrected-
+  navigation queues do not wait for this work.
 
 ## Pinned evidence
 
@@ -168,12 +191,14 @@ three MetaWorld plus three Push-T histories, not a separate Reach-Wall model.
 
 ## Readiness gates and protected scope
 
-- **Full raw bytes now verified; native transformed inputs still pending.** The recent
+- **Full raw bytes verified; Push-T first-batch transformed inputs also passed.** The recent
   `artifacts/offline_study/pusht-native-recovery-20260908-v1/PUBLIC_INPUTS.json`
   contains 31 files: only one training video and all 21 validation videos. It is
   a planning recovery bundle, not the18,685-video training pool. The separate
   complete pool was found and verified on Indiana in the update above. No need
-  to redownload it. Byte identity alone is not native pixels/actions/RNG parity.
+  to redownload it. Byte identity alone is not native pixels/actions/RNG parity;
+  the separate first-batch proof above supplies that bounded evidence for Push-T,
+  not full-loader or MetaWorld equivalence.
 - **The 140 other protected MetaWorld validation rows remain protected.** Complete
   native monitoring eventually reads all 1,260 validation rows. Existing approval
   for the seven primary rows is not approval for these other 140. Resolve the
@@ -195,13 +220,14 @@ These are dependencies of the already required study, as described in the
 
 ## Implementation ownership and remaining files
 
-The first two modules/tests now exist. Keep current navigation runners and frozen
+The raw verifier, first-batch producer, update core and model factory now exist.
+Keep current navigation runners and frozen
 snapshots unchanged; no history launch is implied by this table.
 
 | Responsibility | Files | Status |
 |---|---|---|
 | Complete raw-input binding | `src/offline_study/robotics_training_inputs.py`, `tests/test_robotics_training_inputs.py` | Implemented; full receiving byte audit passed |
-| Native reader/order/transformed-input parity | Separate reader module/tests still required | Not implemented by the byte verifier |
+| Native reader/order/transformed-input parity | `src/offline_study/robotics_training_batch.py`, `tests/test_robotics_training_batch.py` | Push-T first256 real clips passed receiving parity; full-loader/history and MetaWorld reader still missing |
 |32-rank update, logical RNGs and receiving numerical pilot | `src/offline_study/robotics_training_pilot.py`, `tests/test_robotics_training_pilot.py` | Implemented and CPU-tested; native GPU proof pending |
 | Native model/optimizer construction | `src/offline_study/robotics_training_model.py`, `tests/test_robotics_training_model.py` | Implemented;11 CPU tests; no receiving CUDA construction or first-update RNG parity claimed |
 | Task-specific monitoring, histories, epoch resume | `src/offline_study/robotics_training_history.py`, `tests/test_robotics_training_history.py` | Not yet implemented |

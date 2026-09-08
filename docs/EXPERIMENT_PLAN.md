@@ -60,8 +60,11 @@ epoch and 50 epochs. The [read-only readiness report](../reports/NATIVE_32RANK_H
 records verified schedules, partial validation batches, RNG/resume requirements
 and implementation ownership. Complete raw-input bytes were verified onIndiana
 at15:07UTC and the separate32-rank update core is CPU-tested. A native caller-bound
-model factory is also implemented, but not receiving-GPU validated; native tensor
-parity, full initialization/monitoring/resume and actual numerical checks remain.
+model factory is also implemented, but not receiving-GPU validated. At16:16UTC,
+Push-T's first256 rank-ordered training clips passed actual native whole-reader
+versus selected-frame pixel/modality/RNG parity onCPU. This is not full-loader
+parity: full initialization/monitoring/resume, MetaWorld inputs and receiving
+GPU numerical checks remain.
 These implementations are not full-history launch authorization. The140 still-
 protected MetaWorld validation rows remain unresolved. The report also records
 the MetaWorld training-YAML 48 versus existing paper-matched 96-total behavioral

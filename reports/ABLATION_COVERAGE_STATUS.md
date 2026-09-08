@@ -1,11 +1,11 @@
-# Ablation coverage — latest verified execution, 2026-09-08, 15:57 UTC
+# Ablation coverage — latest verified execution, 2026-09-08, 16:16 UTC
 
 The historical inventory below remains evidence of prior state. Current additions:
 
 | Comparison | Completed | Running or prepared | Still missing |
 |---|---|---|---|
 | Refined fixed-response edit, Reach/Reach-Wall | Corrected successor offline scopes; all receiving-GPU checks;96 native, refined, matched-random edit and coupling-only episodes/task | Last matched-random coupling control follows HMM priority work | Complete registered five-arm analysis; fresh confirmation and seed/checkpoint-history comparisons |
-| HMM, Reach/Reach-Wall | Separate fits; frozen causal same-pass implementation;16 receiving scientific CPU tests;11 receiving scheduling tests;576 references verified |69/72 excluded engineering cases; five full suites verified, five scientific children and3/768 scientific endpoints complete | Remaining engineering and765 endpoints at this snapshot, paired analysis; no HMM efficacy yet |
+| HMM, Reach/Reach-Wall | Separate fits; frozen causal same-pass implementation;16 receiving scientific CPU tests;11 receiving scheduling tests;576 references verified; all72 engineering cases/eight full suites passed | Eight scientific children and23/768 scientific endpoints verified at16:13UTC |745 endpoints at this snapshot, paired analysis; no HMM efficacy yet |
 | Static coupling, Wall/PointMaze |96 native and96 visual-only episodes/task;59/128 complete candidate streams including39 preserved | Seven scientific GPU workers,69 streams remaining; no new failures | Full factorial paired analysis and confirmation |
 | Static coupling, Push-T |96 native reference; full11 engineering checks; six completed12-episode candidate streams historically observed | California ownership quarantine; candidate continuation unresolved, no new contact/reassignment | Verify candidate preservation/ownership, remaining candidate streams, full paired analysis and confirmation |
 | Static coupling, DROID | Separate128-recording/512-prefix fit; all44 receiving checks;576/576 endpoints,72/72 shards and complete frozen paired analysis independently verified | All four DROID workers terminal; GPUs automatically handed to navigation | Other interventions, histories and fresh-recording evidence; this completed coupling panel establishes no improvement over native |
