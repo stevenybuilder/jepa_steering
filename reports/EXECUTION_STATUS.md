@@ -1,4 +1,68 @@
-# Execution checkpoint — 2026-09-08,19:14 UTC
+# Execution checkpoint — 2026-09-08,20:02 UTC
+
+The outcome-blind receiving audit verified808 published core episodes and32
+complete shards against their frozen raw action/model-call traces and paired
+native initial/goal stimuli. All checks passed;152 records remained at that
+audit snapshot. It performed no effect estimation or selection. The original
+eight control children and coordinator5929 remained live. The completed local
+suite has638tests, two existing skips,78.585seconds; log SHA256
+`d31adb3f166fa9de1bcc6245b6c6e6e5707c5f5bffb3375cc67086300860c7b1`.
+NewJersey's second Drive upload again hit quota403 despite bounded same-chunk
+retries. Its already full-readback-verified GoogleCloud archive and stopped
+source volume remain intact; do not re-upload the full archive repeatedly.
+Private Drive metadata/access for the214,512-byte preservation-receipts archive
+was verified (file`1FESmQnasahFE7KRlneflRXx1RObq2KvQ`).
+
+## Priority and earlier19:47 timing snapshot
+
+The user approved a core-only priority: finish the existing Reach/Reach-Wall
+five-arm behavioral-development comparison and its paired analysis, then review
+before any extension. All eight LA GPUs resumed the original remaining
+`matched_random_coupling` controls at19:32UTC. At19:47, each task had12/96 new
+control episodes published; all four other arms still have96/96 episodes per
+task and four complete24-episode shards. Current total792/960 episode records;
+168 remain. Partial new shards do not count as complete comparisons.
+
+The measured new-control medians are299.04seconds (Reach) and301.86seconds
+(Reach-Wall). The slowest-GPU remaining-work calculation was6429.92seconds,
+about1h47m at19:47. Allow approximately1h45m–2h15m for the remaining core panel
+and paired analysis, conditional on continued worker health. This is not an ETA
+for the deferred full six-task/confirmation/history study. The original
+CPU-only coordinator remains active and verifies all40shards/raw traces before
+the frozen eight-contrast analysis; no partial-result candidate selection.
+
+HMM and all owned extension/training processes onTexas,Nebraska,Indiana and
+NewJersey were administratively cancelled with their outputs preserved. No
+method/sample/seed/planner change or negative-effect inference follows. The
+original HMM supervisor performed its empty-GPU handoff; all eight exact HMM
+children/supervisors are terminal. Eleven original handoff tests and five new
+archive-stream verification tests pass. The TX/NE pause verifier initially
+encountered an exiting-process argv race after cancellation; a separate
+identity-bound readback verified all those processes terminal and GPUs empty.
+
+Nebraska andIndiana are stopped after complete local/source/archive-member and
+GoogleDrive compressed/member readback verification. Texas is stopped after
+the same local/source check plus a byte-identical replica on retained LA storage.
+Texas additionally passed full Drive compressed/member readback on its same
+uploaded object at19:58; the earlier quota403 failure remains preserved. NewJersey
+checkpoint/output archive has uploaded to the existing US-CENTRAL1 GoogleCloud
+bucket; its full compressed/member readback passed before the rental stop.
+Its latest complete resume checkpoints and selected records are already fully
+verified locally; older checkpoints remain on its source volume. No rental is
+destroyed. The interrupted partial NJ copy on LA is not counted as a backup.
+
+At19:52, account spend was$3.642593/hour before bandwidth, down from$6.962593.
+All four ancillary rentals were confirmed stopped/exited at19:55. This includes all stopped-volume storage and
+the untouched externalCalifornia rental. LA alone costs$2.482963/hour including
+its storage. No contact/signals/lifecycle changes to California orShanghai.
+
+Preservation manifests and exact stop receipts:
+[core-priority archive](../artifacts/offline_study/core-priority-pause-20260908-v1).
+Private Drive folder: [core-priority pause](https://drive.google.com/drive/folders/12r-UzKMTuyYm4wXKl9xPb3r5dcjfwsYr).
+The active priority is recorded at the top of[the experiment plan](../docs/EXPERIMENT_PLAN.md)
+and in`execution_priority_override`in[study.json](../configs/study.json).
+
+## Historical execution checkpoint — 2026-09-08,19:14 UTC
 
 The refined Reach combination passed all18 receiving numerical cases onTexas
 GPU3 with exact independent-reference output/RNG/record parity and unchanged

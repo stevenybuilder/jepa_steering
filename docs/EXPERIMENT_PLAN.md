@@ -1,5 +1,31 @@
 # Frozen-model offline study: active plan
 
+## Immediate execution priority — user approved September 8, 2026
+
+Finish the **existing five-arm Reach/Reach-Wall behavioral-development panel and
+its paired analysis first**. The remaining arm at approval was
+`matched_random_coupling`:96 total episodes per task,192 across both tasks,
+not per GPU. Retain the unchanged original source, fits, freeze, scenarios,
+seeds, planner settings and receiving-device checks. All eight original LA
+queues were released from the HMM scheduling hold at19:32UTC. Their existing
+CPU coordinator verifies all40 shards/960 records and runs the frozen analysis.
+
+HMM, additional combined behavioral tests, navigation/task expansion, and
+training-history work are **paused/deferred for review of this core result**.
+This is an explicit budget/scope decision, not evidence that paused methods
+fail. Completed and partial outputs remain preserved. Future continuation must
+use saved RNG state or replay an interrupted stream in a new directory, not
+splice new randomness into its remainder. Training requires a complete verified
+resume checkpoint. No fresh-confirmation or training-history claim follows
+from completion of this core development panel.
+
+Stop unused owned rentals after verified preservation, retaining their source
+volumes. No automatic extension/training successor. Earlier additions and
+scheduling descriptions below are historical context, not execution authority
+while this priority is active.
+
+## Earlier additions, subject to the priority above
+
 Refined combined engineering addition (September8): implement the already
 requested cheaper Reach combination using its unchanged coupling and fixed-map
 banks, with native B3/H3 features captured by a four-block predictor-prefix
