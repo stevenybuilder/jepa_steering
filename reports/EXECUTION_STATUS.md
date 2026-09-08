@@ -1,4 +1,44 @@
-# Execution checkpoint — 2026-09-08, 11:58 UTC
+# Execution checkpoint — 2026-09-08, 12:21 UTC
+
+HMM priority scheduling is activated, not merely implemented. All24 required
+reference shards/576native+refined+random episodes and raw traces/source/device
+bindings verify. Eleven receiving lifecycle tests passed, including actual safe
+process signaling, startup/exit races and resuming after a paused wait timeout.
+New supervisors49204–49211 and coordinator49212 are live onLA50233992. Original
+parents5202–5209 are suspended; their current coupling-only children continue
+untouched, one perGPU. Each complete child releases its GPU to the unchanged nine
+HMM engineering episodes, then96new routed episodes/device, then its original
+parent resumes the final coupling control. No scientific arm/stream/sample was
+dropped. No HMM GPU efficacy result yet. Old CPU cancellation records are explicitly
+administrative, not scientific failures. PlanSHA003e4365ffe8995ce39a8bc4890eb092cc9bb897c04b5358b5841228e88dd610.
+
+Texas DROIDv3 has completed the first32 new native episodes and is running
+candidate streams onall4GPUs. Keep64TOTAL/arm and all9arms; no oldv2 pooling or
+robot-success claim. PointMaze234 CPU waiter1830 and seed236 waiter2061 are ready
+onTexasGPUs0/1 respectively, each behind its complete144-endpoint DROID assignment.
+Both require receiving GPU numerical checks first.234 resumes originalepoch3;
+236 initializes its own fullfirst engineering epoch and then resumes only its own
+checkpoint through50. All2003data files/30.118GB and pinned runtime/cache verified.
+ReceivingCPU tests:5native/10handoff for234,5native/7handoff for236, no receiving skips.
+PointMaze235 continues onIndiana; this is queued training, not three completed histories.
+
+Latest backups verified: Navigation567files/642,822archivebytes, SHA
+0ce73bf41a657045c841fe5305b886c22d3e9d37580d9b6c6ca41e728cdd45f9;
+MetaWorld2119files/388,573,573archivebytes, SHA
+b44fb52ce7ecf44b9c8f705a29849f88f722c835edf0a32777cefe45e61fd3cb.
+Both under privateDrive `live-20260908T121000Z`, navigation andmetaworld-ipv4-v2.
+The original64MiB upload failed to finish despite >1GBsent; only its localupload
+process was stopped, spool/source preserved, and8MiB retry completed/fullreadback
+passed. Future uploads now use bounded retries/progress/8MiB chunks. No GPU job
+was stopped for storage. HMM60control files/93,488bytes also verified locally.
+
+FiveUSinstances/17workingGPUs; aggregate$6.732593/hour incl retained storage,
+before bandwidth. CaliforniaPushT remains externally stopped/quarantined, so its
+candidate continuation is unresolved. Local287tests passed,2runtime-specific skips.
+No complete new five-arm task-success claim, HMM efficacy, untouched confirmation
+or complete six-task three-seed/late-history study is established yet.
+
+## Historical execution checkpoint — 11:58 UTC
 
 DROID v3 is now executing its paired native/candidate panel on four Texas4090s.
 All four full11-episode engineering suites passed (900–919seconds/device): exact

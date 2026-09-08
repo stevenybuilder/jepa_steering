@@ -695,15 +695,25 @@ See [the roofline model](https://jax-ml.github.io/scaling-book/roofline/).
 
 The HMM panel reuses three completed arms: native, refined edit and its random
 control. Its first scheduler nevertheless waited for two additional coupling
-arms—384 episodes—that are not HMM inputs. The planned priority handoff removes
+arms—384 episodes—that are not HMM inputs. The activated priority handoff removes
 that scheduling edge: finish the current complete stream, run unchanged HMM
 verification/evaluation, then resume the other controls. All comparisons remain
 required. This is critical-path scheduling, not a FLOP reduction or a license to
 skip controls. It can bring the HMM answer forward without another rental; the
 total panel work and full-study completion time need not fall by the same amount.
+At activation the first coupling arm was already running. Its streams finish
+intact; HMM moves ahead of the final192 coupling-control episodes. Do not report
+all384 episodes as avoided delay, and no required comparison is removed.
 
 Likewise, staging compressed PointMaze data and its separate pinned runtime on
 CPU/disk while DROID uses the GPUs overlaps preparation with useful computation.
 The upper bound on benefit comes from the work that can actually overlap; it does
 not turn an I/O-bound preparation step into useful GPU work. Keep the completion
 latency and verified samples/hour alongside GPU utilization when measuring speed.
+
+The same local MetaWorld backup retry retained its388.6MB spool and switched from
+64MiB to8MiB chunks overIPv4: the successful upload took about29seconds at13.8MiB/s,
+then passed full member readback. The previous attempt had sent over1GB without
+completion. Future snapshot uploads now use8MiB chunks with bounded retries and
+progress reporting. This is operational recovery evidence, not an isolated
+network benchmark; no model precision, evaluation sample or GPU work changed.

@@ -1,6 +1,6 @@
 # HMM routing around the refined fixed-response edit
 
-## September8 priority scheduling preparation
+## September8 priority scheduling activation
 
 At11:54UTC the first three reference arms were almost complete, but the original
 CPU scheduler waited for all five arms, including384 coupling/control episodes
@@ -10,9 +10,19 @@ RNG-stream child to finish, verify native/refined/random-refined shard receipts,
 then run the same v3 engineering and four routed arms on that device. Resume the
 remaining original coupling controls afterward, including after a safe HMM failure.
 No arm is dropped; source/fit/freeze, samples, streams, device pairing and analysis
-remain unchanged. This is prepared prioritization, not a completed handoff or an
-outcome-based candidate choice. The existing waiters remain live until the new
-scheduler passes receiving tests and is explicitly recorded in the resource board.
+remain unchanged. At12:17UTC all11receiving lifecycle tests and all576 required
+reference episodes/traces verified; the priority scheduler was activated. Supervisors
+49204–49211 pause only original parents5202–5209 while their current coupling-only
+children finish intact. Coordinator49212 waits for all32 new routed shards. The
+old nine CPU supervisors were administratively cancelled with explicit preserved
+receipts; their cancellation markers are not scientific failures. HMM now precedes
+the final192 coupling-control episodes; the already-started coupling-only streams
+are not discarded or interrupted. No HMM GPU engineering or efficacy is claimed yet.
+
+Plan SHA256: `003e4365ffe8995ce39a8bc4890eb092cc9bb897c04b5358b5841228e88dd610`.
+Control root: `/workspace/jepa-runtime/routing-priority-20260908-v3`. Failed CPU
+preparations v1/v2 are preserved. The original five-arm analysis remains required
+and its coordinator is unchanged; the HMM analysis does not wait for that analysis.
 
 ## September8 same-pass execution amendment, before routed outcomes
 

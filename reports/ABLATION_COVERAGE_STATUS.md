@@ -1,11 +1,11 @@
-# Ablation coverage — latest verified execution, 2026-09-08, 12:04 UTC
+# Ablation coverage — latest verified execution, 2026-09-08, 12:21 UTC
 
 The historical inventory below remains evidence of prior state. Current additions:
 
 | Comparison | Completed | Running or prepared | Still missing |
 |---|---|---|---|
 | Refined fixed-response edit, Reach/Reach-Wall | Corrected successor offline scopes; all receiving-GPU checks;96 native+96 refined episodes/task | Matched-random reference finishing; two coupling comparator arms follow | Complete registered five-arm analysis; fresh confirmation and seed/checkpoint-history comparisons |
-| HMM, Reach/Reach-Wall | Separate fits; frozen causal same-pass implementation;16 receiving CPU tests | Eight CPU waiters; tested priority handoff in preparation to remove unrelated comparator waits | Nine full-GPU engineering episodes/device,768 routed scientific episodes, paired analysis; no HMM efficacy yet |
+| HMM, Reach/Reach-Wall | Separate fits; frozen causal same-pass implementation;16 receiving scientific CPU tests;11 receiving scheduling tests;576 references verified | Eight priority supervisors activated; current whole coupling streams finish, then HMM checks/arms, then remaining controls resume | Nine full-GPU engineering episodes/device,768 routed scientific episodes, paired analysis; no HMM efficacy yet |
 | Static coupling, Wall/PointMaze |96 native and96 visual-only episodes/task | Action-condition-only and remaining fixed factorial arms | Full factorial paired analysis and confirmation |
 | Static coupling, Push-T |96 native reference; full11 engineering checks; six completed12-episode candidate streams preserved | California lease externally stopped; continuation unresolved | Remaining candidate streams, full paired analysis and confirmation |
 | Static coupling, DROID | Separate128-recording/512-prefix fit; all11 full engineering checks on each of4 receiving GPUs; first32 new native episodes | Four disjoint paired queues,64TOTAL/arm and9arms | Complete recorded-action comparison, other interventions, histories and fresh-recording evidence |

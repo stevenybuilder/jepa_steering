@@ -324,8 +324,9 @@ def main():
             # Catch unexpected link/member serialization before paying to upload.
             verify_archive(["cat", str(spool)], h.hexdigest(), size, manifest)
             print(json.dumps({"stage": "retryable_file_upload", "archive_bytes": size}), flush=True)
-            subprocess.run(["rclone", "copyto", str(spool), archive, "--immutable", "--drive-chunk-size", "64M",
-                "--retries", "8", "--low-level-retries", "20", "--retries-sleep", "30s", "--tpslimit", "2"], check=True)
+            subprocess.run(["rclone", "copyto", str(spool), archive, "--immutable", "--drive-chunk-size", "8M",
+                "--retries", "3", "--low-level-retries", "3", "--timeout", "90s", "--contimeout", "15s",
+                "--stats", "15s", "--stats-one-line", "--stats-log-level", "NOTICE", "--tpslimit", "2"], check=True)
     finally:
         tar.stdout.close()
         name_stream.close()

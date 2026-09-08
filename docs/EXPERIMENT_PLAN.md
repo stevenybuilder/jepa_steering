@@ -9,6 +9,9 @@ engineering checks completed on September 8; the candidate comparison is still
 incomplete. A four-device execution freeze retains 64 total episodes per arm and
 collects a new paired native baseline on the receiving GPUs, rather than assuming
 cross-hardware outcome identity. Existing measurements remain separately preserved.
+All four receiving-device full-CEM checks passed; four paired DROID queues are
+executing, with64 total episodes per arm. See the dated execution receipts, not
+this plan alone, for actual completion counts.
 
 HMM behavioral addition (September8): implement the user's explicit paired
 constant/memoryless/HMM comparison around the refined fixed-response edit while
@@ -16,6 +19,9 @@ non-routed rollouts continue. [The HMM contract](HMM_FIXED_RESPONSE_BEHAVIOR.md)
 supersedes the older conditional eligibility-only admission rule for this new
 behavioral-development comparison. Negative fit-only history diagnostics remain
 reported; no qualified-history, success or confirmation claim is inferred.
+The implemented priority scheduler now lets the current original whole-arm
+children finish, runs HMM after its three required reference arms, then resumes
+the remaining coupling controls. No scientific arm, stream or sample is dropped.
 
 Push-T behavioral addition (September8): prepare the complete existing static
 coupling factorial on the same96-total native replication streams. Reuse the
@@ -31,6 +37,10 @@ sampler retains its final partial batch; checkpoint resumes retain its cursor.
 See [the PointMaze training-history contract](POINTMAZE_TRAINING_HISTORY.md).
 Receiving input/CPU checks do not establish completed training, late-checkpoint
 behavioral comparisons or confirmation. Seeds234/235/236 remain required.
+Seed235 is training onIndiana. The preserved234 epoch3 resume and236's separate
+initialization/first-epoch proof/full history are queued onTexasGPUs0/1 after their
+complete DROID assignments and receiving numerical checks. Shared input staging
+does not share seeds' optimizer state or substitute234 weights for236.
 
 Execution addition (September8): the native Push-T replication now has a separate
 receiving-device full native/repeat check in`offline_study.pusht_planning_check`,
