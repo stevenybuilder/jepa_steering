@@ -5,6 +5,7 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import shutil
 import tarfile
 import time
 import urllib.error
@@ -14,6 +15,62 @@ from backup_results_to_google import HashReader, digest
 
 FOLDER = '12r-UzKMTuyYm4wXKl9xPb3r5dcjfwsYr'
 BASE = Path(__file__).resolve().parents[2] / 'artifacts/offline_study/core-priority-pause-20260908-v1'
+
+
+def connector_part(root, archive, proof, index, file_id=None):
+    """Prepare one <=96MiB connector upload, or verify its ID and remove that scratch copy."""
+    chunk = 96 << 20
+    offset = index * chunk
+    if index < 0 or offset >= proof['archive_bytes']:
+        raise ValueError('Part index outside source')
+    output = root / 'connector-parts-v1'; output.mkdir(exist_ok=True)
+    name = archive.name + f'.part-{index:04d}'
+    path, receipt = output / name, output / f'part-{index:04d}.json'
+    if file_id is None:
+        if shutil.disk_usage(root).free < chunk + (1 << 30):
+            raise ValueError('Insufficient reserve for one bounded scratch part')
+        with archive.open('rb') as source, path.open('xb') as destination:
+            source.seek(offset); data = source.read(chunk); destination.write(data)
+        value = {'name':name,'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),
+                 'offset':offset,'archive_sha256':proof['archive_sha256']}
+        with receipt.open('x') as f: json.dump(value, f, indent=2)
+        print(json.dumps({**value,'path':str(path)}),flush=True)
+        return
+    if not re.fullmatch(r'[A-Za-z0-9_-]{10,100}', file_id):
+        raise ValueError('Require grounded uploaded Drive ID')
+    value = json.loads(receipt.read_text())
+    if (value['name'] != name or value['offset'] != offset or value['archive_sha256'] != proof['archive_sha256']
+            or path.is_symlink() or digest(path) != value['sha256'] or path.stat().st_size != value['bytes']):
+        raise ValueError('Scratch part changed')
+    cfg = configparser.ConfigParser(interpolation=None)
+    cfg.read('/Users/stevenyang/.config/rclone/rclone.conf')
+    access = json.loads(cfg['gdrive']['token'])['access_token']
+    request = urllib.request.Request('https://www.googleapis.com/drive/v3/files/' + file_id
+        + '?fields=id,name,size,sha256Checksum,parents', headers={'Authorization':'Bearer '+access})
+    for attempt in range(5):
+        try:
+            with urllib.request.urlopen(request,timeout=60) as response: metadata=json.load(response)
+            break
+        except urllib.error.HTTPError as error:
+            if error.code == 403:
+                detail=json.loads(error.read())
+                transient=any(x.get('reason') in ('rateLimitExceeded','userRateLimitExceeded')
+                              for x in detail.get('error',{}).get('errors',[]))
+            else:
+                transient=error.code in (429,503)
+            if not transient or attempt == 4:
+                raise RuntimeError('Part metadata unavailable; retain scratch and retry only this read') from None
+            time.sleep(2 ** (attempt + 1))
+    if (metadata['id'] != file_id or metadata['name'] != name or metadata['parents'] != [FOLDER]
+            or int(metadata['size']) != value['bytes'] or metadata['sha256Checksum'] != value['sha256']):
+        raise ValueError('Uploaded part metadata/hash mismatch; scratch retained')
+    with (output / f'part-{index:04d}-uploaded.json').open('x') as f:
+        json.dump({**value,'drive_file_id':file_id,'provider_metadata':metadata},f,indent=2)
+    # Only this invocation's derived scratch part; the verified source archive,
+    # source worker volume, and GCS copy are untouched and reconstruct it exactly.
+    path.unlink()
+    print(json.dumps({'part':index,'file_id':file_id,'provider_hash_verified':True,
+                     'removed_scratch_bytes':value['bytes'],'original_archive_retained':True}),flush=True)
 
 
 def verify_stream(source, expected_hash, expected_size, manifest):
@@ -38,6 +95,9 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--worker', choices=('tx', 'nj'), required=True)
     parser.add_argument('--attempt', default='direct-drive')
+    parser.add_argument('--prepare-part', type=int)
+    parser.add_argument('--record-part-id')
+    parser.add_argument('--finalize-parts', action='store_true')
     args = parser.parse_args()
     if not re.fullmatch(r'direct-drive(?:-v[2-9][0-9]*)?', args.attempt):
         raise ValueError('Require a new bounded attempt directory, not a path')
@@ -47,6 +107,26 @@ def main():
     expected, size = digest(archive), archive.stat().st_size
     if proof['archive_sha256'] != expected or proof['archive_bytes'] != size:
         raise ValueError('Local verified archive changed')
+    if args.finalize_parts:
+        if args.prepare_part is not None or args.record_part_id is not None:
+            raise ValueError('Finalize is a separate operation')
+        output=root/'connector-parts-v1'; chunk=96 << 20
+        parts=[json.loads((output/f'part-{i:04d}-uploaded.json').read_text())
+               for i in range((size+chunk-1)//chunk)]
+        for i,part in enumerate(parts):
+            if (part['offset'] != i*chunk or part['bytes'] != min(chunk,size-i*chunk)
+                    or part['archive_sha256'] != expected or part['name'] != archive.name+f'.part-{i:04d}'):
+                raise ValueError('Incomplete or reordered part registry')
+        spec={'archive_name':archive.name,'archive_bytes':size,'archive_sha256':expected,
+              'member_manifest_sha256':digest(root/'FILES.json'),'parts_in_join_order':parts}
+        with (output/'PARTS.json').open('x') as f: json.dump(spec,f,indent=2)
+        print(json.dumps({'parts':len(parts),'spec':str(output/'PARTS.json'),'full_readback_pending':True}),flush=True)
+        return
+    if args.prepare_part is not None:
+        connector_part(root, archive, proof, args.prepare_part, args.record_part_id)
+        return
+    if args.record_part_id is not None:
+        raise ValueError('Part index required')
     output = root / args.attempt
     output.mkdir(exist_ok=False)
     def write(name, value):

@@ -1,4 +1,26 @@
-# Completion collector active — 2026-09-08,20:29 UTC
+# Core continuing / paused-worker Drive preservation complete — 2026-09-08,20:52 UTC
+
+The live completion collector78689 and all eight original queues plus
+coordinator5929 remain active. At20:49 its check counted888/960 published core
+records,32/40 complete shards,no failed shards;72 records remained. No new GPU
+job,scientific change,analysis of partial outcomes or rental transition occurred.
+
+NewJersey's twelve-part Drive archive passed full streamed readback of all
+1,176,313,887 compressed bytes and all527 member hashes. Its join manifest,file
+manifest,restore instructions and verification receipt are private,accessible
+and fully byte-readback verified on Drive. This closes the earlier NJ Drive gap;
+both failed unsplit attempts and the partial LA transfer remain recorded.
+[Preservation map](../artifacts/offline_study/core-priority-pause-20260908-v1/README.md).
+Original local/source/Cloud copies remain. Only derived <=96MiB scratch upload
+parts were removed after exact provider checksum checks,avoiding a second full
+local archive. The Google Drive skill governed destination/access grounding and
+post-upload verification. This is ancillary preservation,not a full-study result.
+
+All646 local tests pass(two existing skips),81.955seconds. Log
+`/tmp/jepa-core-drive-parts-validation-20260908T2045.log`,SHA256
+`dd633d1f260b7488211098f9dbe72fbca636ca48e212b8fd645fa3fa2fd5c26e`.
+
+## Completion collector active — 2026-09-08,20:29 UTC
 
 Local CPU collector78689 is active,with tool session61132 and log
 `/tmp/jepa-core-completion-preserver-20260908-v1.log`. Its first live check found

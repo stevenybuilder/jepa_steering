@@ -115,6 +115,33 @@ class DriveReadbackTests(unittest.TestCase):
                 reader.verify_parts(path, 'folder_1234567890', self.archive, self.manifest, self.output)
             config.assert_not_called()
 
+    def test_split_stream_verifies_without_download_spool(self):
+        path, spec, bodies = self.split_spec(); responses = []
+        for part, body in zip(spec['parts_in_join_order'], bodies):
+            metadata = {'id':part['drive_file_id'],'name':part['name'],'size':str(part['bytes']),
+                        'sha256Checksum':part['sha256'],'parents':['folder_1234567890']}
+            responses += [io.BytesIO(json.dumps(metadata).encode()),io.BytesIO(body)]
+        with patch.object(reader.configparser,'ConfigParser',return_value=self.config), \
+                patch.object(reader.urllib.request,'urlopen',side_effect=responses), \
+                patch.object(reader.shutil,'disk_usage',return_value=type('Disk',(),{'free':2 << 20})()):
+            reader.verify_parts(path,'folder_1234567890',self.archive,self.manifest,self.output,stream=True)
+        report=json.loads((self.output/'VERIFIED.json').read_text())
+        self.assertTrue(report['bounded_stream_no_download_spool'])
+        self.assertEqual(len(report['parts']),2)
+        self.assertFalse((self.output/self.archive.name).exists())
+
+    def test_stream_corruption_fails(self):
+        _,spec,bodies=self.split_spec(); responses=[]
+        for part,body in zip(spec['parts_in_join_order'],bodies):
+            metadata={'id':part['drive_file_id'],'name':part['name'],'size':str(part['bytes']),
+                      'sha256Checksum':part['sha256'],'parents':['folder_1234567890']}
+            responses += [io.BytesIO(json.dumps(metadata).encode()),io.BytesIO(body[:-1])]
+        def request(*args): return responses.pop(0)
+        source=reader.PartsReader(spec['parts_in_join_order'],'folder_1234567890',request)
+        with self.assertRaises(ValueError): source.read(4 << 20)
+        source.close()
+        self.assertFalse(source.verified)
+
 
 if __name__ == '__main__':
     unittest.main()

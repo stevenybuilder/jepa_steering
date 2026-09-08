@@ -10,11 +10,52 @@ import hashlib
 import json
 import re
 import shutil
+import time
+import urllib.error
 import urllib.request
 from pathlib import Path
 
 from backup_results_to_google import verify_archive
 from navigation_redistribution_common import digest, write
+from upload_pause_archive import verify_stream
+
+
+class PartsReader:
+    """Bounded-memory concatenation with each Drive part verified at its boundary."""
+    def __init__(self, parts, folder_id, request):
+        self.parts, self.folder_id, self.request = iter(parts), folder_id, request
+        self.source = None
+        self.verified = []
+
+    def read(self, size):
+        if not 0 <= size <= 4 << 20:
+            raise ValueError('Bounded reads required')
+        result = bytearray()
+        while len(result) < size:
+            if self.source is None:
+                self.part = next(self.parts, None)
+                if self.part is None: break
+                with self.request(self.part['drive_file_id'], '?fields=id,name,size,sha256Checksum,parents') as source:
+                    metadata = json.load(source)
+                if (metadata['id'] != self.part['drive_file_id'] or metadata['name'] != self.part['name']
+                        or metadata['parents'] != [self.folder_id] or int(metadata['size']) != self.part['bytes']
+                        or metadata['sha256Checksum'] != self.part['sha256']):
+                    raise ValueError('Provider part metadata differs')
+                self.metadata, self.count, self.hashed = metadata, 0, hashlib.sha256()
+                self.source = self.request(self.part['drive_file_id'], '?alt=media')
+            block = self.source.read(size - len(result))
+            self.count += len(block); self.hashed.update(block); result.extend(block)
+            if self.count > self.part['bytes']:
+                raise ValueError('Extra part bytes')
+            if not block:
+                self.source.close(); self.source = None
+                if self.count != self.part['bytes'] or self.hashed.hexdigest() != self.part['sha256']:
+                    raise ValueError('Part byte readback differs')
+                self.verified.append(self.metadata)
+        return bytes(result)
+
+    def close(self):
+        if self.source is not None: self.source.close()
 
 
 def verify(file_id, folder_id, archive, manifest_path, output):
@@ -72,7 +113,7 @@ def verify(file_id, folder_id, archive, manifest_path, output):
         raise RuntimeError('Readback failed; existing sources and bounded failure evidence retained') from None
 
 
-def verify_parts(parts_path, folder_id, archive, manifest_path, output):
+def verify_parts(parts_path, folder_id, archive, manifest_path, output, *, stream=False):
     """Rejoin bounded uploaded parts from direct Drive reads, then verify tar."""
     archive, manifest_path, output, parts_path = map(Path, (archive, manifest_path, output, parts_path))
     spec = json.loads(parts_path.read_text()); parts = spec['parts_in_join_order']
@@ -84,23 +125,51 @@ def verify_parts(parts_path, folder_id, archive, manifest_path, output):
             spec['archive_sha256'] != expected or spec['member_manifest_sha256'] != digest(manifest_path) or
             any(type(p['bytes']) is not int or not 0 < p['bytes'] <= 100 << 20 for p in parts) or
             sum(p['bytes'] for p in parts) != size or size > 2 << 30 or
-            shutil.disk_usage(output.parent).free < size + (4 << 30)):
+            shutil.disk_usage(output.parent).free < ((1 << 20) if stream else size + (4 << 30))):
         raise ValueError('Invalid bounded split-archive identity or insufficient reserve')
     manifest = json.loads(manifest_path.read_text())
     verify_archive(['cat', str(archive)], expected, size, manifest)
     output.mkdir(exist_ok=False)
     write(output / 'INTENT.json', {'parts_sha256': digest(parts_path),
         'manifest_sha256': digest(manifest_path), 'archive_sha256': expected,
-        'parent_folder_id': folder_id, 'read_only_google_api': True, 'no_deletion': True})
+        'parent_folder_id': folder_id, 'read_only_google_api': True, 'no_deletion': True,
+        'bounded_stream_no_download_spool': stream})
     cfg = configparser.ConfigParser(interpolation=None)
     cfg.read('/Users/stevenyang/.config/rclone/rclone.conf')
     access = json.loads(cfg['gdrive']['token'])['access_token']
     def request(file_id, suffix):
-        return urllib.request.urlopen(urllib.request.Request(
-            'https://www.googleapis.com/drive/v3/files/' + file_id + suffix,
-            headers={'Authorization': 'Bearer ' + access}), timeout=60)
+        for attempt in range(5):
+            try:
+                return urllib.request.urlopen(urllib.request.Request(
+                    'https://www.googleapis.com/drive/v3/files/' + file_id + suffix,
+                    headers={'Authorization': 'Bearer ' + access}), timeout=60)
+            except urllib.error.HTTPError as error:
+                if error.code == 403:
+                    detail=json.loads(error.read())
+                    transient=any(x.get('reason') in ('rateLimitExceeded','userRateLimitExceeded')
+                                  for x in detail.get('error',{}).get('errors',[]))
+                else:
+                    transient=error.code in (429,503)
+                if not transient or attempt == 4: raise
+                time.sleep(2 ** (attempt+1))
     verified = []
     try:
+        if stream:
+            reader = PartsReader(parts, folder_id, request)
+            verified = reader.verified
+            try:
+                verify_stream(reader, expected, size, manifest)
+                verified = reader.verified
+                if len(verified) != len(parts): raise ValueError('Not all parts consumed')
+            finally:
+                reader.close()
+            write(output / 'VERIFIED.json', {'status':'all_parts_and_rejoined_archive_members_verified',
+                'parts':verified,'archive_bytes':size,'archive_sha256':expected,
+                'manifest_sha256':digest(manifest_path),'files':len(manifest),
+                'bounded_stream_no_download_spool':True,'no_local_or_worker_deletions':True})
+            print(json.dumps({'status':'full_split_drive_stream_readback_verified',
+                'parts':len(parts),'files':len(manifest),'bytes':size,'sha256':expected}),flush=True)
+            return
         received = output / archive.name
         with received.open('xb') as destination:
             for part in parts:
@@ -139,10 +208,11 @@ if __name__ == '__main__':
     group = parser.add_mutually_exclusive_group(required=True)
     group.add_argument('--file-id')
     group.add_argument('--parts', help='Grounded split-archive JSON including Drive file IDs')
+    parser.add_argument('--stream', action='store_true', help='Verify parts without a second local archive')
     for name in ('folder-id', 'archive', 'manifest', 'output'):
         parser.add_argument('--' + name, required=True)
     args = parser.parse_args()
     if args.parts:
-        verify_parts(args.parts, args.folder_id, args.archive, args.manifest, args.output)
+        verify_parts(args.parts, args.folder_id, args.archive, args.manifest, args.output, stream=args.stream)
     else:
         verify(args.file_id, args.folder_id, args.archive, args.manifest, args.output)
