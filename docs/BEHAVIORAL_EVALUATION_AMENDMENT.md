@@ -138,6 +138,15 @@ two extra final checkpoints per model alone address a narrower seed question.
 Reproduction seed IDs are 234, 235 and 236; only 234 is directly specified in the
 released configs, so do not claim these are the authors' unpublished exact triplet.
 
+The user's September8 reaffirmation is implemented numerically in
+`offline_study.checkpoint_aggregation`; see the explicit
+[checkpoint averaging contract](CHECKPOINT_AGGREGATION.md). Simulation primary
+requires all30 seed/checkpoint cells,96 episodes each, with equal checkpoint
+weight and the released plotting code's separately labelled population SD.
+Final-checkpoint three-seed summaries remain separate. Missing evaluations must
+fail completeness, not be averaged into an apparent completed history. The
+aggregation component does not supply absent histories or replace raw verification.
+
 Before training launch, freeze the actual seed triplets, source configs, global batch,
 optimizer/schedule, update counts, checkpoint retention and evaluation cadence.
 Changing physical GPU count must preserve effective training settings or be disclosed

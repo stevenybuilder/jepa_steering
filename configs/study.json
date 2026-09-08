@@ -78,6 +78,18 @@
       "droid_episodes_per_checkpoint_condition": 64,
       "history_coverage_verified": false
     },
+    "checkpoint_aggregation": {
+      "implementation": "offline_study.checkpoint_aggregation.aggregate_checkpoints",
+      "contract": "docs/CHECKPOINT_AGGREGATION.md",
+      "simulation_primary_epochs_inclusive": [41, 50],
+      "simulation_checkpoint_evaluations_per_condition": 30,
+      "simulation_episode_evaluations_per_condition": 2880,
+      "checkpoint_weighting": "equal_per_seed_and_epoch_with_exact_complete_grid",
+      "released_code_sd": "population_sd_of_checkpoint_scores_not_confidence_interval",
+      "partial_grid_allowed": false,
+      "raw_receipt_verification_performed_by_numeric_component": false,
+      "complete_history_results_available": false
+    },
     "pointmaze_training_correction": {
       "status": "wrong_shuffle_histories_preserved_corrected_cpu_waiters_active_on_texas_after_complete_navigation",
       "document": "reports/POINTMAZE_TRAINING_SAMPLER_CORRECTION.md",
