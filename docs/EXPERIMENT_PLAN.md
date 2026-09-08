@@ -6,7 +6,14 @@ banks, with native B3/H3 features captured by a four-block predictor-prefix
 replay. [The engineering contract](FIXED_COMBINED_ENGINEERING.md) distinguishes
 this extra prefix work from a full native shadow and from the old online-probe
 operator. Local tests pass; receiving equivalence, fitting-stimulus provenance,
-full-planner validation and a new behavioral freeze remain required. No old
+full-planner validation and a new behavioral freeze remain required. At18:50UTC
+the receiving-GPU numerical check completed all18 exact cases with unchanged
+model/input/RNG evidence. Its full output and operation receipts passed local
+byte/hash readback. Full-planner engineering is implemented separately; its
+first Texas attempt stopped before any episode due to a missing EGL environment
+and dispatch libraries. That failure is preserved. After actual official
+reset/render verification, a separately reviewed new-directory v2 attempt
+uses explicit EGL and three private hash-bound dispatch libraries. No old
 efficacy result, protected access or completed behavioral claim is inherited.
 
 DROID preparation addition (September8): native-eligible raw fitting inputs and

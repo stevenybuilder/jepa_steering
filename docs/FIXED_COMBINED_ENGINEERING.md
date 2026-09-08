@@ -82,13 +82,59 @@ while local code/tests can proceed.
 
 ## Current evidence
 
+### September8,18:50UTC receiving numerical completion
+
+Texas50259194/GPU3 completed all18 required cases in147.43seconds. Both arms
+match the independent full-native-capture/static-hook reference exactly at
+every checked output horizon, including input bytes/layout, candidate records,
+CPU/CUDA RNG and complete parameter/buffer bytes/modes. All30 check/operation
+JSON files passed full local readback/hash comparison. ReportSHA256:
+`c6faf9cd35eb981457269df3876e2226853e3b3fe2d7e8fecc52fe955ee52897`.
+At300candidates/H6, three synchronized forecasts averaged3.5701seconds for the
+learned combination and3.5695seconds for its control. The same-session native
+comparator averaged3.1629seconds, standalone fixed map3.1733seconds and coupling
+alone3.1573seconds. This is about12.9% combined forecast overhead versus native,
+not a full-episode benchmark, hardware comparison or efficacy result.
+
+`offline_study.fixed_combined_smoke` now implements the next four excluded
+full-CEM episodes: native, exact native repeat, learned combination and matched
+random combination. It retains all100 elementary steps,300 candidates,15 CEM
+iterations per replan, the original mean-forecast calls, same scenario seed,
+full call records and paired initial/goal stimuli. Short forecasts remain native.
+It verifies the completed numerical report, original fitted components, every
+prior source member, same physical GPU and actual model bytes. It does not use
+historical cross-device goal pixels or inspect confirmation outcomes. Internal
+limit3600seconds, required outer3610seconds, no automatic retry or behavioral
+launch authorization. Full local suite:633tests pass(two existing skips),
+including the launcher-renderer regression test; receiving science suite68pass.
+
+The first full-planner attempt was terminal before an episode: its navigation-
+derived environment omitted EGL, and this Texas image lacked generic EGL/OpenGL
+dispatch libraries. The v1failed receipt remains unchanged. The corrected v2
+launcher explicitly chooses EGL on physicalGPU3 and uses three hash-bound private
+dispatch libraries from the already working same-Ubuntu22.04 worker, without
+changing the Texas host NVIDIA driver or other jobs' environments. Actual
+official simulator reset/render passed before the reviewed v2launch. Fourteen
+receiving launcher tests pass, including renderer environment and library checks.
+
+Snapshot note: archive014cf596 contains123 inert AppleDouble sidecar files as
+well as123 Python sources. Preserve all246 checked members. The full-planner
+snapshot adds only its Python checker: receiving hash`e64debad97734af166b4bf8b21db0d0256747895c596ee38ee7bceef175729a3`;
+the executable-only local hash is`c15f5ed1a905f7b5b4d642a11ffa6da71ef04488f927d118db068dae7205e791`.
+All executable filenames/bytes were independently compared equal. Metadata is
+not silently removed from a completed receipt. Future new archives should
+disable AppleDouble emission at creation, not rewrite executed snapshots.
+
+### Historical CPU preparation
+
 The adapter, checker and stimulus preparation pass44 local and44 receiving CPU
 tests. The full local suite passes612 tests(two existing skips). OnIndiana,
 the original selected fitting row passed exact native reader tensor/RNG parity.
 All six stimulus members, its completion receipt and receiving test log passed
 full local byte/hash readback; see
 [preparation readback](../artifacts/offline_study/combined-fit-stimulus-preparation-20260908-v1/READBACK.json).
-This clears the missing fitting-stimulus dependency, not the receiving-GPU
-equivalence or full-planner checks. No actual-GPU equivalence, latency, forecast improvement,
-task-success improvement or fresh confirmation is established for this method.
+This cleared the missing fitting-stimulus dependency at that point, not the
+then-pending receiving-GPU equivalence or full-planner checks. The subsequent
+numerical completion above supplies equivalence/timing only; forecast improvement,
+task-success improvement and fresh confirmation remain unestablished.
 In particular, the old combined 4.824% offline improvement is not inherited.

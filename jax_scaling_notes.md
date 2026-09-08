@@ -1,5 +1,50 @@
 # JAX Scaling Book notes for our JEPA-WM study
 
+## September8: measured combined-edit cost and receiving-runtime gaps
+
+The refined combination now has real-GPU equivalence/timing evidence, not just
+an operation-count estimate. At300 candidates/H6 on Texas RTX4090, three
+synchronized forecasts averaged3.5701seconds combined versus3.1629seconds
+unsteered: about12.9% overhead in this engineering check. The standalone fixed
+map averaged3.1733seconds. All18 required cases matched an independent reference
+exactly, including native-feature coefficients, doses and RNG; model bytes stayed
+unchanged. These are forecast timings, not full-episode throughput or efficacy.
+
+The gap was unnecessary native replay: a naive two-pass implementation would
+execute72 predictor blocks to recover a native feature and then apply the edit.
+The implemented version shares H1/H2, recomputes only the four native H3 blocks
+needed for that feature, and then continues the coupled forecast:40blocks.
+It also repeats that prefix's input embedding work. The fixed response map has
+no online finite-difference probes or full native shadow. This applies the
+book's work accounting: a device-time lower bound is
+`max(FLOPs / compute_throughput, bytes / memory_bandwidth)`; reducing repeated
+work helps, but block counts alone are not measured wall-clock speedups. We did
+not time the full two-pass reference as a throughput baseline, so no1.8x speedup
+claim follows from72/40. [Roofline chapter](https://jax-ml.github.io/scaling-book/roofline/).
+
+A separate operational gap delayed the full-planner handoff: the navigation
+environment worked for PointMaze but omitted MetaWorld EGL settings; the Texas
+image also lacked generic GLVND dispatch libraries. Imports alone missed this.
+The first attempt stopped before any episode. The correction adds an actual
+official-reset/render preflight, explicit EGL/device selection, and three
+private hash-bound dispatcher libraries from an already working same-Ubuntu
+worker. Other active jobs and host NVIDIA drivers remain untouched. This is
+dependency preparation and idle-time reduction, not a model-math speedup. Future
+handoffs should test rendering while predecessor workloads are still running,
+subject to device ownership, instead of discovering missing libraries afterward.
+
+Archive metadata also made receiving and local source digests differ: macOS
+AppleDouble sidecars were included in the original immutable archive. We kept
+those original bytes, verified every executable source file unchanged, and
+bound the new snapshot explicitly. Disable sidecar emission when creating future
+archives; never rewrite a completed scientific snapshot to make hashes match.
+
+Evidence: numerical report`c6faf9cd35eb981457269df3876e2226853e3b3fe2d7e8fecc52fe955ee52897`,
+all30 numerical/operation JSON files full-readback verified, and the
+[combined engineering contract](docs/FIXED_COMBINED_ENGINEERING.md). Full-planner
+engineering and then a separately frozen96-total behavioral comparison remain;
+neither is satisfied by these numerical/timing checks.
+
 Research and code audit: 2026-09-07. This is a learning document and implementation
 decision log, not a replacement for [the experiment plan](docs/EXPERIMENT_PLAN.md)
 or [the behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md).

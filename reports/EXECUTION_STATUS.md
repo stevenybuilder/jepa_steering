@@ -1,4 +1,37 @@
-# Execution checkpoint — 2026-09-08, after 16:50 UTC
+# Execution checkpoint — 2026-09-08,19:14 UTC
+
+The refined Reach combination passed all18 receiving numerical cases onTexas
+GPU3 with exact independent-reference output/RNG/record parity and unchanged
+model/source/input bytes. All30 completion/operation JSON files passed full
+local hash readback. H6/300candidate forecasts averaged3.5701seconds combined
+versus3.1629seconds native (12.9% overhead in this check, not episode throughput).
+[Numerical evidence](../artifacts/offline_study/combined-engineering-tx3-20260908-v1/READBACK.json).
+
+The four-episode full-planner check is implemented and running in a separate
+Texasv2root: supervisor39069/start43300913, child39076/start43300992. At the live
+check, its first native episode had completed40forecast calls and both exact
+processes were live. Native repeat and both combined arms follow in fixed order.
+No completed efficacy/confirmation claim follows. The v1attempt failed before
+an episode due to missing EGL launch settings/libraries and remains preserved;
+actual official reset/render passed before v2. Three private same-UbuntuGLVND
+libraries plus explicit physicalGPU3 EGL selection fix that environment without
+changing other jobs or host NVIDIA drivers. New full local suite633tests passes
+(two existing skips),68receiving science and14launcher tests pass. Eight immutable
+v2launch/render records passed full byte/hash readback.
+[Full-planner launch evidence](../artifacts/offline_study/combined-full-planner-tx3-20260908-v2/READBACK.json).
+
+Other work continues: all8LA HMM GPUs were observed executing with100% sampled
+utilization;2NJ Wall-training GPUs,2Nebraska navigation GPUs andIndiana recovery
+were also live. Texas0/1/2 retain their original navigation/training handoffs.
+Indiana recovery483 is live; its old native32 waiter16910 died in the17:13
+container restart and has NOT been silently relaunched. Collector65423 remains
+live. The previous16:50 waiter status below is historical, not current readiness.
+Provider account rate at19:09UTC was$6.962593/hour before bandwidth, including
+stopped storage and externalCalifornia. User cap remains$7/hour; no new rental,
+Shanghai use or California contact. Complete six-task behavioral/confirmation
+and three-seed/late-history scope still remains unfulfilled.
+
+## Historical checkpoint — after16:50 UTC
 
 Native32 receiving arithmetic/timing check is staged and CPU-tested, with a live
 Indiana CPU waiterPID16910/start18343560. Exact launch/source/input/authorization
