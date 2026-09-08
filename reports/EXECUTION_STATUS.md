@@ -37,6 +37,14 @@ required, not rerunning or recomputing their results. Latest provider check15:04
 was$6.962593/h before bandwidth including externally running quarantinedCA.
 Our fiveUSinstances/17GPUs stay assigned; no CAcontact/new leases in this update.
 
+Preservation addendum15:23UTC: completedDROID714-member increment is now private
+onDrive,549338compressedbytes SHA178d0afaa7baf2ba509f99bce3644f5411ebfbc70d8aba1ce66eff70be8fb908.
+ProviderSHA256 and complete downloadedarchive/member bytes verified by directID
+read afterCLI403quota failures. Four provenancefiles also uploaded/private
+metadata verified; priorchain/sources/failures retained and nothingdeleted.
+FileID13fiIpPZrsyv7xs6dOe1W4vFIOpT3IR3w. Completegeometryarchive preservation
+isCPU-only work in parallel; no GPUrerun. Core/code/docs e161f2d pushed.
+
 ## Historical checkpoint — 14:35 UTC
 
 Enhanced processing schedule is active. Three navigation workers are executing;

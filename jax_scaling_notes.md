@@ -46,6 +46,16 @@ Source/evidence: [raw-byte verifier](src/offline_study/robotics_training_inputs.
 The provenance skill was used only to audit existing completion/evidence, not to
 choose methods or authorize scientific execution.
 
+Preservation update15:23UTC: DROID's714 new immutable members (549,338 compressed
+bytes) are uploaded privately, with the prior archive chain and four provenance
+files. The connected Drive uploader succeeded after shared-client CLI quota
+failures. A direct authenticated file-ID read then verified Google's SHA256 and
+all downloaded archive/member bytes against the local manifest. No credentials,
+sharing settings or GPU workload changed; no data was deleted. This is a storage
+reliability fix, not a model throughput improvement. Exact
+[archive](https://drive.google.com/file/d/13fiIpPZrsyv7xs6dOe1W4vFIOpT3IR3w/view?usp=drivesdk)
+and [full readback proof](artifacts/offline_study/live-20260908T151000Z/instance-50259194-droid-parallel/direct-readback/VERIFIED.json).
+
 ## Practical implementation summary — September 8, 14:35 UTC
 
 The enhanced plan is implemented and its scheduling changes are active. This does
