@@ -32,6 +32,18 @@ class ImageEncoder(torch.nn.Module):
         return output[:, 1:]
 
 
+class NativeModeImageEncoder(torch.nn.Module):
+    def __init__(self):
+        super().__init__()
+        self.weight = torch.nn.Parameter(torch.tensor(2.), requires_grad=False)
+        self.eval()
+
+    def forward(self, images):
+        output = torch.zeros(len(images), 3, 3)
+        output[:, 1:] = images.flatten(1)[:, :6].reshape(len(images), 2, 3) * self.weight
+        return output[:, 1:]
+
+
 class TinyTraining(torch.nn.Module):
     def __init__(self):
         super().__init__()
@@ -145,6 +157,7 @@ class PilotTests(unittest.TestCase):
 
     def test_full_update_driver_reuses_objective_and_uncached_native_validation(self):
         model = TinyTraining()
+        model.encoder = NativeModeImageEncoder()
         initial = (model, SimpleNamespace(_step=0), SimpleNamespace(_step=0))
         visual = torch.arange(128 * 4 * 12, dtype=torch.float32).reshape(128, 4, 3, 2, 2) / 1000
         batch = ({"visual": visual}, torch.zeros(128, 4, 2), torch.zeros(128, 4, 2), torch.zeros(128, 4))
@@ -167,6 +180,9 @@ class PilotTests(unittest.TestCase):
             calls.append("native_validation")
             self.assertEqual(event, 0)
             self.assertNotIn("forward", run.encoder.__dict__)
+            run.eval()
+            run.encoder(visual[:8].flatten(0, 1))
+            run.train()  # Actual pinned native validation exit; v1 mock missed this.
             return {"global_clips": 64, "diagnostic": torch.rand(1).item()}
         cpu = [torch.get_rng_state().clone() for _ in range(16)]
         with tempfile.TemporaryDirectory() as temporary, self.make_cache(Path(temporary) / "cache", model.encoder, frames) as store:
@@ -174,15 +190,47 @@ class PilotTests(unittest.TestCase):
                 for rank in range(16):
                     with record.frames(frames[rank*32:(rank+1)*32]):
                         model.encoder(visual[rank*8:(rank+1)*8].flatten(0, 1))
+            identity = c.class_identity(type(model.encoder))
+            policy = c.EngineeringModePolicy(model.encoder, store.binding,
+                audited_classes={identity["class"]: identity["file_sha256"]},
+                source_receipt={"source_sha256": store.binding.source_sha256, "scope": "CPU fixture"})
+            orders = {"original": list(range(512)), "reverse": list(reversed(range(512))),
+                "cross": [batch*32+pos for pos in range(32) for batch in range(16)]}
+            def mode_batches(order):
+                images = visual.flatten(0, 1)
+                for start in range(0, 512, 32):
+                    chosen = order[start:start+32]
+                    yield [frames[i] for i in chosen], images[chosen]
+            policy.prove(model.encoder, store, frames, orders, mode_batches)
             with patch.object(p, "two_batches", return_value=batches), patch.object(p, "accumulated_update", side_effect=objective), \
                     patch.object(p, "validation_step", side_effect=lambda vendor, model, *args: model), \
                     patch.object(p, "monitor", side_effect=monitoring), patch.object(torch.cuda, "synchronize"):
                 def run(store):
                     return p.run_updates(initial, None, [[0]*128]*2, [frames]*2, p.tensor_evidence(batches),
-                        cpu, cpu, VENDOR, {}, None, None, store, capture_gradients=True)[0]
+                        cpu, cpu, VENDOR, {}, None, None, store, capture_gradients=True, mode_policy=policy)[0]
                 checked = c.paired_update_check(lambda: run(None), lambda: run(store))
+                # Reproduce the actual v1 mode-guard failure, not a mock that
+                # silently keeps the visual encoder in eval after validation.
+                with self.assertRaisesRegex(ValueError, "eval-mode"):
+                    p.run_updates(initial, None, [[0]*128]*2, [frames]*2, p.tensor_evidence(batches),
+                        cpu, cpu, VENDOR, {}, None, None, store, capture_gradients=True)
             self.assertTrue(checked["native_and_cached_state_and_rng_bitwise"])
-            self.assertEqual(calls, ["unchanged_objective", "native_validation", "unchanged_objective"] * 2)
+            self.assertEqual(calls[:6], ["unchanged_objective", "native_validation", "unchanged_objective"] * 2)
+            self.assertEqual(calls[6:], ["unchanged_objective", "native_validation"])
+            self.assertFalse(model.encoder.training)  # Original model never forced to either mode.
+
+    def test_successor_version_preserves_v1_failure_and_exact_pinned_source_contract(self):
+        self.assertTrue(p.PROTOCOL_VERSION.endswith("v2"))
+        self.assertFalse(p.V1_FAILURE["complete_update_parity_established"])
+        self.assertTrue(c.valid_sha(p.V1_FAILURE["failed_receipt_sha256"]))
+        self.assertEqual(p.DINO_MODE_FILES["dinov2/layers/attention.py"],
+            "79c7be7a452b3aad96698ec38d5d5150b9f4d8ac084fa93324510dc9f624775d")
+        # Source mismatch is checked before any GPU or encoder call, not by
+        # changing mode and hoping a numerical fixture passes.
+        from offline_study import model_loader
+        with patch.object(model_loader, "verified_local_dino_cache", side_effect=ValueError("source changed")), \
+                self.assertRaisesRegex(ValueError, "source changed"):
+            p.native_dino_mode_policy(None, None, VENDOR)
 
     def test_scratch_and_time_caps_never_silently_reduce_scientific_work(self):
         frame = c.Frame("obses/episode_000.pth", "d" * 64, 0)

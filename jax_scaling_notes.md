@@ -42,6 +42,19 @@ Evidence: [v2 receiving completion](artifacts/offline_study/navigation-redistrib
 The cache pilot's16local files also passed full privateDrive readback at13:46UTC
 under `live-20260908T134200Z/visual-cache-engineering`; no local files were deleted.
 
+Cache successor readiness at13:54UTC: a separate source-bound engineering policy
+now preserves the real initial-eval/post-validation-train lifecycle. It rejects
+stateful/buffer-bearing components, unknown classes, nonzero stochastic rates,
+parameter changes and unaudited attention backends. The actual Indiana CPU tree
+audit checked200modules, zero stochastic rates/buffers and no availablexFormers;
+no GPU forward or native mode change was performed. The33focused cache tests and
+full371-test suite passed(2existing skips in the full suite). This clears a source
+readiness issue, **not** receiving-GPU numerical parity or a speedup. The successor
+still needs its bounded six-composition/mode proof and full native/cached update,
+validation, gradient/optimizer/RNG comparison on a separately released device.
+No scientific cache is active, and queued uncached histories remain unblocked.
+Evidence: [actual encoder CPU audit](artifacts/offline_study/visual-cache-mode-audit-20260908-v2/CPU_TREE.json).
+
 ## September 8, 12:51 UTC: gaps, causes, and the enhanced processing plan
 
 This section answers the user's cost/throughput concern explicitly. We have **not**

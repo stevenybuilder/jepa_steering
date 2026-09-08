@@ -11,11 +11,14 @@ from __future__ import annotations
 
 from collections import OrderedDict
 from contextlib import contextmanager
+import copy
 from dataclasses import asdict, dataclass
 import fcntl
 import hashlib
+import inspect
 import json
 import math
+import marshal
 import os
 from pathlib import Path, PurePosixPath
 import platform
@@ -384,6 +387,152 @@ def evidence_snapshot(value):
     raise ValueError("Unsupported mutable full-update parity evidence")
 
 
+def class_identity(cls):
+    """Bind actual loaded Python class code, not only a matching class name."""
+    source = Path(inspect.getfile(cls))
+    methods = {base.__module__ + "." + base.__qualname__ + "." + name:
+        hashlib.sha256(marshal.dumps(method.__code__)).hexdigest()
+        for base in cls.__mro__ if base not in (torch.nn.Module, object)
+        for name, method in vars(base).items() if inspect.isfunction(method)}
+    return {"class": cls.__module__ + "." + cls.__qualname__,
+        "file_sha256": hashlib.sha256(source.read_bytes()).hexdigest(), "methods": methods}
+
+
+class EngineeringModePolicy:
+    """Explicit source-bound exception to default eval-only engineering.
+
+    This does not authorize scientific caching. Unknown classes, registered
+    buffers (including nonpersistent state), nonzero stochastic rates, mutable
+    Python state and mixed module modes are rejected. Replay requires a complete
+    live proof on an isolated clone: eval/train x original/two alternate batches.
+    The caller's actual encoder modes are never changed by the proof or sessions.
+    """
+    TORCH_TYPES = frozenset((torch.nn.ModuleList, torch.nn.Identity, torch.nn.Linear,
+        torch.nn.Conv2d, torch.nn.LayerNorm, torch.nn.GELU, torch.nn.Dropout))
+    ZERO_RATES = frozenset(("p", "drop_prob", "drop_path_rate", "sample_drop_ratio",
+        "attn_drop", "proj_drop", "dropout", "dropout_p", "dropout_prob"))
+
+    def __init__(self, encoder, binding, *, audited_classes, source_receipt):
+        binding.validate()
+        if source_receipt.get("source_sha256") != binding.source_sha256 or not audited_classes:
+            raise ValueError("Explicit matching source/encoder mode policy required")
+        if any(not valid_sha(value) for value in audited_classes.values()):
+            raise ValueError("Every audited custom class needs its reviewed file checksum")
+        self.binding_sha256 = binding.sha256
+        self.audited_classes = dict(audited_classes)
+        self.source_receipt = json.loads(canonical(source_receipt))
+        self._proof = None
+        if encoder_digest(encoder) != binding.encoder_sha256:
+            raise ValueError("Mode policy encoder weights differ from binding")
+        self.inventory = self._inventory(encoder)
+        self.contract = digest(self.receipt())
+
+    def receipt(self):
+        return {"schema": "source_bound_encoder_mode_engineering_v2",
+            "binding_sha256": self.binding_sha256, "source_receipt": self.source_receipt,
+            "audited_classes": self.audited_classes, "module_inventory": self.inventory,
+            "allowed_modes": ["all_eval", "all_train"], "registered_buffers_allowed": False,
+            "native_modes_changed": False, "scientific_activation": False}
+
+    def _inventory(self, encoder, *, routed_root=False):
+        result, identities = [], {}
+        base_attributes = set(vars(torch.nn.Module()))
+        def immutable(value):
+            if value is None or type(value) in (bool, int, str):
+                return value
+            if type(value) is float and math.isfinite(value):
+                return value
+            if type(value) in (tuple, list):
+                return {type(value).__name__: [immutable(item) for item in value]}
+            raise ValueError("Unaudited mutable/stateful encoder attribute")
+        for name, module in encoder.named_modules():
+            cls = type(module)
+            qualified = cls.__module__ + "." + cls.__qualname__
+            if cls not in self.TORCH_TYPES and qualified not in self.audited_classes:
+                raise ValueError("Unaudited encoder component: " + qualified)
+            if list(module.buffers(recurse=False)):
+                raise ValueError("Stateful/buffer-bearing encoder components are unsupported")
+            if cls not in identities:
+                identities[cls] = class_identity(cls)
+            identity = identities[cls]
+            if cls not in self.TORCH_TYPES and identity["file_sha256"] != self.audited_classes[qualified]:
+                raise ValueError("Reviewed encoder class source changed")
+            attributes = {}
+            for key, value in vars(module).items():
+                if key in base_attributes or (not name and key == "forward" and routed_root):
+                    continue
+                if key in self.ZERO_RATES and (type(value) not in (int, float) or value != 0):
+                    raise ValueError("Nonzero stochastic encoder rate: " + name + "." + key)
+                attributes[key] = immutable(value)
+            result.append({"name": name, "type": identity, "attributes": attributes})
+        if len({module.training for module in encoder.modules()}) != 1:
+            raise ValueError("Mixed encoder modes are outside the audited native lifecycle")
+        return result
+
+    def guard(self, encoder, binding, *, replay=False, routed_root=False):
+        if binding.sha256 != self.binding_sha256 or digest(self.receipt()) != self.contract:
+            raise ValueError("Bound encoder mode policy changed")
+        if self._inventory(encoder, routed_root=routed_root) != self.inventory:
+            raise ValueError("Audited encoder code/configuration/Python state changed")
+        if replay and self._proof is None:
+            raise ValueError("Train/eval and alternate-composition bitwise proof is required before replay")
+
+    def prove(self, encoder, store, frames, orders, batches):
+        """`batches(order)` yields original-size (frame IDs, transformed images).
+
+        All keys must already exist; failures never add new cache entries or
+        authorize replay. No transforms are skipped in the training comparison.
+        Only the isolated clone changes modes, preserving original model/RNG.
+        """
+        self._proof = None
+        self.guard(encoder, store.binding)
+        size = store.binding.input_shape[0]
+        if len(frames) % size or len(orders) != 3 or next(iter(orders)) != "original":
+            raise ValueError("Require original and exactly two complete alternate compositions")
+        full = list(range(len(frames)))
+        if (orders["original"] != full or any(sorted(order) != full for order in orders.values()) or
+                len({tuple(order) for order in orders.values()}) != 3):
+            raise ValueError("Mode proof compositions must be distinct full permutations")
+        if {canonical(asdict(frame)) for frame in frames} != store.allowed:
+            raise ValueError("Mode proof must cover every bound frame")
+        for frame in frames:
+            if not store.path(frame).is_file():
+                raise ValueError("Mode proof requires prepopulated original eval features")
+        original_modes = [(name, module.training) for name, module in encoder.named_modules()]
+        original_rng, original_state = rng_snapshot(), encoder_digest(encoder)
+        rows = []
+        try:
+            clone = copy.deepcopy(encoder)
+            for training in (False, True):
+                clone.train(training)  # Excluded engineering clone ONLY.
+                for label, order in orders.items():
+                    count = 0
+                    with EncoderCacheSession(clone, store, mode="record", mode_policy=self) as session:
+                        for actual_frames, images in batches(order):
+                            expected = tuple(frames[i] for i in order[count:count + size])
+                            if tuple(actual_frames) != expected or len(expected) != size:
+                                raise ValueError("Mode proof input order/complete batches changed")
+                            with session.frames(actual_frames):
+                                clone(images)  # put compares to prior eval bits, not to a new target.
+                            count += size
+                        if count != len(frames):
+                            raise ValueError("Incomplete mode proof frame coverage")
+                    rows.append({"training": training, "composition": label,
+                        "order_sha256": digest(order), "full_encoder_batches": session.calls,
+                        "all_existing_frame_bits_equal": True, "rng_and_state_unchanged": True})
+            assert_bitwise(original_rng, rng_snapshot())
+            self._proof = {"policy_sha256": self.contract, "binding_sha256": store.binding.sha256,
+                "frame_inventory_sha256": store.binding.frame_inventory_sha256, "checks": rows,
+                "native_modes_changed": False, "scientific_activation": False}
+            return evidence_snapshot(self._proof)
+        finally:
+            restore_rng(original_rng)
+            if ([(name, module.training) for name, module in encoder.named_modules()] != original_modes or
+                    encoder_digest(encoder) != original_state):
+                self._proof = None
+                raise ValueError("Mode proof changed the original encoder")
+
+
 class EncoderCacheSession:
     """Explicit engineering hook; never installs itself in a training runner.
 
@@ -392,21 +541,29 @@ class EncoderCacheSession:
     are rejected. Input hashes cover the actual transformed, dtype-cast pixels.
     Output reconstruction preserves DINO's original noncontiguous batch stride.
     """
-    def __init__(self, encoder, store, *, mode):
+    def __init__(self, encoder, store, *, mode, mode_policy=None):
         if mode not in ("record", "engineering_replay"):
             raise ValueError("Scientific activation is not implemented; independent batch/update/RNG gates required")
         self.encoder, self.store, self.mode = encoder, store, mode
+        self.mode_policy = mode_policy
         self.pending, self.calls, self.active = None, 0, False
 
     def _guard(self):
         tensors = list(self.encoder.named_parameters()) + list(self.encoder.named_buffers())
         global_hooks = torch.nn.modules.module
-        if (any(value.requires_grad for _, value in tensors) or any(module.training for module in self.encoder.modules()) or
+        if (any(value.requires_grad for _, value in tensors) or
+                (self.mode_policy is None and any(module.training for module in self.encoder.modules())) or
                 any(module._forward_hooks or module._forward_pre_hooks or module._backward_hooks
                     for module in self.encoder.modules()) or
                 any(getattr(global_hooks, name, {}) for name in
                     ("_global_forward_hooks", "_global_forward_pre_hooks", "_global_backward_hooks"))):
             raise ValueError("Require frozen eval-mode encoder without external activation hooks")
+        modes = tuple(module.training for module in self.encoder.modules())
+        if hasattr(self, "native_modes") and modes != self.native_modes:
+            raise ValueError("Native encoder mode changed inside one cache session")
+        if self.mode_policy is not None:
+            self.mode_policy.guard(self.encoder, self.store.binding,
+                replay=self.mode == "engineering_replay", routed_root=self.active)
         versions = [(name, id(value), value.data_ptr(), value._version) for name, value in tensors]
         if hasattr(self, "versions") and versions != self.versions:
             raise ValueError("Frozen encoder state was changed or replaced")
@@ -416,6 +573,7 @@ class EncoderCacheSession:
         if self.active:
             raise ValueError("Nested encoder cache session")
         self.versions = self._guard()
+        self.native_modes = tuple(module.training for module in self.encoder.modules())
         if encoder_digest(self.encoder) != self.store.binding.encoder_sha256:
             raise ValueError("Actual encoder weights/buffers differ from cache binding")
         self.original, self.had_forward = self.encoder.forward, "forward" in self.encoder.__dict__

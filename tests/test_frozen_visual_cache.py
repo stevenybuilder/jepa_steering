@@ -32,6 +32,165 @@ class FixtureEncoder(torch.nn.Module):
         return padded[:, 1:]
 
 
+class ModeEncoder(torch.nn.Module):
+    """Small source-bound deterministic fixture, not a generic whitelist bypass."""
+    def __init__(self, *, mode_sensitive=False, stochastic=False, stateful=False):
+        super().__init__()
+        self.weight = torch.nn.Parameter(torch.tensor(2.), requires_grad=False)
+        self.drop = torch.nn.Dropout(0.)
+        self.mode_sensitive, self.stochastic, self.stateful = mode_sensitive, stochastic, stateful
+        self.counter = 0
+        self.eval()
+
+    def forward(self, value):
+        if self.training and self.stochastic:
+            torch.rand(())
+        if self.training and self.stateful:
+            self.counter += 1
+        output = torch.zeros(len(value), 3, 3)
+        output[:, 1:] = self.drop(value.flatten(1)[:, :6].reshape(len(value), 2, 3) * self.weight)
+        if self.training and self.mode_sensitive:
+            output[:, 1:] += 1
+        return output[:, 1:]
+
+
+class ModePolicyTests(unittest.TestCase):
+    def setUp(self):
+        self.before = c.rng_snapshot()
+        self.tmp = tempfile.TemporaryDirectory()
+        self.encoder = ModeEncoder()
+        self.frames = tuple(c.Frame("obses/episode_000.pth", "d" * 64, i) for i in range(4))
+        self.images = torch.arange(48, dtype=torch.float32).reshape(4, 3, 2, 2)
+        self.binding = c.Binding(task="pointmaze", source_sha256="a" * 64,
+            encoder_sha256=c.encoder_digest(self.encoder), transform_sha256="b" * 64,
+            input_manifest_sha256="c" * 64, frame_inventory_sha256=c.digest(c.frame_inventory(self.frames)),
+            runtime_sha256=c.digest(c.runtime_identity("cpu")), precision_sha256=c.digest(c.precision_identity("cpu")),
+            input_shape=(2, 3, 2, 2), input_stride=(12, 4, 2, 1), input_dtype="torch.float32",
+            output_shape=(2, 2, 3), output_stride=(9, 3, 1), output_dtype="torch.float32")
+        self.store = c.CacheStore.create(Path(self.tmp.name) / "cache", self.binding, self.frames,
+            max_disk_bytes=1 << 20, min_free_bytes=0)
+        self.orders = {"original": [0, 1, 2, 3], "cross": [0, 2, 1, 3], "reverse": [3, 2, 1, 0]}
+
+    def tearDown(self):
+        self.store.close(); self.tmp.cleanup(); c.restore_rng(self.before)
+
+    def policy(self, encoder=None, **kwargs):
+        encoder = encoder or self.encoder
+        identity = c.class_identity(type(encoder))
+        args = {"audited_classes": {identity["class"]: identity["file_sha256"]},
+            "source_receipt": {"source_sha256": self.binding.source_sha256, "scope": "CPU fixture"}}
+        return c.EngineeringModePolicy(encoder, self.binding, **{**args, **kwargs})
+
+    def batches(self, order):
+        for start in range(0, 4, 2):
+            selected = order[start:start+2]
+            yield [self.frames[i] for i in selected], self.images[selected]
+
+    def populate(self, encoder=None):
+        encoder = encoder or self.encoder
+        with c.EncoderCacheSession(encoder, self.store, mode="record") as session:
+            for frames, images in self.batches(self.orders["original"]):
+                with session.frames(frames):
+                    encoder(images)
+
+    def prove(self, policy, encoder=None):
+        return policy.prove(encoder or self.encoder, self.store, self.frames, self.orders, self.batches)
+
+    def test_complete_mode_and_composition_proof_preserves_native_modes_then_allows_replay(self):
+        self.populate(); policy = self.policy()
+        with self.assertRaisesRegex(ValueError, "proof"):
+            with c.EncoderCacheSession(self.encoder, self.store, mode="engineering_replay", mode_policy=policy):
+                pass
+        before = c.rng_snapshot()
+        report = self.prove(policy)
+        self.assertEqual(len(report["checks"]), 6)
+        self.assertEqual({row["training"] for row in report["checks"]}, {True, False})
+        self.assertFalse(self.encoder.training)
+        c.assert_bitwise(before, c.rng_snapshot())
+        self.encoder.train()  # Stand-in for the upstream validation exit, not forced by cache.
+        expected = self.encoder(self.images[:2])
+        with c.EncoderCacheSession(self.encoder, self.store, mode="engineering_replay", mode_policy=policy) as session:
+            with session.frames(self.frames[:2]):
+                c.assert_bitwise(expected, self.encoder(self.images[:2]))
+        self.assertTrue(self.encoder.training)
+        with self.assertRaisesRegex(ValueError, "eval-mode"):
+            with c.EncoderCacheSession(self.encoder, self.store, mode="record"):
+                pass
+        with self.assertRaisesRegex(ValueError, "Scientific activation"):
+            c.EncoderCacheSession(self.encoder, self.store, mode="science", mode_policy=policy)
+
+    def test_source_weight_binding_and_unknown_components_are_fail_closed(self):
+        identity = c.class_identity(type(self.encoder))
+        with self.assertRaisesRegex(ValueError, "source"):
+            self.policy(source_receipt={"source_sha256": "f" * 64})
+        with self.assertRaisesRegex(ValueError, "source"):
+            self.policy(audited_classes={identity["class"]: "f" * 64})
+        self.encoder.weight.data.add_(1)
+        with self.assertRaisesRegex(ValueError, "weights"):
+            self.policy()
+        self.encoder.weight.data.sub_(1)
+        self.encoder.extra = torch.nn.BatchNorm2d(3, track_running_stats=False, affine=False)
+        self.encoder.extra.eval()
+        with self.assertRaisesRegex(ValueError, "Unaudited"):
+            self.policy()
+
+    def test_nonzero_dropout_attention_drop_path_and_buffers_are_rejected(self):
+        self.encoder.drop.p = .1
+        with self.assertRaisesRegex(ValueError, "stochastic"):
+            self.policy()
+        self.encoder.drop.p = 0.
+        for name in ("attn_drop", "sample_drop_ratio", "drop_prob"):
+            setattr(self.encoder, name, .1)
+            with self.assertRaisesRegex(ValueError, "stochastic"):
+                self.policy()
+            delattr(self.encoder, name)
+        self.encoder.register_buffer("hidden", torch.zeros(1), persistent=False)
+        with self.assertRaisesRegex(ValueError, "buffer"):
+            self.policy()
+
+    def test_mode_sensitive_stochastic_or_state_mutating_encoder_never_passes(self):
+        for option in ("mode_sensitive", "stochastic", "stateful"):
+            with self.subTest(option=option):
+                encoder = ModeEncoder(**{option: True})
+                self.populate(encoder); policy = self.policy(encoder)
+                before = c.rng_snapshot()
+                with self.assertRaises(ValueError):
+                    self.prove(policy, encoder)
+                self.assertIsNone(policy._proof)
+                self.assertFalse(encoder.training)
+                c.assert_bitwise(before, c.rng_snapshot())
+
+    def test_partial_compositions_missing_frames_and_mixed_modes_are_rejected(self):
+        policy = self.policy()
+        with self.assertRaisesRegex(ValueError, "prepopulated"):
+            self.prove(policy)
+        self.populate()
+        with self.assertRaisesRegex(ValueError, "permutations"):
+            policy.prove(self.encoder, self.store, self.frames, {**self.orders, "reverse": [0,1,2,3]}, self.batches)
+        def partial(order):
+            yield next(self.batches(order))
+        with self.assertRaisesRegex(ValueError, "Incomplete"):
+            policy.prove(self.encoder, self.store, self.frames, self.orders, partial)
+        self.assertIsNone(policy._proof)
+        self.encoder.drop.train()
+        with self.assertRaisesRegex(ValueError, "Mixed"):
+            self.policy()
+
+    def test_post_proof_configuration_and_within_session_mode_mutations_rejected(self):
+        self.populate(); policy = self.policy(); self.prove(policy)
+        self.encoder.mode_sensitive = True
+        with self.assertRaisesRegex(ValueError, "changed"):
+            with c.EncoderCacheSession(self.encoder, self.store, mode="engineering_replay", mode_policy=policy):
+                pass
+        self.encoder.mode_sensitive = False
+        with self.assertRaisesRegex(ValueError, "mode changed"):
+            with c.EncoderCacheSession(self.encoder, self.store, mode="engineering_replay", mode_policy=policy) as session:
+                self.encoder.train()
+                with session.frames(self.frames[:2]):
+                    self.encoder(self.images[:2])
+        self.assertNotIn("forward", self.encoder.__dict__)
+
+
 class CacheTests(unittest.TestCase):
     def setUp(self):
         self.initial_rng = c.rng_snapshot()

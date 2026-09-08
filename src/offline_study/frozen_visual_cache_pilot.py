@@ -18,6 +18,7 @@ from contextlib import contextmanager, nullcontext
 import copy
 from dataclasses import asdict
 import itertools
+import inspect
 import json
 import logging
 from pathlib import Path
@@ -51,6 +52,78 @@ CACHE_MEMORY_BYTES = 64 << 20
 ENGINEERING_SEED = 234
 LOADER_SEED = 2026090725
 UPDATE_INDICES = (0, 1)
+PROTOCOL_VERSION = "pointmaze_visual_cache_native_modes_engineering_v2"
+V1_FAILURE = {"root": "visual-cache-engineering-20260908-v1",
+    "failed_receipt_sha256": "a16050f3c235290d492258fc444395325995c11cff0ba28d79c41b974b07dd77",
+    "protocol_sha256": "74c65872b45f4dab0fd2111304b926f62cb9d3058b12a65f7e6ffd7b348f81d0",
+    "reason": "Native validation ends world_model.train(); default eval-only cache guard refused update1",
+    "numerical_parity_failure_observed": False, "complete_update_parity_established": False}
+DINO_MODE_FILES = {
+    "dinov2/models/vision_transformer.py": "7799a260f2d7d0fe197331d08502fb8c542f9b7424723650f6a39b64fa2639ea",
+    "dinov2/layers/block.py": "60c0ac7dfa4474be313fabfa5a23d82faf6f0cecd4e720a88be35de9788cb636",
+    "dinov2/layers/attention.py": "79c7be7a452b3aad96698ec38d5d5150b9f4d8ac084fa93324510dc9f624775d",
+    "dinov2/layers/mlp.py": "255825c73b60a916dd00eb1e38aacbcdbf316e40d6a005efb46e245b7edb43aa",
+    "dinov2/layers/patch_embed.py": "40da6add3d811198ea3e17cb99cdd4e5cda59e369efbbe3d18d89308618cf142",
+    "dinov2/layers/layer_scale.py": "dadd5aafe178f1bf72a205a02a6645c7e635cacbad585d4a7369c200c6e89135",
+    "dinov2/layers/drop_path.py": "b9f8236e86054b9d9a71275efcad2a9ecaa1f86b529d4b8d6109ddb5e806f67a",
+    "dinov2/hub/backbones.py": "871fca671b12a9ff02e810654baf509e97ccf461bf8196ce5ddeefff2fd87d3e"}
+
+
+def native_dino_mode_policy(encoder, binding, vendor):
+    """Reviewed Sep8 pinned source; a whitelist, not generic train-mode caching.
+
+    DinoEncoder calls forward_features(Tensor), not DINO.forward(is_training=...).
+    Tensor blocks take identical branches at sample_drop_ratio=0; attention SDPA
+    dropout_p is zero in both modes. MLP/projection Dropout(p=0) is identity.
+    No BatchNorm, registered buffers, nested-list attention-bias cache, mask input,
+    trainable visual parameters or nonzero DropPath is allowed by this contract.
+    These source facts do NOT substitute for the receiving bitwise/RNG proof.
+    """
+    from .model_loader import verified_local_dino_cache
+    with verified_local_dino_cache():  # Hashes only; never calls torch.hub.load here.
+        pass
+    root = Path(torch.hub.get_dir()) / "facebookresearch_dinov2_main"
+    for relative, expected in DINO_MODE_FILES.items():
+        if sha256(root / relative) != expected:
+            raise ValueError("Pinned mode-sensitive DINO source changed")
+    wrapper = vendor / "app/plan_common/models/dino.py"
+    if (sha256(wrapper) != "6994115d43796ceda054509eb6bac9b9ea62ae1115b4d0f9dae25122f7ab0e9f" or
+            sha256(vendor / "app/vjepa_wm/train.py") != "c1fc4c57b99cab18df14405236adf463363fa4eef23705635a2a48e5d6e98285"):
+        raise ValueError("Pinned native encoder/validation mode lifecycle changed")
+    classes = {
+        "app.plan_common.models.dino.DinoEncoder": sha256(wrapper),
+        "dinov2.models.vision_transformer.DinoVisionTransformer": DINO_MODE_FILES["dinov2/models/vision_transformer.py"],
+        "dinov2.layers.block.NestedTensorBlock": DINO_MODE_FILES["dinov2/layers/block.py"],
+        "dinov2.layers.attention.MemEffAttention": DINO_MODE_FILES["dinov2/layers/attention.py"],
+        "dinov2.layers.mlp.Mlp": DINO_MODE_FILES["dinov2/layers/mlp.py"],
+        "dinov2.layers.patch_embed.PatchEmbed": DINO_MODE_FILES["dinov2/layers/patch_embed.py"],
+        "dinov2.layers.layer_scale.LayerScale": DINO_MODE_FILES["dinov2/layers/layer_scale.py"]}
+    if (type(encoder).__module__ + "." + type(encoder).__qualname__ != "app.plan_common.models.dino.DinoEncoder" or
+            encoder.name != "dinov2_vits14" or encoder.feature_key != "x_norm_patchtokens" or
+            encoder.latent_ndim != 2 or encoder.base_model.chunked_blocks or
+            encoder.base_model.bag_of_channels or encoder.base_model.num_register_tokens != 0 or
+            encoder.base_model.n_blocks != 12 or encoder.base_model.embed_dim != 384):
+        raise ValueError("Actual receiving encoder differs from the reviewed DINO-S/14 tensor path")
+    backend = {}
+    for name in ("dinov2.layers.block", "dinov2.layers.attention"):
+        import sys
+        module = sys.modules[name]
+        backend[name] = {"XFORMERS_AVAILABLE": module.XFORMERS_AVAILABLE,
+            "XFORMERS_ENABLED": module.XFORMERS_ENABLED}
+        # Pinned receiving runtime uses PyTorch SDPA. Do not silently bless a
+        # different external kernel or the stateful nested-list cache path.
+        if module.XFORMERS_AVAILABLE:
+            raise ValueError("Unaudited xFormers backend; native SDPA mode proof required")
+    for module in encoder.modules():
+        cls = type(module)
+        if cls.__module__.startswith("dinov2.") and not Path(inspect.getfile(cls)).resolve().is_relative_to(root.resolve()):
+            raise ValueError("Loaded DINO class is outside its verified source root")
+    return cache.EngineeringModePolicy(encoder, binding, audited_classes=classes,
+        source_receipt={"source_sha256": binding.source_sha256, "dino_source_sha256": DINO_SOURCE_SHA256,
+            "dino_weight_sha256": DINO_WEIGHT_SHA256, "mode_sensitive_files": DINO_MODE_FILES,
+            "backend": backend, "native_validation_train_restore_line": 1307,
+            "observed_modes": "initial_eval; native_validation_eval_then_train",
+            "review_basis": "zero stochastic rates; frozen buffer-free Tensor-only SDPA DINO-S/14 path"})
 
 
 def actual_native_schedule(vendor, cfg, train_clips, val_clips, train_rows, val_rows):
@@ -186,11 +259,12 @@ class EncoderTiming:
 
 
 @contextmanager
-def routed_encoder(encoder, frames, store=None):
+def routed_encoder(encoder, frames, store=None, mode_policy=None):
     """One scope per unchanged accumulated_update; validation stays uncached."""
     if len(frames) != 512:
         raise ValueError("Require all16 native32-image encoder calls")
-    session = cache.EncoderCacheSession(encoder, store, mode="engineering_replay") if store else None
+    session = cache.EncoderCacheSession(encoder, store, mode="engineering_replay",
+        mode_policy=mode_policy) if store else None
     scope = session if session else nullcontext()
     timing, calls = EncoderTiming(), 0
     with scope:
@@ -236,7 +310,7 @@ def gradient_evidence(model, enabled):
 
 
 def run_updates(initial, training, indices, frame_rows, input_evidence, initial_cpu, initial_cuda,
-                vendor, cfg, validation, val_schedule, store, *, capture_gradients):
+                vendor, cfg, validation, val_schedule, store, *, capture_gradients, mode_policy=None):
     model, scheduler, wd = copy.deepcopy(initial)
     cpu, cuda = [state.clone() for state in initial_cpu], [state.clone() for state in initial_cuda]
     loader_rng = torch.Generator().manual_seed(LOADER_SEED)
@@ -245,13 +319,17 @@ def run_updates(initial, training, indices, frame_rows, input_evidence, initial_
     load_seconds = time.monotonic() - load_started
     if tensor_evidence(batches) != input_evidence:
         raise ValueError("Reloaded original transformed inputs changed")
-    losses, timings, validation_evidence = [], [], None
+    losses, timings, validation_evidence, mode_events = [], [], None, []
     callback_started = time.monotonic()
     with gradient_evidence(model, capture_gradients) as gradients:
         for update, batch in enumerate(batches):
             # Context bookkeeping/weight hashing is outside step-only timing and
             # explicitly included in callback wall time below.
-            with routed_encoder(model.encoder, frame_rows[update], store) as encoder_timing:
+            mode_events.append({"event": "before_update" + str(update),
+                "encoder_modes": {name: module.training for name, module in model.encoder.named_modules()}})
+            if set(mode_events[-1]["encoder_modes"].values()) != {bool(update)}:
+                raise ValueError("Native initial-eval / post-validation-train lifecycle changed")
+            with routed_encoder(model.encoder, frame_rows[update], store, mode_policy) as encoder_timing:
                 torch.cuda.synchronize()
                 started = time.monotonic()
                 values = accumulated_update(model, scheduler, wd, batch, cpu)
@@ -274,7 +352,7 @@ def run_updates(initial, training, indices, frame_rows, input_evidence, initial_
         "scheduler": {"learning_rate": scheduler._step, "weight_decay": wd._step},
         "logical_rngs": tensor_evidence({"cpu": cpu, "cuda": cuda}),
         "loader_rng": tensor_evidence(loader_rng.get_state()), "validation_events": 1,
-        "validation": validation_evidence, "updates": 2}
+        "validation": validation_evidence, "updates": 2, "native_mode_events": mode_events}
     return result, {"updates": timings, "input_load_seconds": load_seconds,
         "callback_seconds": time.monotonic() - callback_started,
         "callback_excludes_initial_model_clone_and_input_loading": True}
@@ -303,6 +381,20 @@ def composition_checks(encoder, store, batches, frame_rows):
             reports.append({"composition": name, "order_sha256": cache.digest(order),
                 "full_encoder_batches": session.calls, "all_existing_frame_bits_equal": True})
     return reports
+
+
+def mode_composition_checks(encoder, store, batches, frame_rows, policy):
+    frames = list(itertools.chain.from_iterable(frame_rows))
+    cpu_frames = [batch[0]["visual"].flatten(0, 1) for batch in batches]
+    orders = {"original": list(range(1024)), **composition_orders()}
+    def supplied(order):
+        for start in range(0, 1024, 32):
+            chosen = order[start:start + 32]
+            images = torch.stack([cpu_frames[index // 512][index % 512] for index in chosen]).to(
+                "cuda:0", dtype=torch.bfloat16)
+            yield [frames[index] for index in chosen], images
+    with torch.amp.autocast("cuda", dtype=torch.bfloat16):
+        return policy.prove(encoder, store, frames, orders, supplied)
 
 
 def check_budget(binding, frames):
@@ -360,7 +452,8 @@ def main():
             "native_video_wm.py": sha256(args.vendor / "app/vjepa_wm/video_wm.py"),
             "native_init_utils.py": sha256(args.vendor / "app/vjepa_wm/utils.py"),
             "dino_source_sha256": DINO_SOURCE_SHA256, "dino_weight_sha256": DINO_WEIGHT_SHA256}
-        protocol = {"role": "excluded_pointmaze_frozen_visual_cache_parity_and_timing", "task": "pointmaze",
+        protocol = {"schema": PROTOCOL_VERSION, "prior_engineering_failure": V1_FAILURE,
+            "role": "excluded_pointmaze_frozen_visual_cache_parity_and_timing", "task": "pointmaze",
             "source_sha256": sources, "native_config_sha256": sha256(args.vendor / CONFIGS["pointmaze"]),
             "input_report_sha256": input_hash, "input_check_report_sha256": check_hash,
             "seed": ENGINEERING_SEED, "sampler_policy": SAMPLER_POLICY, "update_indices": list(UPDATE_INDICES),
@@ -372,6 +465,8 @@ def main():
             "validation": "full64clips,16ranks,8frames; noisy and recorded-action H6; always uncached",
             "gradient_parity_pairs": 1, "timing_pairs": 1, "timing_order": ["cached", "native"],
             "cache_population_original_batches": 32, "alternate_compositions": list(composition_orders()),
+            "mode_parity_batches": 192, "mode_parity_gate": "eval/train x original/two alternate compositions",
+            "mode_changes_for_proof": "isolated encoder clone only; preserve native update/validation modes",
             "gpu_stage_limit_seconds": GPU_STAGE_LIMIT_SECONDS,
             "required_outer_process_timeout_seconds": REQUIRED_OUTER_TIMEOUT_SECONDS,
             "scratch_limit_bytes": SCRATCH_LIMIT_BYTES, "memory_cache_bytes": CACHE_MEMORY_BYTES,
@@ -407,6 +502,8 @@ def main():
             input_shape=tuple(sample.shape), input_stride=sample.stride(), input_dtype=str(sample.dtype),
             output_shape=tuple(output.shape), output_stride=output.stride(), output_dtype=str(output.dtype))
         capacity = check_budget(binding, frames)
+        mode_policy = native_dino_mode_policy(model.encoder, binding, args.vendor)
+        write_json(args.output / "MODE_POLICY.json", mode_policy.receipt())
         write_json(args.output / "BINDING.json", {"binding": asdict(binding), "capacity": capacity})
         with cache.CacheStore.create(args.output / "cache", binding, frames,
                 max_disk_bytes=SCRATCH_LIMIT_BYTES - (16 << 20), min_free_bytes=2 << 30,
@@ -418,8 +515,8 @@ def main():
                             model.encoder(obs["visual"].flatten(0, 1))
                 if session.calls != 32:
                     raise ValueError("Incomplete original-batch cache population")
-            compositions = composition_checks(model.encoder, store, batches, frame_rows)
-            write_json(args.output / "COMPOSITIONS.json", {"binding_sha256": binding.sha256, "checks": compositions})
+            compositions = mode_composition_checks(model.encoder, store, batches, frame_rows, mode_policy)
+            write_json(args.output / "COMPOSITIONS.json", compositions)
             parity_model, parity_lr, parity_wd = copy.deepcopy(initial)
             native_parity = verify_accumulation(args.vendor, parity_model, parity_lr, parity_wd,
                 batches[0], [state.clone() for state in cpu])
@@ -429,7 +526,7 @@ def main():
             def run(label, gradients):
                 evidence, timings = run_updates(initial, training, indices, frame_rows, input_evidence,
                     cpu, cuda, args.vendor, cfg, validation, validation_batches(),
-                    store if label == "cached" else None, capture_gradients=gradients)
+                    store if label == "cached" else None, capture_gradients=gradients, mode_policy=mode_policy)
                 captured[label] = {"evidence": evidence, "timings": timings}
                 return evidence
             parity = cache.paired_update_check(lambda: run("native", True), lambda: run("cached", True))
@@ -452,7 +549,7 @@ def main():
         complete = {"status": "bounded_pointmaze_visual_cache_engineering_passed",
             "protocol_sha256": sha256(args.output / "protocol.json"), "binding_sha256": binding.sha256,
             "receipts_sha256": {name: sha256(args.output / name) for name in
-                ("INPUTS.json", "BINDING.json", "COMPOSITIONS.json", "UPDATE_PARITY.json", "TIMING.json")},
+                ("INPUTS.json", "BINDING.json", "MODE_POLICY.json", "COMPOSITIONS.json", "UPDATE_PARITY.json", "TIMING.json")},
             "preflight_seconds": preflight_seconds, "gpu_stage_seconds": time.monotonic() - gpu_started,
             "full_update_bitwise_parity": True, "independent_batch_composition_bitwise_parity": True,
             "cache_bytes": actual_cache_bytes, "native_two_update_seconds": native_seconds,
