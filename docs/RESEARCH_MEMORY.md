@@ -1,5 +1,11 @@
 # Sonar research memory
 
+## Highest-level goal — Steven, 2026-09-09
+
+"My goal at an extremely high level is to find a method that would allow widespread adoption (not just by researchers) but companies to productionize JEPA. For instance, Transformers architecture allowed that for LLMs."
+
+This is the overarching ambition. The deployment-adaptation question below is one concrete expression of it, not a restriction of the entire project to dynamics correction. Steven seeks an enabling, reusable method that makes JEPA practical for companies to build and deploy systems with. Evaluate candidate directions by whether they remove a recurring adoption barrier and preserve useful task performance at practical cost. Training recipes, architectures, fine-tuning, inference-time adaptation, memory, and discovery/selection are possible approaches; do not assume a frozen backbone or activation patching is mandatory. The Transformer analogy expresses the desired breadth of enabling impact, not a claim that one architecture alone caused LLM adoption. Widespread adoption is a long-term goal, not an existing result or a guaranteed outcome of one paper.
+
 ## Core question — Steven, 2026-09-09
 
 "can you reduce the amount of data, retraining, or manual engineering needed when deployment conditions change?"
