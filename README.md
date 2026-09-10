@@ -1,8 +1,10 @@
 # JEPA-WM offline intervention study
 
-PyTorch experiments on frozen JEPA-WM checkpoints. The primary task suite is
-**MetaWorld Reach, MetaWorld Reach-Wall, and Push-T**. The broader unedited
-baseline covers all 42 released MetaWorld tasks and Push-T.
+PyTorch experiments on frozen JEPA-WM checkpoints. The approved research scope
+contains **Reach, Reach-Wall, Push-T, PointMaze, Wall, and DROID**. The completed
+core closed-loop comparison covers **Reach and Reach-Wall only**; this is not a
+completed six-task study. DROID uses a recorded-plan action endpoint, not
+physical-robot closed-loop success. RoboCasa is excluded.
 
 The active design is [EXPERIMENT_PLAN.md](docs/EXPERIMENT_PLAN.md), with machine-readable
 settings in [study.json](configs/study.json). The [benchmark runbook](docs/BENCHMARK.md)
@@ -10,23 +12,53 @@ contains setup, commands, metrics, and the measurement-based compute estimate.
 The [GPU/Vast guide](docs/GPU_EFFICIENCY.md) documents bounded multi-GPU execution,
 precision comparisons, and the read-only Vast offer workflow.
 
-## Current state
+## Current state — September 10, 2026
 
-- Implemented: lineage-aware real-dataset inventory, a pinned PyTorch JEPA-WM adapter,
-  recorded-action H6 baseline benchmark, rollout/family/task metrics, immutable run receipts,
-  zero-dose instrumentation check, nonoverlapping trajectory sharding, and a
-  [frozen-protocol intervention executor](docs/INTERVENTIONS.md) that batches arms.
-- Executed remotely: official-data strict-FP32 baseline inference on Push-T and all 42
-  MetaWorld tasks, after bounded 1/2-GPU scaling checks. Receipts remain runtime artifacts.
-- Correction: the first Push-T run used a row-level split. It is retained only as
-  throughput/descriptive evidence; all released train families are now development-exposed,
-  and fresh independent Push-T families are required for confirmation. See the
-  [lineage correction report](reports/PUSHT_LINEAGE_CORRECTION.md).
-- Not yet frozen/fitted: the category-specific operator banks and remaining scientific
-  choices. Historical implementations remain available for carefully scoped reuse;
-  the new executor refuses to invent or tune those choices on development outcomes.
-- No GPU rental, CEM search, simulator rollout, weight training, or protected-holdout
-  evaluation is triggered by the current benchmark.
+- **Completed behavioral table:** [960 matched episode evaluations](reports/CORE_METAWORLD_BEHAVIORAL_RESULTS.md),
+  comprising two tasks × five conditions × 96 paired scenarios per task. The
+  conditions are unsteered, the refined fixed-response edit, vision–action
+  coupling, and each edit's matched-random control. Frozen paired analyses were
+  independently recomputed. Neither learned edit establishes improved task
+  success against both required references; all eight simultaneous intervals
+  include zero. This is not proof of no effect.
+- **Completed offline comparisons:** [corrected prediction results](reports/CORRECTED_OFFLINE_RESULTS.md).
+  Forecast improvements do not establish better planning. The
+  [refined fixed-response operator](docs/FIXED_RESPONSE_RANK4.md) replaces the
+  expensive online response-probe operator; their measurements are distinct.
+- **Implemented infrastructure:** lineage-aware inventory, source-pinned
+  PyTorch adapters, fitted/frozen intervention execution, paired planning,
+  HMM routing and training-history tools. Implementation or an engineering
+  check does not imply completion of the corresponding scientific comparison.
+- **Paused/deferred:** HMM behavioral completion, combined extensions,
+  remaining task comparisons, fresh confirmation and complete three-training-
+  seed/late-checkpoint histories. The core table uses one released checkpoint.
+  A planner-decision/candidate-ranking diagnostic is not yet complete.
+- **Data corrections remain binding:** see the [Push-T lineage report](reports/PUSHT_LINEAGE_CORRECTION.md),
+  [MetaWorld correction](reports/METAWORLD_LINEAGE_CORRECTION.md), and
+  [planning alignment](reports/PLANNING_METHOD_ALIGNMENT.md). Reusing released
+  development families is replication, not fresh-family confirmation.
+- **Preservation and shutdown:** [verified Drive recovery and rental closeout](reports/VAST_FINAL_STORAGE_RELEASE_20260910.md).
+  The September 10 audit records twelve deleted rentals and two inaccessible
+  disks retained pending recovery. No new experiment or compute restart is
+  authorized by this merge or by the historical launcher scripts.
+
+For broader interpretation, see [world-model approaches and measured results](wm-approaches.md).
+For computational lessons, see [jax_scaling_notes.md](jax_scaling_notes.md).
+The [research-direction notes](docs/RESEARCH_MEMORY.md) record motivation, not
+evidence that repeatable improvement has already been established.
+
+## Reproducing and restoring
+
+The [core analysis](reports/wm-approaches/core-analysis.json) and
+[verification receipt](reports/wm-approaches/core-verification.json) are tracked.
+Raw episode traces, model histories and large archives are stored separately;
+follow the [Drive restoration guide](reports/VAST_FINAL_STORAGE_RELEASE_20260910.md#evidence-and-recovery)
+for exact object IDs, hashes and reconstruction instructions. Archives and Drive
+folders remain private; repository access alone does not grant storage access.
+
+Existing untracked paper drafts and explicitly deferred launchers are not the
+authoritative results. Use the dated reports above. Do not resume old queues or
+interpret historical completion flags as current authorization.
 
 ## Four research categories
 
@@ -50,6 +82,11 @@ what this does and does not preserve. Historical completion flags and instructio
 do not govern the new study.
 
 ## CPU harness check
+
+The full source-alignment test suite also requires the pinned upstream source
+under `vendor/jepa-wms`, its test/runtime dependencies, and this repository's
+Git history. Follow the [setup runbook](docs/BENCHMARK.md) first; a bare source
+archive without those dependencies is not a complete test environment.
 
 ```bash
 python -m pip install -e .

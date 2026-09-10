@@ -91,7 +91,11 @@ readback. Google Drive verification and rental lifecycle are separate operationa
 gates: see the latest execution checkpoint and
 [restoration guide](../artifacts/offline_study/core-completion-preservation-20260908-v1/RESTORE.md)
 for the archive locations, verification receipts and shutdown status.
-All source volumes must remain retained. HMM, combined extensions, additional
-tasks, fresh confirmation, and training histories remain paused/deferred under
+The later user-authorized storage closeout supersedes the original blanket
+source-volume hold: verified rentals have been deleted after Drive preservation;
+two inaccessible disks remain retained. See the dated
+[final storage-release report](VAST_FINAL_STORAGE_RELEASE_20260910.md).
+HMM, combined extensions, additional tasks, fresh confirmation, and training
+histories remain paused/deferred under
 the user's core-first priority. This completes the agreed core comparison, not
 the full six-task study. No additional scientific job is authorized by this report.

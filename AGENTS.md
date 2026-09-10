@@ -2,6 +2,12 @@
 
 Read docs/EXPERIMENT_PLAN.md and configs/study.json before scientific changes.
 
+- Branch workflow (user preference, September 10, 2026): work directly on `main`
+  by default, with small, scoped, verified commits. Do not create feature branches
+  or pull requests unless the user asks. Preserve unrelated local changes, fetch
+  before pushing, never force-push, and report any branch-protection requirement
+  rather than bypassing it. Finish the already-authorized `offline-study-reset`
+  merge before switching this workspace to `main`.
 - User-approved scope: mw-reach, mw-reach-wall, pusht, pointmaze, wall, droid.
   RoboCasa is excluded. DROID uses the paper's recorded-plan action endpoint,
   not physical-robot closed-loop success. Never report a single-task run as
