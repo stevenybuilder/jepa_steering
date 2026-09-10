@@ -1,5 +1,15 @@
 # Frozen-model offline study: active plan
 
+## Bounded diagnostic continuation — user approved September 10, 2026
+
+The user now authorizes one planner-decision diagnostic and final analysis/write-up.
+Follow [its separate contract](PLANNER_DECISION_DIAGNOSTIC.md): the existing five
+conditions on Reach and Reach-Wall, 96 canonical scenarios each, one shared
+300-candidate action bank and one 15-step physical prefix per selected action.
+This does not restart full closed-loop panels, other tasks/intervention families,
+training histories or confirmation. All prior results and freezes remain intact.
+No claim of new execution/completion follows from this plan entry alone.
+
 ## Core complete; preserve and pause — user approved September 8, 2026
 
 All 960 core episodes and the frozen eight-contrast paired analysis completed.

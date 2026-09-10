@@ -1264,3 +1264,30 @@ then passed full member readback. The previous attempt had sent over1GB without
 completion. Future snapshot uploads now use8MiB chunks with bounded retries and
 progress reporting. This is operational recovery evidence, not an isolated
 network benchmark; no model precision, evaluation sample or GPU work changed.
+
+## September 10: keep a bounded decision diagnostic computationally bounded
+
+The new diagnostic shares one native 300-candidate action tensor and one encoded
+initial/goal pair across five conditions. Encode once when the input is genuinely
+identical; do not recompute it per condition. If redundant encoding occupied a
+fraction `f` of the original runtime, replacing five encodings with one gives an
+Amdahl-law upper bound `1 / (1 - f + f/5)`, **not** a fivefold end-to-end speedup.
+We have not separately measured `f` here, so no measured speedup is claimed.
+
+Candidate scoring is a GPU batch of 300, with one predictor rollout per condition.
+The initial physical state and action bank are hash-bound. When conditions choose
+the exact same candidate, the simulator prefix may be reused within that scenario
+after exact reset/repeat validation; this saves work without manufacturing more
+independent samples. Native, zero-dose and repeated-state engineering checks remain.
+
+One Michigan RTX4090 costs $0.423704/hour with its chosen disk. The early measured
+rate is approximately 16 seconds per scenario across all five conditions. A single
+fully occupied GPU is enough for this small panel; extra rentals would repeat
+environment setup. The compact input archive is about51MB; no training dataset or
+RGB decoder is downloaded just to run this diagnostic.
+
+Crucially, using only the first CEM population and a fifteen-step prefix is a
+**different, explicitly narrower diagnostic question**, not an optimization that
+reproduces the complete fifteen-iteration, full-episode planner more cheaply.
+The complete old 960-episode study remains separate and unchanged. This distinction
+prevents a scope reduction from being marketed as an equivalent compute speedup.
