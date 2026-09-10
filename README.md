@@ -87,6 +87,11 @@ The full source-alignment test suite also requires the pinned upstream source
 under `vendor/jepa-wms`, its test/runtime dependencies, and this repository's
 Git history. Follow the [setup runbook](docs/BENCHMARK.md) first; a bare source
 archive without those dependencies is not a complete test environment.
+Recovery integration tests also verify exact historical receipt fixtures under
+`artifacts/offline_study/pointmaze-tx-resume-20260908-v1` and
+`artifacts/offline_study/navigation-redistribution-20260908-v2`. Restore these
+from the private archives when running the full suite; they are intentionally
+not embedded in the source repository.
 
 ```bash
 python -m pip install -e .
