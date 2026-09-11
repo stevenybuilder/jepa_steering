@@ -1,4 +1,38 @@
-# Core complete, Drive verified, all study compute stopped — 2026-09-08,22:07 UTC
+# Bounded independent confirmation launched — 2026-09-11,02:58 UTC
+
+The newly authorized run is **Reach and Reach-Wall only**, five unchanged
+conditions: native, cheap fixed-response refined edit, its matched-random
+control, equal-budget coupling, and its matched-random control. There are
+96 reserved scenarios/task/condition, **960 new full 100-step episodes total**;
+no original expensive online operator, extra task, HMM/combined successor or
+training history is running. This is not a well-powered five-point-effect claim.
+
+Five exclusively owned US rentals /16 RTX4090s are launched at a combined
+quoted **$6.479259/hour**, within the **$65 total new-compute/transfer cap**.
+Reach-Wall50544130 has passed all eight receiving-device engineering panels
+and is collecting protected outcomes. Reach50546169/170/171/172 supervisors
+are launched; receiving checks precede their protected evaluations. Do not
+count launcher completion as a completed scientific panel.
+
+The immutable execution contract is
+`artifacts/offline_study/confirmation-20260911-v1/freeze-v2/`; the readable scope,
+exposure-audit limits and analysis rules are in
+[FINAL_STATISTICAL_VALIDATION.md](../docs/FINAL_STATISTICAL_VALIDATION.md).
+The source/input bundle and frozen protocol have passed full private Drive
+readback. Running outputs are mirrored by the registered local launchd monitor.
+At worker completion, archive/readback verification precedes stopping its GPUs;
+global paired analysis is independently reloaded before final disk destruction.
+Only verified local archive duplicates may be evicted; raw mirrors are retained.
+
+Independent budget backstop stops new paid compute at **11:00 UTC /7:00am EDT**
+if closeout has not already released it. Mac power/network must remain available
+for Drive transfer and provider API shutdown. Old inaccessible50125440/50205763
+are not part of the new authorization and remain untouched. The failed slow
+bootstrap50544129 was preserved and released without scientific-result loss.
+About1.65GB of rebuildable pip cache was cleared after transient local ENOSPC;
+no research file was removed for that recovery.
+
+## Historical: core complete, Drive verified, compute stopped — 2026-09-08,22:07 UTC
 
 The agreed core panel is complete: **960/960 episodes,40/40shards**, two tasks,
 five arms and96 total episodes per task/arm. An independent reload of all raw

@@ -20,7 +20,7 @@ from final_preservation_drive import upload_direct, verify as drive_verify, requ
 PROJECT=Path(__file__).resolve().parents[2]
 ROOT=PROJECT/'artifacts/offline_study/confirmation-20260911-v1'
 VAST='/Users/stevenyang/.local/bin/vastai'
-KEY='/tmp/jepa_vast_50123620_ed25519'
+KEY='/Users/stevenyang/.ssh/id_ed25519'
 
 
 def stamp():return datetime.now(timezone.utc).isoformat()
@@ -90,11 +90,17 @@ def stage(lease):
     else:raise RuntimeError('Receiving SSH unavailable; preserve/release bootstrap allocation')
     rate=max(float(row['dph_total']),float(row.get('instance',{}).get('totalHour',0)))
     if rate>lease['dph_total']+.05:raise ValueError('Unexpected receiving rental rate')
-    write(ROOT/'leases'/f"{lease['id']}-received.json",{k:row.get(k) for k in
-        ('id','label','geolocation','gpu_name','num_gpus','public_ipaddr','ports','dph_total','actual_status')})
+    receiving={k:row.get(k) for k in
+        ('id','label','geolocation','gpu_name','num_gpus','public_ipaddr','ports','dph_total','actual_status')}
+    receipt=ROOT/'leases'/f"{lease['id']}-received.json"
+    if receipt.exists():
+        if json.loads(receipt.read_text())!=receiving:raise ValueError('Receiving identity changed on staging resume')
+    else:write(receipt,receiving)
     shell=shlex.join(ssh(row)[:-1])
-    subprocess.run(['rsync','-a','--timeout=90','-e',shell,str(archive),
-        ssh(row)[-1]+':/workspace/confirmation-inputs.tar.gz'],check=True,timeout=600)
+    present=command(ssh(row)+['sha256sum /workspace/confirmation-inputs.tar.gz 2>/dev/null || true'],60)
+    if package['sha256'] not in present.split():
+        subprocess.run(['rsync','-a','--timeout=90','-e',shell,str(archive),
+            ssh(row)[-1]+':/workspace/confirmation-inputs.tar.gz'],check=True,timeout=600)
     received=command(ssh(row)+['sha256sum /workspace/confirmation-inputs.tar.gz'],60)
     if package['sha256'] not in received.split():raise ValueError('Received bundle SHA mismatch')
     command(ssh(row)+['mkdir /workspace/confirmation && tar -xzf /workspace/confirmation-inputs.tar.gz -C /workspace/confirmation'],180)
@@ -177,6 +183,49 @@ def preserve(lease,row):
     uploaded=upload_direct(archive,name,out/'DRIVE_UPLOAD.json')
     verified=drive_verify(uploaded['id'],name,checked['bytes'],checked['sha256'])
     write(out/'DRIVE_VERIFIED.json',{**checked,**verified,'file_id':uploaded['id'],'utc':stamp()})
+    # Only this newly downloaded duplicate is evicted, after complete Drive
+    # readback. Raw mirrored results and the remote source disk remain intact.
+    if archive.is_symlink() or digest(archive)!=checked['sha256']:
+        raise ValueError('Local archive changed after verification; retain it')
+    archive.unlink()
+    write(out/'LOCAL_ARCHIVE_EVICTED.json',{'utc':stamp(),'path':str(archive),
+        'bytes':checked['bytes'],'sha256':checked['sha256'],'verified_drive_file_id':uploaded['id'],
+        'raw_mirror_retained':True,'remote_source_retained':True})
+
+
+def park_completed(lease,local):
+    """Archive finished streams and stop their GPUs while other hosts finish.
+
+    No disk is destroyed here. Global paired analysis still precedes release.
+    """
+    done=json.loads((local/'WORKER_DONE.json').read_text())
+    expected=60*lease['num_gpus']
+    if (done.get('task')!=lease['task'] or done.get('episodes')!=expected
+        or len(list((local/'results').glob('*/*/rank-*/episode-*.json')))!=expected
+        or list(local.glob('*FAILED.json'))):
+        raise ValueError('Refuse to park an incomplete worker')
+    out=ROOT/'closeout'/str(lease['id'])
+    if (out/'PARKED.json').exists():return
+    row=provider()[lease['id']]
+    identity(lease,row)
+    preserve(lease,row)
+    # Full Drive-byte verification is mandatory before even stopping this host.
+    proof=json.loads((out/'DRIVE_VERIFIED.json').read_text())
+    if not proof.get('file_id'):raise ValueError('Missing durable preservation proof')
+    row=provider()[lease['id']]
+    identity(lease,row)
+    response=command([VAST,'stop','instance',str(lease['id']),'--raw'],120)
+    for _ in range(12):
+        row=provider().get(lease['id'])
+        if row is None:raise ValueError('Stopped source disk unexpectedly vanished')
+        identity(lease,row)
+        if row['actual_status'] in ('stopped','exited'):
+            write(out/'PARKED.json',{'id':lease['id'],'utc':stamp(),'episodes':expected,
+                'drive_verified_first':True,'disk_retained':True,'response':response})
+            print(json.dumps({'parked':lease['id'],'awaiting_global_analysis':True}),flush=True)
+            return
+        time.sleep(5)
+    raise RuntimeError('Provider has not confirmed completed-worker stop')
 
 
 def release(lease):
@@ -212,6 +261,11 @@ def monitor():
             row=fleet.get(lease['id'])
             if not row:raise ValueError('Unpreserved worker vanished')
             identity(lease,row)
+            local=ROOT/'workers'/str(lease['id'])
+            if (ROOT/'closeout'/str(lease['id'])/'PARKED.json').exists():
+                if not (local/'WORKER_DONE.json').exists():raise ValueError('Parked mirror missing')
+                counts[lease['id']]=len(list((local/'results').glob('*/*/rank-*/episode-*.json')))
+                continue
             state=command(ssh(row)+['if test -f /workspace/confirmation-output/WORKER_DONE.json; then echo COMPLETE; '
                 'elif test -f /workspace/confirmation-launch-exit.json; then echo FAILED; else echo RUNNING; fi'],60).strip().splitlines()[-1]
             if state=='FAILED':raise RuntimeError('Worker failed; preserve before any retry')
@@ -220,6 +274,7 @@ def monitor():
             if available=='PRESENT':
                 local=mirror(lease,row)
                 counts[lease['id']]=len(list((local/'results').glob('*/*/rank-*/episode-*.json')))
+                if state=='COMPLETE':park_completed(lease,local)
         print(json.dumps({'utc':stamp(),'mirrored_episode_records':counts,'target':960}),flush=True)
         if ready:break
         time.sleep(30)
