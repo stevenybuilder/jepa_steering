@@ -15,6 +15,14 @@ import manage_confirmation as manager
 
 
 class ConfirmationManagementTests(unittest.TestCase):
+    def test_user_pause_prevents_new_rental_and_staging_before_api_calls(self):
+        with tempfile.TemporaryDirectory() as temp:
+            root=Path(temp);(root/'USER_PAUSE.json').write_text('{}')
+            with patch.object(manager,'ROOT',root),patch.object(manager,'command') as command:
+                with self.assertRaisesRegex(ValueError,'User paused'):manager.reserve({})
+                with self.assertRaisesRegex(ValueError,'User paused'):manager.stage({})
+                command.assert_not_called()
+
     def test_incomplete_worker_cannot_be_parked_or_archived(self):
         with tempfile.TemporaryDirectory() as temp:
             local=Path(temp)

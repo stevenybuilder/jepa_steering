@@ -1,5 +1,19 @@
 # Frozen-model offline study: active plan
 
+## User pause supersedes confirmation launch — September 10, 23:35 EDT
+
+The user explicitly stopped the additional confirmation run. No experimental
+continuation, replacement cohort or new rental is authorized. Preserve partial
+results/source/logs in verified private Drive, stop the five new rentals, and
+retain source disks. The original960-episode behavioral analysis and192-scenario
+decision diagnostic are already complete. This extra960-episode re-test was a
+later addition, not automatic advancement under the original rule (neither
+learned method qualified). Do not relabel interrupted native-only records as a
+completed confirmation or pool them into an altered primary comparison.
+Current operational receipts are under
+`artifacts/offline_study/confirmation-20260911-v1/pause/` and `closeout/`.
+The original scientific freezes and completed analyses remain unchanged.
+
 ## Bounded confirmation approved — September 10 evening EDT
 
 The user approved the existing 960-full-episode independent re-test on Reach and

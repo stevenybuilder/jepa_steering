@@ -1,4 +1,33 @@
-# Bounded independent confirmation launched — 2026-09-11,02:58 UTC
+# Additional confirmation PAUSED; five rentals stopped — 2026-09-11,03:43 UTC
+
+The user explicitly stopped the additional run. **All five new rentals are
+stopped/exited; zero new-fleet GPUs are running.** The original completion
+collector and budget backstop are unregistered after verified shutdown, and
+the controller refuses provisioning/staging/monitor continuation when the
+immutable `USER_PAUSE.json` receipt exists. No other experiment was restarted.
+
+All117 completed partial-run records (Reach33, Reach-Wall84, **native only**),
+incomplete in-flight outputs, logs, runtime/source and engineering evidence are
+preserved in five archives whose members and complete Drive bytes were verified
+before each rental stopped. This is **not** a completed confirmation panel;
+no new learned-intervention result exists. All prior960-episode development and
+192-scenario diagnostic analyses remain unchanged and complete.
+
+Exact pause, source-preservation and provider receipts are in
+`artifacts/offline_study/confirmation-20260911-v1/{pause,closeout}/` and
+`PAUSED.json`. Private archive destination:
+[Vast final preservation folder](https://drive.google.com/drive/folders/14zoPlI5qViiF5DwqVkCyKUu2O-Bj8u48).
+Careful-shutdown and Google Drive skills required explicit lease/process checks,
+full archive/member readback and preservation before stopping. The provenance
+skill separately rechecked original paired counts; no statistical rule changed.
+
+The five new source disks are **retained, not destroyed**. Their combined nominal
+storage rate is approximately$0.079259/hour ($1.90/day), separate from historical
+inaccessible50125440/50205763, which remain untouched. This is a provider quote,
+not a final invoice. Verified local archive duplicates were evicted to save
+space; all raw mirrors remain local and full archives remain in Drive.
+
+## Historical launch — 2026-09-11,02:58 UTC
 
 The newly authorized run is **Reach and Reach-Wall only**, five unchanged
 conditions: native, cheap fixed-response refined edit, its matched-random

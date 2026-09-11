@@ -1,5 +1,27 @@
 # Final statistical validation: execution readiness, September 10, 2026
 
+## User stopped the additional run — September 10, 23:35 EDT
+
+This pause supersedes the execution authorization below. The already completed
+960-episode core and192-scenario diagnostic have finished statistical analyses
+and independent numerical verification. Independent fresh-data replication is a
+different claim: its exact additional960-episode registry was added September10,
+not automatically required after neither learned method passed development.
+
+All five new worker queues have been interrupted at the user's request. The
+partial mirrors contain33 Reach and84 Reach-Wall **native** episode records;
+no learned-intervention arm was completed or started in this run. In-flight
+episodes and their logs are retained as incomplete. Do not claim confirmation,
+use this interruption as a significance-based stop, or retrospectively pool
+partial outputs into the original primary analysis. The base-1 cohort now has
+recorded policy exposure and must not be described as wholly unopened again.
+
+Archive/readback verification precedes stopping the new rental containers;
+source disks remain retained. No further experiment or restart is authorized.
+See [execution status](../reports/EXECUTION_STATUS.md) and the exact `pause/`
+and `closeout/` receipts under the confirmation run root. Original freezes,
+results, selection rules and tests are preserved unchanged.
+
 ## Authorized execution — September 10 evening EDT
 
 The user approved the bounded 96-fresh-scenarios/task option, not the larger

@@ -59,6 +59,7 @@ def ssh(row):
 
 
 def reserve(spec):
+    if (ROOT/'USER_PAUSE.json').exists():raise ValueError('User paused this run; no new rental authorized')
     start=time.time()
     label='jepa-confirmation-0911-'+spec['task']+'-'+str(spec['logical_ranks'][0])
     result=json.loads(command([VAST,'create','instance',str(spec['offer']),
@@ -73,6 +74,7 @@ def reserve(spec):
 
 
 def stage(lease):
+    if (ROOT/'USER_PAUSE.json').exists():raise ValueError('User paused this run; no workload restart authorized')
     package=json.loads((ROOT/'PACKAGE.json').read_text())
     archive=Path(package['archive'])
     if digest(archive)!=package['sha256']:raise ValueError('Changed input bundle')
@@ -326,6 +328,9 @@ def budget():
 
 def main():
     p=argparse.ArgumentParser();p.add_argument('mode',choices=('provision','monitor','budget'));args=p.parse_args()
+    if args.mode!='budget' and (ROOT/'USER_PAUSE.json').exists():
+        print(json.dumps({'user_paused':True,'automatic_continuation_disabled':True}),flush=True)
+        return
     if args.mode=='provision':
         plan=json.loads((ROOT/'FLEET_PLAN.json').read_text())
         if sum(r['dph_total'] for r in plan)>7 or sum(r['num_gpus'] for r in plan)!=16:
