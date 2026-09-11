@@ -122,7 +122,7 @@ def leases():
 def mirror(lease,row):
     local=ROOT/'workers'/str(lease['id'])
     local.mkdir(parents=True,exist_ok=True)
-    subprocess.run(['rsync','-a','--timeout=90','-e',shlex.join(ssh(row)[:-1]),
+    subprocess.run(['rsync','-a','--exclude=*.tmp','--timeout=90','-e',shlex.join(ssh(row)[:-1]),
         ssh(row)[-1]+':/workspace/confirmation-output/',str(local)+'/'],check=True,timeout=180,
         stdout=subprocess.DEVNULL)
     return local
@@ -154,6 +154,11 @@ def preserve(lease,row):
     # Never package a moving research tree. All owned streams must be terminal.
     live=command(ssh(row)+['nvidia-smi --query-compute-apps=pid --format=csv,noheader'],60)
     if any(line.strip().isdigit() for line in live.splitlines()):raise ValueError('GPU workload remains active')
+    helper=PROJECT/'scripts/vast/preserve_confirmation_worker.py'
+    subprocess.run(['rsync','-a','--timeout=90','-e',shlex.join(ssh(row)[:-1]),str(helper),
+        ssh(row)[-1]+':/workspace/confirmation/scripts/vast/preserve_confirmation_worker.py'],check=True,timeout=90)
+    if digest(helper) not in command(ssh(row)+['sha256sum /workspace/confirmation/scripts/vast/preserve_confirmation_worker.py']).split():
+        raise ValueError('Preservation helper transfer differs')
     name=f"JEPA-confirmation-{lease['id']}-20260911.tar.gz"
     archive=out/name
     if not (out/'REMOTE_ARCHIVE.json').exists():
@@ -195,6 +200,12 @@ def release(lease):
 
 def monitor():
     auth=json.loads((ROOT/'AUTHORIZATION.json').read_text())
+    expected=len(json.loads((ROOT/'FLEET_PLAN.json').read_text()))
+    receiving_deadline=min(time.time()+900,auth['deadline_timestamp'])
+    while (len(leases())!=expected or any(not (ROOT/'leases'/f"{r['id']}-launched.json").exists() for r in leases())):
+        if time.time()>receiving_deadline:raise TimeoutError('Receiving setup never launched; retain source disks')
+        print(json.dumps({'utc':stamp(),'stage':'waiting_for_receiving_supervisors'}),flush=True)
+        time.sleep(10)
     while time.time()<auth['deadline_timestamp']:
         fleet=provider(); ready=True; counts={}
         for lease in leases():
