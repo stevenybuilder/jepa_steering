@@ -1,5 +1,25 @@
 # Bounded decision diagnostic — September 10, 2026
 
+## Completed closeout: 23:51 UTC
+
+All 192 scenarios and 960 condition-prefix evaluations completed. Independent
+CPU recomputation and all raw-file receipt checks passed. None of the eight
+simultaneous primary intervals excludes zero. Relative to native, the refined
+edit changed selections in 1/192 scenarios and coupling in 3/192; this concerns
+the initial candidate population, not the full replanning procedure.
+See [complete diagnostic results](PLANNER_DECISION_DIAGNOSTIC_RESULTS.md).
+
+The 193,971,999-byte archive contains 1,672 verified members and passed full
+Google Drive byte readback. Its private Drive file is
+`1gCq4ln8kwZ7WgAqITaNvTCe29sgbi_RL`; SHA256
+`24ca62301773bbd2166f3af4c3790d4015c86b86a23a34b2b57d6cacdfb7809c`.
+Automatic release failed while parsing the destroy CLI response. After fresh
+Drive/hash/member/ownership/process checks, manual release with explicit
+`--yes` succeeded; the CLI returned empty stdout, and a separate provider query
+confirmed worker 50531754 absent at 23:51:17 UTC. The original failure receipt
+remains preserved alongside the superseding `DONE.json`. No science was rerun.
+Only the two older stopped/inaccessible disks remain; neither was modified.
+
 The user authorized completing the previously proposed small diagnostic and
 write-up. The six-task expansion, HMM, new interventions, model training, and
 fresh confirmation remain paused. This does not reopen those old queues.

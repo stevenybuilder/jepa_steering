@@ -1,5 +1,19 @@
 # Frozen-model offline study: active plan
 
+## Independent statistical validation requested — September 10, 2026
+
+The user requests completion of the existing independent-validation stage.
+[Execution readiness](FINAL_STATISTICAL_VALIDATION.md) links the original
+one-shot/behavioral confirmation provisions and records what is still missing.
+Both the 960-episode core and 192-scenario diagnostic are complete and preserved;
+neither is an untouched confirmation result. The new CPU statistical supplement
+does not change any original test or count as independent evidence. Reserved
+base-1 metadata is verified disjoint from the completed development cohort and
+all 16 original tensor shards pass byte verification. The full exposure audit,
+sample-size/analysis freeze and a new total compute cap are outstanding.
+No paid launch or training-history
+restart follows from this readiness entry alone.
+
 ## Bounded diagnostic continuation — user approved September 10, 2026
 
 The user now authorizes one planner-decision diagnostic and final analysis/write-up.
