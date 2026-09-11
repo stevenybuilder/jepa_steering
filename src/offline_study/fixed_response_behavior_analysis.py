@@ -23,7 +23,10 @@ def holm(values):
     return adjusted
 
 
-def validate_panel(panel):
+def validate_panel(panel, expected=None):
+    expected = schedule() if expected is None else expected
+    if len(expected) != 96:
+        raise ValueError("This analysis requires exactly 96 paired scenarios per task")
     if tuple(panel) != TASKS:
         raise ValueError("Both predeclared tasks required")
     for task in TASKS:
@@ -31,9 +34,9 @@ def validate_panel(panel):
             raise ValueError("All five arms required; partial selection forbidden")
         for arm in ARMS:
             rows = panel[task][arm]
-            validate_coverage(rows, schedule())
-            for reference, row, expected in zip(panel[task]["native"], rows, schedule()):
-                if row["arm"] != arm or row["local_seed"] != expected["local_seed"]:
+            validate_coverage(rows, expected)
+            for reference, row, expected_row in zip(panel[task]["native"], rows, expected):
+                if row["arm"] != arm or row["local_seed"] != expected_row["local_seed"]:
                     raise ValueError("Wrong treatment or planner seed stream")
                 if (row["initial_state_vector"] != reference["initial_state_vector"] or
                         any(row["result"][k] != reference["result"][k] for k in ("initial_sha256", "goal_sha256"))):
@@ -91,8 +94,8 @@ def load_panel(root, freeze):
     return panel, bindings
 
 
-def analyze(panel):
-    validate_panel(panel)
+def analyze(panel, expected=None):
+    validate_panel(panel, expected)
     rng = np.random.default_rng(ANALYSIS["seed"])
     rows, tasks = [], {}
     for task in TASKS:

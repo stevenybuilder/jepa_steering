@@ -1,5 +1,35 @@
 # Final statistical validation: execution readiness, September 10, 2026
 
+## Authorized execution — September 10 evening EDT
+
+The user approved the bounded 96-fresh-scenarios/task option, not the larger
+power-study estimate: **Reach and Reach-Wall only, five conditions, 960 complete
+100-step episodes**, one released checkpoint. Conditions are native, the cheap
+fixed-response refined edit, its matched random, equal-budget coupling, and its
+matched random. No old online response probes, native shadows, combined/HMM
+extension, other task or training history is authorized. Total new compute and
+transfer cap is **$65**, with a fleet ceiling of $7/hour and a hard deadline.
+Neither the small sample nor this authorization guarantees adequate power for
+a five-percentage-point gain. Retain the original eight-contrast analysis.
+
+Executable runner: `offline_study.confirmation`. The immutable active contract
+is `artifacts/offline_study/confirmation-20260911-v1/freeze-v2/`; the earlier
+top-level prelaunch freeze is preserved and superseded before any GPU execution.
+The isolated receiving-source bundle pins two unused paused-task modules to the
+original numerical-check snapshot, leaving their current main versions intact.
+All actual MetaWorld operator code is unchanged. Complete receiving-device
+four-episode checks still precede protected policy outcomes.
+
+The exposure audit examined 1,075 retained JSON artifacts / 1,007 actual outcome
+records and found no reserved initial-image/vector matches. Original reserved
+input/tensor receipts also verify zero learned-policy evaluations at preparation.
+This is a retained-project-evidence audit, not a claim to have inspected the two
+inaccessible old disks or unrecorded work outside the project. Audit limitations
+remain in the frozen receipt. Original development measurements remain separate.
+
+Execution status must be taken from actual worker/analysis/preservation receipts;
+this authorization entry alone is not a launch or completion claim.
+
 The user requests completion of the already planned independent validation, not
 another retrospective narrative. This document makes the remaining execution
 requirements explicit. It does not claim an untouched evaluation has run, reopen

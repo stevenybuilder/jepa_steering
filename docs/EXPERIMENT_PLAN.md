@@ -1,5 +1,23 @@
 # Frozen-model offline study: active plan
 
+## Bounded confirmation approved — September 10 evening EDT
+
+The user approved the existing 960-full-episode independent re-test on Reach and
+Reach-Wall: native, inexpensive fixed-response refined edit, its random control,
+equal-budget coupling and its random control. New compute/transfer cap $65,
+maximum fleet rate $7/hour. Frozen source/input/access/statistics contract:
+`artifacts/offline_study/confirmation-20260911-v1/freeze-v2/`. Use the separate
+`offline_study.confirmation` runner, full receiving-device engineering checks,
+unaltered 100-step native planner and all eight original paired contrasts.
+No retraining, old expensive solver, HMM/combined successor or other task resumes.
+This sample is not a claim of adequate power for a five-point gain. The retained
+artifact exposure audit and its inaccessible-disk limitation are explicit in
+[the validation execution document](FINAL_STATISTICAL_VALIDATION.md).
+Preserve complete raw results/logs/inputs and verified analysis in private Drive,
+then release only the new owned workers. Deadline backstop stops compute while
+retaining source storage if preservation fails. No completion claim follows from
+this plan entry. All previous results and freezes remain unchanged.
+
 ## Independent statistical validation requested — September 10, 2026
 
 The user requests completion of the existing independent-validation stage.
