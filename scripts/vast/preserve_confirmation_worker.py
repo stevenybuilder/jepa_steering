@@ -25,7 +25,8 @@ def main():
             files += [x for x in root.rglob('*') if x.is_file() and
                 not any(part in ('.git','__pycache__') or part.startswith('._') for part in x.relative_to(root).parts)]
     files += [x for x in workspace.glob('confirmation-*.log') if x.is_file()]
-    files += [x for x in (workspace/'confirmation-packages.txt', workspace/'confirmation-inputs.tar.gz') if x.is_file()]
+    files += [x for x in (workspace/'confirmation-packages.txt', workspace/'confirmation-inputs.tar.gz',
+                          workspace/'confirmation-launch-exit.json') if x.is_file()]
     if any(x.is_symlink() for x in files): raise ValueError('Unexpected research symlink')
     members = {str(x.relative_to(workspace)): {'bytes':x.stat().st_size,'sha256':digest(x)} for x in files}
     payload = json.dumps({'members':members,'omitted':'rebuildable environment, published checkpoint/DINO cache, vendor git history'},sort_keys=True).encode()

@@ -232,6 +232,7 @@ def monitor():
         cwd=PROJECT,env=env,check=True,timeout=180)
     if digest(ROOT/'analysis/report.json')!=digest(ROOT/'analysis-recheck/report.json'):
         raise ValueError('Independent analysis reload differs')
+    with request('14zoPlI5qViiF5DwqVkCyKUu2O-Bj8u48','?fields=id,name,mimeType') as response:json.load(response)
     name='JEPA-confirmation-final-analysis-20260911.json'
     upload=upload_direct(ROOT/'analysis/report.json',name,ROOT/'ANALYSIS_DRIVE_UPLOAD.json')
     proof=drive_verify(upload['id'],name,(ROOT/'analysis/report.json').stat().st_size,digest(ROOT/'analysis/report.json'))
