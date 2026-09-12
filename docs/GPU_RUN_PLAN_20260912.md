@@ -1,5 +1,14 @@
 # GPU run plan — 14-cell completion (authoritative, 2026-09-12)
 
+> **SCOPE CORRECTION (2026-09-12 14:30 UTC).** Everything in this plan is
+> development/replication on the already-exposed population, as the table-completion
+> docs specified. It is **not** the fresh protected ("base-1") confirmation promised in
+> `EXPERIMENT_PLAN.md` steps 6–7 and requested in `FINAL_STATISTICAL_VALIDATION.md`.
+> That confirmation was started 2026-09-10/11 (`confirmation-0911-*` workers), exited at
+> the receiving-engineering stage, was paused, and remains **unfinished**. The earlier
+> "CLOSED"/"done" wording below refers to the 14 table cells only. Status and what it
+> takes to finish: `docs/CONFIRMATION_STATUS_20260912.md`.
+
 Owner: rep_geometry_transcoder / Claude session. Update this file BEFORE any
 instance rental/stop/destroy and AFTER any assignment change. The
 `GPU_RESOURCE_BOARD.md` "Latest execution status" points here.
