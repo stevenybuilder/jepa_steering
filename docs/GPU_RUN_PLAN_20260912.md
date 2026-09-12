@@ -4,6 +4,14 @@ Owner: rep_geometry_transcoder / Claude session. Update this file BEFORE any
 instance rental/stop/destroy and AFTER any assignment change. The
 `GPU_RESOURCE_BOARD.md` "Latest execution status" points here.
 
+## Cost post-mortem (09-12, from vast invoice lines since takeover 09-11 20:00 UTC): $212 total
+~$60–65 useful compute at fair rates · ~$40–45 premium cards (NV3 PRO 6000 kept 15 h at $2.20 ≈ $22 excess; Texas/Brazil/
+Romania 4090s at $2.00–3.33 ≈ $18 excess while a $0.63 RTX 6000 Ada and $0.80/GPU L40S did the same work) · ~$30 Codex
+workers still running on the evening of 09-11 · ~$15–20 idle boxes held for decisions · ~$10 per-device engineering on 14
+spread GPUs · ~$15 rework (NV0 salvage unusable, slot-0 rerun, NJ duplicate) · ~$5 validation restarts/H100 test.
+Rules adopted: search ALL Ada/Blackwell cards + multi-GPU boxes by $/GPU-hr before renting; cap at ~1.5× the 5090 rate for
+any card not faster than a 5090; swap expensive cards when their unit ends; release boxes the moment data is Drive-verified.
+
 ## Standing rules (from the user, tonight)
 1. **Never stop or destroy an instance without the user's explicit go-ahead.**
    Finished/idle boxes stay up.
