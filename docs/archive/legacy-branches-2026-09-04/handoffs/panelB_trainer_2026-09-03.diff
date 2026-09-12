@@ -1,0 +1,392 @@
+--- /tmp/tfp_orig.py	2026-09-03 07:52:02
++++ train_feature_predictor.py	2026-09-03 07:46:37
+@@ -68,6 +68,36 @@
+ Synthetic data (``--synthetic N,T,A``) has a learnable action-dependent drift
+ ``z_{t+1} = z_t + sum_i a_i U_i + 0.1 eps`` inside a rank-128 token subspace, so the loss
+ must drop well below the copy-last-frame baseline.
++
++Panel B: action-as-token / action-as-feature predictors (``--pred-type token|feature``)
++---------------------------------------------------------------------------------------
++``cross model design jepa.md`` Panel B trains a second JEPA predictor architecture on the
++SAME cached features and clip multiset: ``src/models/ac_predictor.py::
++VisionTransformerPredictorAC`` (the class behind the authors' V-JEPA-2-AC baseline, vendor
++``pred_type: vjepa2_ac``), built exactly as ``init_video_model`` builds it:
++
++* ``token``   one action token per frame (``action_encoder`` Linear(A, W)) prepended to the
++  frame's ``G*G`` patch tokens; block-causal mask over ``num_frames`` frames of
++  ``1 + G*G`` tokens (``build_action_block_causal_attention_mask``, full causal history, no
++  local window); RoPE (the action token is rotated along the frame axis only).  The
++  conditioning tokens are stripped from the output before ``predictor_proj``.
++* ``feature`` the encoded action (Linear(A, ``--action-emb-dim``, default 64)) is concatenated
++  to every patch token; the block width becomes ``W + action_emb_dim`` (must divide by the
++  head count, head dim kept a multiple of 8 for the fused SDPA kernels); no extra tokens; the
++  action slice is stripped from the output.
++
++State/proprio token: NONE (``proprio_tokens: 0``), which is the vendor's own DROID
++``vj2ac ... noprop`` recipe (``configs/vjepa_wm/droid_final_sweep/
++droid_8fpcs_fps4_r256_vj2acvitgL1_repro_2roll_noprop_4n_asp1_wsd.yaml``).  The feature
++store has no proprio (``has_proprio: false``) and the unchanged eval stack
++(``EncPredWM.unroll`` with a Tensor context) passes ``proprio_features=None``, so a
++zero-filled state token would (a) be a learned constant token, not state, and (b) break the
++frozen loader.  ``eval_config.yaml`` mirrors the vendor vj2ac eval yaml (``pred_type:
++vjepa2_ac``, ``action_conditioning``/``proprio_encoding`` = token|feature,
++``proprio_encoder_inpred: true``) so ``model_action_sensitivity.load_model`` builds the
++identical module; ``check_panelb_loader.py`` verifies reload equivalence.  Loss, optimiser,
++schedules, split, checkpoint format and metadata are shared with the AdaLN path
++(``forward_pred`` dispatches on the predictor class; the AdaLN code path is unchanged).
+ """
+ 
+ from __future__ import annotations
+@@ -122,8 +152,24 @@
+     action_dim: int = 2
+     local_window_time: int = 3
+     init_scale_factor_adaln: int = 10
++    # Panel B (defaults reproduce the AdaLN predictor exactly)
++    pred_type: str = "AdaLN"  # AdaLN | token | feature
++    action_emb_dim: int = 0  # feature conditioning only: width of the per-patch action slice
+ 
+ 
++PRED_TYPES = ("AdaLN", "token", "feature")
++VENDOR_PRED_TYPE = {"AdaLN": "AdaLN", "token": "vjepa2_ac", "feature": "vjepa2_ac"}
++AC_PREDICTOR_CLASS = "VisionTransformerPredictorAC"
++VJ2AC_TRAIN_YAML = (
++    "configs/vjepa_wm/droid_final_sweep/"
++    "droid_8fpcs_fps4_r256_vj2acvitgL1_repro_2roll_noprop_4n_asp1_wsd.yaml"
++)
++VJ2AC_EVAL_YAML = (
++    "configs/evals/simu_env_planning/droid/vj2ac/"
++    "droid_L2_cem_sourcedset_H3_nas3_maxnorm01_ctxt2_gH3_r256_alpha0_ep64_decode.yaml"
++)
++
++
+ def default_heads(width: int) -> int:
+     return 16 if width >= 1024 else max(1, width // 64)
+ 
+@@ -158,11 +204,141 @@
+     )
+ 
+ 
++def conditioning_fields(cfg: ModelCfg) -> dict[str, Any]:
++    """The ``model`` yaml fields that differ between the AdaLN predictor and the Panel B
++    ``vjepa2_ac`` predictors (token / feature).  AdaLN values are the historical ones."""
++
++    if cfg.pred_type == "AdaLN":
++        return {
++            "action_conditioning": "token",
++            "proprio_encoding": "none",
++            "action_encoder": {"action_tokens": 1, "action_emb_dim": 0, "act_mlp": False, "action_encoder_inpred": True},
++            "proprio_encoder": {"proprio_tokens": 0, "proprio_emb_dim": 0, "prop_mlp": False, "proprio_encoder_inpred": False},
++            "pred_type": "AdaLN",
++        }
++    if cfg.pred_type == "token":  # vendor DROID vj2ac noprop: action token only, no state token
++        return {
++            "action_conditioning": "token",
++            "proprio_encoding": "token",
++            "action_encoder": {"action_tokens": 1, "action_emb_dim": 0, "act_mlp": False, "action_encoder_inpred": True},
++            "proprio_encoder": {"proprio_tokens": 0, "proprio_emb_dim": 0, "prop_mlp": False, "proprio_encoder_inpred": True},
++            "pred_type": "vjepa2_ac",
++        }
++    if cfg.pred_type == "feature":  # vendor mw ..._predvj2acftcond_noprop: action slice on every patch token
++        return {
++            "action_conditioning": "feature",
++            "proprio_encoding": "feature",
++            "action_encoder": {"action_tokens": 0, "action_emb_dim": cfg.action_emb_dim, "act_mlp": False, "action_encoder_inpred": True},
++            "proprio_encoder": {"proprio_tokens": 0, "proprio_emb_dim": 0, "prop_mlp": False, "proprio_encoder_inpred": True},
++            "pred_type": "vjepa2_ac",
++        }
++    raise ValueError(f"unknown pred_type {cfg.pred_type!r} (expected one of {PRED_TYPES})")
++
++
++def ac_predictor_kwargs(cfg: ModelCfg) -> dict[str, Any]:
++    """Exactly the kwargs ``init_video_model`` passes to ``vit_ac_predictor`` (pred_type
++    ``vjepa2_ac``) for ``conditioning_fields(cfg)`` with ``use_proprio=False`` (the eval
++    loader's ``init_module`` sets ``proprio_dim=None`` then)."""
++
++    fields = conditioning_fields(cfg)
++    return dict(
++        img_size=cfg.img_size,
++        patch_size=cfg.img_size // cfg.grid_size,
++        num_frames=cfg.num_frames_pred,
++        tubelet_size=1,
++        uniform_power=True,  # swallowed by **kwargs in the vendor class
++        embed_dim=cfg.embed_dim,
++        predictor_embed_dim=cfg.pred_embed_dim,
++        action_dim=cfg.action_dim,
++        proprio_dim=None,
++        action_emb_dim=fields["action_encoder"]["action_emb_dim"],
++        proprio_emb_dim=fields["proprio_encoder"]["proprio_emb_dim"],
++        proprio_encoder_inpred=fields["proprio_encoder"]["proprio_encoder_inpred"],
++        action_encoder_inpred=fields["action_encoder"]["action_encoder_inpred"],
++        action_conditioning=fields["action_conditioning"],
++        proprio_tokens=fields["proprio_encoder"]["proprio_tokens"],
++        depth=cfg.pred_depth,
++        is_frame_causal=True,
++        num_heads=cfg.pred_num_heads,
++        use_rope=True,
++        use_sdpa=True,  # swallowed by **kwargs (the vendor Attention always uses SDPA when a mask is given)
++        use_silu=None,  # -> nn.GELU, as use_SiLU: null in the vendor yamls
++        wide_silu=True,
++        use_extrinsics=False,
++        use_activation_checkpointing=False,
++    )
++
++
++def block_width(cfg: ModelCfg) -> int:
++    """Transformer block width: ``W`` for AdaLN/token, ``W + action_emb_dim`` for feature."""
++
++    return cfg.pred_embed_dim + (cfg.action_emb_dim if cfg.pred_type == "feature" else 0)
++
++
++def build_ac_predictor(cfg: ModelCfg, device: torch.device, with_encoder: bool = False):
++    """Panel B: build ``VisionTransformerPredictorAC`` with the vendor factory.  ``with_encoder``
++    goes through ``init_video_model(pred_type='vjepa2_ac')`` (frozen DINOv3 on CPU, never run)
++    and asserts the direct build has identical parameter names/shapes."""
++
++    import src.models.ac_predictor as vit_ac_pred  # type: ignore
++
++    if block_width(cfg) % cfg.pred_num_heads:
++        raise ValueError(f"block width {block_width(cfg)} not divisible by {cfg.pred_num_heads} heads")
++    predictor = vit_ac_pred.vit_ac_predictor(**ac_predictor_kwargs(cfg))
++    assert type(predictor).__name__ == AC_PREDICTOR_CLASS
++    encoder = None
++    if with_encoder:
++        from app.vjepa_wm.utils import init_video_model  # type: ignore
++
++        fields = conditioning_fields(cfg)
++        vendor_pred, encoder, act_enc, prop_enc = init_video_model(
++            device=torch.device("cpu"),
++            img_size=cfg.img_size,
++            num_frames_pred=cfg.num_frames_pred,
++            enc_type="dino",
++            enc_version="dinov3_vitl16",
++            embed_dim=cfg.embed_dim,
++            uniform_power=True,
++            pred_type="vjepa2_ac",
++            pred_depth=cfg.pred_depth,
++            pred_embed_dim=cfg.pred_embed_dim,
++            pred_num_heads=cfg.pred_num_heads,
++            pred_use_extrinsics=False,
++            tubelet_size=1,
++            use_rope=True,
++            use_SiLU=None,
++            cfgs_attn_pattern={"local_window_time": cfg.local_window_time, "local_window_h": -1, "local_window_w": -1},
++            use_activation_checkpointing=False,
++            action_dim=cfg.action_dim,
++            action_conditioning=fields["action_conditioning"],
++            use_action=True,
++            proprio_dim=None,
++            proprio_encoding=fields["proprio_encoding"],
++            use_proprio=False,
++            **fields["action_encoder"],
++            **fields["proprio_encoder"],
++        )
++        assert act_enc is None and prop_enc is None
++        assert int(encoder.patch_size) == cfg.img_size // cfg.grid_size, "encoder patch size != img_size/grid"
++        assert int(encoder.emb_dim) == cfg.embed_dim, "encoder dim != embed_dim"
++        a = {k: tuple(v.shape) for k, v in predictor.state_dict().items()}
++        b = {k: tuple(v.shape) for k, v in vendor_pred.state_dict().items()}
++        assert a == b, "direct vit_ac_predictor build differs from init_video_model build"
++        predictor = vendor_pred
++        encoder.eval()
++        for p in encoder.parameters():
++            p.requires_grad_(False)
++    return predictor.to(device), encoder
++
++
+ def build_vendor_predictor(cfg: ModelCfg, device: torch.device, with_encoder: bool = False):
+     """Build the predictor with the vendor code.  ``with_encoder`` goes through
+     ``init_video_model`` (instantiates the frozen DINOv3 encoder on CPU, never run here) and
+     asserts the direct build has identical parameter names/shapes."""
+ 
++    if cfg.pred_type != "AdaLN":  # Panel B
++        return build_ac_predictor(cfg, device, with_encoder=with_encoder)
++
+     from app.plan_common.models.AdaLN_vit import vit_predictor_AdaLN  # type: ignore
+ 
+     predictor = vit_predictor_AdaLN(**predictor_kwargs(cfg))
+@@ -388,11 +564,24 @@
+ # --------------------------------------------------------------------------- #
+ # Model interface, loss, eval-style unroll
+ # --------------------------------------------------------------------------- #
++
++
++def forward_pred_ac(predictor: torch.nn.Module, feats: torch.Tensor, acts: torch.Tensor) -> torch.Tensor:
++    """``VideoWM.forward_pred`` for pred_type ``vjepa2_ac`` (``normalize_reps: false``):
++    ``predictor(feats.flatten(1, 4), actions [B, T, A], states=None)`` -> ``[B, T*(G*G), D]``
++    with the action (+ proprio) tokens / feature slice already stripped by the vendor class."""
+ 
++    b, t, v, g, _, d = feats.shape
++    out, _, _ = predictor(feats.flatten(1, 4), acts, None)
++    return out.view(b, t, v, g, g, d)
+ 
++
+ def forward_pred(predictor: torch.nn.Module, feats: torch.Tensor, acts: torch.Tensor) -> torch.Tensor:
+-    """``VideoWM.forward_pred`` for pred_type AdaLN: ``[B, T, 1, G, G, D]`` -> same shape."""
++    """``VideoWM.forward_pred`` for pred_type AdaLN: ``[B, T, 1, G, G, D]`` -> same shape.
++    Panel B predictors (``VisionTransformerPredictorAC``) dispatch to ``forward_pred_ac``."""
+ 
++    if type(predictor).__name__ == AC_PREDICTOR_CLASS:
++        return forward_pred_ac(predictor, feats, acts)
+     out, _, _ = predictor(feats, acts)
+     b, t, n, d = out.shape
+     g = int(math.isqrt(n))
+@@ -540,8 +729,25 @@
+ 
+ def eval_config(cfg: ModelCfg, out_dir: Path, checkpoint_name: str, ctxt_window: int, rollout: dict[str, Any]) -> dict[str, Any]:
+     """Mirror of the DROID eval yaml with our predictor size, ``datasets: [driving]`` and the
+-    image decoder disabled (``heads_cfg.architectures: {}``)."""
++    image decoder disabled (``heads_cfg.architectures: {}``).  Panel B predictors mirror the
++    vendor vj2ac eval yaml (``pred_type: vjepa2_ac``) in the conditioning fields only."""
+ 
++    fields = conditioning_fields(cfg)
++    cgs_block: dict[str, Any] = {
++        "model_name": MODEL_NAME,
++        "note": (
++            "Feature-trained driving predictor (train_feature_predictor.py). Load with "
++            "model_action_sensitivity.load_model(repo, this_yaml, checkpoint, 'jepa_wm_driving', device); "
++            "action_dim comes from DATA_STATS['driving'] (vendor_patches/0001-driving-data-stats.patch), "
++            f"set JEPAWM_DRIVING_ACTION_DIM={cfg.action_dim} when it is not the default."
++        ),
++        "action_dim": cfg.action_dim,
++        "template": DROID_EVAL_YAML,
++    }
++    if cfg.pred_type != "AdaLN":
++        cgs_block["panel_b"] = {"pred_type": cfg.pred_type, "vendor_pred_type": fields["pred_type"], "predictor_class": AC_PREDICTOR_CLASS,
++                                "conditioning_template": VJ2AC_EVAL_YAML, "state_token": "none (proprio_tokens 0, vendor noprop recipe)",
++                                "block_width": block_width(cfg), "loader_check": "scripts/cgs_pilot/check_panelb_loader.py"}
+     return {
+         "nodes": 1,
+         "tasks_per_node": 1,
+@@ -551,17 +757,7 @@
+         "tag": f"cgs_pilot/{MODEL_NAME}/feature_trained",
+         "eval_name": "simu_env_planning",
+         "meta": {"quick_debug": False, "seed": 1, "eval_episodes": 0},
+-        "cgs_pilot": {
+-            "model_name": MODEL_NAME,
+-            "note": (
+-                "Feature-trained driving predictor (train_feature_predictor.py). Load with "
+-                "model_action_sensitivity.load_model(repo, this_yaml, checkpoint, 'jepa_wm_driving', device); "
+-                "action_dim comes from DATA_STATS['driving'] (vendor_patches/0001-driving-data-stats.patch), "
+-                f"set JEPAWM_DRIVING_ACTION_DIM={cfg.action_dim} when it is not the default."
+-            ),
+-            "action_dim": cfg.action_dim,
+-            "template": DROID_EVAL_YAML,
+-        },
++        "cgs_pilot": cgs_block,
+         "model_kwargs": {
+             "module_name": "app.vjepa_wm.modelcustom.simu_env_planning.vit_enc_preds",
+             "checkpoint": checkpoint_name,
+@@ -569,8 +765,8 @@
+                 "grid_size": cfg.grid_size,
+                 "tubelet_size_enc": 1,
+                 "use_activation_checkpointing": False,
+-                "action_conditioning": "token",
+-                "proprio_encoding": "none",
++                "action_conditioning": fields["action_conditioning"],
++                "proprio_encoding": fields["proprio_encoding"],
+                 "num_frames_pred": cfg.num_frames_pred,
+                 "visual_encoder": {
+                     "enc_type": "dino",
+@@ -584,15 +780,15 @@
+                     "num_frames_enc": None,
+                     "uniform_power": True,
+                 },
+-                "action_encoder": {"action_tokens": 1, "action_emb_dim": 0, "act_mlp": False, "action_encoder_inpred": True},
+-                "proprio_encoder": {"proprio_tokens": 0, "proprio_emb_dim": 0, "prop_mlp": False, "proprio_encoder_inpred": False},
++                "action_encoder": dict(fields["action_encoder"]),
++                "proprio_encoder": dict(fields["proprio_encoder"]),
+                 "predictor": {
+                     "tubelet_size": 1,
+                     "pred_num_heads": cfg.pred_num_heads,
+                     "pred_depth": cfg.pred_depth,
+                     "pred_embed_dim": cfg.pred_embed_dim,
+                     "pred_use_extrinsics": False,
+-                    "pred_type": "AdaLN",
++                    "pred_type": fields["pred_type"],
+                     "act_pred_projector": None,
+                     "use_SiLU": None,
+                     "use_rope": True,
+@@ -625,14 +821,19 @@
+ 
+ 
+ def train_config(cfg: ModelCfg, args: argparse.Namespace, out_dir: Path, rollout: dict[str, Any], total_steps: int) -> dict[str, Any]:
++    fields = conditioning_fields(cfg)
++    cgs_block: dict[str, Any] = {
++        "trainer": "scripts/cgs_pilot/train_feature_predictor.py",
++        "template": DROID_TRAIN_YAML,
++        "arm": args.arm,
++        "note": "trained on precomputed frozen-encoder features; encoder never run during training",
++    }
++    if cfg.pred_type != "AdaLN":
++        cgs_block["panel_b"] = {"pred_type": cfg.pred_type, "vendor_pred_type": fields["pred_type"], "conditioning_template": VJ2AC_TRAIN_YAML,
++                                "note": "Panel B: same loss/optimiser/schedule/split as the AdaLN arm; only the predictor architecture differs"}
+     return {
+         "app": "vjepa_wm",
+-        "cgs_pilot": {
+-            "trainer": "scripts/cgs_pilot/train_feature_predictor.py",
+-            "template": DROID_TRAIN_YAML,
+-            "arm": args.arm,
+-            "note": "trained on precomputed frozen-encoder features; encoder never run during training",
+-        },
++        "cgs_pilot": cgs_block,
+         "nodes": 1,
+         "tasks_per_node": 1,
+         "folder": str(out_dir),
+@@ -644,13 +845,13 @@
+             "grid_size": cfg.grid_size,
+             "tubelet_size_enc": 1,
+             "use_activation_checkpointing": False,
+-            "action_conditioning": "token",
+-            "proprio_encoding": "none",
++            "action_conditioning": fields["action_conditioning"],
++            "proprio_encoding": fields["proprio_encoding"],
+             "num_frames_pred": cfg.num_frames_pred,
+             "visual_encoder": {"enc_type": "dino", "enc_version": "dinov3_vitl16", "embed_dim": cfg.embed_dim, "uniform_power": True},
+-            "action_encoder": {"action_tokens": 1, "action_emb_dim": 0, "act_mlp": False, "action_encoder_inpred": True},
+-            "proprio_encoder": {"proprio_tokens": 0, "proprio_emb_dim": 0, "prop_mlp": False, "proprio_encoder_inpred": False},
+-            "predictor": {"tubelet_size": 1, "pred_num_heads": cfg.pred_num_heads, "pred_depth": cfg.pred_depth, "pred_embed_dim": cfg.pred_embed_dim, "pred_use_extrinsics": False, "pred_type": "AdaLN", "use_rope": True},
++            "action_encoder": dict(fields["action_encoder"]),
++            "proprio_encoder": dict(fields["proprio_encoder"]),
++            "predictor": {"tubelet_size": 1, "pred_num_heads": cfg.pred_num_heads, "pred_depth": cfg.pred_depth, "pred_embed_dim": cfg.pred_embed_dim, "pred_use_extrinsics": False, "pred_type": fields["pred_type"], "use_rope": True},
+             "wm_encoding": {"batchify_video": True, "dup_image": False, "normalize_reps": False},
+             "rollout_cfg": rollout,
+             "attn": {"local_window_time": cfg.local_window_time, "local_window_h": -1, "local_window_w": -1},
+@@ -775,6 +976,10 @@
+         "history": [],
+         "best": None,
+     }
++    if cfg.pred_type != "AdaLN":
++        meta["vendor"]["panel_b_templates"] = {"train": VJ2AC_TRAIN_YAML, "eval": VJ2AC_EVAL_YAML}
++        meta["model"]["block_width"] = block_width(cfg)
++        meta["model"]["state_token"] = "none (proprio_tokens 0, vendor noprop recipe)"
+     print(json.dumps({k: meta[k] for k in ("model_name", "arm", "model", "schedule")}, indent=None, default=str))
+     print(f"data: {meta['data']}")
+ 
+@@ -901,6 +1106,11 @@
+     model.add_argument("--pred-depth", type=int, default=6)
+     model.add_argument("--pred-embed-dim", type=int, default=512)
+     model.add_argument("--pred-heads", type=int, default=None, help="default 16 for width>=1024 else width//64")
++    model.add_argument("--pred-type", choices=PRED_TYPES, default="AdaLN",
++                       help="AdaLN (Panel A, vendor vit_predictor_AdaLN) | token / feature (Panel B, vendor VisionTransformerPredictorAC = pred_type vjepa2_ac)")
++    model.add_argument("--action-emb-dim", type=int, default=64,
++                       help="--pred-type feature only: per-patch action slice width; block width W + this must divide by the heads and the head dim should stay a multiple of 8 "
++                            "(512 + 64 = 576 / 8 heads = 72; 16 -> head dim 66 forces the SDPA math kernel: 2.5x VRAM, 1.6x time)")
+     model.add_argument("--embed-dim", type=int, default=1024)
+     model.add_argument("--grid", type=int, default=16)
+     model.add_argument("--img-size", type=int, default=256)
+@@ -959,7 +1169,14 @@
+         raise SystemExit(f"store grid/dim {store.grid}/{store.dim} != --grid/--embed-dim {args.grid}/{args.embed_dim}")
+     cfg = ModelCfg(pred_depth=args.pred_depth, pred_embed_dim=args.pred_embed_dim,
+                    pred_num_heads=args.pred_heads or default_heads(args.pred_embed_dim), embed_dim=args.embed_dim,
+-                   grid_size=args.grid, img_size=args.img_size, num_frames_pred=store.t, action_dim=store.action_dim)
++                   grid_size=args.grid, img_size=args.img_size, num_frames_pred=store.t, action_dim=store.action_dim,
++                   pred_type=args.pred_type, action_emb_dim=args.action_emb_dim if args.pred_type == "feature" else 0)
++    if cfg.pred_type == "feature" and cfg.action_emb_dim <= 0:
++        raise SystemExit("--pred-type feature needs --action-emb-dim > 0")
++    if block_width(cfg) % cfg.pred_num_heads:
++        raise SystemExit(f"block width {block_width(cfg)} (W{' + action_emb_dim' if cfg.pred_type == 'feature' else ''}) must divide by {cfg.pred_num_heads} heads")
++    if (block_width(cfg) // cfg.pred_num_heads) % 8:
++        print(f"WARNING: head dim {block_width(cfg) // cfg.pred_num_heads} is not a multiple of 8; SDPA falls back to the math kernel (much more VRAM/time)", flush=True)
+     if args.repo is None:
+         raise SystemExit("--repo is required to build the vendor predictor")
+     sys.path.insert(0, str(args.repo.resolve()))

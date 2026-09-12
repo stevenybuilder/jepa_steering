@@ -50,9 +50,17 @@ MetaWorld checkpoint and full 100-step episodes.
 |---|---:|---:|
 | Unsteered | 43 / 96 | 29 / 96 |
 | Refined fixed-response edit | 49 / 96 | 30 / 96 |
-| Matched-random fixed-response control | 48 / 96 | 23 / 96 |
-| Vision–action coupling | 47 / 96 | 25 / 96 |
-| Matched-random coupling control | 58 / 96 | 27 / 96 |
+| Refined control: response-calibrated random-subspace edit | 48 / 96 | 23 / 96 |
+| Equal-budget vision–action coupling | 47 / 96 | 25 / 96 |
+| Coupling control: dose-matched random-direction edit | 58 / 96 | 27 / 96 |
+
+These are **two distinct active controls**, not one random baseline. The refined
+control retains response calibration but substitutes a random four-dimensional
+basis; the coupling control substitutes fixed random visual/action-conditioning
+directions at the same sites and doses. Neither means random robot actions.
+Labels are clarified without changing outcomes or the frozen comparisons.
+[Six-task results and control mapping](reports/SIX_TASK_RESULTS_20260911.md) ·
+[Exact control definitions](matched%20random%20control.md#4-our-controls-exact-definitions-and-gaps)
 
 On Reach, the refined edit improves the point estimate by **6.25 percentage
 points** over unsteered, but only **1.04 points** over its random control. Its

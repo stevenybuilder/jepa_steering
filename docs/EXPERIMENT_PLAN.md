@@ -1,5 +1,51 @@
 # Frozen-model offline study: active plan
 
+## Missing MetaWorld component cells — September 11, 19:08 UTC
+
+The three missing component arms on Reach and Reach-Wall now have a separate
+[execution and analysis contract](METAWORLD_COMPONENT_COMPLETION.md), tested
+runner, and immutable pre-execution source freeze `component-extension-v1/freeze`.
+Use the existing coupling fits and canonical96 scenarios per task; four conditions
+including a receiving-runtime native reference produce768 evaluations,576 of
+which fill the six missing cells. The192 native references check comparability
+with historical outcomes and must not silently replace the existing table scores.
+There is no new population, training, expensive solver, or confirmation claim.
+
+Florida50544130 could not reacquire its GPUs; canceling that start was verified.
+Fresh California50625596 (one4090,$0.724445/hour including80GB) is acquired for
+receiving checks and runtime measurement. Source/input bundle and raw outputs
+remain isolated at `/workspace/metaworld-components-20260911-v1`. Add disjoint
+whole-stream workers only within the$7/hour aggregate cap. All paired conditions
+for a scenario stay on the same device. Guard, verified Drive preservation, and
+retained-disk emergency stop apply. Acquisition is not scientific progress.
+The other eight refined/control cells still require their own task-specific
+fit/adapter extension; this component launch does not imply they are ready.
+
+## Six-task table completion authorized — September 11, 2026
+
+The user explicitly authorizes GPU execution to fill the missing cells of the
+released-checkpoint comparison table. This supersedes the pause **only for that
+table's existing refined fixed-response edit, static vision/action coupling
+factorial, and matched controls**. Recover and verify already collected results
+before queuing missing complete RNG streams. Preserve all original freezes and
+results; never restart the legacy expensive response-probe operator.
+
+Use US-only workers within the latest $7/hour aggregate cap. Initially reactivate
+only the owned two-GPU Washington worker50546172 for asset restoration and
+receiving validation; add parallel workers only when independent jobs are ready.
+Use an isolated `/workspace/table-completion-20260911-v1` output root, leaving
+the interrupted confirmation data untouched. A six-hour operational backstop
+stops newly activated compute while retaining disks if verified closeout has not
+finished. This is a spending guard, not a scientific completion or ETA claim.
+
+The original 96-total-per-condition simulation and 64-total DROID endpoints
+remain unchanged. Reuse prior native streams only after required same-input,
+source, RNG and receiving-device checks. New task-specific refined adapters/fits
+require their own pre-execution method and analysis freeze; do not silently
+transfer the MetaWorld bank to another architecture. Training histories, HMM,
+combined successors and the interrupted fresh-confirmation panel remain paused.
+See `docs/TABLE_COMPLETION_20260911.md` for this bounded continuation.
+
 ## User pause supersedes confirmation launch — September 10, 23:35 EDT
 
 The user explicitly stopped the additional confirmation run. No experimental
