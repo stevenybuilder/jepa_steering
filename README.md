@@ -201,7 +201,7 @@ archive/            Historical workspace; not the active protocol
 
 - **Scientific design:** [plan](docs/EXPERIMENT_PLAN.md), [behavioral amendment](docs/BEHAVIORAL_EVALUATION_AMENDMENT.md), [author alignment](reports/PLANNING_METHOD_ALIGNMENT.md).
 - **Data integrity:** [Push-T lineage](reports/PUSHT_LINEAGE_CORRECTION.md), [MetaWorld lineage](reports/METAWORLD_LINEAGE_CORRECTION.md), [goal-image repair](reports/METAWORLD_STIMULUS_REPAIR.md).
-- **Compute lessons:** [Scaling Book notes](jax_scaling_notes.md), [GPU execution guide](docs/GPU_EFFICIENCY.md).
+- **Compute:** [GPU compute playbook](docs/GPU_COMPUTE_PLAYBOOK.md) (renting, device parity, fleet ops, collection, cost), [Scaling Book notes](jax_scaling_notes.md), [legacy baseline-harness tuning](docs/GPU_EFFICIENCY.md).
 - **Context:** [methods and interpretation](wm-approaches.md), [archive provenance](docs/ARCHIVE.md).
 
 ## Reference and project status

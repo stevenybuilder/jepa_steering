@@ -91,15 +91,8 @@ they never reduce it.
    market (see below) — but the price of *new* capacity has no bearing on
    question 1.
 
-## Live market note (2026-09-12, ~00:30 UTC)
-
-On-demand single-GPU RTX 4090/5090 listings on vast.ai were quoted at
-$6.67–$53/hr — roughly 9x the $0.75/hr NJ is actually paying on its existing
-(already-running) rental. This bears only on question 2 above (adding new
-capacity), not on question 1 (which hardware runs the already-committed
-work). Re-check spot/on-demand pricing before renting new capacity rather
-than assuming the rate that was available earlier in the session still holds
-— it did not.
+Renting rules, measured per-card rates and the device-parity results are in
+[docs/GPU_COMPUTE_PLAYBOOK.md](docs/GPU_COMPUTE_PLAYBOOK.md).
 
 ## Cost accounting reminder
 
