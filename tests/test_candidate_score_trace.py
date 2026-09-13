@@ -18,8 +18,9 @@ class ToyCEM:
 
     def plan(self, z_init):
         mean = torch.zeros(2, 3)
+        std = torch.ones_like(mean)
         for _ in range(self.iterations):
-            actions = mean[:, None] + torch.randn(2, 5, 3, generator=self.local_generator)
+            actions = mean[:, None] + std[:, None] * torch.randn(2, 5, 3, generator=self.local_generator)
             costs = self.cost_function(actions, z_init)
             idx = torch.topk(-costs, self.num_elites, dim=0).indices
             mean = actions[:, idx].mean(1)
@@ -32,15 +33,19 @@ class TraceTests(unittest.TestCase):
         ref, traced = ToyCEM(), ToyCEM()
         expected = ref.plan(None).actions
         original = torch.topk
+        original_randn = torch.randn
         with CandidateScoreTrace(traced) as trace:
             actual = trace.run(None).actions
         self.assertTrue(torch.equal(actual, expected))
         self.assertTrue(torch.equal(ref.local_generator.get_state(), traced.local_generator.get_state()))
         self.assertIs(torch.topk, original)
+        self.assertIs(torch.randn, original_randn)
         self.assertNotIn('cost_function', traced.__dict__)
         data = trace.payload()
         self.assertEqual(len(data['iterations']), 3)
         for row in data['iterations']:
+            self.assertTrue(torch.equal(row['proposal_std'],torch.ones(2,3)))
+            self.assertAlmostEqual(float(row['proposal_entropy_nats']),8.513631199228036)
             torch.testing.assert_close(row['objective_costs'], row['candidate_actions'].square().sum((0, 2)))
             self.assertTrue(torch.equal(row['elite_indices'], torch.topk(-row['objective_costs'], 2).indices))
 

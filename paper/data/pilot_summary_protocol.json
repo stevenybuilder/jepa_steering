@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "status": "fixed_before_development_pilot_summary",
+  "initial_execution_manifest_sha256": "9daa0cdd1d433a7fc02fc55112227ac8c34aca30a75afa26c526181dc75ba9fb",
+  "expanded_execution_manifest_sha256": "a33fd428f7d47bbcb4c53b9263b0120465d0f6dd4823c431ff42b46124ba032d",
+  "expansion_intent_sha256": "4d08bce0465c657db6e3be4d830782a78987f801b3fb17744d7e2b79bc73cdcc",
+  "cohort_policy": "Exactly all64 IDs0..31/task for expanded analysis; alternatively exactly all8 IDs0..3/task explicitly instrumentation-only. No partial subset summaries.",
+  "tasks": ["reach", "reach-wall"],
+  "attention": {"layers": [0,1,2,3,4,5], "heads": 16, "horizons": [1,2,3,4,5,6], "candidate": "original candidate0 zero-action plan", "metrics": ["spatial_distance_patches", "temporal_distance_frames", "conditioning_mass", "visual_mass"]},
+  "cem": {"iterations": 15, "candidates": 300, "elites": 10, "metrics": ["proposal_entropy_nats", "proposal_std_mean", "best_cost", "best_runnerup_margin", "elite_boundary_margin"], "entropy": "actual diagonal Gaussian before clipping and mean-candidate insertion; differential entropy may be negative"},
+  "replay": {"base_arms": ["fixed_rank4", "matched_random_fixed_rank4"], "components": ["full", "cached_full", "zero", "mean_only", "centered_only"], "candidate_count": 300, "renormalize": false, "reconstruction": "1 minus squared error to the centered full-minus-native score-change vector divided by its squared energy; undefined if denominator zero, never clipped", "additive_components": "also compare sum of common-only and centered-only score-change vectors with full score change; cost functional diagnostic, not output nonadditivity"},
+  "resampling_unit": "scenario, separately within task; never heads, horizons, candidates or CEM iterations",
+  "bootstrap_replicates": 20000,
+  "bootstrap_seed": 20260913,
+  "interval": "marginal paired-scenario percentile95, descriptive, no corrected discovery claim",
+  "controls": "all layer/head/horizon cells and both original learned/random arms retained; no favorable site selection",
+  "scope": "historical development inputs; no fitting-disjointness assumption, no fresh physical outcomes, no physical-coordinate or causal-head claim",
+  "provenance": "verify execution/input manifest bindings, complete cohort, report/DONE/compact hashes and GCS readback receipts; saved H6 parity is execution-attested when bulk tensors stay in cloud"
+}
