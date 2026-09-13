@@ -93,9 +93,6 @@ The planner uses **CEM (Cross-Entropy Method)**: sample 300 action sequences,
 predict their consequences, retain the lowest-cost plans, and repeat. Only a
 prefix of the selected plan is executed before observing and replanning.
 
-<details>
-<summary>Architecture diagram and the eight intervention arms</summary>
-
 ![Frozen encoders, six-block predictor, goal scoring and CEM, with alternative activation-edit sites.](docs/figures/architecture_readable.png)
 
 We compare three intervention families against an **unsteered** checkpoint:
@@ -109,8 +106,6 @@ sites, not three edits used together. Edits occur at imagined step H3 of an H6
 forecast; B0–B5 are zero-indexed blocks. Base weights and the planning objective
 stay fixed. Randomized comparisons are **activation edits, not random robot actions**.
 [Exact fitting, timing and dose definitions](docs/METHODS.md).
-
-</details>
 
 <details>
 <summary>Evaluation stages: offline predictions, earlier behavior, unseen confirmation</summary>
@@ -131,14 +126,39 @@ separate populations; earlier baselines cannot replace concurrent fresh baseline
 
 ## Further analyses
 
+The completed analyses and figures are listed in the [experiment inventory](docs/ANALYSIS_COMPLETION.md).
 The detailed reports retain every tested arm, uncertainty estimate and limitation.
 
-<details>
-<summary>Layer maps, shared corrections, CEM search, attention and action geometry</summary>
+### Layer-by-layer forecast effects
 
-- **Layer-by-layer effects:** [all 576 cells](docs/MECHANISMS.md#layer-response-map)
-  and [the heatmap](docs/figures/layer_mechanism_bfloat16_native.png). Interventions
-  measure later forecast effects, not attention importance or a unique physics zone.
+![Layer-by-layer BF16 forecast-error changes across six blocks, six horizons, two modalities and three tasks.](docs/figures/layer_mechanism_bfloat16_native.png)
+
+Earlier blocks give larger forecast corrections on Reach and Reach-Wall in this
+rank-one sweep; Push-T does not show the same pattern. Positive values mean lower
+error than unsteered. These independently fitted operators differ from the later
+rank-four edit. [All 576 cells, FP32 and random controls](docs/MECHANISMS.md#layer-response-map).
+
+### Attention by head and layer
+
+![Spatial attention distance for all sixteen heads and six predictor blocks on Reach and Reach-Wall.](docs/figures/paper_pilot_attention.png)
+
+This map averages 32 development contexts per task at H6 on the fixed zero-action
+candidate. Attention distance describes where attention falls; it does not identify
+a causal physics circuit. [All horizons and uncertainty](docs/PILOT_MECHANISMS.md).
+
+### Executing the selected action prefixes
+
+![All paired physical-prefix effects and the twelve registered simultaneous intervals.](docs/figures/planned_prefix_effects.png)
+
+The complete **56-context physical replay** executes the selected prefixes after
+identical simulator resets. The learned edit improves forecast error on the same
+unsteered-selected actions in both tasks, but all eight physical distance and
+encoded-goal-cost intervals include zero. This measures the first 15 elementary
+actions, not full-task success. [Results and all model/plan forecasts](docs/PLANNED_PREFIX_REPLAY.md).
+
+<details>
+<summary>Shared corrections, CEM search and action geometry</summary>
+
 - **Shared versus candidate-specific corrections:** [64-context replay](docs/PILOT_MECHANISMS.md).
   The common component reconstructs the full edit's relative cost change with
   scores **0.983 / 0.998** on Reach / Reach-Wall. Random-subspace edits show the
@@ -149,8 +169,6 @@ The detailed reports retain every tested arm, uncertainty estimate and limitatio
   divergence is not better control. [All paired plans](docs/figures/cem_expansion_prefixes.png)
   · [search curves](docs/figures/cem_expansion_search.png)
   · [entropy](docs/figures/cem_expansion_entropy.png). The original eight cases remain separate.
-- **Attention by head and layer:** [64-context attention map](docs/figures/paper_pilot_attention.png).
-  Spatial attention distance on fixed zero-action inputs is descriptive, not a causal circuit.
 - **Action-conditioned rankings:** [all-six-layer donor tests](docs/ACTION_CONDITION_SPECIFICITY.md)
   and [action-history/range controls](docs/ACTION_COUNTERFACTUAL.md). Small global
   rank changes can affect the top-ten elite set; input-reachable and off-range

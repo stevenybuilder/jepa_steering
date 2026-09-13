@@ -2,7 +2,7 @@
 
 ## Protected confirmation
 
-The [README table](../README.md#final-protected-results) reports the complete final
+The [README table](../README.md#final-protected-results-and-earlier-benchmarks) reports the complete final
 panel: 384 scenarios, eight arms, four tasks, 3,072 evaluations. The committed
 [report](../reports/fresh-confirmation/report.json) contains all 32 success rates
 and 48 paired contrasts. It is a byte-identical copy of the frozen analyzer output.
@@ -80,6 +80,15 @@ actual steered CEM instrumentation. They show that common activation corrections
 can change relative goal costs and that identical initial elites can precede
 divergent search trajectories. No plans from those diagnostic runs were executed.
 [Completed diagnostic results and provenance](PILOT_MECHANISMS.md).
+
+A later [56-context CEM extension](CEM_EXPANSION.md) and its
+[physical-prefix follow-up](PLANNED_PREFIX_REPLAY.md) are also complete. The latter
+executes three selected prefixes and a repeated unsteered prefix in every context
+(224 trajectories), with all 504 model/plan forecasts retained. Learned edits
+reduce same-unsteered-prefix forecast MSE in both tasks; all eight physical-distance
+and encoded-goal-cost simultaneous intervals include zero. These are 15-action
+development prefixes, not full-task success or protected confirmation. The
+[experiment inventory](ANALYSIS_COMPLETION.md) links each completed analysis and figure.
 
 These are separate, fixed-input development measurements—not retrospective traces
 of the protected outcomes. They do not establish the cause of the net efficacy

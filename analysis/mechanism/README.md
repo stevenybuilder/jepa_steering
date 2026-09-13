@@ -41,5 +41,9 @@ cannot quantify physical action changes. Flip overlap cannot establish what any
 perturbation would do. Basis concentration is not causal semantic localization.
 No candidate-score or elite-rank traces exist for the completed fresh panel.
 
-Synthetic fixtures from make_fixture.py test software only. Neither those
-fixtures nor later candidate-trace/attention pilot code are new scientific results.
+Synthetic fixtures from make_fixture.py test software only. The later real
+development diagnostics have their own completed source-bound analyses:
+`pilot_summary.py`, `cem_steering_summary.py`, `controlled_geometry_summary.py`,
+`action_condition_summary.py`, `action_counterfactual_summary.py`,
+`cem_expansion_summary.py`, and `planned_prefix_summary.py`.
+See the [complete experiment and figure inventory](../../docs/ANALYSIS_COMPLETION.md).

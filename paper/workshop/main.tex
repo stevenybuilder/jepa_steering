@@ -207,6 +207,27 @@ Reach-Wall & Prefix RMS & 0.2827 & $[-0.0070,\ 0.5294]$\\
 \end{tabular}
 \end{table}
 
+\subsection{Forecast improvement and physical prefix quality remain distinct}
+\label{sec:physical-prefix}
+
+The separately frozen physical follow-up covers all 56 extension contexts, $n=28$ per task. Each unsteered, learned, and calibrated-random selected prefix executes from the original seeded simulator reset for fifteen elementary actions. A repeated unsteered trajectory checks byte-identical observations and physics, giving 224 trajectories in total. Every model forecasts every plan, retaining 504 scientific model/plan evaluations. Exact reset, native-repeat and H3 future-tail receiving checks pass; the preprocessing amendment and failed first attempt remain preserved in the accompanying physical-prefix report.
+
+On the same unsteered-selected actions, learned-minus-unsteered weighted forecast MSE is $-0.002720$ on Reach (simultaneous 95\% interval $[-0.003061,-0.002342]$) and $-0.002268$ on Reach-Wall ($[-0.002607,-0.001905]$). These are absolute errors, not percentages. All eight physical end-effector-distance and encoded-goal-cost contrasts for the two edit arms include zero under the prespecified twelve-contrast family correction (Figure~\ref{fig:physical-prefix}). Thus this experiment establishes improved same-action forecasts in both tasks without an established physical-prefix gain. CEM optimized H6, whereas execution and scoring here cover H3; predicted/actual H3 preference disagreement alone does not establish exploitation of the H6 objective. This is development-prefix execution, not full-task success or another protected evaluation.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.87\textwidth]{\figroot/planned_prefix_effects.pdf}
+\caption{\textbf{Better forecasts do not establish a better executed prefix.} All 56 development states and twelve registered contrasts. Points retain each paired state; diamonds mark means and bars use the prespecified family-twelve 95\% intervals. Lower is better for each endpoint. Same-prefix forecast comparisons hold the unsteered-selected actions fixed; physical comparisons execute each edited model's selected actions. Neither is full-task success.}
+\label{fig:physical-prefix}
+\end{figure}
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.87\textwidth]{\figroot/planned_prefix_forecasts.pdf}
+\caption{\textbf{The complete prediction/execution grid.} All three models predict all three selected plans in every context: 504 points. Axes use visual goal MSE plus 0.1 times proprioceptive goal MSE, with equal scales within task. Dashed lines mark equal predicted and actual encoded H3 goal cost. These are endpoint goal costs, distinct from prediction-versus-endpoint forecast error.}
+\label{fig:physical-prefix-forecasts}
+\end{figure}
+
 \subsection{Action conditions affect rankings and elite membership differently}
 
 In a separate 16-context experiment, each candidate receives the next candidate's newest action-derived AdaLN condition at H3, one block at a time. A private-generator isotropic perturbation matches each donor-minus-recipient L2 norm. All six blocks and both original and freshly seeded 300-action banks are retained. This is donor interchange within a context, not an intervention on explicit action tokens or semantic physical labels.
@@ -296,7 +317,7 @@ An internal edit should be measured at the intervention site, at its downstream 
 COAST uses outcome-labelled conceptors in a policy action expert \citep{miao2026coast}; our recorded-forecast fit precedes a separate sampling planner. This motivates an objective-mismatch hypothesis but does not explain the different reported gains. The conceptor is also a full matrix: low effective spectral rank does not make its displacement identical to a rank-four edit. Physical-variable steering in video representations evaluates probe readouts and plausibility, not robot success \citep{joseph2026interpretingphysics}. Manifold steering's curved-versus-straight interpolation and vision readout likewise differ from closed-loop control \citep{wurgaft2026manifoldsteering}.
 
 \paragraph{Prospective questions.}
-Model-native coordinates may expose useful variables, as suitable reference frames do for Othello representations \citep{nanda2023emergentlinear}. Establishing them here requires held-out physical labels and a predicted causal consequence, not semantic names for PCA axes. Our completed fixed-bank replay isolates shared and centered edits, and the small CEM follow-up measures adaptive-plan divergence. Simulator forks would additionally test physical candidate ranking rather than latent ranking alone; that remains prospective.
+Model-native coordinates may expose useful variables, as suitable reference frames do for Othello representations \citep{nanda2023emergentlinear}. Establishing them here requires held-out physical labels and a predicted causal consequence, not semantic names for PCA axes. Our completed fixed-bank replay isolates shared and centered edits, the CEM extension measures adaptive-plan divergence, and the physical follow-up tests three selected prefixes per context. Physical ranking of the full candidate population remains unmeasured; the selected-prefix test does not recover that ranking.
 
 Adaptation is distinct again. AdaJEPA uses observed transitions to update a world model and replan \citep{wang2026adajepa}. Test-time-training layers and fast weights change state or memory machinery \citep{sun2024tttlayers,ba2016fastweights}, not merely fixed steering coefficients. Fair comparisons must match observation access and optimization/latency budgets, and separate real observed history from candidate-specific imagined histories.
 

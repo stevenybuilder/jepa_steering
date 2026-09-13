@@ -16,12 +16,16 @@ python scripts/build_precision_story.py
 python -m analysis.mechanism.pathway_geometry --plots-only
 python -m analysis.mechanism.pilot_summary --plots-only
 python scripts/build_paper_figures.py
+python scripts/build_cem_expansion_figures.py
+python scripts/build_planned_prefix_figures.py
 python -m unittest discover -s tests -p test_decision_geometry.py -v
 python -m unittest discover -s tests -p 'test_steering_specificity.py' -v
 python -m unittest discover -s tests -p 'test_fresh_confirmation.py' -v
 python -m unittest discover -s tests -p 'test_mechanism_energy_schema.py' -v
 python -m unittest discover -s tests -p 'test_pilot_summary.py' -v
 python -m unittest discover -s tests -p 'test_cem_steering_summary.py' -v
+python -m unittest discover -s tests -p 'test_planned_prefix_summary.py' -v
+python -m unittest discover -s tests -p 'test_planned_prefix_figures.py' -v
 python -m unittest discover -s tests -p 'test_story_figures.py' -v
 python -m unittest discover -s tests -p 'test_precision_story.py' -v
 ```

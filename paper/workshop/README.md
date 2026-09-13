@@ -6,7 +6,7 @@ Mechanism-focused preprint updated September 13, 2026. The official NeurIPS 2026
 
 ## Scope and evidence
 
-The manuscript separates the earlier rank-one layer sweep, later fixed-response rank-four operator, historical fixed-bank decision diagnostic, local pathway/geometry experiments, 64-context attention/component replay, controlled 64-context arithmetic comparison, 16-context action-conditioning specificity, eight-context actual-CEM pilot, and protected closed-loop confirmation. It does not infer an end-to-end causal mechanism across those populations. The completed GPU diagnostics use development inputs and do not execute robot actions. The 56-context CEM extension and physical-prefix follow-up remain pending in this version.
+The manuscript separates the earlier rank-one layer sweep, later fixed-response rank-four operator, historical fixed-bank decision diagnostic, local pathway/geometry experiments, 64-context attention/component replay, controlled 64-context arithmetic comparison, 16-context action-conditioning specificity and action counterfactuals, eight-context actual-CEM pilot, 56-context CEM extension, physical-prefix follow-up, and protected closed-loop confirmation. All these analyses are complete. It does not infer an end-to-end causal mechanism across those populations. The physical follow-up executes fifteen elementary actions from each selected plan on development inputs; it is not another full-task or protected success experiment.
 
 | Evidence | Authoritative source | Scope |
 |---|---|---|
@@ -20,6 +20,8 @@ The manuscript separates the earlier rank-one layer sweep, later fixed-response 
 | Controlled arithmetic | `paper/data/controlled_geometry_summary.json`, `controlled_geometry_*.csv` | All 64 contexts, six blocks, three conditions; fixed weights/inputs/action axis; output rounding alone does not reproduce actual BF16 computation |
 | Action-conditioning specificity | `paper/data/action_condition_summary.json`, `action_condition_*.csv` | All 16 contexts, six blocks, two banks; donor interchange versus equal-norm isotropic edits; small ranking effects, not physical success |
 | Coherent action counterfactuals | `paper/data/action_counterfactual_summary.json`, `action_counterfactual_*.csv` | All 16 contexts, both history appearances, range/off-range controls; 72 simultaneous primary contrasts; predictor consistency, not physical outcomes |
+| Adaptive CEM extension | `paper/data/cem_expansion_summary.json`, `cem_expansion_*.csv` | All 56 new contexts; original eight kept separate; six primary contrasts |
+| Physical selected-prefix replay | `paper/data/planned_prefix_summary.json`, `planned_prefix_*.csv` | All 56 contexts; 224 physical trajectories, 504 crossed forecasts, twelve primary contrasts; H3 prefix, not full-task success |
 | Author and historical comparison | `paper/data/benchmark_comparison_sources.json`, `benchmark_comparison.csv` | External context and exposed development; never pooled into fresh confirmation |
 | Literature | `docs/LITERATURE_MECHANISMS.md`, `references.bib` | Primary-source metadata and explicit endpoint boundaries |
 
@@ -41,6 +43,8 @@ From the repository root, regenerate the architecture/table and benchmark figure
 .venv/bin/python scripts/build_paper_figures.py
 .venv/bin/python scripts/build_publication_figures.py
 .venv/bin/python scripts/build_action_history_figure.py
+.venv/bin/python scripts/build_cem_expansion_figures.py
+.venv/bin/python scripts/build_planned_prefix_figures.py
 .venv/bin/python scripts/check_public_results.py
 .venv/bin/python scripts/check_manuscript.py
 ```
