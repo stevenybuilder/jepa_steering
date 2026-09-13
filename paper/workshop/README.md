@@ -19,6 +19,7 @@ The manuscript separates the earlier rank-one layer sweep, later fixed-response 
 | Actual steered CEM | `paper/data/cem_steering_summary.json`, `cem_steering_*.csv` | Eight development contexts; both learned/random arms; 15 iterations; returned 60-coordinate prefix, no executed actions |
 | Controlled arithmetic | `paper/data/controlled_geometry_summary.json`, `controlled_geometry_*.csv` | All 64 contexts, six blocks, three conditions; fixed weights/inputs/action axis; output rounding alone does not reproduce actual BF16 computation |
 | Action-conditioning specificity | `paper/data/action_condition_summary.json`, `action_condition_*.csv` | All 16 contexts, six blocks, two banks; donor interchange versus equal-norm isotropic edits; small ranking effects, not physical success |
+| Coherent action counterfactuals | `paper/data/action_counterfactual_summary.json`, `action_counterfactual_*.csv` | All 16 contexts, both history appearances, range/off-range controls; 72 simultaneous primary contrasts; predictor consistency, not physical outcomes |
 | Author and historical comparison | `paper/data/benchmark_comparison_sources.json`, `benchmark_comparison.csv` | External context and exposed development; never pooled into fresh confirmation |
 | Literature | `docs/LITERATURE_MECHANISMS.md`, `references.bib` | Primary-source metadata and explicit endpoint boundaries |
 
@@ -39,6 +40,7 @@ From the repository root, regenerate the architecture/table and benchmark figure
 .venv/bin/python scripts/build_comparison_figures.py
 .venv/bin/python scripts/build_paper_figures.py
 .venv/bin/python scripts/build_publication_figures.py
+.venv/bin/python scripts/build_action_history_figure.py
 .venv/bin/python scripts/check_public_results.py
 .venv/bin/python scripts/check_manuscript.py
 ```

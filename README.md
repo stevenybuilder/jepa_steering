@@ -15,9 +15,8 @@ the plan a robot chooses?**
 | Finding | Measured result | Evaluation scope |
 |---|---|---|
 | **Improve recorded-action forecasts** | Refined four-direction edits reduce H6 proprioceptive-embedding MSE by **2.36% on Reach / 2.19% on Reach-Wall** versus native forecasts. | Offline development; these results informed the recipe. |
-| **Map where predictions respond to edits** | Reach H6 error reduction falls from **3.03% at B0 to 0.48% at B5** in the registered rank-one sweep. The early-to-late gradient also appears in Reach-Wall and persists in FP32. | Paired layer interventions; Push-T does not reproduce the MetaWorld benefit. |
 | **Trace a shared latent shift into plan scoring** | Common-only replay reconstructs the full edit's candidate-relative cost change with scores **0.983 / 0.998** on Reach / Reach-Wall. | **64 development contexts**, same 300 actions per context; random-subspace edits show the same pattern and component energies are not equalized. |
-| **Test local geometry under controlled arithmetic** | Cubic reconstruction is better in FP32 but worse in BF16 at **all six blocks**, with the same weights and action perturbations. Rounding only the FP32 output does not reproduce the full BF16 effect. | **64 development contexts**, three numerical conditions; activation reconstruction, not robot success. |
+| **Locate an action-history dependency** | Patching an action condition at both appearances reproduces the corresponding raw-action change exactly. Patching only its first appearance gives H6 reconstruction **R = 0.503–0.508**. | **16 development contexts**, both action banks and all-block controls; a predictor-internal counterfactual, not physical accuracy. |
 
 The contribution is an instrumented path from **activation geometry → goal costs →
 adaptive search**, alongside a separate behavioral evaluation: **384 fresh paired
@@ -153,10 +152,38 @@ agreement and the planner's elite set therefore measure different sensitivities.
 
 This does not identify a unique control zone or better physical actions. The
 400-dimensional condition comes from a 20-dimensional affine action encoder;
-an isotropic control need not stay in its action-reachable subspace. That geometric
-distinction is being tested separately, not assumed away by matching edit norms.
+an isotropic control need not stay in its action-reachable subspace. The completed
+follow-up below tests that geometric distinction instead of assuming it away.
 [Complete findings and layer figure](docs/ACTION_CONDITION_SPECIFICITY.md) ·
 [What each intervention actually tests](docs/INTERVENTION_MECHANISM_AUDIT.md).
+
+### Changing an internal forecast is not the same as changing its action
+
+![A first-appearance-only donor patch stops matching the coherent raw-action counterfactual when that action returns as history; patching both appearances remains exact.](docs/figures/action_history_consistency.png)
+
+In this checkpoint's two-frame context, the H3 action enters twice: as the newest
+condition at H3, then as history at H4. Replacing its condition at **both appearances,
+across all six blocks**, reproduces the corresponding raw-action substitution
+byte-for-byte through H6. Patching only H3 matches at H3 but diverges when the
+original action reappears: H6 reconstruction is **R = 0.503–0.508** across both tasks
+and both banks. `R = 1 − MSE(patched, counterfactual) / MSE(native, counterfactual)`;
+it is not a success rate or percentage of action information.
+
+The layer sweep makes the timing dependence concrete. Persistent rather than
+H3-only donor replacement improves counterfactual reconstruction at B0–B3 in
+both tasks/banks; the largest observed difference is at B1 (**ΔR ≈ 0.50**).
+Equal-norm random edits inside the action encoder's range perturb rankings more
+than off-range edits at B1/B4, but only by about **0.0021–0.0025 Spearman units**.
+All 72 registered contrasts remain reported, including unresolved B4/B5 timing
+contrasts. This is not a discovered physical manifold or proof that off-range
+directions are inert.
+
+The practical implication is to test an edit against a **coherent action history**,
+not just a changed activation at one call. Whether that improves physical prediction
+or control is a separate question. These donor swaps differ from the older fixed
+steering vectors and do not, by themselves, explain protected task outcomes.
+[Complete counterfactual study](docs/ACTION_COUNTERFACTUAL.md) ·
+[All-layer contrasts](docs/figures/paper_action_counterfactual.png).
 
 ## Local geometry is not the same as a useful correction
 
@@ -309,6 +336,7 @@ python scripts/build_comparison_figures.py
 python scripts/build_story_figures.py
 python scripts/build_precision_story.py
 python scripts/build_publication_figures.py
+python scripts/build_action_history_figure.py
 python analysis/mechanism/steering_specificity.py
 python -m analysis.mechanism.decision_geometry
 python -m analysis.mechanism.pathway_geometry --plots-only

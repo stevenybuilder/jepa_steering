@@ -56,6 +56,7 @@ jobs:
             test_story_figures.py \
             test_precision_story.py \
             test_publication_figures.py \
+            test_action_history_figure.py \
             test_action_condition_specificity.py \
             test_action_condition_summary.py \
             test_public_results.py; do
@@ -63,4 +64,4 @@ jobs:
           done
       - name: Run numerical mechanism controls
         run: |
-          python -m pytest -q tests/test_controlled_geometry_pilot.py tests/test_controlled_geometry_summary.py
+          python -m pytest -q tests/test_controlled_geometry_pilot.py tests/test_controlled_geometry_summary.py tests/test_action_counterfactual_pilot.py tests/test_action_counterfactual_summary.py

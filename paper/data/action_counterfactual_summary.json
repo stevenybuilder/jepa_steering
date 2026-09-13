@@ -1,0 +1,853 @@
+{
+  "all_cloud_verified": true,
+  "analysis_source_sha256": "e1ee17c7c2c6d35061aa3cdf77ecdb3d656c619c5dca142be42aa482bc122f51",
+  "bootstrap_draws": 20000,
+  "bootstrap_seed": 20260913,
+  "cohort": 16,
+  "execution_manifest_sha256": "d2a364d761d34eddfe0c54ffac2c70f6f2b96c6d403857a3bf71d673f572030a",
+  "fresh_confirmation": false,
+  "n_per_task": 8,
+  "outputs": {
+    "action_counterfactual_case_metrics.csv": {
+      "rows": 10080,
+      "sha256": "408e127a3c08ec2ca18407e2eb70b9614bf08b7c707028408d71d014cdba6950"
+    },
+    "action_counterfactual_norm_audits.csv": {
+      "rows": 1728,
+      "sha256": "8998d86ef1aacc02360d118f79452012f991049c84790088cff5e5ace465ab37"
+    },
+    "action_counterfactual_primary_contrasts.csv": {
+      "rows": 72,
+      "sha256": "1981900e27e49bcb8d2195b09b60aeb136e09a6f53456cd2adecd06ced312baa"
+    },
+    "action_counterfactual_summary.csv": {
+      "rows": 8820,
+      "sha256": "dc303bfa9e87518f077317bae5de08a574e8645640756e0b7b0069b60dc51258"
+    }
+  },
+  "parity_basis": "Full-horizon bytes/RNG execution-attested; archived costs/elites/scalar distance identities independently recomputed",
+  "physical_outcomes_measured": false,
+  "primary_cells": 72,
+  "primary_interval": "Max absolute centered bootstrap deviations over12bank-layer cells per task/contrast; six families Bonferroni quantile1-.05/6",
+  "protocol_sha256": "7c16653101ebc9a29bca82b88783e7ae44edac2a134733bc87dc0f6263141f72",
+  "reconstruction": "Scenario ratio of mean squared errors, never mean candidate ratios",
+  "sources": [
+    {
+      "archive_sha256": "79098d47e18b738c83dae299bb3d9125dad6f026887c5eeb17de659e54f08d97",
+      "cloud_receipt_sha256": "97eef20b2843b77aed8f388d8d377e3b397c8d507b2f61cfa2997fc93b0711d6",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-0-verified.tgz",
+      "episode": 0,
+      "generation": "1789327151501545",
+      "gpu_uuid": "f3b334d1-e416-78a2-420e-4db4e2ae65f0",
+      "hashes": {
+        "DONE.json": "b20b0554f75f6296ef1a60829235b98d88c905e90d95f4f97ac01f10c784e36c",
+        "STARTED.json": "36d904c2851a03cf52af8a182cf643dd6389611c28073168348ed3ccb7eda093",
+        "actions.pt": "fe910303337bf70d067ad41ac3a0f5514f103b692443a00c706883ab73937570",
+        "report.json": "a27200c13a7eb7c1ea20b25e0ecf94d3f9ffe4e5b8a75175dd102bdb6ad9c82d",
+        "scores.json": "9b2edfe5073030520a3c7530f8780a4dc2db65ae4df48bc67afb8c6771fff97d"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach"
+    },
+    {
+      "archive_sha256": "4a62cf43a5e80c6ff9e044d80534370885a8c7cd7d039459e706fa2f22ffbafb",
+      "cloud_receipt_sha256": "35d7e5fb7ecf54824c3b7bafc2fe9e6bdcd4f0b9e9b6261a5d7380dbbeb57dcd",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-1-verified.tgz",
+      "episode": 1,
+      "generation": "1789327152637478",
+      "gpu_uuid": "aa838aea-67af-8c99-937c-c86a49b84a9e",
+      "hashes": {
+        "DONE.json": "889c2a92a168f05152b375a6d7a6e248e6dfd19fed371d4b4c89bb2c2523ca80",
+        "STARTED.json": "8238c08513ada3b49a4cd1d2cd1f20da34c4aeec0e49ec02702b3dea6e9014d9",
+        "actions.pt": "26f365ddb66590450aa80f40861c6fbc470480b031ef7883dcfff6fcb0c7fe41",
+        "report.json": "a58bb2ac97f7a43307dffa3722c429886a2719ac77e9f6221a848f0789ed055a",
+        "scores.json": "4411edd62db348f22fa501979b10f87f3fbebe76259bbd3d30c4e4b279afa7de"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach"
+    },
+    {
+      "archive_sha256": "3ff6b58cb70eec531c38fd5bc1da27334369154fecb6381dd6af5f11aef2e3a8",
+      "cloud_receipt_sha256": "9c200c5829a0aa859fc15c0ba3dca37bc287e62cfb900e9ca1a2cab940a67e70",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-2-verified.tgz",
+      "episode": 2,
+      "generation": "1789327351501455",
+      "gpu_uuid": "f3b334d1-e416-78a2-420e-4db4e2ae65f0",
+      "hashes": {
+        "DONE.json": "537fbed555d76ecce4c33b75717e034f4568eb2b6302a30dca163bbc7777f1b3",
+        "STARTED.json": "c0fd5c74741ae866e7717c6271adc21ad15dc5eb775b132e3e110409a16a5e99",
+        "actions.pt": "575b830b80ea2469f5e4ec4f915c80d620992631628ceef3adc42d0f5381db33",
+        "report.json": "9d8c63c8f5a92d6fa398ee9e21654c04e5f554a0bc052f5130dbdf3fa28351c6",
+        "scores.json": "34249c122bfb937cc3be1e845b77a0cbc383e09e950c182e657c7fd3bafda05f"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach"
+    },
+    {
+      "archive_sha256": "64846038a318730150167ff9862234739a096eb3b55f9cbc219a64b4ff3eb707",
+      "cloud_receipt_sha256": "5dabb87f3f89ae9274acc3b0b5c6beee62b572d22d2dffacb3065f6324b9515c",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-3-verified.tgz",
+      "episode": 3,
+      "generation": "1789327203104406",
+      "gpu_uuid": "aa838aea-67af-8c99-937c-c86a49b84a9e",
+      "hashes": {
+        "DONE.json": "2c53c4e4bf6c408b3cdb1b990ae9ad9178fb40220d8e037bb7c9bc19eeeae075",
+        "STARTED.json": "7560d7e84b2184c41801a5264274d19c9ad94eff60e942c0e26773ee2a033bf4",
+        "actions.pt": "272e420497215b1adc0c33ebdf2e7984403c33d733b4de12b45cf26e78c03639",
+        "report.json": "22034f66c09eb2f8259ca0191ea88cfc1ebd108d5c67200a1474b3edfbda93d9",
+        "scores.json": "f56112306971f191e66052226fed1326e56858058e5dc0964d12f5fbcec371b2"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach"
+    },
+    {
+      "archive_sha256": "eb40a94f4b6af0b5d454e43ea6788664316fe8fb7a099be583c2212ee2fd7794",
+      "cloud_receipt_sha256": "50ddade205837891bdb8815cdabc410c252d0cf7d4a1b900af7c83f7f58ea75b",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-4-verified.tgz",
+      "episode": 4,
+      "generation": "1789327569140932",
+      "gpu_uuid": "f3b334d1-e416-78a2-420e-4db4e2ae65f0",
+      "hashes": {
+        "DONE.json": "86b05115c962fe2dd9f3e21597733cb9e9ad5c480d7b358f05c20143101ab11b",
+        "STARTED.json": "9bf42d551388334943ebb06974276d40dd18af38f85587e588119f24a11736b2",
+        "actions.pt": "612546e76ca97be0812c99cca1d4eba3010e46cc07fa1944b4f21535c48d0e14",
+        "report.json": "91798ce6987e1231b5dc5fa6c169545551dea5d0076dec385eb9ae7d1f45b72e",
+        "scores.json": "42c7117892c211459a88415d055b3b0a421ee6788812edd07789c9bad7e81d08"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach"
+    },
+    {
+      "archive_sha256": "e51d39065ab831ad4f3db2585ce6334bcf6bcbf4a9757faebeae51aa6ed99119",
+      "cloud_receipt_sha256": "1128bac63f28ddb4ba82ee1fddea699d1b66dc0f1b01e028a8a4b6e356b295ef",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-5-verified.tgz",
+      "episode": 5,
+      "generation": "1789327570331768",
+      "gpu_uuid": "aa838aea-67af-8c99-937c-c86a49b84a9e",
+      "hashes": {
+        "DONE.json": "8c6a359881e37737a04730b516d409b3074c87996e1c30466935033afb1feb2b",
+        "STARTED.json": "49c60b27b4d43785eb1d9f471acfa4ce64c180102008a52f597456cf988e01ae",
+        "actions.pt": "264c57fb7601ed303c5de21d6f9cfa7c9f072a72d8d84b4fae1d7c7aea980872",
+        "report.json": "6fde5cbee6e929d9a46015b5997c0fd22b29a9e03d3bfd137b2ac562a90f0d77",
+        "scores.json": "872f591013a93e51ee05ee1765287e90a0852b387deef65c8884918156ae3c54"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach"
+    },
+    {
+      "archive_sha256": "08aaf197c895a0ed9f7b7aae7211188ae1d484e1bef9dbe3a816550ee8401ba4",
+      "cloud_receipt_sha256": "75906beefd6ae856d45f60143c8c0a472a49aaa528b1c7aa5fe4c5409afd0173",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-6-verified.tgz",
+      "episode": 6,
+      "generation": "1789327648450600",
+      "gpu_uuid": "f3b334d1-e416-78a2-420e-4db4e2ae65f0",
+      "hashes": {
+        "DONE.json": "c87912b651a0847f4945179c4e165fb24fcf8fceb96bd33f01261c52e4717640",
+        "STARTED.json": "2a6c1ff30d578f34df2aa0e4eb7917d083cdf4daa14da24b904df3cd99211328",
+        "actions.pt": "5777d698403ffcf2dabf491a4ef7d75cfd470ca6c9019ffdb0ab0220d2c352e6",
+        "report.json": "69d92e8712ef9b35b6e1f8b6f24487c3a57050e6be561c70af16a0e9d302562b",
+        "scores.json": "c11e65d54c3044136394421268c263b3d86a03899188d0be571c15d800fa73be"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach"
+    },
+    {
+      "archive_sha256": "5c6d4c4fed2e0b951598f6b497d8f63e6e822166b1e627e52a55cd75f89f7740",
+      "cloud_receipt_sha256": "f80a82401fe2d5e611f25becffaffb905b33833138157b3f2885808afb25fc9c",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-7-verified.tgz",
+      "episode": 7,
+      "generation": "1789327822757696",
+      "gpu_uuid": "aa838aea-67af-8c99-937c-c86a49b84a9e",
+      "hashes": {
+        "DONE.json": "14fbcbe90aff2eaf4e1c77dc4657d39b2488fa818b764d89d578da3c7807a6be",
+        "STARTED.json": "a9d82e428c2a87d9cae42005193d8e141dc0994038a14d74bf96552683378131",
+        "actions.pt": "e2d5d10f2b43ce81e09bae9c3643af3efd8cb412d708824fe9f7ee242ffefa89",
+        "report.json": "46a70f64ffc9191787f846c92b94794a70fea9d7c327f7a7b09fae5a2edb72cc",
+        "scores.json": "b7e5e0eee59c83fb28fa07e288f3c86053b7de9431f8de24c1ee78d6a6e5e7ab"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach"
+    },
+    {
+      "archive_sha256": "845cd8dcc54c12732ed54ec890e5066a2a4a3d22fb8bfab4e24284efa0b2c490",
+      "cloud_receipt_sha256": "4032b8cd88a8fe84f9cf06fa1dd4f327a55be9ab5cca19c33e3f9e146b6fe808",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-wall-0-verified.tgz",
+      "episode": 0,
+      "generation": "1789327676142311",
+      "gpu_uuid": "f3b334d1-e416-78a2-420e-4db4e2ae65f0",
+      "hashes": {
+        "DONE.json": "2f229445da1a9bdeb62a0d0d55d09738d6217dc1bd63b9275aea44bcd77d81fa",
+        "STARTED.json": "583df6b54b01ed779c8666e817cfa505f670ea545a6fb2a2b66e0e2ec1411ddf",
+        "actions.pt": "775eb039fcc4c9204997245a17d2304965e105b8611c0a6e22b3c5c8ab778d01",
+        "report.json": "084769aebcd13d76f53402b15943515be4d5b952279619c526eecb7a89601acb",
+        "scores.json": "4b7dba92a099f161be9548ce63d9c2ac3a0c8c9f23875cffb00d1c38b4e58770"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach-wall"
+    },
+    {
+      "archive_sha256": "ddb093f05f9085f5b50ff51c71684ecec283a4ae73262dde98ef30efb2572c32",
+      "cloud_receipt_sha256": "2fcea059786d79510f1a849be2d55fb7cc731e28ef196785cccd5ecd1ce01659",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-wall-1-verified.tgz",
+      "episode": 1,
+      "generation": "1789327916562399",
+      "gpu_uuid": "aa838aea-67af-8c99-937c-c86a49b84a9e",
+      "hashes": {
+        "DONE.json": "f8d5246bc07a0a85ca73dea58d2bceca77dad33d089c4534c4a7cb638de1de89",
+        "STARTED.json": "c146ce722f96adfedb189c15a818fec1e68bf5680712e2992673b542fd1eae19",
+        "actions.pt": "af6e9f39ca65e4fd149117f887d50463e5fa2c0202c3b92ecaa899ac5b0f6d42",
+        "report.json": "41191cc2fd78a807ccf2959862fd17b9feb7830fe81862ed1607dccfc4860d75",
+        "scores.json": "c80a6c93031839d002767c39ebfbcc4b9c157177a804e71c830d5831e83c53cd"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach-wall"
+    },
+    {
+      "archive_sha256": "3dd7789cd6af1473ea6f2679ede8568fa8c300f85811ccd35f240c263038fcc3",
+      "cloud_receipt_sha256": "0398091c1744fcf7c05a2d610f50e91cca6b08008d838d186db2b127badff5f2",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-wall-2-verified.tgz",
+      "episode": 2,
+      "generation": "1789327800506004",
+      "gpu_uuid": "f3b334d1-e416-78a2-420e-4db4e2ae65f0",
+      "hashes": {
+        "DONE.json": "139d0950f83571b3ac9906f1d62f622720dc2fe1d79839d258a7937e1bbc11d0",
+        "STARTED.json": "35a26a65d5a7bc219ca59b4f14e5fd1f7433cd8d3e56c6d9d1b00d19d36f09e6",
+        "actions.pt": "e1980e4b213546d723d19b24da4a4a5e60b753d68c407f34349007313ab6cf5e",
+        "report.json": "aa651054b9dcf21a11cc58883b631e231b119c62f882e78055867fdf706f4bfa",
+        "scores.json": "c2c6d6c9cd8ea25a2f92b731060822a7a94f1d4712fb0e56bdc76f5c5b80f4a6"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach-wall"
+    },
+    {
+      "archive_sha256": "f89df05fcf4e94d5b81b910bef39ab08ceb0fa5a5241408bd0c21e5c988cdf29",
+      "cloud_receipt_sha256": "80d1f8db5eae457f1191bd8e04600291da6b1577323379affc8b1cb49b677412",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-wall-3-verified.tgz",
+      "episode": 3,
+      "generation": "1789328011390030",
+      "gpu_uuid": "aa838aea-67af-8c99-937c-c86a49b84a9e",
+      "hashes": {
+        "DONE.json": "8da44b552fdb732f8e97b14c69ec87fc5e417aa2f15571f22c03d7b9a58b8783",
+        "STARTED.json": "f49552a20b854f0e642d941dc17896225b53d2f96fe2b5fc84be1e2fcce8aa43",
+        "actions.pt": "1124e5c7d15f21eb6e7974c0c53a760077e8b4ada1eae60cdc344780e2820a28",
+        "report.json": "b1ece0564520ac17b2cedf97562d936f00988790fde60c70d24ea4e3e14508db",
+        "scores.json": "f0a629f005deb310adb4908afdf505bdf920922098082a4ebd386096365cbfc1"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach-wall"
+    },
+    {
+      "archive_sha256": "fecab5419dd77bb9d2960801308dbb583347459eb5aae8a2eb21ebf090018170",
+      "cloud_receipt_sha256": "e5c9ee91f003760063bacedfddfbdcfa9d9eef3c4e041f5726a01a1887507e1e",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-wall-4-verified.tgz",
+      "episode": 4,
+      "generation": "1789327991007648",
+      "gpu_uuid": "f3b334d1-e416-78a2-420e-4db4e2ae65f0",
+      "hashes": {
+        "DONE.json": "77ac95d3d6f4124a670e7117af18da986466cf42e49c4eded536c76c25b63bb2",
+        "STARTED.json": "2ba849364fda2bd62693b2af2b2a3796fced8488538a5f20980530d7a8600a8e",
+        "actions.pt": "6e8de9e70bc32782ba28b9d8f36d216ffffb09d033483f2e8603a826f5d9960b",
+        "report.json": "05007734623d8142b50c1d5f1f324a219324a57ddc44ea32c3347b59fa94284d",
+        "scores.json": "89b01d24a4677d3e0a927ab2385460312bf6d73d1a322fe7a10c228be0d66dc2"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach-wall"
+    },
+    {
+      "archive_sha256": "47ae5109e8a516b400e8ece1ac8dbaf32da830413b1080f3bc718a5ad9a70789",
+      "cloud_receipt_sha256": "9a49cc9747e7a67e3fd88b0c33de1ee5dfc537ed202687b94570caf347ba24aa",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-wall-5-verified.tgz",
+      "episode": 5,
+      "generation": "1789328231356046",
+      "gpu_uuid": "aa838aea-67af-8c99-937c-c86a49b84a9e",
+      "hashes": {
+        "DONE.json": "e11e47032b46a0f58352fdf2b7d0dc930ff399057a08f1cab42b0d0b3fde7188",
+        "STARTED.json": "eaacb55ba652d65c3751d68afa7be135fcfd4799b87921f12344c7c3a0911db9",
+        "actions.pt": "ffefb6d2b6046b6103a1ad7fb8a613b6d366bd048549eafe8ff31c7933cb8708",
+        "report.json": "d3654866200c358b540f3913e7270e8f73f4535350a55c09b5d248aa5d94c0e9",
+        "scores.json": "83b7bb5385b9c107566287abd7c25c166a686448a541814e77f7fb557b5617bc"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach-wall"
+    },
+    {
+      "archive_sha256": "4f766c1968658500c664a17b699a9ca5823ae33b939edd0dcb7d1cd27f230cdb",
+      "cloud_receipt_sha256": "0c0de58aaf1ffa45e33e9d4dd1bdbd8dc8b6f376e485f52ca3a475a454f4a67f",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-wall-6-verified.tgz",
+      "episode": 6,
+      "generation": "1789328185557921",
+      "gpu_uuid": "f3b334d1-e416-78a2-420e-4db4e2ae65f0",
+      "hashes": {
+        "DONE.json": "2afb53767b26e2aea7eebf444f2776d1951dd590cdbdc5dd4d74b15fa732f69e",
+        "STARTED.json": "e2cbd9b0b53cb66762e4d1018eb60c93a755142b247db51ae665d666733e6ac8",
+        "actions.pt": "be98c081857a423092f390c478aa8501b088eeb70ed896fc114466f3f73e425c",
+        "report.json": "9087aefdbd32af8ba0a1b16afe579cd44ef3b1ad0a5b53e8810283cd1168204f",
+        "scores.json": "6e37bac881a59f702b69d68121aa6d0545b2ba2f96d539574e3af8501c961bd7"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach-wall"
+    },
+    {
+      "archive_sha256": "7ff73b4a558c7577983ec9b4becb221c500265ed2fb38bbac52469ca9d5f455b",
+      "cloud_receipt_sha256": "ce627be7da6b4f370424140d8a72f0e8c23f26af47f7e38dab4cb38d7d94cd8a",
+      "cloud_uri": "gs://rgt-jepa-archive-2026/mechanism-20260913/layer-pilot-v1/action-counterfactual-v1-reach-wall-7-verified.tgz",
+      "episode": 7,
+      "generation": "1789328554285343",
+      "gpu_uuid": "aa838aea-67af-8c99-937c-c86a49b84a9e",
+      "hashes": {
+        "DONE.json": "66a500eb868e27f5870ab22a278ba54849c354e1cd241ced66f4132aab6b3dc8",
+        "STARTED.json": "ed2890a43ccbad1ca6eea8042391b8653ea82069e1ba0ce0dc196e69853efb9c",
+        "actions.pt": "5fee6a74ebf86e13c03fb0b379a08e96866b4e89b791197b361b06a42ce9132a",
+        "report.json": "af3634deb05ae0c603e07f6f3191b1eb6d748cb9e708889facdbfd9fafca33c1",
+        "scores.json": "4a79ee876806aed56ab163f9775f5dc4239448f41408be34746029a6c0b79799"
+      },
+      "range_audit": {
+        "orthogonality_max_error": 2.886579864025407e-15,
+        "projector_basis_sha256": "4034d6578834d06d32b55c9de7718420f2a965db4c9c3af6739595c1128e2956",
+        "relative_rank_threshold": 1e-06,
+        "retained_rank": 20,
+        "scope": "affine action encoder range, not physical or latent manifold",
+        "singular_values": [
+          0.1979004879879312,
+          0.16655203867584956,
+          0.14544014935100347,
+          0.133009344238599,
+          0.12770858022373077,
+          0.09149793290735089,
+          0.07345018350711884,
+          0.06952454743494353,
+          0.06442011590475413,
+          0.06362864358375761,
+          0.05770848479959002,
+          0.047732758653542304,
+          0.04389786287789592,
+          0.04143931588056707,
+          0.040636389109733495,
+          0.03957086035119961,
+          0.03877810510116152,
+          0.03593435581474393,
+          0.03349670895413096,
+          0.032942613545950176
+        ],
+        "svd_reconstruction_relative_error": 1.623043241026503e-15,
+        "weight_sha256": "5e407927b651c5df26d4d32678cd2efc98f45328a51059bb42b5e00f0f10499e",
+        "weight_shape": [
+          400,
+          20
+        ]
+      },
+      "task": "reach-wall"
+    }
+  ],
+  "status": "complete16_action_counterfactual_development"
+}

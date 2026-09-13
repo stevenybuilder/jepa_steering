@@ -8,6 +8,8 @@
 \usepackage{amsmath,amssymb}
 \usepackage{booktabs,array}
 \usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{float}
 \usepackage{xcolor}
 \usepackage{caption}
 \captionsetup{font=small,labelfont=bf}
@@ -188,7 +190,23 @@ In a separate 16-context experiment, each candidate receives the next candidate'
 
 At B1 and B4, donor substitution disrupts native official-cost rankings more than the random edit: excess Spearman loss is 0.0071--0.0084 across the two tasks and two banks. Six-layer simultaneous intervals exclude zero in these cells, but no layer reaches the prespecified 0.05 practical flag. Native rank agreement remains at least 0.98979 in every official-cost cell. At B1, however, donor edits lose a mean 1.0--1.125 additional members of the native top ten relative to random edits. Small global rank changes and a changed elite set can coexist; neither establishes physical action quality.
 
-Delivered-norm mismatch is not supported here: the maximum relative error is $2.72\times10^{-8}$. Distributional mismatch remains. The affine action encoder maps 20 input coordinates into 400 condition coordinates; isotropic noise need not lie in its at-most-20-dimensional reachable subspace. Matching total L2 therefore does not match action-reachable dose. Separate range and off-range controls are pending; the current result does not identify a unique control zone. Complete curves and uncertainty appear in Appendix~\ref{app:condition}.
+Delivered-norm mismatch is not supported here: the maximum relative error is $2.72\times10^{-8}$. Distributional mismatch remains. The affine action encoder maps 20 input coordinates into 400 condition coordinates; isotropic noise need not lie in its at-most-20-dimensional reachable subspace. Matching total L2 therefore does not match action-reachable dose. Complete specificity curves and uncertainty appear in Appendix~\ref{app:condition}; the following separately frozen study adds range controls.
+
+\subsection{Coherent action changes require consistent history}
+\label{sec:history}
+
+An H3 action appears twice in the predictor's two-frame context: newest at H3, then older at H4. On the same 16 contexts and both fixed banks, we compare coherent raw H3 action substitution with donor-condition replacement at H3 only or at both appearances. All-block persistent replacement reproduces the raw-action counterfactual byte-exactly through H6. All-block H3-only replacement matches at H3 but has H6 reconstruction $R=0.5029$--$0.5079$ across task/bank cells (Figure~\ref{fig:history}). Here $R=1-\MSE(\hat z_{\rm patch},\hat z_{\rm cf})/\MSE(\hat z_{\rm native},\hat z_{\rm cf})$, using ratios of candidate means under the official modality weighting. This is a predictor-internal counterfactual, not its physical correctness.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{\figroot/action_history_consistency.pdf}
+\caption{\textbf{A one-time internal patch is not a coherent action change.} The donor H3 condition must also replace the older occurrence at H4. All six blocks, both original/fresh action banks, and all 16 contexts are retained. The exact persistent/raw-action match is a computational consistency control; the H3-only deviation is measured. Bands are full marginal context-bootstrap intervals. No physical actions are executed.}
+\label{fig:history}
+\end{figure}
+
+The six-layer contrasts retain a 72-cell simultaneous primary family (two tasks, two banks, six layers, three contrasts). Persistent versus H3-only reconstruction is positively separated at B0--B3 in both tasks/banks, 16 of 24 cells; B4/B5 remain unresolved. The largest observed persistence difference occurs at B1, $\Delta R=0.4991$--$0.5057$. H3 donor replacement exceeds equal-norm range-random reconstruction at B0/B1/B2/B4, but not established at B3/B5. These are a complete depth map, not a retrospectively selected intervention site.
+
+Range-random edits disrupt native rankings more than off-range random edits at B1/B4 in both banks, by about 0.0021--0.0025 Spearman units; only fresh-bank B2 adds positive separation. The frozen encoder has rank 20 of 400; isotropic controls place 4.995\% mean energy in its range. Actual norm error is at most $3.41\times10^{-8}$. Input-range membership is not a global activation manifold, and off-range does not mean causally inert. Together, these interventions identify an action-history dependency within this predictor. They neither reproduce the older static steering operators nor establish the cause of protected outcome changes.
 
 \section{Finding 3: reconstruction and forecast utility separate}
 \label{sec:geometry}
@@ -272,7 +290,7 @@ Early rank-one sweeps, later rank-four fitting, archival candidate banks, and pr
 \section{Native attention and diagnostic evidence}
 \label{app:attention}
 
-\begin{figure}[h]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{\figroot/paper_pilot_attention.pdf}
 \caption{\textbf{Native H6 attention distance, all six blocks and sixteen heads.} Each cell averages 32 development contexts per task with the same archived zero-action candidate. Colors are shared across tasks. The complete H1--H6 grid is retained in the accompanying data. Attention distance is not causal importance or evidence of a planning-emergence zone.}
@@ -287,7 +305,9 @@ All files emitted by these completed diagnostics are cloud-verified. Original H6
 \section{Action-conditioning specificity}
 \label{app:condition}
 
-\begin{figure}[h]
+The subsequent action-counterfactual experiment retains all 72 primary contrasts in the accompanying \texttt{action\_counterfactual\_primary\_contrasts.csv}. Its 20,000 paired bootstrap draws share context weights across banks and layers. Each task/contrast family uses the maximum absolute centered deviation over twelve bank/layer cells, with quantile $1-0.05/6$ across six families. Undefined cells would remain undefined; all registered cells were defined. All 1,120 forecasts, source identities, cloud receipts, norm controls and full-horizon parity checks passed. The full-layer figure and reproduction receipt are provided alongside the focused timing figure.
+
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{\figroot/action_condition_specificity.pdf}
 \caption{\textbf{Small global ranking changes can alter the elite set.} Complete 16-context donor-interchange experiment, eight contexts per task, two fixed candidate banks, and all six layers. The contrast is excess loss of native goal-cost rank agreement relative to an equal-norm isotropic edit. Six-layer simultaneous intervals are within task/bank/metric families, not across every secondary endpoint. No layer reaches the prespecified 0.05 excess-Spearman practical flag. Rankings are model predictions, not physical counterfactual values.}
@@ -295,10 +315,11 @@ All files emitted by these completed diagnostics are cloud-verified. Original H6
 
 Zero-capture passes reproduce H1--H6 forecasts and costs exactly; interventions leave the earlier condition time unchanged. All 115,200 delivered norms pass. The 448 total forecasts include 32 engineering passes and do not create 448 independent observations. An import-only receiving amendment initializes the native planner dependency before the RNG boundary; the final guard still requires unchanged global RNG throughout all scientific forecasts. The failed attempt remains archived. The public source-bound receipt exports all 1,152 case metric rows and 144 contrast rows.
 
+\clearpage
 \section{Protected rates and historical context}
 \label{app:rates}
 
-\begin{table}[h]
+\begin{table}[H]
 \centering\small
 \caption{Complete protected success rates (\%). Each cell has 96 paired scenarios, rounded from the frozen report.}
 \setlength{\tabcolsep}{4pt}
@@ -318,7 +339,7 @@ Action conditioning only & 47.92 & 17.71 & 81.25 & 78.13\\
 \end{tabular}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[H]
 \centering\small
 \caption{Historical development only, not pooled into protected confirmation. DROID is a recorded-plan action score over 64 endpoints, not 96 physical robot episodes. MetaWorld component rows marked \(^{*}\) use concurrent native 45.83/29.17, not the canonical native row.}
 \setlength{\tabcolsep}{3pt}
@@ -338,7 +359,7 @@ Action & 42.71\(^{*}\) & 36.46\(^{*}\) & 58.33 & 86.46 & 76.04 & 51.11\\
 \end{tabular}
 \end{table}
 
-\begin{table}[h]
+\begin{table}[H]
 \centering\small
 \caption{Author-reported benchmark context \citep{terver2025jepawm}. Tables 2/11 report late-epoch recipe aggregates; Table 12 reports final checkpoints. Different aggregation, checkpoints and scenarios prevent pairing these rows with our interventions.}
 \setlength{\tabcolsep}{4pt}
@@ -354,10 +375,11 @@ JEPA-WM final, L2 & 49.0 & 29.2 & 69.4 & 83.3 & 80.9 & 46.5\\
 \end{tabular}
 \end{table}
 
+\clearpage
 \section{Local geometry: targets and missingness}
 \label{app:geometry}
 
-\begin{table}[h]
+\begin{table}[H]
 \centering\small
 \caption{Reconstruction reduction is \(100(L_{\rm linear}-L_{\rm cubic})/L_{\rm linear}\) for omitted-activation MSE. H6 advantage uses the future proprioceptive loss difference divided by \emph{native future MSE}. Positive favors cubic. These denominators are not interchangeable; values are descriptive means.}
 \setlength{\tabcolsep}{4pt}
@@ -377,13 +399,14 @@ PointMaze & 200 & -42.2175 & 99.9858 & 0.015918 & -0.014072\\
 
 All ten task/precision geometry sources are retained. The seven coupling reports are not a complete five-task-by-two-precision factorial: registered PointMaze coupling and FP32 Wall coupling are absent. Output decomposition is unavailable at H2/H4/H5. The compact Wall source lacks per-arm lineage losses, so its aggregate loss interaction is retained without invented lineage contrasts. Saved interaction norms and cross terms are recounted and identity-checked, not reconstructed by reexecuting output tensors. Precision-specific fits and realized doses prevent isolating rounding as a treatment.
 
-\begin{figure}[t]
+\begin{figure}[H]
 \centering
 \includegraphics[width=\textwidth]{\figroot/paper_action_interaction.pdf}
 \caption{\textbf{Output pathways and squared-loss interaction are distinct.} All seven registered H6 proprioceptive conditions. The additive cross-term plus nonadditive remainder equals the loss factorial; the remainder already includes \(\|q\|^2\), which is not added twice. Wall's aggregate-only factorial has no invented interval; its remaining intervals retain the saved fixed native denominator. Separate axis scales, precision-specific fits, and doses preclude treating the panels as a controlled precision experiment. These are fixed-input forecasts, not protected behavioral interactions.}
 \label{fig:factorial}
 \end{figure}
 
+\FloatBarrier
 \section{Reproducibility and analysis boundaries}
 \label{app:repro}
 
