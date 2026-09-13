@@ -149,8 +149,8 @@ def margins():
     frame = load_margins()
     fig, axes = plt.subplots(1, 2, figsize=(7.8, 5.3), sharex=True, sharey=True)
     fig.subplots_adjust(left=.095, right=.97, top=.63, bottom=.25, wspace=.16)
-    fig.text(.055, .94, "Score changes rarely displace the best plan", fontsize=18, weight="bold", color=INK)
-    fig.text(.055, .877, "Below 1: the original winning candidate is guaranteed to stay first.", fontsize=11, color=MUTED)
+    fig.text(.055, .94, "The first choice stays the same in 191 / 192 states", fontsize=16, weight="bold", color=INK)
+    fig.text(.055, .877, "Learned edit on fixed candidate sets. The curves show all four edits.", fontsize=11, color=MUTED)
     arms = ("refined", "random_refined", "coupling", "random_coupling")
     names = ("Learned edit", "Random subspace", "Visual + action", "Random visual + action")
     colors = (TEAL, TEAL, AMBER, AMBER)
@@ -166,9 +166,9 @@ def margins():
         ax.set_title(LABELS[task], loc="left", fontsize=12.5, weight="bold", color=INK, pad=12)
         ax.set_xscale("log")
         ax.set(xlim=(lo, hi), ylim=(0, 102), yticks=[0, 25, 50, 75, 100])
-        ax.set_xlabel("Score-change range / original winner's lead", fontsize=10.5, labelpad=8)
+        ax.set_xlabel("Change in relative costs / original winning gap", fontsize=10.5, labelpad=8)
         clean(ax)
-    axes[0].set_ylabel("Cumulative scenarios (%)")
+    axes[0].set_ylabel("States below the horizontal-axis value (%)")
     fig.legend([Line2D([0], [0], color=c, lw=2, ls=s) for c, s in zip(colors, styles)], names,
                loc="upper left", bbox_to_anchor=(.045, .82), ncol=2, frameon=False,
                fontsize=10, columnspacing=1.3, handlelength=1.8)

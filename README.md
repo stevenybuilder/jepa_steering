@@ -1,27 +1,29 @@
-# Activation Steering in JEPA World Models
+# Steering Predictions and Plans in JEPA World Models
 
-We study **activation steering and representational geometry in frozen JEPA-WM
-checkpoints**. We compare low-rank predictor corrections, visual and
-action-conditioning edits, and matched random controls, with layer sweeps and
-component ablations. The question is how the geometry of an edit affects future
-predictions, candidate rankings, and the plans ultimately executed.
+**When does changing a predicted future change the plan?**
 
-Sonia Joseph et al.'s [*Interpreting Physics in Video World Models*](https://arxiv.org/html/2602.07050v1)
-provides an important reference: their **Physics Emergence Zone** analysis connects
-layerwise access to physical variables with distributed subspaces and targeted
-interventions. Here we investigate the action-conditioned JEPA-WM predictor.
-We test whether low-rank corrections and local interpolation provide useful
-steering directions, where their effects are strongest, and how those effects
-propagate through a sampling planner.
+JEPA-WM plans by predicting what candidate actions will lead to, then choosing
+among those futures. We keep its checkpoints frozen and test **activation
+steering inside the predictor**: learned low-rank corrections, visual and
+action-conditioning edits, matched random controls, and component ablations.
+Representational geometry motivates the edits; forecasting and planning are the
+outcomes we follow.
 
-**Key results:** the rank-four edit reduces H6 proprioceptive forecast MSE by
-**2.36% / 2.19%** on Reach / Reach-Wall. A score-margin bound certifies an unchanged
-winner in **184/192 fixed candidate banks**, while later adaptive searches can
-return different plans. Local reconstruction reverses between FP32 and BF16.
-The separate **3,072-run protected evaluation** establishes no reliable success
-gain; the experiments below distinguish these endpoints.
+The experiments connect **prediction, context history, and action selection**:
 
-[Paper](paper/workshop/main.pdf) · [Methods](docs/METHODS.md) · [All results](docs/RESULTS.md) · [Reproduce](docs/REPRODUCING.md)
+- **A local patch can lose agreement with the intended action change.** Patching
+  every appearance across all blocks reproduces its forecast; a one-time patch
+  loses about half the reconstruction by H6.
+- **Better forecasts and different plans are separate outcomes.** Forecast MSE
+  improves **2.36% / 2.19%**. In a separate fixed-bank test, the first choice
+  changes in **1/192 states**, while adaptive search can still return different plans.
+- **Measured geometry can reverse with precision.** FP32 favors cubic over linear
+  reconstruction at every block; BF16 favors linear under the same weights and inputs.
+
+The separate **3,072-run protected evaluation** leaves improved task success
+unestablished. These diagnostics do not identify a single cause of that outcome.
+
+[LCFM paper](paper/lcfm/main.pdf) · [Full study](paper/workshop/main.pdf) · [Methods](docs/METHODS.md) · [All results](docs/RESULTS.md) · [Reproduce](docs/REPRODUCING.md)
 
 ## Model and interventions
 
@@ -44,40 +46,83 @@ trajectories; recorded development trajectories inform the recipe. The final
 four-task confirmation uses new scenarios after that recipe is frozen.
 [Operator equations, fitting, and dose definitions](docs/METHODS.md).
 
-## Simulated executions
+## A changed action must remain changed when it becomes history
 
-![Synchronized Reach and Reach-Wall executions of unsteered, learned rank-four, and random-subspace selected plans.](docs/media/jepa_prefix_comparison.gif)
+We replace an action in the input and compare that rollout with an internal
+patch intended to reproduce the same change. The action appears twice in
+JEPA-WM's two-frame context: first at H3, then as the older action at H4.
+**Patching the first appearance matches the changed-action forecast at H3,
+but the agreement breaks when the original action returns at H4.**
 
-Saved 15-action prefixes from the first registered follow-up case in each task,
-replayed from the recorded simulator states. Playback is slowed 16×; these clips
-show the initial execution, not full-task completion. The examples were selected
-by case order. [HD video](docs/media/jepa_prefix_comparison_hd.mp4) ·
-[Replay verification and reproduction](docs/media/README.md).
+![Counterfactual reconstruction at H3, H4 and H6, comparing patches at the first appearance with patches at both appearances.](docs/figures/lcfm_context_history.png)
 
-## How an activation edit reaches the planner
+The upper panels replace the action-derived condition at all six blocks.
+Patching both appearances reproduces the input-action change exactly through
+H6; the one-time patch ends near **R = 0.50**. R measures agreement with the
+changed-action forecast: 1 is exact and 0 is the unmodified forecast.
 
-### A score-margin bound identifies stable choices
+The lower panels show B1 as a **post hoc illustration**, where patching both
+appearances helps but is not exact. The complete six-layer comparison finds a
+positive persistence effect at B0–B3 in both tasks and both banks; B4/B5 remain
+unresolved. All sixteen contexts and both candidate banks are retained.
 
-For 192 development states, we rescore the same 300 candidates under each edit.
-If the range of cost changes is smaller than the original winner's lead, the
-winner cannot change. This bound certifies **184/192** learned-edit comparisons;
-the winning candidate actually changes in **1/192**.
+**Why it matters for world models:** a local activation patch can be an incomplete
+version of the input change it is meant to represent. Testing only the edited
+step misses this. This is agreement with a specified model counterfactual,
+not evidence that the counterfactual is physically correct. The tested context
+has two frames; we make no context-length scaling claim.
+[All six layers, all 72 contrasts, and action-range controls](docs/ACTION_COUNTERFACTUAL.md).
 
-![Size of score changes relative to the lead of the best plan, for all four edits on Reach and Reach-Wall.](docs/figures/decision_margin_story.png)
+## Better forecasts, first choices, and replanning
 
-The horizontal axis is the cost-change range divided by the original winning
-margin. Values below one certify an unchanged winner. This connects edit size
-to a specific decision boundary, while leaving later CEM updates unconstrained.
-[Derivation and all four edit arms](docs/MECHANISMS.md).
+### The first choice stays the same in 191 of 192 states
 
-### Adaptive search produces different plans
+We score the **same 300 action sequences** before and after the learned edit.
+The lowest-cost plan stays the same in 191 of 192 states. This is an observed
+choice, not a claim that every candidate keeps the same rank.
 
-In a separate 56-context extension, both learned and random edits change later
-CEM proposals and the returned action prefixes. All fifteen iterations and
-paired prefix endpoints are retained. The six registered learned-versus-random
-intervals include zero: the demonstrated effect is search sensitivity, without
-an established advantage for learned edits. [Search curves](docs/figures/cem_expansion_search.png)
-· [All paired prefixes and inference](docs/CEM_EXPANSION.md).
+A simple bound accounts for most of these stable choices. Compare the best
+plan's original lead with the largest difference the edit makes between any
+two candidates' costs. **If that difference is smaller than the lead, no rival
+can overtake the best plan.** This certifies 184 of the 192 cases; it leaves
+the other eight undecided, of which one actually changes winner.
+
+![All fixed-bank score perturbations relative to the original winning gap. The line at one separates guaranteed stable winners from cases the bound leaves undecided.](docs/figures/decision_margin_story.png)
+
+Each curve shows how many states fall below a given ratio. Left of 1, the
+edit cannot close the winning gap. Right of 1, a changed winner is possible,
+but is not guaranteed. All four tested edits and both tasks are shown.
+
+**For a planning objective, prediction error alone leaves a key question open:**
+does the correction change which future the planner prefers? This fixed-bank
+test answers that question for the initial candidate population.
+[Bound, exact counts, and controls](docs/MECHANISMS.md).
+
+### Later search can still produce a different plan
+
+The first winner does not determine the entire CEM search. CEM refits its next
+action distribution from ten elite plans, then draws new candidates. Changing
+those intermediate selections can alter the later search.
+
+![Proposal distributions diverge across fifteen CEM iterations under learned and random predictor edits.](docs/figures/cem_expansion_search.png)
+
+In a separate 56-state replay, both learned and random edits change the returned
+action prefixes. Their six registered comparison intervals include zero, so the
+learned edit has no established advantage over the random control on these
+search measurements. These are differences in planned action coordinates;
+physical execution is tested below. [All paired results](docs/CEM_EXPANSION.md).
+
+### Even a shared prediction shift can change relative costs
+
+In a 64-context replay, keeping only the correction shared across candidates
+reconstructs the full edit's relative cost changes with scores of **0.983 / 0.998**
+on Reach / Reach-Wall. A common shift moves different starting predictions
+closer to or farther from the same goal. Candidate-specific edit coefficients
+are therefore not required to change relative goal distances.
+
+Random-subspace edits show a similar pattern. The components retain their
+original magnitudes; this tests their contribution to the delivered edit,
+not their efficacy at equal energy. [Component replay](docs/PILOT_MECHANISMS.md).
 
 ## Layer structure and forecast correction
 
@@ -97,29 +142,7 @@ The later **rank-four B3 correction** reduces H6 proprioceptive MSE by **2.36%
 on Reach and 2.19% on Reach-Wall**. This operator is fitted separately from the
 rank-one sweep; the sweep does not establish where to place the rank-four edit.
 
-## Additional geometry and mechanism analyses
-
-<details>
-<summary>Shared corrections, action history, numerical precision, and attention maps</summary>
-
-### Shared corrections can change relative goal costs
-
-In a 64-context replay, the component shared across candidates reconstructs the
-full edit's candidate-centered cost changes with scores of **0.983 / 0.998** on
-Reach / Reach-Wall. A shared activation shift can affect rankings because its
-contribution to squared goal distance depends on each candidate's prediction.
-Random-subspace edits show a similar pattern. Components retain their original
-magnitudes, so this is a decomposition of the delivered edit, not an equal-energy
-comparison of steering directions. [Component replay](docs/PILOT_MECHANISMS.md).
-
-### Consistent action patches must include both context windows
-
-The H3 action appears as the newest action at H3 and as history at H4.
-Patching both appearances across all six blocks reproduces the raw input-action
-counterfactual exactly through H6. A one-time patch diverges when the original
-action returns as history. This 16-context, two-bank experiment distinguishes a
-coherent action substitution from a local condition edit.
-[Timing figure, full layer map, and range controls](docs/ACTION_COUNTERFACTUAL.md).
+## Numerical geometry and attention
 
 ### Local reconstruction depends on numerical precision
 
@@ -147,7 +170,6 @@ structure; identifying a causal circuit would require targeted interventions of
 the kind used in Joseph et al.'s study. [All horizons and uncertainty](docs/PILOT_MECHANISMS.md).
 
 
-</details>
 
 ## Physical execution and behavioral evaluation
 
@@ -156,6 +178,8 @@ and each prefix executes for fifteen elementary actions from an identical reset.
 The learned edit improves same-action forecast error in both tasks. All eight
 physical-distance and encoded-goal-cost intervals include zero under the registered
 correction. [All paired effects and the 3×3 model/plan grid](docs/PLANNED_PREFIX_REPLAY.md).
+
+![Paired forecast-error and physical-outcome changes in the same 56 development states.](docs/figures/planned_prefix_effects.png)
 
 The protected evaluation covers **384 fresh scenarios × eight arms = 3,072 runs**
 on Reach, Reach-Wall, PointMaze, and Wall. All 48 registered simultaneous contrast
@@ -170,10 +194,20 @@ so these diagnostics cannot identify the cause of their outcome changes. Push-T
 and DROID remain development-only; DROID measures recorded-action agreement.
 [Completed experiments and remaining evidence gaps](docs/ANALYSIS_COMPLETION.md).
 
+## What the simulated tasks require
+
+![Reach and Reach-Wall task demonstrations using MetaWorld scripted policies, with the true target highlighted in green. These are not JEPA-WM rollouts.](docs/media/task_demonstration.gif)
+
+**Task illustration using MetaWorld scripted policies, not a JEPA-WM result.**
+The robot moves to the green target; Reach-Wall adds an obstacle. The clip runs
+at simulation speed, with a brief final hold. [HD video](docs/media/task_demonstration_hd.mp4).
+
+Our measured three-arm JEPA comparison retains only the first fifteen actions
+(0.19 seconds of simulated motion). It is useful for checking trajectory replay,
+but too short to show task completion. [Measured prefixes and verification](docs/media/README.md).
+
 ## Benchmark context
 
-<details>
-<summary>Published baselines and post hoc best-arm comparisons</summary>
 
 ### Robot success and published benchmark context
 
@@ -202,12 +236,9 @@ evaluations**, we did not establish a reliable overall success improvement.
 The internal effects above are findings, not a demonstrated cause of that outcome.
 [Paired analysis](docs/RESULTS.md#protected-confirmation).
 
-</details>
 
 ## Final protected results and earlier benchmarks
 
-<details>
-<summary>Full six-task table · published references, development, protected confirmation</summary>
 
 Simulator success (%); **DROID is an action-agreement score**, not robot success.
 Stages are separate populations, not interchangeable baselines. Protected cells
@@ -242,16 +273,21 @@ Development MetaWorld joint/visual/action arms use their concurrent unsteered
 Protected contrasts use **only the protected unsteered row**. No historical rates
 are substituted for fresh baselines. [Provenance](paper/data/benchmark_comparison_sources.json).
 
-</details>
 
 ## What this contributes
 
-The study connects activation geometry to measurable changes in prediction,
-relative goal scores, and adaptive planning. The margin bound identifies when an
-edit cannot change a fixed choice; component, history, and precision controls help
-interpret the edit itself. These are mechanisms within the tested computations,
-with behavioral utility assessed separately.
-[Relation to Physics Emergence Zone, COAST, and Manifold Steering](docs/LITERATURE_MECHANISMS.md).
+The study evaluates a frozen world model at three distinct levels: whether an
+internal edit reproduces an intended input change, whether predictions improve,
+and whether the planner selects actions with better outcomes. The history test,
+score bound, adaptive searches, and physical replays make these questions
+separately testable. The layer and precision analyses examine which internal
+structures those edits use and how reliably we can interpret them.
+
+Sonia Joseph et al.'s [*Interpreting Physics in Video World Models*](https://arxiv.org/html/2602.07050v1)
+provides a reference for the layerwise work. Their **Physics Emergence Zone**
+analysis connects physical variables, distributed subspaces, and interventions
+in video encoders. We study the action-conditioned predictor and the planning
+computations it supports. [Relation to that study, COAST, and Manifold Steering](docs/LITERATURE_MECHANISMS.md).
 
 ## Reproduce and inspect
 

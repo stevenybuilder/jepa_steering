@@ -49,3 +49,26 @@ replay diagnostics rather than expecting pixel hashes to match across renderers.
 [Input records](../../paper/data/qualitative_replay_inputs.json) ·
 [Renderer](../../scripts/render_qualitative_rollouts.py) ·
 [Full physical-prefix analysis](../PLANNED_PREFIX_REPLAY.md)
+
+## Full task illustration in the README
+
+The README now embeds [task_demonstration.gif](task_demonstration.gif), with a
+[1920×720 MP4](task_demonstration_hd.mp4). It shows the MetaWorld scripted Reach
+and Reach-Wall policies with the actual target highlighted in green. **It is a
+task illustration, not a JEPA-WM rollout or evidence for steering efficacy.**
+That distinction appears both in the clip and beside it in the README.
+
+Both tasks use seed 0 and 160 elementary actions without a seed search. Motion
+plays at simulation speed (two seconds), followed by a half-second final hold.
+The clip shows task completion; the short measured JEPA prefixes above remain
+available separately. Full JEPA episode logs preserve action hashes rather than
+numeric actions, so they cannot reconstruct an extended measured rollout.
+
+Reproduce with the same rendering environment:
+
+```bash
+python scripts/render_task_demonstration.py
+```
+
+[Scripted actions and distances](../../paper/data/task_demonstration_records.json) ·
+[Generation receipt](task_demonstration_receipt.json).
