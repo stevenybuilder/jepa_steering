@@ -63,10 +63,15 @@ requested edit doses. [Controlled test](docs/CONTROLLED_GEOMETRY.md) ·
 ### Robot success and published benchmark context
 
 **Unsteered** means the released checkpoint with no activation edit.
-**Intervention** means that same checkpoint with our fixed four-direction edit—the
-arm called *Refined four-direction* in the complete results table.
+**Best observed edit** means the highest success among all **seven activation-edit
+arms**, including randomized comparisons. The winning edit is named in each panel;
+all ties are retained. This is a **post hoc comparison**, not one fixed method.
 
-![Task success: published DINO-WM and JEPA-WM references alongside our Unsteered and Intervention conditions on the same 96 unseen scenarios per task.](docs/figures/benchmark_readable.png)
+![Taskwise best observed activation edits versus Unsteered and published references; winners and ties are named, including the randomized Reach-Wall winner.](docs/figures/benchmark_readable.png)
+
+Every ablation is eligible; Reach-Wall's winner is **randomized visual–action
+coupling: 27.08%**. Error bars show episode standard errors, not uncertainty
+adjusted for choosing the best arm.
 
 These are **fresh, protected evaluation scenarios**, not the earlier development
 set. That is why the unsteered Reach rate is **54.17% (52/96)** here rather than
@@ -75,8 +80,8 @@ evaluation populations; they provide context, not paired controls.
 [Published source](https://arxiv.org/html/2512.24497v4#S5.T2) ·
 [Exact values and error-bar definitions](paper/data/benchmark_comparison_sources.json).
 
-Against concurrent unsteered JEPA-WM, the intervention changes success by
-**0.00 / −8.33 / +2.08 / −1.04 percentage points** on Reach / Reach-Wall /
+Against concurrent unsteered JEPA-WM, these observed maxima differ by
+**0.00 / −2.08 / +2.08 / +2.08 percentage points** on Reach / Reach-Wall /
 PointMaze / Wall. Across the full **384 paired scenarios × eight arms = 3,072
 evaluations**, we did not establish a reliable overall success improvement.
 The internal effects above are findings, not a demonstrated cause of that outcome.
@@ -138,10 +143,12 @@ The detailed reports retain every tested arm, uncertainty estimate and limitatio
   The common component reconstructs the full edit's relative cost change with
   scores **0.983 / 0.998** on Reach / Reach-Wall. Random-subspace edits show the
   same pattern; component energies were not equalized.
-- **Adaptive CEM search:** [all eight pilot contexts](docs/figures/cem_steering_search.png).
-  Identical initial elite sets can lead to different later proposals and returned
-  plans. This small pilot did not execute actions or establish a consistent entropy
-  effect. A separate 56-context extension is in progress, not a completed result.
+- **Adaptive CEM search:** [complete 56-context extension](docs/CEM_EXPANSION.md).
+  Both learned and random edits change later search paths and returned plans.
+  All six registered learned-versus-random intervals include zero; greater plan
+  divergence is not better control. [All paired plans](docs/figures/cem_expansion_prefixes.png)
+  · [search curves](docs/figures/cem_expansion_search.png)
+  · [entropy](docs/figures/cem_expansion_entropy.png). The original eight cases remain separate.
 - **Attention by head and layer:** [64-context attention map](docs/figures/paper_pilot_attention.png).
   Spatial attention distance on fixed zero-action inputs is descriptive, not a causal circuit.
 - **Action-conditioned rankings:** [all-six-layer donor tests](docs/ACTION_CONDITION_SPECIFICITY.md)

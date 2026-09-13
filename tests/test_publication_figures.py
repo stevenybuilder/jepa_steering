@@ -15,19 +15,26 @@ spec.loader.exec_module(module)
 
 
 class PublicationFigureTests(unittest.TestCase):
-    def test_benchmark_labels_preserve_exact_intervention(self):
-        self.assertEqual(module.BENCHMARK_LOCAL_ARMS,
-                         (("native", "Unsteered"), ("fixed_rank4", "Intervention")))
+    def test_benchmark_labels_and_selection_pool(self):
+        self.assertEqual(module.BENCHMARK_LOCAL_LABELS, ("Unsteered", "Best edit"))
+        self.assertEqual(set(module.EDIT_LABELS), set(module.ARMS) - {"native"})
 
     def test_benchmark_uses_fresh_count_based_rates(self):
         source, report = module.load_data()
-        expected_counts = {"reach": (52, 52), "reach-wall": (28, 20),
-                           "pointmaze": (83, 85), "wall": (78, 77)}
+        expected_counts = {"reach": (52, 52), "reach-wall": (28, 26),
+                           "pointmaze": (83, 85), "wall": (78, 80)}
         for task, counts in expected_counts.items():
             self.assertEqual(report["results"][task]["n"], 96)
-            for (arm, _), count in zip(module.BENCHMARK_LOCAL_ARMS, counts):
-                self.assertAlmostEqual(report["results"][task]["success_percent"][arm], count/96*100)
+            self.assertAlmostEqual(report["results"][task]["success_percent"]["native"], counts[0]/96*100)
+            self.assertAlmostEqual(module.best_observed_edit(report, task)["success_percent"], counts[1]/96*100)
         self.assertEqual(source["development_rows"][0]["values"][0], 44.79)
+
+    def test_best_edit_retains_ties_and_randomized_winner(self):
+        _, report = module.load_data()
+        self.assertEqual(module.best_observed_edit(report, "reach")["arms"], ("fixed_rank4", "visual_only"))
+        self.assertEqual(module.best_observed_edit(report, "reach-wall")["arms"], ("matched_random_coupling",))
+        self.assertEqual(module.best_observed_edit(report, "pointmaze")["arms"], ("fixed_rank4",))
+        self.assertEqual(module.best_observed_edit(report, "wall")["arms"], ("coupling_only",))
 
     def test_benchmark_tick_labels_do_not_collide(self):
         module.style()

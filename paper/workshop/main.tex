@@ -177,12 +177,35 @@ We now test the common-shift question directly on all 64 fixed development conte
 
 Let $u$ be the full intervention's cost change, centered across candidates, and $u_k$ the corresponding change for component $k$. We report $R_k=1-\|u-u_k\|_2^2/\|u\|_2^2$, retaining undefined zero-denominator cases and allowing negative values. This is a reconstruction score, not a probability. For learned edits, common-only $R$ is 0.9827 on Reach (marginal 95\% interval $[0.9793,0.9858]$) and 0.9975 on Reach-Wall ($[0.9971,0.9980]$); centered-only values are 0.0218 and 0.0135. Common-field energy fractions are 99.53\% and 99.78\%. Random-subspace common-only scores are similarly high, 0.9795 and 0.9854. These results establish the common component's effect at its natural energy, not superiority over equal-energy centered steering.
 
-\paragraph{An identical initial elite set does not fix the final plan.}
-Before inspecting these development summaries, we fixed a separate eight-context follow-up using the original seeds and native comparator traces. Each learned/random arm runs the actual fifteen-iteration CEM search with exact traced/untraced plan and RNG parity. All sixteen arm--context comparisons preserve the original initial action bank and all ten initial elite members. Nevertheless, returned three-step, 60-coordinate action prefixes differ: mean RMS changes are 0.503/0.247 for learned edits and 0.311/0.112 for random edits on Reach/Reach-Wall. These are normalized model-action coordinates, not physical displacement or success gains; $n=4$ per task.
+\paragraph{Small initial changes can accompany divergent adaptive searches.}
+After an initial eight-case pilot, a separately frozen extension reruns all three arms on the same receiving GPU for 56 new development contexts ($n=28$ per task). Each search uses fifteen CEM iterations, 300 candidates and ten elites; traced/untraced selected-plan and RNG parity pass for all 336 searches. The original eight cases remain separate from primary inference. Every arm starts from identical candidate actions, but initial elite sets need not be identical: mean learned/random overlap with the native top ten is 9.893/9.857 on Reach and 9.964/9.929 on Reach-Wall.
 
-Each later proposal is adapted using its own scores. We therefore compare proposal means, standard deviations, and actual pre-clipping Gaussian entropy, not later candidate IDs as though they denoted the same actions. Small first-bank changes and altered final search are compatible observations. This directly measures a possible route from an internal edit to a changed plan, but does not explain protected successes or regressions; the resulting plans were not executed.
+Later proposals adapt to each arm's scores, so later candidate IDs are not matched actions. Figure~\ref{fig:cem-expansion} retains all fifteen iterations. Returned three-step, 60-coordinate prefixes have mean RMS differences from unsteered of 0.697/0.578 for learned/random edits on Reach and 0.500/0.217 on Reach-Wall. These normalized model-action differences are not physical displacements or success gains. All six prespecified learned-minus-random intervals include zero (Table~\ref{tab:cem-extension}); the positive marginal Reach-Wall prefix contrast does not survive the registered family correction. Search-path changes therefore extend beyond the original eight cases, without establishing greater divergence or a consistent entropy effect for learned edits over calibrated random edits.
 
-This small pilot is not the headline evidence for adaptive search. A separately frozen 56-context extension and matched physical-prefix replay remain in progress and are not counted as findings in this version.
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{\figroot/cem_expansion_search.pdf}
+\caption{\textbf{Adaptive search can diverge despite nearly shared initial elites.} Complete 56-context extension, both edit arms and all fifteen iterations. Shading is one scenario standard error, not a confidence interval. RMS uses all 120 proposal-mean coordinates; the returned prefix uses 60 coordinates. Entropy curves and every paired returned-prefix endpoint are retained in the public CEM report. This is a search measurement, not a physical-quality test.}
+\label{fig:cem-expansion}
+\end{figure}
+
+\begin{table}[t]
+\centering\small
+\caption{\textbf{All six registered adaptive-search contrasts.} Learned minus calibrated random, relative to concurrent unsteered; $n=28$ paired contexts per task. Intervals use 20,000 paired-context bootstrap draws and Bonferroni family six. Proposal and entropy effects average all fifteen iterations.}
+\label{tab:cem-extension}
+\begin{tabular}{@{}llrr@{}}
+\toprule
+Task & Metric & Mean & Simultaneous 95\% interval\\
+\midrule
+Reach & Prefix RMS & 0.1197 & $[-0.1284,\ 0.3487]$\\
+ & Proposal RMS & 0.0403 & $[-0.0717,\ 0.1353]$\\
+ & Entropy (nats) & 0.2631 & $[-0.8152,\ 1.4570]$\\
+Reach-Wall & Prefix RMS & 0.2827 & $[-0.0070,\ 0.5294]$\\
+ & Proposal RMS & 0.0809 & $[-0.0541,\ 0.1929]$\\
+ & Entropy (nats) & 0.3596 & $[-0.6327,\ 1.3388]$\\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \subsection{Action conditions affect rankings and elite membership differently}
 
@@ -257,7 +280,7 @@ The complete protected panel contains 384 fresh scenarios across Reach, Reach-Wa
 \begin{figure}[t]
 \centering
 \includegraphics[width=.9\textwidth]{\figroot/benchmark_readable.pdf}
-\caption{\textbf{Protected behavior and published benchmarks are distinct evidence.} Unsteered denotes the unchanged checkpoint; Intervention denotes the fixed four-direction (rank-four) edit. These paired arms use 96 fresh scenarios per task. Shaded DINO-WM/JEPA-WM recipe values are external context. Published error bars are reported late-epoch SD; local bars are one Bernoulli episode SE, not confidence intervals or training-seed variation. No best arm is selected by task. All eight arms and historical rates remain in Appendix~\ref{app:rates}.}
+\caption{\textbf{Observed maxima are descriptive, not a new confirmed method.} Unsteered is the unchanged checkpoint. Best edit selects the highest observed success among all seven edited arms, including randomized comparators, separately for each task: refined/visual-only tie on Reach, random coupling on Reach-Wall, refined on PointMaze, and equal-budget visual--action coupling on Wall. All local arms use 96 paired fresh scenarios per task. Published DINO-WM/JEPA-WM values are external context. Published bars show reported late-epoch SD; local bars show one Bernoulli episode SE, neither confidence intervals nor adjusted for selecting a maximum. Frozen paired inference and all eight arms remain unchanged; full rates appear in Appendix~\ref{app:rates}.}
 \label{fig:behavior}
 \end{figure}
 

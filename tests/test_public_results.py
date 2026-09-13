@@ -61,8 +61,16 @@ class PublicResultsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = self.copy_inputs(folder)
             path = root/'README.md'
-            path.write_text(path.read_text().replace('0.00 / −8.33 / +2.08 / −1.04', '0.00 / −8.33 / +3.00 / −1.04'))
+            path.write_text(path.read_text().replace('0.00 / −2.08 / +2.08 / +2.08', '0.00 / −2.08 / +3.00 / +2.08'))
             with self.assertRaisesRegex(AssertionError, 'paired delta'):
+                module.check(root)
+
+    def test_best_edit_selection_disclosure_required(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = self.copy_inputs(folder)
+            path = root/'README.md'
+            path.write_text(path.read_text().replace('post hoc', 'fixed-method'))
+            with self.assertRaisesRegex(AssertionError, 'selection disclosure'):
                 module.check(root)
 
     def test_changed_report_bytes_are_rejected(self):

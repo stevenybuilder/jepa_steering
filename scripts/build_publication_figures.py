@@ -1,8 +1,8 @@
 """Readable README figures from complete, provenance-bound measurements.
 
-These are presentation changes, not a new fit, endpoint selection, or replacement
-of the paired inference. Benchmark bars explicitly distinguish published SD from
-our single-checkpoint episode SE. Full arm and task results stay in the table.
+These are presentation changes, not a new fit or replacement of paired inference.
+Benchmark maxima are explicitly post hoc across all seven edited arms. Published
+SD and local episode SE are distinct; neither adjusts for maximum selection.
 """
 from __future__ import annotations
 
@@ -20,12 +20,18 @@ import numpy as np
 import pandas as pd
 
 from build_comparison_figures import load_data, display
+from check_public_results import ARMS, best_observed_edit
 
 ROOT = Path(__file__).resolve().parents[1]
 INK, MUTED, TEAL, AMBER, BLUE = "#24343e", "#63737c", "#247f85", "#bd7836", "#4b72a3"
 TASKS = ("reach", "reach-wall", "pointmaze", "wall")
 LABELS = {"reach": "Reach", "reach-wall": "Reach-Wall", "pointmaze": "PointMaze", "wall": "Wall"}
-BENCHMARK_LOCAL_ARMS = (("native", "Unsteered"), ("fixed_rank4", "Intervention"))
+BENCHMARK_LOCAL_LABELS = ("Unsteered", "Best edit")
+EDIT_LABELS = {
+    "fixed_rank4": "Four-direction", "matched_random_fixed_rank4": "Random subspace",
+    "coupling_only": "Equal-budget visual + action", "matched_random_coupling": "Random visual + action",
+    "joint": "Unscaled joint", "visual_only": "Visual-only", "action_condition_only": "Action-only",
+}
 
 
 def sha(path):
@@ -66,11 +72,11 @@ def episode_se(percent, n):
 
 def benchmark():
     source, report = load_data()
-    fig, axes = plt.subplots(2, 2, figsize=(8.8, 6.8), sharey=True)
-    fig.subplots_adjust(left=.085, right=.975, top=.81, bottom=.18, hspace=.42, wspace=.23)
-    fig.text(.055, .94, "Does steering improve task success?", fontsize=19, weight="bold", color=INK)
-    fig.text(.055, .89, "Our comparison: the same checkpoint, the same 96 unseen scenarios per task", fontsize=11, color=MUTED)
-    names = ["DINO-WM", "JEPA-WM"] + [label for _, label in BENCHMARK_LOCAL_ARMS]
+    fig, axes = plt.subplots(2, 2, figsize=(8.8, 7.3), sharey=True)
+    fig.subplots_adjust(left=.085, right=.975, top=.78, bottom=.18, hspace=.65, wspace=.23)
+    fig.text(.055, .94, "Best observed activation edit by task", fontsize=19, weight="bold", color=INK)
+    fig.text(.055, .89, "Highest success among seven edit arms · same 96 unseen scenarios per task", fontsize=11, color=MUTED)
+    names = ["DINO-WM", "JEPA-WM", *BENCHMARK_LOCAL_LABELS]
     colors = ["#d7ddd9", "#b0bcb6", BLUE, TEAL]
     measures = []
     for ax, task in zip(axes.flat, TASKS):
@@ -80,7 +86,8 @@ def benchmark():
         n = report["results"][task]["n"]
         if n != source["fresh_source"]["n_per_task_arm"]:
             raise ValueError("Benchmark cohort size disagrees with provenance")
-        local = [report["results"][task]["success_percent"][arm] for arm, _ in BENCHMARK_LOCAL_ARMS]
+        selected = best_observed_edit(report, task)
+        local = [report["results"][task]["success_percent"]["native"], selected["success_percent"]]
         local_errors = [episode_se(v, n) for v in local]
         values += local
         errors += local_errors
@@ -90,7 +97,11 @@ def benchmark():
         for i, (v, err) in enumerate(zip(values, errors)):
             ax.text(i, v+err+2.1, display(v), ha="center", fontsize=9.7, color=INK)
         ax.axvline(1.5, color="#bcc9c2", lw=.7, ls=(0, (3, 3)))
-        ax.set_title(LABELS[task], loc="left", fontsize=12.5, weight="bold", color=INK, pad=11)
+        ax.set_title(LABELS[task], loc="left", fontsize=12.5, weight="bold", color=INK, pad=30)
+        selected_label = " / ".join(EDIT_LABELS[arm] for arm in selected["arms"])
+        if len(selected["arms"]) > 1:
+            selected_label += " (tie)"
+        ax.text(0, 1.035, selected_label, transform=ax.transAxes, fontsize=9, color=TEAL, va="bottom")
         ax.text(.5, 109, "Published", ha="center", fontsize=9, color=MUTED)
         ax.text(2.5, 109, "Our evaluation", ha="center", fontsize=9, color=INK)
         ax.set(ylim=(0, 116), xlim=(-.6, 3.6), xticks=np.arange(4), xticklabels=names, yticks=[0, 25, 50, 75, 100])
@@ -99,16 +110,17 @@ def benchmark():
         for tick, color in zip(ax.get_xticklabels()[2:], (BLUE, TEAL)):
             tick.set_color(color)
         measures.append(dict(task=task, values=values, error_bars=errors,
-                             labels=names, local_arm_ids=[arm for arm, _ in BENCHMARK_LOCAL_ARMS], n=n,
+                             labels=names, unsteered_arm="native", selected_arms=selected["arms"], n=n,
                              published="reported late-epoch SD", local="one Bernoulli episode SE, n96"))
     axes[0, 0].set_ylabel("Success (%)")
     axes[1, 0].set_ylabel("Success (%)")
-    fig.text(.055, .105, "Unsteered = no edit. Intervention = our fixed four-direction activation edit.", fontsize=10.5, color=INK)
-    fig.text(.055, .066, "Error bars: published late-epoch SD; our evaluation ±1 episode SE, not confidence intervals.", fontsize=9.5, color=MUTED)
-    fig.text(.055, .030, "Published models are external context, not paired controls. Earlier development results are separate.", fontsize=9.5, color=MUTED)
+    fig.text(.055, .105, "Best edit = post-hoc taskwise maximum; not one fixed method. Winning edits are named above.", fontsize=9.5, color=INK)
+    fig.text(.055, .066, "Error bars: published SD; local ±1 episode SE, not adjusted for selecting the maximum.", fontsize=9.5, color=MUTED)
+    fig.text(.055, .030, "Published models are external context. Full results retain all arms, ties and paired comparisons.", fontsize=9.5, color=MUTED)
     save(fig, "benchmark_readable", dict(source_sha256=sha(ROOT/"paper/data/benchmark_comparison_sources.json"),
          report_sha256=source["fresh_source"]["sha256"], values=measures,
-         scope="Fixed refined arm shown, not taskwise best arm; paired inference remains in final report"))
+         selection_pool=[arm for arm in ARMS if arm != "native"],
+         scope="Post-hoc observed maximum across all seven activation edits, including randomized comparators; every tie retained. Not a confirmed fixed method. Episode SE is not selection-adjusted. Frozen paired inference unchanged."))
 
 
 def load_margins(root=ROOT):
