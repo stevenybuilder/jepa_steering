@@ -8,12 +8,15 @@
     "verified_date": "2026-09-13",
     "scope": "Primary-source Tables 2, 11, and 12, CEM L2 rows. Maze is mapped to PointMaze. RoboCasa is outside this study and not included.",
     "comparison_limit": "Author aggregates use different checkpoints, populations, RNG and numerical settings from local runs. They are external context, not paired controls. Tables 2/11 and final-checkpoint Table 12 use different aggregation conventions.",
-    "uncertainty": "Published parenthesized dispersion values are retained below but NOT plotted as error bars: they are not the paired confidence intervals used for fresh confirmation."
+    "uncertainty": "Published parenthesized dispersion values are retained. The new readable chart plots the Table2/11 DINO/JEPA late-epoch SD exactly as reported, distinct from local episode SE. Table12 final-checkpoint across-seed dispersion remains in the source, not used as a late-epoch bar. Older all-arm figures remain point estimates."
   },
   "author_rows": [
     {"id": "dino_wm", "label": "DINO-WM", "table": "2/11", "values": [44.8, 35.1, 66.0, 81.6, 64.1, 39.4], "published_dispersion": [8.9, 9.4, 4.7, 3.4, 4.6, 2.1]},
     {"id": "jepa_improved", "label": "JEPA-WM improved", "table": "2/11", "values": [58.2, 41.6, 70.2, 83.9, 78.8, 48.2], "published_dispersion": [9.3, 10.0, 2.8, 2.3, 3.9, 1.8]},
     {"id": "jepa_final", "label": "JEPA-WM final checkpoint", "table": "12", "values": [49.0, 29.2, 69.4, 83.3, 80.9, 46.5], "published_dispersion": [9.4, 11.5, 4.0, 3.1, 4.9, 0.4]}
+  ],
+  "additional_author_rows": [
+    {"id": "jepa_cem_l1", "label": "JEPA-WM recipe, CEM-L1", "table": "11", "values": [55.1, 40.8, 63.4, 79.7, 46.7, 47.2], "published_dispersion": [8.5, 9.2, 2.1, 3.1, 3.6, 1.8]}
   ],
   "development_source": {
     "kind": "Historical author-supplied table, corroborated by local results/runbook; not a new raw-record audit",
@@ -42,7 +45,7 @@
     "arms_per_task": 8,
     "scientific_evaluations": 3072,
     "scope": "New protected scenarios, same-physical-GPU paired arms within each scenario. All eight arms are shown in protocol order, without ranking by outcome.",
-    "uncertainty": "Bars are descriptive point estimates, with no invented error bars. All 48 frozen simultaneous 95% paired contrast intervals include zero. See protected_results for paired uncertainty."
+    "uncertainty": "The readable benchmark shows local mean +/-1 Bernoulli episode SE:100*sqrt(p*(1-p)/96), not training-seed variation or a confidence interval. Paired comparisons still use the unchanged full48 simultaneous95 interval family. Older all-arm figures remain point estimates."
   },
   "style_sources": ["User-provided Desktop/baseline.png: small-multiple vertical bars, zero baseline and direct numeric labels", "https://stevenybuilder.github.io/pick-it-up/: restrained ink/green/blue/amber palette, whitespace, light chart rules"],
   "architecture_sources": ["src/offline_study/fixed_response.py:118-171", "src/offline_study/operator_fit.py:53-100,197-252", "https://arxiv.org/html/2512.24497v4#S3"],

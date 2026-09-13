@@ -13,27 +13,38 @@ REPORT_SHA = '8123d71497835fc164f09f5094c430308647a3ee2462c66746baea32633a0b15'
 
 
 def check_headline(root, readme, report):
-    sources = json.loads((root / 'paper/data/benchmark_comparison_sources.json').read_text())
     section = readme.split('### Robot success and published benchmark context')[1].split('## Architecture')[0]
-    rows = [line.split('|')[1:-1] for line in section.splitlines() if re.match(r'^\|[^|]+\|[^|]+\|\s*\d', line)]
-    expected = []
-    for author in sources['author_rows']:
-        expected.append((author['label'], 'Published reference',
-                         [author['values'][sources['task_order'].index(t)] for t in TASKS]))
-    for label, arm in (('Unsteered JEPA-WM', 'native'), ('Refined four-direction edit', 'fixed_rank4')):
-        expected.append((label, 'Our protected evaluation',
-                         [report['results'][t]['success_percent'][arm] for t in TASKS]))
-    assert len(rows) == len(expected), 'Missing headline comparison row'
-    for row, (label, source, values) in zip(rows, expected):
-        assert [cell.strip() for cell in row[:2]] == [label, source], 'Headline source/label mismatch'
-        displayed = [Decimal(str(v)).quantize(Decimal('.01'), rounding=ROUND_HALF_UP) for v in values]
-        assert [Decimal(cell.strip()) for cell in row[2:]] == displayed, 'Headline value mismatch'
     delta_text = section.split('Against concurrent unsteered JEPA-WM')[1].split('percentage points')[0]
     actual = [Decimal(n) for n in re.findall(r'[+−-]?\d+\.\d+', delta_text.replace('−', '-'))]
     deltas = [(Decimal(str(report['results'][t]['success_percent']['fixed_rank4'])) -
                Decimal(str(report['results'][t]['success_percent']['native']))).quantize(
                    Decimal('.01'), rounding=ROUND_HALF_UP) for t in TASKS]
     assert actual == deltas, 'Headline paired delta mismatch'
+
+
+def check_full_table(root, readme, report):
+    sources = json.loads((root / 'paper/data/benchmark_comparison_sources.json').read_text())
+    section = readme.split('## Final protected results and earlier benchmarks')[1].split('## What')[0]
+    rows = [[v.strip() for v in line.split('|')[1:-1]] for line in section.splitlines()
+            if re.match(r'^\| (Published|Development|Protected) \|', line)]
+    author_by_id = {r['id']: r for r in sources['author_rows'] + sources['additional_author_rows']}
+    expected = [('Published', label, author_by_id[key]['values']) for key, label in (
+        ('dino_wm', 'DINO-WM'), ('jepa_improved', 'JEPA-WM recipe, CEM-L2'),
+        ('jepa_cem_l1', 'JEPA-WM recipe, CEM-L1'), ('jepa_final', 'JEPA-WM final, CEM-L2'))]
+    names = ('Unsteered', 'Refined four-direction', 'Calibrated random subspace',
+             'Equal-budget coupling', 'Dose-matched random directions', 'Unscaled joint',
+             'Visual only', 'Action-conditioning only')
+    assert [r['id'] for r in sources['development_rows']] == list(ARMS)
+    expected.extend(('Development', label, row['values']) for label, row in zip(names, sources['development_rows']))
+    expected.extend(('Protected', label, [report['results'][task]['success_percent'][arm] if task in TASKS else None
+                                         for task in sources['task_order']]) for label, arm in zip(names, ARMS))
+    assert len(rows) == len(expected) == 20, 'Missing full comparison row'
+    for actual, (stage, label, values) in zip(rows, expected):
+        assert actual[:2] == [stage, label], 'Table stage/label mismatch'
+        display = ['—' if v is None else str(Decimal(str(v)).quantize(Decimal('.01'), rounding=ROUND_HALF_UP)) for v in values]
+        assert actual[2:] == display, f'Table value mismatch: {stage}/{label}'
+    return {arm: {task: float(rows[12+ai][2+sources['task_order'].index(task)]) for task in TASKS}
+            for ai, arm in enumerate(ARMS)}
 
 
 def check(root=ROOT):
@@ -46,14 +57,9 @@ def check(root=ROOT):
     assert report['analysis']['family_size'] == 48
     assert report['analysis']['bootstrap_draws'] == 20000
     assert report['analysis']['historical_results_pooled'] is False
-    rows = []
     full_readme = (root / 'README.md').read_text()
     check_headline(root, full_readme, report)
-    readme = full_readme.split('## Final protected results')[1].split('## What')[0]
-    for line in readme.splitlines():
-        if re.match(r'^\|[^|]+\|\s*\d', line):
-            rows.append([float(v.strip()) for v in line.split('|')[2:-1]])
-    assert len(rows) == len(ARMS), 'Missing README result row'
+    rows = check_full_table(root, full_readme, report)
     for ti, task in enumerate(TASKS):
         result = report['results'][task]
         assert result['n'] == 96 and set(result['success_percent']) == set(ARMS)
@@ -65,7 +71,7 @@ def check(root=ROOT):
             assert abs(pct - count / 96 * 100) < 1e-9
             # Display exact count-based percentages with conventional half-up rounding.
             display = float((Decimal(count) * 100 / 96).quantize(Decimal('.01'), rounding=ROUND_HALF_UP))
-            assert rows[ai][ti] == display, (task, arm, 'README mismatch')
+            assert rows[arm][task] == display, (task, arm, 'README mismatch')
             if arm != 'native':
                 a = audit[task][arm]
                 assert count - audit[task]['native']['success'] == a['rescue'] - a['regress']
@@ -77,4 +83,4 @@ def check(root=ROOT):
 
 if __name__ == '__main__':
     check()
-    print('PASS: report SHA256, 32 full-panel + 20 headline rates, paired deltas, 48 intervals, and rescue/regression identities')
+    print('PASS: report SHA256, 104 provenance-separated table values, paired deltas, 48 intervals, and rescue/regression identities')

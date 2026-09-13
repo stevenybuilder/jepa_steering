@@ -27,7 +27,7 @@ class PublicResultsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = self.copy_inputs(folder)
             readme = root/'README.md'
-            readme.write_text(readme.read_text().replace('| Unsteered | 54.17', '| Unsteered | 44.79'))
+            readme.write_text(readme.read_text().replace('| Protected | Unsteered | 54.17', '| Protected | Unsteered | 44.79'))
             with self.assertRaises(AssertionError):
                 module.check(root)
 
@@ -35,9 +35,26 @@ class PublicResultsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as folder:
             root = self.copy_inputs(folder)
             path = root/'README.md'
-            path.write_text(path.read_text().replace('| DINO-WM | Published reference | 44.80',
-                                                      '| DINO-WM | Published reference | 99.99'))
-            with self.assertRaisesRegex(AssertionError, 'Headline value'):
+            path.write_text(path.read_text().replace('| Published | DINO-WM | 44.80',
+                                                      '| Published | DINO-WM | 99.99'))
+            with self.assertRaisesRegex(AssertionError, 'Table value'):
+                module.check(root)
+
+    def test_development_value_cannot_fill_protected_blank(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = self.copy_inputs(folder)
+            path = root/'README.md'
+            path.write_text(path.read_text().replace('| Protected | Unsteered | 54.17 | 29.17 | —',
+                                                     '| Protected | Unsteered | 54.17 | 29.17 | 59.38'))
+            with self.assertRaisesRegex(AssertionError, 'Table value'):
+                module.check(root)
+
+    def test_stage_cannot_be_silently_relabelled(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = self.copy_inputs(folder)
+            path = root/'README.md'
+            path.write_text(path.read_text().replace('| Development | Unsteered |', '| Protected | Unsteered |'))
+            with self.assertRaisesRegex(AssertionError, 'stage/label'):
                 module.check(root)
 
     def test_wrong_paired_delta_is_rejected(self):

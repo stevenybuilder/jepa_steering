@@ -1,0 +1,15 @@
+{
+  "status": "fixed_before_complete64_controlled_geometry_aggregation",
+  "cohort": "All64 existing development contexts, IDs0..31 per task, all6blocks and all3conditions",
+  "primary_metric": "Within-context log(cubic center MSE / linear center MSE), defined only when both errors are positive",
+  "contrasts": ["FP32 field BF16 roundtrip minus FP32", "actual BF16 predictor minus FP32", "actual BF16 predictor minus FP32 field BF16 roundtrip"],
+  "zero_policy": "Explicit both_zero, linear_zero, cubic_zero counts. No epsilon. A mean/CI requiring an undefined context is itself undefined; no selective complete-case summary.",
+  "bootstrap_replicates": 20000,
+  "bootstrap_seed": 20260913,
+  "resampling": "32 whole contexts with replacement within task; identical weights across all layers, conditions and contrasts",
+  "intervals": "Marginal paired-scenario percentile95; max absolute standardized bootstrap deviation for simultaneous95 across the six layers of each task/condition-pair contrast. Separate contrast families, not an all-task/global discovery claim.",
+  "practical_match_margin_log_units": 0.1,
+  "equivalence_claimed": false,
+  "audit": "Report/DONE/STARTED and cloud download-SHA bindings before aggregation; all18 metric cells per context. Independently recompute Gram reconstruction, donor RMS, and finite-difference RMS identities. Direct tensor errors and exact byte/RNG parity remain execution-attested; bulk fields were not retained.",
+  "limitations": "Predictor/unroll autocast with shared FP32 encoding, not single-kernel precision or physical-coordinate causality. Symmetric center interpolation is quadratic-compatible. No planner/control outcomes or new protected confirmation. All layers retained, no winner. Marginal intervals are descriptive."
+}

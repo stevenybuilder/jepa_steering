@@ -10,13 +10,6 @@ the plan a robot chooses?**
 [Paper](paper/workshop/main.pdf) · [Mechanisms](docs/MECHANISMS.md) · [Methods & ablations](docs/METHODS.md) · [Results](docs/RESULTS.md) ·
 [Reproduce](docs/REPRODUCING.md) · [GPU execution](docs/COMPUTE.md)
 
-![Same initial choices, different search trajectories: all sixteen learned and calibrated-random traces across eight development contexts.](docs/figures/steering_search_story.png)
-
-The edited and native planners start with the same candidate actions and initial
-elites. The figure follows their proposal means through fifteen CEM iterations:
-every context is visible, not just the average. These diagnostic plans were not
-executed. [Complete traces and uncertainty](docs/PILOT_MECHANISMS.md).
-
 ## Headline results
 
 | Finding | Measured result | Evaluation scope |
@@ -24,7 +17,7 @@ executed. [Complete traces and uncertainty](docs/PILOT_MECHANISMS.md).
 | **Improve recorded-action forecasts** | Refined four-direction edits reduce H6 proprioceptive-embedding MSE by **2.36% on Reach / 2.19% on Reach-Wall** versus native forecasts. | Offline development; these results informed the recipe. |
 | **Map where predictions respond to edits** | Reach H6 error reduction falls from **3.03% at B0 to 0.48% at B5** in the registered rank-one sweep. The early-to-late gradient also appears in Reach-Wall and persists in FP32. | Paired layer interventions; Push-T does not reproduce the MetaWorld benefit. |
 | **Trace a shared latent shift into plan scoring** | Common-only replay reconstructs the full edit's candidate-relative cost change with scores **0.983 / 0.998** on Reach / Reach-Wall. | **64 development contexts**, same 300 actions per context; random-subspace edits show the same pattern and component energies are not equalized. |
-| **Redirect adaptive planning** | All **10/10 initial elites** remain identical, yet iterative CEM returns different action prefixes: mean RMS change **0.503 / 0.247** on Reach / Reach-Wall. | Separate **eight-context** follow-up; random edits also change prefixes. Returned plans were not executed in this diagnostic. |
+| **Test local geometry under controlled arithmetic** | Cubic reconstruction is better in FP32 but worse in BF16 at **all six blocks**, with the same weights and action perturbations. Rounding only the FP32 output does not reproduce the full BF16 effect. | **64 development contexts**, three numerical conditions; activation reconstruction, not robot success. |
 
 The contribution is an instrumented path from **activation geometry → goal costs →
 adaptive search**, alongside a separate behavioral evaluation: **384 fresh paired
@@ -33,43 +26,28 @@ measures whether the interventions improve task success.
 
 ### Robot success and published benchmark context
 
-Task success (%). The two local rows below use **96 fresh scenarios per task**.
-The refined arm was fixed before confirmation; the [complete eight-arm panel](#final-protected-results)
-retains all randomized and pathway controls.
+![Four readable task panels: published DINO-WM and JEPA-WM baselines, concurrent native and the fixed refined intervention.](docs/figures/benchmark_readable.png)
 
-| Model / intervention | Evidence source | Reach | Reach-Wall | PointMaze | Wall |
-|---|---|---:|---:|---:|---:|
-| DINO-WM | Published reference | 44.80 | 35.10 | 81.60 | 64.10 |
-| JEPA-WM improved | Published reference | 58.20 | 41.60 | 83.90 | 78.80 |
-| JEPA-WM final checkpoint | Published reference | 49.00 | 29.20 | 83.30 | 80.90 |
-| Unsteered JEPA-WM | Our protected evaluation | 54.17 | 29.17 | 86.46 | 81.25 |
-| Refined four-direction edit | Our protected evaluation | 54.17 | 20.83 | 88.54 | 80.21 |
-
-The refined arm's absolute rates exceed the published DINO-WM references on Reach,
-PointMaze, and Wall, and fall below on Reach-Wall. The concurrent unsteered model
-already shows the same above/below pattern. Published rows use different
-checkpoints, aggregation, and scenarios; these are **benchmark context**, while
-the paired local comparison measures the added effect of steering.
-[Source values and provenance](paper/data/benchmark_comparison_sources.json).
+Published bars provide **benchmark context**, not a paired measure of our steering.
+Our native and refined bars use the same **96 fresh scenarios per task**.
+Error bars are the authors' reported late-epoch SD for published baselines, and
+**one episode standard error** for our frozen checkpoint—not confidence intervals
+or training-seed replication. [Definitions and source values](paper/data/benchmark_comparison_sources.json).
 
 Against concurrent unsteered JEPA-WM, the refined arm changes success by
 **0.00 / −8.33 / +2.08 / −1.04 percentage points**, respectively.
-The full panel does not establish a reliable success gain: all 48 simultaneous
-95% paired contrast intervals include zero. The measured forecast and planning
-effects above remain distinct findings.
+The complete paired panel does not establish a reliable success gain. The measured
+forecast and planning effects above remain distinct findings.
 [Paired estimates](reports/fresh-confirmation/report.json) ·
 [Evaluation details](docs/RESULTS.md#protected-confirmation).
 
-![Published DINO-WM and JEPA-WM references alongside all eight arms on fresh scenarios, with separate source bands.](docs/figures/headline_benchmark.png)
-
-[Full six-task, three-stage comparison](docs/figures/benchmark_comparison.png)
-separates the published references, earlier development results, and protected
-confirmation. Push-T and DROID were measured in earlier development and were not
-rerun in the four-task protected panel; DROID measures recorded-action agreement.
+[One complete six-task table](#final-protected-results-and-earlier-benchmarks)
+below retains all authors' references, all eight interventions, and both local
+evaluation stages. Push-T and DROID were not rerun in protected confirmation.
 
 ## Architecture and ablation sites
 
-![Frozen encoders, six-block action-conditioned predictor, latent goal scoring and CEM replanning, with three alternative intervention sites.](docs/figures/ablation_architecture.png)
+![Frozen encoding, six-block action-conditioned prediction, goal scoring and iterative CEM, with alternative visual, conditioning and residual edit sites.](docs/figures/architecture_readable.png)
 
 **V** edits the predictor's visual input; **A** edits block B3's action conditioning;
 **R** applies the refined rank-four correction at B3's output. Sites are shown at
@@ -79,7 +57,14 @@ encoders, model weights and CEM objective are unchanged across arms.
 CEM repeats candidate proposal/scoring; simulator observations refresh at replanning.
 [Exact arm definitions](docs/METHODS.md).
 
-![Separate eight-arm ablation matrix: native, refined and calibrated random subspace, equal-budget coupling and randomized directions, and joint/visual/action components.](docs/figures/ablation_table.png)
+| Experiment family | What changes | Comparison |
+|---|---|---|
+| Refined correction | Four-direction **R** edit at B3 output | Response-calibrated random subspace |
+| Equal-budget coupling | **V + A**, each scaled by `1/√2` | Same-dose random directions at both sites |
+| Component ablation | Original-dose **V + A**, **V only**, or **A only** | Concurrent unsteered model; joint vs component effects |
+
+The unsteered arm changes nothing. These alternatives make **eight arms**; R is
+never combined with V or A. [Full dose and fitting definitions](docs/METHODS.md).
 
 ## Layer-by-layer intervention map
 
@@ -101,7 +86,7 @@ the later fixed-response rank-four planner experiment.
 
 ## From edited predictions to candidate choices
 
-![Decision-margin certificates, actual changed choices and normalized cost perturbations on two development tasks.](docs/figures/decision_geometry.png)
+![All four edit families relative to the native winning margin: most scenario-level perturbations lie below the algebraic threshold for changing the winner.](docs/figures/decision_margin_story.png)
 
 For native costs `C` and intervention changes `ΔC`, the selected candidate cannot
 change if **`max(ΔC) − min(ΔC)` is smaller than the native best–runner-up margin**.
@@ -144,7 +129,8 @@ not compare the same actions. No resulting plan was executed in this diagnostic.
 The [complete proposal-divergence and entropy figure](docs/figures/cem_steering_search.png)
 retains the paired intervals. It does not establish a consistent increase or decrease
 in entropy. The clearer observation is divergence of proposal means and returned
-prefixes, shown at the top of this README; their physical quality was not measured.
+prefixes; their physical quality was not measured. A fixed 56-context extension
+is running separately; the eight-context pilot is not treated as its result.
 
 ### Native attention, layer by layer
 
@@ -156,9 +142,33 @@ not causal importance or a discovered physics-emergence zone. Attention uses the
 archived zero-action candidate; the action pathway still enters through AdaLN.
 [All horizons, native proposal entropy, and replay controls](docs/PILOT_MECHANISMS.md).
 
+### Action conditioning: small rank changes reach the elite set
+
+In a separate **16-context, all-six-layer test**, replacing a candidate's action
+condition with another candidate's condition changes goal-cost rankings more than
+an equal-norm isotropic edit at B1 and B4. The excess Spearman loss is only
+**0.007–0.0084**, below the prespecified 0.05 practical flag. Yet at B1, the donor
+edit loses about **one additional member of the native top ten**. Global rank
+agreement and the planner's elite set therefore measure different sensitivities.
+
+This does not identify a unique control zone or better physical actions. The
+400-dimensional condition comes from a 20-dimensional affine action encoder;
+an isotropic control need not stay in its action-reachable subspace. That geometric
+distinction is being tested separately, not assumed away by matching edit norms.
+[Complete findings and layer figure](docs/ACTION_CONDITION_SPECIFICITY.md) ·
+[What each intervention actually tests](docs/INTERVENTION_MECHANISM_AUDIT.md).
+
 ## Local geometry is not the same as a useful correction
 
-![Cubic-versus-linear reconstruction changes across precision conditions on all five tasks; complete paired-bootstrap intervals are retained.](docs/figures/precision_reconstruction_story.png)
+![Controlled precision test: cubic-to-linear reconstruction error at all six blocks for FP32, rounded FP32 outputs and actual BF16 computation.](docs/figures/geometry_control_story.png)
+
+The controlled follow-up holds weights, encoded inputs, raw action perturbations
+and reconstruction coefficients fixed across **64 contexts**. FP32 favors cubic
+reconstruction at every block; BF16 reverses that comparison. Rounding the FP32
+field to BF16 removes much of the advantage, but does **not** quantitatively
+reproduce the actual BF16 computation. The BF16-minus-rounded log-error gap is
+**0.224–0.336** across task/block cells, above the prespecified 0.1 margin throughout.
+[Controlled experiment and full uncertainty](docs/CONTROLLED_GEOMETRY.md).
 
 On all five tasks with the geometry sweep, cubic interpolation reconstructs an
 omitted activation much better than equal-anchor linear interpolation in FP32,
@@ -167,9 +177,10 @@ corresponding H6 forecast advantage is small and mixed; realized-dose deviations
 are retained in the audit. **Reconstruction fidelity
 alone does not identify a useful direction for steering a future prediction.**
 
-The README figure isolates reconstruction for readability. The
+The [earlier five-task precision comparison](docs/figures/precision_reconstruction_story.png)
+and the
 [full forecast comparison—including Push-T's wide interval](docs/figures/pathway_geometry_precision.png)
-remains available; neither the metric nor its uncertainty was changed. The two
+remain available; neither the metric nor its uncertainty was changed. The two
 precision sweeps used precision-specific fitted banks, so this comparison does not
 isolate rounding as the cause. This is a four-anchor local test, not discovery of
 a dense physical manifold.
@@ -199,24 +210,43 @@ The protected joint/visual/action/native factorial measures closed-loop behavior
 component effects and interaction. The separate recorded-input factorial measures
 output nonadditivity; the equal-budget joint arm tests efficacy at a matched budget.
 
-## Final protected results
+## Final protected results and earlier benchmarks
 
 <details>
-<summary>Complete eight-arm panel · 96 fresh scenarios per task</summary>
+<summary>Full six-task table · published references, development, protected confirmation</summary>
 
-Task success (%), **96 scenarios per cell**. Every arm is paired to the concurrent
-native row below, not an older checkpoint evaluation on different scenarios.
+Simulator success (%); **DROID is an action-agreement score**, not robot success.
+Stages are separate populations, not interchangeable baselines. Protected cells
+use 96 scenarios per arm; `—` means not run in that stage.
 
-| Intervention | Reach | Reach-Wall | PointMaze | Wall |
-|---|---:|---:|---:|---:|
-| Unsteered | 54.17 | 29.17 | 86.46 | 81.25 |
-| Refined four-direction | 54.17 | 20.83 | 88.54 | 80.21 |
-| Calibrated random subspace | 44.79 | 21.88 | 86.46 | 80.21 |
-| Equal-budget coupling | 47.92 | 18.75 | 84.38 | 83.33 |
-| Dose-matched random directions | 46.88 | 27.08 | 87.50 | 77.08 |
-| Unscaled joint | 52.08 | 22.92 | 84.38 | 77.08 |
-| Visual only | 54.17 | 22.92 | 81.25 | 80.21 |
-| Action-conditioning only | 47.92 | 17.71 | 81.25 | 78.13 |
+| Stage | Model / intervention | Reach | Reach-Wall | Push-T | PointMaze | Wall | DROID score |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Published | DINO-WM | 44.80 | 35.10 | 66.00 | 81.60 | 64.10 | 39.40 |
+| Published | JEPA-WM recipe, CEM-L2 | 58.20 | 41.60 | 70.20 | 83.90 | 78.80 | 48.20 |
+| Published | JEPA-WM recipe, CEM-L1 | 55.10 | 40.80 | 63.40 | 79.70 | 46.70 | 47.20 |
+| Published | JEPA-WM final, CEM-L2 | 49.00 | 29.20 | 69.40 | 83.30 | 80.90 | 46.50 |
+| Development | Unsteered | 44.79 | 30.21 | 59.38 | 80.21 | 76.04 | 51.10 |
+| Development | Refined four-direction | 51.04 | 31.25 | 59.38 | 85.42 | 78.13 | 51.05 |
+| Development | Calibrated random subspace | 50.00 | 23.96 | 61.46 | 79.17 | 76.04 | 51.00 |
+| Development | Equal-budget coupling | 48.96 | 26.04 | 61.46 | 77.08 | 82.29 | 51.07 |
+| Development | Dose-matched random directions | 60.42 | 28.13 | 60.42 | 84.38 | 77.08 | 51.27 |
+| Development | Unscaled joint | 52.08 | 29.17 | 61.46 | 79.17 | 78.13 | 50.85 |
+| Development | Visual only | 50.00 | 38.54 | 60.42 | 81.25 | 73.96 | 50.83 |
+| Development | Action-conditioning only | 42.71 | 36.46 | 58.33 | 86.46 | 76.04 | 51.11 |
+| Protected | Unsteered | 54.17 | 29.17 | — | 86.46 | 81.25 | — |
+| Protected | Refined four-direction | 54.17 | 20.83 | — | 88.54 | 80.21 | — |
+| Protected | Calibrated random subspace | 44.79 | 21.88 | — | 86.46 | 80.21 | — |
+| Protected | Equal-budget coupling | 47.92 | 18.75 | — | 84.38 | 83.33 | — |
+| Protected | Dose-matched random directions | 46.88 | 27.08 | — | 87.50 | 77.08 | — |
+| Protected | Unscaled joint | 52.08 | 22.92 | — | 84.38 | 77.08 | — |
+| Protected | Visual only | 54.17 | 22.92 | — | 81.25 | 80.21 | — |
+| Protected | Action-conditioning only | 47.92 | 17.71 | — | 81.25 | 78.13 | — |
+
+Published rows use the authors' checkpoints and aggregation, not our paired inputs.
+Development MetaWorld joint/visual/action arms use their concurrent native
+**45.83 / 29.17** in contrasts; the canonical development row remains unchanged.
+Protected contrasts use **only the protected native row**. No historical rates
+are substituted for fresh baselines. [Provenance](paper/data/benchmark_comparison_sources.json).
 
 </details>
 
@@ -278,6 +308,7 @@ python scripts/build_readme_figures.py
 python scripts/build_comparison_figures.py
 python scripts/build_story_figures.py
 python scripts/build_precision_story.py
+python scripts/build_publication_figures.py
 python analysis/mechanism/steering_specificity.py
 python -m analysis.mechanism.decision_geometry
 python -m analysis.mechanism.pathway_geometry --plots-only
