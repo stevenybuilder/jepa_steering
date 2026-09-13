@@ -11,6 +11,8 @@ python scripts/build_readme_figures.py
 python analysis/mechanism/steering_specificity.py
 python -m analysis.mechanism.decision_geometry
 python scripts/build_comparison_figures.py
+python scripts/build_story_figures.py
+python scripts/build_precision_story.py
 python -m analysis.mechanism.pathway_geometry --plots-only
 python -m analysis.mechanism.pilot_summary --plots-only
 python scripts/build_paper_figures.py
@@ -20,6 +22,8 @@ python -m unittest discover -s tests -p 'test_fresh_confirmation.py' -v
 python -m unittest discover -s tests -p 'test_mechanism_energy_schema.py' -v
 python -m unittest discover -s tests -p 'test_pilot_summary.py' -v
 python -m unittest discover -s tests -p 'test_cem_steering_summary.py' -v
+python -m unittest discover -s tests -p 'test_story_figures.py' -v
+python -m unittest discover -s tests -p 'test_precision_story.py' -v
 ```
 
 These check committed aggregates, their hashes and derived figures. They do not

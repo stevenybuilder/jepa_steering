@@ -12,6 +12,30 @@ ARMS = ('native', 'fixed_rank4', 'matched_random_fixed_rank4', 'coupling_only',
 REPORT_SHA = '8123d71497835fc164f09f5094c430308647a3ee2462c66746baea32633a0b15'
 
 
+def check_headline(root, readme, report):
+    sources = json.loads((root / 'paper/data/benchmark_comparison_sources.json').read_text())
+    section = readme.split('### Robot success and published benchmark context')[1].split('## Architecture')[0]
+    rows = [line.split('|')[1:-1] for line in section.splitlines() if re.match(r'^\|[^|]+\|[^|]+\|\s*\d', line)]
+    expected = []
+    for author in sources['author_rows']:
+        expected.append((author['label'], 'Published reference',
+                         [author['values'][sources['task_order'].index(t)] for t in TASKS]))
+    for label, arm in (('Unsteered JEPA-WM', 'native'), ('Refined four-direction edit', 'fixed_rank4')):
+        expected.append((label, 'Our protected evaluation',
+                         [report['results'][t]['success_percent'][arm] for t in TASKS]))
+    assert len(rows) == len(expected), 'Missing headline comparison row'
+    for row, (label, source, values) in zip(rows, expected):
+        assert [cell.strip() for cell in row[:2]] == [label, source], 'Headline source/label mismatch'
+        displayed = [Decimal(str(v)).quantize(Decimal('.01'), rounding=ROUND_HALF_UP) for v in values]
+        assert [Decimal(cell.strip()) for cell in row[2:]] == displayed, 'Headline value mismatch'
+    delta_text = section.split('Against concurrent unsteered JEPA-WM')[1].split('percentage points')[0]
+    actual = [Decimal(n) for n in re.findall(r'[+−-]?\d+\.\d+', delta_text.replace('−', '-'))]
+    deltas = [(Decimal(str(report['results'][t]['success_percent']['fixed_rank4'])) -
+               Decimal(str(report['results'][t]['success_percent']['native']))).quantize(
+                   Decimal('.01'), rounding=ROUND_HALF_UP) for t in TASKS]
+    assert actual == deltas, 'Headline paired delta mismatch'
+
+
 def check(root=ROOT):
     raw = (root / 'reports/fresh-confirmation/report.json').read_bytes()
     assert hashlib.sha256(raw).hexdigest() == REPORT_SHA, 'Final report changed'
@@ -23,7 +47,9 @@ def check(root=ROOT):
     assert report['analysis']['bootstrap_draws'] == 20000
     assert report['analysis']['historical_results_pooled'] is False
     rows = []
-    readme = (root / 'README.md').read_text().split('## Final protected results')[1].split('## What')[0]
+    full_readme = (root / 'README.md').read_text()
+    check_headline(root, full_readme, report)
+    readme = full_readme.split('## Final protected results')[1].split('## What')[0]
     for line in readme.splitlines():
         if re.match(r'^\|[^|]+\|\s*\d', line):
             rows.append([float(v.strip()) for v in line.split('|')[2:-1]])
@@ -51,4 +77,4 @@ def check(root=ROOT):
 
 if __name__ == '__main__':
     check()
-    print('PASS: report SHA256, 32 README rates, 48 intervals, and rescue/regression identities')
+    print('PASS: report SHA256, 32 full-panel + 20 headline rates, paired deltas, 48 intervals, and rescue/regression identities')

@@ -74,6 +74,13 @@ intervals were unchanged. Tests cover both schemas. Raw generated prose with tho
 stale warnings is not presented as the final interpretation.
 
 Fresh candidate costs, elite IDs and numeric selected-action arrays were not saved.
-They cannot be reconstructed from hashes. Candidate-trace and layer-attention code
-has CPU tests but **has not produced a new GPU result**. A forecast-to-decision
-misalignment remains a hypothesis, not a demonstrated failure mechanism.
+They cannot be reconstructed from hashes. Subsequent GPU diagnostics are complete:
+64 development contexts for attention/component replay, plus eight contexts for
+actual steered CEM instrumentation. They show that common activation corrections
+can change relative goal costs and that identical initial elites can precede
+divergent search trajectories. No plans from those diagnostic runs were executed.
+[Completed diagnostic results and provenance](PILOT_MECHANISMS.md).
+
+These are separate, fixed-input development measurements—not retrospective traces
+of the protected outcomes. They do not establish the cause of the net efficacy
+result; forecast-to-decision misalignment remains a candidate explanation.
