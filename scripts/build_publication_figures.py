@@ -149,10 +149,10 @@ def margins():
     frame = load_margins()
     fig, axes = plt.subplots(1, 2, figsize=(7.8, 5.3), sharex=True, sharey=True)
     fig.subplots_adjust(left=.095, right=.97, top=.63, bottom=.25, wspace=.16)
-    fig.text(.055, .94, "Most edits stay below the decision margin", fontsize=18, weight="bold", color=INK)
+    fig.text(.055, .94, "Score changes rarely displace the best plan", fontsize=18, weight="bold", color=INK)
     fig.text(.055, .877, "Below 1: the original winning candidate is guaranteed to stay first.", fontsize=11, color=MUTED)
     arms = ("refined", "random_refined", "coupling", "random_coupling")
-    names = ("Intervention", "Random subspace", "Visual + action", "Random visual + action")
+    names = ("Learned edit", "Random subspace", "Visual + action", "Random visual + action")
     colors = (TEAL, TEAL, AMBER, AMBER)
     styles = ("-", "--", "-", "--")
     lo = 10**np.floor(np.log10(frame.range_to_margin.min()))
@@ -166,14 +166,14 @@ def margins():
         ax.set_title(LABELS[task], loc="left", fontsize=12.5, weight="bold", color=INK, pad=12)
         ax.set_xscale("log")
         ax.set(xlim=(lo, hi), ylim=(0, 102), yticks=[0, 25, 50, 75, 100])
-        ax.set_xlabel("Edit range / unsteered winning margin", fontsize=10.5, labelpad=8)
+        ax.set_xlabel("Score-change range / original winner's lead", fontsize=10.5, labelpad=8)
         clean(ax)
     axes[0].set_ylabel("Cumulative scenarios (%)")
     fig.legend([Line2D([0], [0], color=c, lw=2, ls=s) for c, s in zip(colors, styles)], names,
                loc="upper left", bbox_to_anchor=(.045, .82), ncol=2, frameon=False,
                fontsize=10, columnspacing=1.3, handlelength=1.8)
     refined = frame[frame.arm == "refined"]
-    fig.text(.055, .092, f"Intervention: {int(refined.no_flip_certified.sum())}/192 certified unchanged; {int(refined.changed.sum())}/192 observed winner changes.", fontsize=10.5, weight="bold", color=TEAL)
+    fig.text(.055, .092, f"Learned edit: {int(refined.no_flip_certified.sum())}/192 certified unchanged; {int(refined.changed.sum())}/192 observed winner changes.", fontsize=10.5, weight="bold", color=TEAL)
     fig.text(.055, .04, "96 contexts/task · same 300 actions per comparison · initial population, not an entire CEM search", fontsize=9.5, color=MUTED)
     save(fig, "decision_margin_story", dict(source_sha256=sha(ROOT/"paper/data/decision_geometry_scenarios.csv"),
          scope="Complete empirical cumulative distributions; all arms, all observations; algebraic certificate, no statistical test"))
@@ -191,7 +191,7 @@ def architecture():
         if len(points)>2:
             ax.plot(*zip(*points[:-1]), color=color, lw=1.15, zorder=2)
         ax.annotate("", xy=points[-1], xytext=points[-2], arrowprops=dict(arrowstyle="->", color=color, lw=1.15), zorder=2)
-    ax.text(.1, 5.63, "Steer the prediction. Recompute the plan.", fontsize=18, weight="bold", color=INK)
+    ax.text(.1, 5.63, "How JEPA-WM plans with predicted futures", fontsize=18, weight="bold", color=INK)
     ax.text(.1, 5.22, "Frozen JEPA-WM  ·  alternative intervention sites at imagined step H3", fontsize=10.5, color=MUTED)
     box(.12, 3.97, 2.02, .65, "Image + robot state")
     box(.12, 2.94, 2.02, .65, "Frozen encoders")
@@ -222,11 +222,11 @@ def architecture():
     for x in xs:
         arrow([(x+.245, 2.71), (x+.245, 3.17)], AMBER)
     ax.text(5.20, 2.53, "every block", fontsize=8.5, color=MUTED)
-    box(4.60, .40, 2.30, .72, "CEM: refit to\nelite action plans", color="#eaf4f2", edge=TEAL)
+    box(4.60, .40, 2.30, .72, "CEM: sample around\nthe best ten plans", color="#eaf4f2", edge=TEAL)
     arrow([(8.78, 1.66), (8.78, 1.35), (5.75, 1.35), (5.75, 1.16)])
     arrow([(4.56, .76), (1.13, .76), (1.13, 1.67)])
     ax.text(2.85, .87, "resample + rescore", ha="center", fontsize=9, color=TEAL)
-    box(7.75, .40, 2.05, .72, "Execute prefix\nObserve + replan", size=9.5)
+    box(7.75, .40, 2.05, .72, "Start executing\nObserve + replan", size=9.5)
     arrow([(6.94, .76), (7.71, .76)])
     save(fig, "architecture_readable", dict(scope="Inference schematic, not result. V=visual input only; A=B3 action condition; R=B3 output. Alternative arms; action conditioning reaches all blocks. No model weights updated."))
 

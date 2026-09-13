@@ -18,32 +18,159 @@
 \newcommand{\RMS}{\operatorname{RMS}}
 \newcommand{\Var}{\operatorname{Var}}
 \newcommand{\figroot}{../../docs/figures}
-\title{Steering Latent World Predictions:\\From Internal Geometry to Planner Decisions}
+\title{Steering JEPA World Models:\\Do Better Predictions Lead to Better Plans?}
 \author{Anonymous authors}
 
 \begin{document}
+\raggedbottom
 \maketitle
 
 \begin{abstract}
-How does an activation edit inside a frozen world model reach its planner's decisions? We study this computation in JEPA-WM, separating internal reconstruction, future prediction, goal scoring, and closed-loop behavior. Earlier layer sweeps show a task-dependent early-to-late gradient in forecast correction. A 64-context component-replay experiment finds that candidate-common rank-four corrections reproduce almost all measured candidate-centered goal-cost changes: reconstruction scores are 0.983 on Reach and 0.998 on Reach-Wall. Separately, archived costs certify an unchanged winning candidate in 184 of 192 fixed banks. Global ranking stability need not preserve the elite set: controlled donor-condition substitutions retain high rank agreement while changing top-ten membership. A second 64-context experiment holds weights and action perturbations fixed: FP32 favors cubic activation reconstruction at every block, BF16 reverses the comparison, and rounding only the FP32 output does not reproduce the full effect. A separate protected panel of 3,072 arm evaluations on 384 fresh scenarios changes which scenarios succeed without establishing a net success gain. These measurements locate distinct prediction-to-decision sensitivities; they do not establish a universal physical coordinate system or explain the aggregate protected outcome.
+JEPA world models plan by predicting where candidate actions will lead. We ask whether correcting those predictions through activation steering helps the robot choose better actions. We edit a frozen JEPA-WM predictor and measure forecast error, plan selection, and executed behavior separately. A learned four-direction edit reduces six-step robot-state embedding error by 2.36\% on Reach and 2.19\% on Reach-Wall on recorded development trajectories. Yet it changes the best plan in only one of 192 fixed sets of 300 candidates. A simple score-margin bound certifies that the winner cannot change in 184 of these sets. Iterative search can still return different plans. In a 56-state simulator follow-up, the learned edit improves forecasts for the same actions without establishing better physical endpoints for its selected plans. Finally, eight conditions evaluated on 384 fresh scenarios produce no reliable success gain under the registered simultaneous intervals. These results show why forecast improvement alone is insufficient evidence for better planning. They also provide separate tests of where an edit changes the computation and whether that change helps the robot.
 \end{abstract}
 
 \section{Introduction}
 
-Latent world models select actions by predicting the consequences of candidate plans. In a JEPA world model, an encoder and an action-conditioned dynamics predictor produce a latent future; a planner compares that future with a goal \citep{zhou2024dinowm,terver2025jepawm}. This offers an intervention target: improve the imagined future by editing an internal representation while leaving model weights frozen. The relevant question, however, is not only whether prediction improves. It is whether the changed prediction changes the \emph{relative costs} of candidate actions in a useful way.
+A robot using a world model can compare possible actions before executing them. JEPA-WM predicts their consequences in learned image and robot-state features, then chooses a plan whose predicted future is close to a goal \citep{terver2025jepawm}. This makes the prediction a possible target for intervention: if we correct what the model expects to happen, can it choose a better action?
 
-Activation steering already changes frozen-policy behavior. COAST steers a policy action expert using success/failure-derived conceptors \citep{miao2026coast}. Our edit instead enters a predictor scored by a separate planner. Both are latent steering; the distinction is the computation between the edited state and the executed action. Physical-variable probes in video encoders \citep{joseph2026interpretingphysics} and curved activation interpolation \citep{wurgaft2026manifoldsteering} also motivate geometric questions, but their endpoints do not establish better robotic planning.
+That question has two parts. A forecast can become more accurate for a given action. A planner must also use its forecasts to choose between actions. These objectives are related, but an improvement in one need not improve the other. For example, lowering the predicted costs of every plan by the same amount leaves their ordering unchanged. More generally, score changes can be too small to displace the current best plan.
 
-Our findings are: \textbf{(1)} forecast correction has a task-dependent layer and rank structure; \textbf{(2)} candidate-common corrections change relative goal costs, and adaptive search can diverge despite initial selection stability; and \textbf{(3)} local reconstruction and downstream forecast utility behave differently across numerical conditions. We place these measurements alongside separately frozen behavioral confirmation. We neither pool development and confirmation nor infer a causal chain across experiments that changed operators, inputs, or planner randomness.
+We study this distinction by editing the internal activations of released JEPA-WM checkpoints while keeping their weights and planning objective fixed. We fit small corrections using recorded fitting trajectories, compare them with random edits and component ablations, and measure their effects at three stages: future prediction, plan selection, and execution. The main analysis follows a learned four-direction correction inside the predictor. A separate evaluation compares all eight conditions on new scenarios after the intervention recipe is frozen.
+
+The learned correction improves some forecasts, but we do not establish a success gain. Our contribution is a set of measurements that makes this result more informative. A bound on score changes certifies when a fixed set of plans must retain its winner. Repeated-search tests show that this initial stability can coexist with a changed final plan. Simulator replay then tests the physical consequences of those plans. Additional layer, action-history, and numerical-precision experiments examine how to interpret internal changes. These experiments have different inputs and scopes; together they motivate evaluating steering at each stage, without identifying a single cause of the final success result.
 
 \begin{figure}[t]
 \centering
 \includegraphics[width=\textwidth]{\figroot/architecture_readable.pdf}
-\caption{\textbf{An intervention inside a forecast-to-decision computation.} Inference schematic for the six-block checkpoints studied here. Visual input (V), B3 action conditioning (A), and rank-four B3 output (R) are alternative edit sites at H3 within H6. Actions normally condition every block. CEM refines 300 candidate plans using encoded-goal costs, executes a prefix, and replans. R and V/A are not combined in the protected panel.}
+\caption{\textbf{Steering inside a JEPA world model.} The predictor forecasts the consequences of candidate action sequences. The planner scores their distance to the encoded goal, refits its action distribution, and repeats. It executes the beginning of the chosen plan before observing and replanning. R marks the four-direction predictor edit; V and A mark the alternative visual and action-conditioning edits. All edits occur at imagined step H3 of an H6 forecast. R is never combined with V/A in the eight-condition evaluation.}
 \label{fig:architecture}
 \end{figure}
 
-\section{Model, interventions, and evidence populations}
+\section{Related work}
+
+DINO-WM and JEPA-WM use prediction in learned features for planning \citep{zhou2024dinowm,terver2025jepawm}. JEPA-WM studies which model and training choices support physical planning. We keep the released models fixed and ask what an inference-time activation correction changes.
+
+Activation steering also appears in robot policies. COAST uses success- and failure-derived conceptors in a policy's action expert \citep{miao2026coast}. Our intervention enters a world-model predictor whose output is scored by a separate sampling planner. The supervision and computations differ, so comparing reported gains does not isolate the reason for their difference.
+
+Joseph et al.\ probe physical variables and intervene on motion representations in video models \citep{joseph2026interpretingphysics}. Their layer analyses motivate checking where an internal signal is accessible and what changes when it is edited. Our six-layer action-conditioned predictor is a different object of study, and its attention maps do not identify a physics-emergence zone. Curved activation interpolation \citep{wurgaft2026manifoldsteering} motivates a second control: reconstruction quality should be tested against downstream prediction and numerical precision before receiving a physical interpretation.
+
+\section{Model and experimental setup}
+
+\paragraph{Prediction and planning.}
+Frozen encoders map images and robot state to feature vectors. A six-block predictor takes these features and candidate actions to forecast six imagined steps. In the MetaWorld tasks, the planner minimizes
+\begin{equation}
+ C(a_{1:H})=\MSE(\hat z^v_H,z^v_g)+0.1\,\MSE(\hat z^p_H,z^p_g),
+ \label{eq:main-cost}
+\end{equation}
+where $v$ and $p$ denote visual and robot-state features, and each MSE averages over its feature dimensions. The target is the goal, whereas forecast error compares a prediction with the outcome of those actions.
+
+The Cross-Entropy Method (CEM) starts with 300 action sequences, keeps the ten with lowest predicted cost, and samples a new population around them. MetaWorld uses fifteen such iterations per planning call. The robot executes a three-step prefix, corresponding to fifteen elementary simulator actions, before replanning. Full MetaWorld episodes contain seven planning calls over 100 elementary steps; navigation uses thirty search iterations per call.
+
+\paragraph{Interventions.}
+The main learned edit adds a normalized correction in a four-dimensional subspace to the fourth predictor block's output (B3), at the third imagined step (H3). Its coefficients come from an offline fitted map of the current unedited features. A random-subspace comparison matches rank, edit site, and prescribed dose, with separate response calibration. Both are activation edits; the robot still obtains its actions from the planner.
+
+We also test a learned pair of visual-input and action-conditioning directions. Equal-budget and randomized versions form one comparison. Unscaled joint, visual-only, and action-only edits form a component ablation. Together with unsteered and the two four-direction conditions, these give eight arms. Appendix~\ref{sec:design} gives the equations, fitting details, and dose definitions. No intervention updates the base model weights.
+
+\paragraph{Data and uncertainty.}
+Fitting trajectories determine the operators. Separate recorded development trajectories measure prediction error and inform the recipe. Development diagnostics compare fixed plans, iterative searches, and short physical executions. The protected evaluation uses 96 new scenarios per task on Reach, Reach-Wall, PointMaze, and Wall after freezing the eight-arm recipe. All arms share the same physical GPU within each scenario, with strict FP32 and TF32 disabled. Engineering checks use excluded inputs.
+
+Statistical units are source trajectories for recorded forecasts and starting scenarios for planning and behavior. Candidate plans are not independent replicates. Registered uncertainty uses paired bootstrap resampling and correction across the specified comparisons: six for the search extension, twelve for physical replay, and 48 for protected behavior. Each uses 20,000 draws. Details and source identities are retained in the appendices and accompanying reports. Push-T and DROID appear only in earlier development results; DROID measures recorded-action agreement.
+
+\section{Results}
+
+\subsection{The learned edit improves some forecasts}
+
+On recorded development trajectories, the four-direction edit reduces H6 robot-state embedding MSE by 2.360\% on Reach and 2.192\% on Reach-Wall. These are prediction errors for recorded futures. They do not measure how the robot moves under the edited planner.
+
+An earlier rank-one sweep finds larger H6 forecast corrections at early predictor blocks on both tasks, in FP32 and BF16. Push-T does not show the same pattern. The sweep uses independently fitted rank-one operators; it does not test moving the later four-direction edit to another layer. Appendix~\ref{sec:layers} retains the full layer analysis.
+
+\subsection{The best plan usually stays the same in a fixed candidate set}
+
+We next score identical banks of 300 action sequences in 192 development states, 96 per MetaWorld task. The learned edit changes the winning plan in zero Reach states and one Reach-Wall state.
+
+To assess why a winner can remain stable, let $m$ be the original cost gap between the best and second-best plans. Let $\delta_i$ be the cost change for plan $i$, and let $r=\max_i\delta_i-\min_i\delta_i$ be the range of these changes. If $r<m$, no competitor can overtake the winner: its original disadvantage exceeds any relative improvement the edit can give it. Appendix~\ref{sec:decision} gives the proof and all four edit comparisons.
+
+This condition holds for the learned edit in 184 of 192 states: 94 Reach and 90 Reach-Wall. Failure of the bound does not imply a changed winner. Conversely, preserving the best plan does not preserve all ten elites used by CEM. The bound applies to the saved finite set of candidates, and does not certify the result of later search iterations.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{\figroot/decision_margin_story.pdf}
+\caption{\textbf{Most fixed candidate sets retain their winner.} The horizontal axis divides the range of score changes by the original winner's lead. Values below one certify an unchanged winner. Curves retain all 96 states per task and all four edits; the learned edit changes one winner across both tasks. This comparison holds candidate actions fixed.}
+\label{fig:decision}
+\end{figure}
+
+A separate 64-state replay asks which part of the edit produces the score changes. Keeping only the correction shared across candidates reconstructs the full edit's relative cost changes with scores of 0.983 on Reach and 0.998 on Reach-Wall. Random edits show a similar pattern. A shared activation correction can still change relative costs because squared goal distance depends on each candidate's starting prediction (Equation~\ref{eq:translation}). Components retain their natural magnitudes, so this test does not compare their efficacy at equal energy.
+
+\subsection{Iterative search can return different plans}
+
+CEM changes its next candidate population using the current elite plans. Small score changes can therefore alter later searches even when the first winner remains unchanged. A 56-state extension, with 28 states per task, runs all fifteen iterations for unsteered, learned, and random-subspace conditions.
+
+Both edits change the returned action prefixes. Mean RMS differences from unsteered are 0.697/0.578 for learned/random on Reach and 0.500/0.217 on Reach-Wall, in normalized action coordinates. All six registered learned-minus-random intervals include zero. These measurements establish changed plans, but do not establish an advantage for the learned edit or measure physical displacement. Complete search curves and contrasts appear in Appendix~\ref{sec:replay}.
+
+\subsection{Improved forecasts do not establish better executed prefixes}
+
+We execute each condition's selected prefix from the same simulator reset in all 56 extension states. Each trajectory contains fifteen elementary actions. A repeated unsteered execution checks exact reset and trajectory agreement, giving 224 trajectories. All three models also predict all three selected plans, giving 504 model/plan forecasts.
+
+Holding the unsteered-selected actions fixed, the learned edit reduces weighted forecast MSE by 0.002720 on Reach (simultaneous 95\% interval $[0.002342,0.003061]$) and 0.002268 on Reach-Wall ($[0.001905,0.002607]$). These are absolute error reductions. For executed plans, however, all eight contrasts in physical end-effector distance and actual encoded-goal cost include zero under the registered twelve-comparison correction (Figure~\ref{fig:physical-prefix}).
+
+Thus we can detect better same-action forecasts in this experiment without establishing that the selected actions bring the robot closer to its goal. This tests short executions on development states. It is separate from full-task success. CEM optimizes H6 while this follow-up measures the H3 endpoint, so discrepancies here do not by themselves show exploitation of the optimized objective.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=.87\textwidth]{\figroot/planned_prefix_effects.pdf}
+\caption{\textbf{Forecast accuracy and physical outcome in the same 56 states.} Negative effects favor the edit. The top row holds actions fixed and measures prediction error. The lower rows execute each model's selected actions and measure the resulting distance and goal cost. Dots show paired states, diamonds show means, and bars show the registered family-twelve intervals. Learned forecasts improve in both tasks; all eight physical-outcome intervals cross zero.}
+\label{fig:physical-prefix}
+\end{figure}
+
+\subsection{Protected evaluation does not establish a success gain}
+\label{sec:behavior}
+
+The protected panel evaluates eight arms on 384 fresh scenarios across four tasks, for 3,072 runs. Table~\ref{tab:main-rates} gives every arm. All 48 registered simultaneous intervals include zero, covering comparisons with unsteered, learned versus random edits, and component interactions. This is insufficient evidence for a reliable success gain; it is not an equivalence result.
+
+Steering does change which scenarios succeed. On Reach, unsteered and learned steering each succeed on 52 of 96 scenarios. The edit rescues 21 failures and loses 21 successes. Earlier development rates use different scenarios and planner randomness, and are not substitutes for the concurrent protected baseline.
+
+\begin{table}[t]
+\centering\small
+\caption{Complete protected success rates (\%). Each cell has 96 paired scenarios. All 48 registered simultaneous contrast intervals include zero.}
+\label{tab:main-rates}
+\setlength{\tabcolsep}{4pt}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+Arm & Reach & Reach-Wall & PointMaze & Wall\\
+\midrule
+Native & 54.17 & 29.17 & 86.46 & 81.25\\
+Refined rank-four & 54.17 & 20.83 & 88.54 & 80.21\\
+Calibrated random subspace & 44.79 & 21.88 & 86.46 & 80.21\\
+Equal-budget coupling & 47.92 & 18.75 & 84.38 & 83.33\\
+Dose-matched random directions & 46.88 & 27.08 & 87.50 & 77.08\\
+Unscaled joint & 52.08 & 22.92 & 84.38 & 77.08\\
+Visual only & 54.17 & 22.92 & 81.25 & 80.21\\
+Action conditioning only & 47.92 & 17.71 & 81.25 & 78.13\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\section{Discussion and limitations}
+
+For a JEPA planner, the practical test of a prediction correction is whether it helps select actions with better outcomes. Our results show that forecast error, candidate ordering, search behavior, and physical performance can respond differently to the same intervention family. Checking only the first measurement leaves the planning claim unresolved.
+
+The fixed-bank bound gives a precise explanation for many unchanged initial choices. It does not explain the protected success result: those episodes used different inputs and random seeds, and did not retain numerical candidate costs or elite identities. The physical follow-up measures three selected plans per state, not the true physical ranking of all 300 candidates. We therefore cannot conclude that a particular ranking error caused the lack of a success gain.
+
+The internal diagnostics impose further limits on interpretation. Action-condition edits must replace both appearances of an action to reproduce a coherent alternative history (Appendix~\ref{sec:history}). Cubic-versus-linear reconstruction reverses between FP32 and BF16 under fixed weights and inputs (Appendix~\ref{sec:geometry}). Attention distance is descriptive (Appendix~\ref{app:attention}). These controls test specific properties of this predictor; they do not establish a universal physical representation.
+
+Finally, the study uses one released checkpoint per task, task-specific fitted edits, and 96 protected scenarios per task. It has no independent training-seed replication and leaves small behavioral effects unresolved. Development diagnostics informed the analysis and should not be read as additional protected confirmation. Full source tables retain negative results, random controls, and unavailable historical cells.
+
+\section{Conclusion}
+
+Activation steering improves some JEPA-WM forecasts and changes some plans, but these experiments do not establish better robot success. Evaluating the intermediate decisions makes that result more useful: a forecast correction can leave a fixed choice unchanged, and a changed search can return a plan without a demonstrated physical advantage. World-model steering should be assessed through both prediction and execution.
+
+\clearpage
+\bibliographystyle{plainnat}
+{\small\bibliography{references}}
+\clearpage
+\appendix
+\clearpage
+\section{Intervention details and data populations}
 \label{sec:design}
 
 \paragraph{Frozen predictor and planner.}
@@ -87,7 +214,8 @@ Fit trajectories supply directions, readouts, and calibration. Separate recorded
 
 The archival CPU analyses recount hash-verified records. New GPU diagnostics separately reexecute the frozen predictor on 64 canonical development contexts (IDs 0--31 per MetaWorld task), with an eight-context actual-CEM pilot (IDs 0--3 per task). Controlled arithmetic uses all 64 contexts; action-conditioning specificity uses 16 (IDs 0--7 per task), each with original and freshly seeded candidate banks. Fresh candidates are not fresh scenarios. These diagnostics do not execute physical actions. Offline effects use source lineages as units; candidate costs and behavior use scenarios. Candidates, heads, horizons, and calls are not independent replicates. Follow-up protocols specify their uncertainty families before outcomes; the studies remain development analyses, not replacements for protected confirmation.
 
-\section{Finding 1: forecast correction has layer and rank structure}
+\clearpage
+\section{Layer-by-layer forecast effects}
 \label{sec:layers}
 
 A recount verifies all 576 task/precision/support/modality/horizon cells in the earlier layer grid. In its singleton \emph{rank-one} sweep, H6 proprioceptive-error reduction decreases monotonically from B0 to B5 on both MetaWorld tasks in both numerical conditions (Figure~\ref{fig:layers}). Reach B0/B5 reductions are 3.026\%/0.475\% in BF16 and 3.050\%/0.494\% in FP32; Reach-Wall reductions are 1.526\%/0.298\% and 1.334\%/0.228\%. Original BF16 simultaneous B0-minus-B5 intervals are \([1.769,3.333]\) and \([0.243,2.214]\) percentage points of native MSE.
@@ -103,7 +231,8 @@ The later \emph{rank-four fixed-response} successor is evaluated at B3, not acro
 \label{fig:layers}
 \end{figure}
 
-\section{Finding 2: initial stability does not determine adaptive search}
+\clearpage
+\section{Candidate scores, component replay, and search}
 \label{sec:decision}
 
 \paragraph{An exact sufficient certificate.}
@@ -130,12 +259,7 @@ We analyze all 192 completed development scenarios and four non-native diagnosti
 \]
 is 0.2466\% and 0.2786\%. Coupling certifies 82/96 and 81/96 banks and changes 1/96 and 2/96 winners. Table~\ref{tab:margin} retains both random controls.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{\figroot/decision_margin_story.pdf}
-\caption{\textbf{Cost perturbations can be compared with a selection boundary.} Complete 192-scenario development diagnostic, one shared 300-candidate bank per scenario. The certificate concerns the initial bank's winner, not the full iterative CEM solution, later replanning calls, or protected behavior.}
-\label{fig:decision}
-\end{figure}
+
 
 \begin{table}[t]
 \centering\small
@@ -173,7 +297,7 @@ Archived decision banks and protected episodes differ in inputs and planner RNG.
 \label{sec:replay}
 
 \paragraph{A shared field carries relative-score changes.}
-We now test the common-shift question directly on all 64 fixed development contexts. For each learned or calibrated-random correction, cache its native H3/B3 field and replay the full field, zero field, candidate-common mean, and candidate-centered remainder on the same 300 actions. Cached-full and zero controls reproduce their reference forecasts and scores exactly. Neither component is renormalized, and no operator is refitted.
+We test the shared-correction question on all 64 fixed development contexts. For each learned or calibrated-random correction, cache its native H3/B3 field and replay the full field, zero field, candidate-common mean, and candidate-centered remainder on the same 300 actions. Cached-full and zero controls reproduce their reference forecasts and scores exactly. Neither component is renormalized, and no operator is refitted.
 
 Let $u$ be the full intervention's cost change, centered across candidates, and $u_k$ the corresponding change for component $k$. We report $R_k=1-\|u-u_k\|_2^2/\|u\|_2^2$, retaining undefined zero-denominator cases and allowing negative values. This is a reconstruction score, not a probability. For learned edits, common-only $R$ is 0.9827 on Reach (marginal 95\% interval $[0.9793,0.9858]$) and 0.9975 on Reach-Wall ($[0.9971,0.9980]$); centered-only values are 0.0218 and 0.0135. Common-field energy fractions are 99.53\% and 99.78\%. Random-subspace common-only scores are similarly high, 0.9795 and 0.9854. These results establish the common component's effect at its natural energy, not superiority over equal-energy centered steering.
 
@@ -214,12 +338,7 @@ The separately frozen physical follow-up covers all 56 extension contexts, $n=28
 
 On the same unsteered-selected actions, learned-minus-unsteered weighted forecast MSE is $-0.002720$ on Reach (simultaneous 95\% interval $[-0.003061,-0.002342]$) and $-0.002268$ on Reach-Wall ($[-0.002607,-0.001905]$). These are absolute errors, not percentages. All eight physical end-effector-distance and encoded-goal-cost contrasts for the two edit arms include zero under the prespecified twelve-contrast family correction (Figure~\ref{fig:physical-prefix}). Thus this experiment establishes improved same-action forecasts in both tasks without an established physical-prefix gain. CEM optimized H6, whereas execution and scoring here cover H3; predicted/actual H3 preference disagreement alone does not establish exploitation of the H6 objective. This is development-prefix execution, not full-task success or another protected evaluation.
 
-\begin{figure}[t]
-\centering
-\includegraphics[width=.87\textwidth]{\figroot/planned_prefix_effects.pdf}
-\caption{\textbf{Better forecasts do not establish a better executed prefix.} All 56 development states and twelve registered contrasts. Points retain each paired state; diamonds mark means and bars use the prespecified family-twelve 95\% intervals. Lower is better for each endpoint. Same-prefix forecast comparisons hold the unsteered-selected actions fixed; physical comparisons execute each edited model's selected actions. Neither is full-task success.}
-\label{fig:physical-prefix}
-\end{figure}
+
 
 \begin{figure}[t]
 \centering
@@ -252,11 +371,12 @@ The six-layer contrasts retain a 72-cell simultaneous primary family (two tasks,
 
 Range-random edits disrupt native rankings more than off-range random edits at B1/B4 in both banks, by about 0.0021--0.0025 Spearman units; only fresh-bank B2 adds positive separation. The frozen encoder has rank 20 of 400; isotropic controls place 4.995\% mean energy in its range. Actual norm error is at most $3.41\times10^{-8}$. Input-range membership is not a global activation manifold, and off-range does not mean causally inert. Together, these interventions identify an action-history dependency within this predictor. They neither reproduce the older static steering operators nor establish the cause of protected outcome changes.
 
-\section{Finding 3: reconstruction and forecast utility separate}
+\clearpage
+\section{Numerical precision and activation reconstruction}
 \label{sec:geometry}
 
 \paragraph{A controlled arithmetic comparison.}
-The new 64-context experiment fixes model weights, encoded inputs, the literal first action coordinate, four symmetric perturbations ($\pm0.1,\pm0.05$), and reconstruction coefficients. At every block, it compares strict FP32, actual BF16-autocast computation, and FP32 fields rounded to BF16 then restored to FP32. Each condition reconstructs its own unperturbed center; no fitted bank or dose-normalized correction changes between conditions.
+The 64-context experiment fixes model weights, encoded inputs, the literal first action coordinate, four symmetric perturbations ($\pm0.1,\pm0.05$), and reconstruction coefficients. At every block, it compares strict FP32, actual BF16-autocast computation, and FP32 fields rounded to BF16 then restored to FP32. Each condition reconstructs its own unperturbed center; no fitted bank or dose-normalized correction changes between conditions.
 
 FP32 favors cubic reconstruction at all six blocks: mean log cubic/linear MSE ratios span $-5.40$ to $-7.89$. Output round-tripping moves these ratios near equality ($-0.098$ to $+0.010$), whereas actual BF16 produces $+0.160$ to $+0.306$. The actual-BF16-minus-rounded contrast is $+0.224$ to $+0.336$ across all twelve task/block cells, with six-layer-corrected lower bounds above the prespecified 0.1 log-unit margin. Thus output rounding degrades the apparent reconstruction advantage but does not quantitatively reproduce the actual BF16 result. The experiment isolates numerical-condition sensitivity, not an individual kernel or a physical manifold.
 
@@ -293,44 +413,6 @@ with the endpoint's dimensional averaging. Thus loss interaction can be nonzero 
 Saved H6 output-interaction squared norms, divided by native proprioceptive MSE, are 0.419\%, 0.512\%, and 5.020\% in BF16 for Reach, Reach-Wall, and Push-T. Corresponding FP32 values are \(4.82\times10^{-6}\%\), \(1.07\times10^{-5}\%\), and \(0.00256\%\). These establish precision-conditioned differences in retained scalar diagnostics, not that rounding caused them. Missing horizons remain missing; original tensors are not reconstructed from scalars. Together, these results distinguish local interpolation quality, the delivered activation intervention, and its downstream forecast utility.
 The loss terms can nearly cancel: BF16 Push-T has a \(+2.460\%\) additive cross-term and \(-2.509\%\) nonadditive remainder, yielding only \(-0.049\%\) net H6 loss interaction. Figure~\ref{fig:factorial} retains all seven source conditions, not just this illustrative case.
 
-\section{Protected behavior is an independent endpoint}
-\label{sec:behavior}
-
-The complete protected panel contains 384 fresh scenarios across Reach, Reach-Wall, PointMaze, and Wall and eight arms per scenario: 3,072 scientific evaluations. Input, operator, checkpoint, source, RNG, and analysis identities were frozen before scientific outcomes. All arms of each scenario use the same physical GPU, strict FP32, and TF32 disabled. Excluded engineering inputs validate native repeats, zero-dose identity, hook/reference agreement, and dose before science.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=.9\textwidth]{\figroot/benchmark_readable.pdf}
-\caption{\textbf{Observed maxima are descriptive, not a new confirmed method.} Unsteered is the unchanged checkpoint. Best edit selects the highest observed success among all seven edited arms, including randomized comparators, separately for each task: refined/visual-only tie on Reach, random coupling on Reach-Wall, refined on PointMaze, and equal-budget visual--action coupling on Wall. All local arms use 96 paired fresh scenarios per task. Published DINO-WM/JEPA-WM values are external context. Published bars show reported late-epoch SD; local bars show one Bernoulli episode SE, neither confidence intervals nor adjusted for selecting a maximum. Frozen paired inference and all eight arms remain unchanged; full rates appear in Appendix~\ref{app:rates}.}
-\label{fig:behavior}
-\end{figure}
-
-The frozen family contains 48 paired contrasts: seven non-native arms versus native, two learned-versus-random comparisons, and three unscaled factorial contrasts per task. All 48 Bonferroni-simultaneous 95\% percentile intervals, from 20,000 paired-scenario bootstrap draws, include zero. The panel therefore does not establish a reliable gain under its registered analysis; neither does it establish equivalence or an exactly zero effect. One released checkpoint per task and 96 paired scenarios do not provide independent-training-seed replication or precise detection of small effects.
-
-The edits nonetheless change which scenarios succeed. On fresh Reach, native and refined both succeed in 52/96 scenarios, with 21 native failures rescued and 21 native successes lost. Fresh native rates are 54.17\%, 29.17\%, 86.46\%, and 81.25\% in task order. The old six-task native row is a different measurement. Both cohort and planner RNG changed; baseline differences cannot be attributed solely to overfitting, hardware, or new initial states.
-
-\section{Implications and limits}
-
-An internal edit should be measured at the intervention site, at its downstream forecast target, and at the planner's relative scoring geometry. A real cost change can be too small to cross a particular selection boundary. Conversely, low coefficient variation across candidates does not make a shared edit irrelevant to ranking. These are testable distinctions, not evidence for a universal physical coordinate system.
-
-\paragraph{Relation to latent steering.}
-COAST uses outcome-labelled conceptors in a policy action expert \citep{miao2026coast}; our recorded-forecast fit precedes a separate sampling planner. This motivates an objective-mismatch hypothesis but does not explain the different reported gains. The conceptor is also a full matrix: low effective spectral rank does not make its displacement identical to a rank-four edit. Physical-variable steering in video representations evaluates probe readouts and plausibility, not robot success \citep{joseph2026interpretingphysics}. Manifold steering's curved-versus-straight interpolation and vision readout likewise differ from closed-loop control \citep{wurgaft2026manifoldsteering}.
-
-\paragraph{Prospective questions.}
-Model-native coordinates may expose useful variables, as suitable reference frames do for Othello representations \citep{nanda2023emergentlinear}. Establishing them here requires held-out physical labels and a predicted causal consequence, not semantic names for PCA axes. Our completed fixed-bank replay isolates shared and centered edits, the CEM extension measures adaptive-plan divergence, and the physical follow-up tests three selected prefixes per context. Physical ranking of the full candidate population remains unmeasured; the selected-prefix test does not recover that ranking.
-
-Adaptation is distinct again. AdaJEPA uses observed transitions to update a world model and replan \citep{wang2026adajepa}. Test-time-training layers and fast weights change state or memory machinery \citep{sun2024tttlayers,ba2016fastweights}, not merely fixed steering coefficients. Fair comparisons must match observation access and optimization/latency budgets, and separate real observed history from candidate-specific imagined histories.
-
-A smaller end-to-end latent model such as LeWorldModel could reduce the cost of a future controlled mechanism study \citep{maes2026lewm}. Memory Maze would be an optional, distinct testbed only if partial observability and long-term memory become the target variables \citep{pasukonis2022memorymaze}. Neither is a tested extension here, and current PointMaze results are not Memory Maze evidence.
-
-\paragraph{Scope.}
-Early rank-one sweeps, later rank-four fitting, archival candidate banks, and protected rollouts have complementary but noninterchangeable scopes. Controlled replay and arithmetic interventions identify effects within their fixed inputs; they do not identify a universal physics layer or the cause of protected outcome changes. Their contribution is to make intermediate relationships measurable: where a predictor can be changed, whether local reconstruction improves a future target, and whether its costs cross a decision boundary.
-
-\bibliographystyle{plainnat}
-{\small\bibliography{references}}
-
-\clearpage
-\appendix
 \section{Native attention and diagnostic evidence}
 \label{app:attention}
 
@@ -344,7 +426,7 @@ The observer measures post-RoPE attention-weighted spatial and temporal distance
 
 Native and steered CEM traces retain actual proposal standard deviations. Differential entropy is $\sum_{j=1}^{120}(\log\sigma_j+\tfrac12\log(2\pi e))$, before clipping and insertion of the mean candidate. It depends on action units and may be negative. It is neither attention entropy nor calibrated uncertainty about physical outcomes.
 
-All files emitted by these completed diagnostics are cloud-verified. Original H6 tensors were retained for the first eight contexts; later contexts retain compact diagnostics after on-GPU parity checks, under the fixed retention policy. Preservation does not recover tensors that were never saved. The eight actual-CEM follow-up records are fully preserved. An engineering-only amendment changed an incorrect fifteen-callback guard to thirty: each iteration forecasts both the 300-candidate population and its updated mean. Failed attempts remain excluded, with unchanged seeds and scientific arms.
+All files emitted by these completed diagnostics are cloud-verified. Full H6 tensors were retained for the first eight contexts; later contexts retain compact diagnostics after on-GPU parity checks, under the fixed retention policy. Preservation does not recover tensors that were never saved. The eight actual-CEM follow-up records are fully preserved. An engineering-only amendment changed an incorrect fifteen-callback guard to thirty: each iteration forecasts both the 300-candidate population and its updated mean. Failed attempts remain excluded, with unchanged seeds and scientific arms.
 
 \section{Action-conditioning specificity}
 \label{app:condition}
@@ -360,28 +442,10 @@ The subsequent action-counterfactual experiment retains all 72 primary contrasts
 Zero-capture passes reproduce H1--H6 forecasts and costs exactly; interventions leave the earlier condition time unchanged. All 115,200 delivered norms pass. The 448 total forecasts include 32 engineering passes and do not create 448 independent observations. An import-only receiving amendment initializes the native planner dependency before the RNG boundary; the final guard still requires unchanged global RNG throughout all scientific forecasts. The failed attempt remains archived. The public source-bound receipt exports all 1,152 case metric rows and 144 contrast rows.
 
 \clearpage
-\section{Protected rates and historical context}
+\section{Historical evaluation and published context}
 \label{app:rates}
 
-\begin{table}[H]
-\centering\small
-\caption{Complete protected success rates (\%). Each cell has 96 paired scenarios, rounded from the frozen report.}
-\setlength{\tabcolsep}{4pt}
-\begin{tabular}{@{}lrrrr@{}}
-\toprule
-Arm & Reach & Reach-Wall & PointMaze & Wall\\
-\midrule
-Native & 54.17 & 29.17 & 86.46 & 81.25\\
-Refined rank-four & 54.17 & 20.83 & 88.54 & 80.21\\
-Calibrated random subspace & 44.79 & 21.88 & 86.46 & 80.21\\
-Equal-budget coupling & 47.92 & 18.75 & 84.38 & 83.33\\
-Dose-matched random directions & 46.88 & 27.08 & 87.50 & 77.08\\
-Unscaled joint & 52.08 & 22.92 & 84.38 & 77.08\\
-Visual only & 54.17 & 22.92 & 81.25 & 80.21\\
-Action conditioning only & 47.92 & 17.71 & 81.25 & 78.13\\
-\bottomrule
-\end{tabular}
-\end{table}
+
 
 \begin{table}[H]
 \centering\small
@@ -464,7 +528,7 @@ The decision reanalysis is \texttt{paper/data/decision\_geometry.json}, its per-
 Layer measurements are in \texttt{paper/data/layer\_mechanism\_grid.csv}. The pathway recount is \texttt{paper/data/pathway\_geometry.json}, with lineage, summary, and cross-precision exports. Curated baseline provenance and figure captions are in \texttt{benchmark\_comparison\_sources.json} and \texttt{benchmark\_figure\_provenance.json} under \texttt{paper/data}. Protected rates are never recovered from pixels or historical denominators.
 
 \paragraph{Execution and scaling.}
-The frozen PyTorch inference workloads used independent whole-scenario GPU replicas, with 300 candidates batched inside each forward call. All eight arms of a scenario stayed on the same physical device. Pinned cloud staging and asynchronous hash-verified preservation overlapped independent execution; they did not alter scientific inputs. Strict FP32 and TF32-off settings were retained. We applied the workload-first scaling principles of the Ultra-Scale Playbook and \emph{How To Scale Your Model} \citep{huggingfaceultrascale,austin2025gpus}: distinguish memory capacity, compute, communication, and serial orchestration, then parallelize independent work. Training-oriented gradient sharding and model parallelism were unnecessary because the model fits per device and evaluation has no backward pass. No JAX rewrite, FlashAttention replacement, or measured kernel-level speedup is claimed. Any future compiler, precision, or parallelism change must pass receiving and replay parity checks before scientific comparison.
+The frozen PyTorch inference workloads used independent whole-scenario GPU replicas, with 300 candidates batched inside each forward call. All eight arms of a scenario stayed on the same physical device. Pinned cloud staging and asynchronous hash-verified preservation overlapped independent execution; they did not alter scientific inputs. Strict FP32 and TF32-off settings were retained. Evaluation uses independent whole-scenario replicas; the model fits on each device and requires no backward pass. Changes to precision, kernels, or parallelism require replay parity checks before scientific comparison.
 
 The code and aggregate package is maintained at \url{https://github.com/stevenybuilder/jepa_steering}, currently a private repository. This does not claim that all raw archives are public. New replay or adaptation work requires separately specified inputs, parity checks, and an evidence label. Unfinished experiments are not counted as results here.
 \end{document}

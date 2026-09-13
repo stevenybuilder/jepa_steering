@@ -1,12 +1,14 @@
 # Workshop manuscript
 
-**Steering Latent World Predictions: From Internal Geometry to Planner Decisions**
+**Steering JEPA World Models: Do Better Predictions Lead to Better Plans?**
 
-Mechanism-focused preprint updated September 13, 2026. The official NeurIPS 2026 style is retained in preprint mode with an anonymous author line. No affiliation, workshop acceptance, or final page count is asserted.
+Question-led preprint rewritten September 13, 2026. The official NeurIPS 2026 style is retained in preprint mode with an anonymous author line. No affiliation, workshop acceptance, or final page count is asserted.
+
+[Writing principles, reference papers, and tool review](../../docs/SCIENTIFIC_WRITING.md).
 
 ## Scope and evidence
 
-The manuscript separates the earlier rank-one layer sweep, later fixed-response rank-four operator, historical fixed-bank decision diagnostic, local pathway/geometry experiments, 64-context attention/component replay, controlled 64-context arithmetic comparison, 16-context action-conditioning specificity and action counterfactuals, eight-context actual-CEM pilot, 56-context CEM extension, physical-prefix follow-up, and protected closed-loop confirmation. All these analyses are complete. It does not infer an end-to-end causal mechanism across those populations. The physical follow-up executes fifteen elementary actions from each selected plan on development inputs; it is not another full-task or protected success experiment.
+The main text follows forecast accuracy, fixed candidate choice, iterative search, physical execution, and protected success. Full intervention definitions and secondary controls are retained in the appendices. The manuscript separates the earlier rank-one layer sweep, later fixed-response rank-four operator, historical fixed-bank decision diagnostic, local pathway/geometry experiments, 64-context attention/component replay, controlled 64-context arithmetic comparison, 16-context action-conditioning specificity and action counterfactuals, eight-context actual-CEM pilot, 56-context CEM extension, physical-prefix follow-up, and protected closed-loop confirmation. All these analyses are complete. It does not infer an end-to-end causal mechanism across those populations. The physical follow-up executes fifteen elementary actions from each selected plan on development inputs; it is not another full-task or protected success experiment.
 
 | Evidence | Authoritative source | Scope |
 |---|---|---|
@@ -27,13 +29,13 @@ The manuscript separates the earlier rank-one layer sweep, later fixed-response 
 
 Protected report SHA256: `8123d71497835fc164f09f5094c430308647a3ee2462c66746baea32633a0b15`.
 
-The code/aggregate package is at `https://github.com/stevenybuilder/jepa_steering`, currently private. The manuscript does not claim that raw archives are publicly released. LeWorldModel, Memory Maze, and adaptation are future testbeds or hypotheses, not completed extensions. The systems appendix describes actual whole-scenario PyTorch replicas and cloud preservation, without claiming FSDP or a JAX rewrite.
+The code/aggregate package is at `https://github.com/stevenybuilder/jepa_steering`, currently private. The manuscript does not claim that raw archives are publicly released. The reproducibility appendix describes whole-scenario PyTorch replicas and cloud preservation.
 
 The planner objective in the analyzed MetaWorld configuration is visual goal MSE + 0.1 × proprioceptive goal MSE. Full MetaWorld episodes have seven planning calls, not 33. Archived first-bank margins cannot explain protected outcome flips because cohort and planner RNG differ and protected numeric candidate costs were not saved. DROID remains 64 recorded-plan endpoints, not physical robot success.
 
 ## Figures and build
 
-All current figures are referenced from `../../docs/figures`, not the old workshop `figures/` directory. The updated architecture, benchmark, decision-margin and controlled-geometry figures share the readable README designs. Ablations use a compact text table. The small CEM pilot remains in prose rather than the headline. Historical workshop PDFs remain on disk but are not included.
+All current figures are referenced from `../../docs/figures`, not the old workshop `figures/` directory. The main text uses the architecture, candidate-margin, and physical-outcome figures, followed by the complete eight-arm protected table. Secondary layer, search, action-history, attention, and geometry figures appear with their full controls in the appendices. The post hoc best-arm benchmark remains README context, rather than a main-paper success claim. Historical workshop PDFs remain on disk but are not included.
 
 From the repository root, regenerate the architecture/table and benchmark figures with:
 

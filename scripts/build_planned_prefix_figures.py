@@ -10,7 +10,7 @@ from build_publication_figures import ROOT, INK, MUTED, TEAL, AMBER, BLUE, clean
 
 TASKS = ('reach', 'reach-wall')
 ARMS = ('native', 'fixed_rank4', 'matched_random_fixed_rank4')
-NAMES = ('Unsteered', 'Intervention (rank-four)', 'Calibrated random')
+NAMES = ('Unsteered', 'Learned edit', 'Calibrated random')
 COLORS = (BLUE, TEAL, AMBER)
 METRICS = ('terminal_ee_distance', 'actual_weighted_goal_cost', 'same_native_prefix_forecast_weighted_mse')
 PROTOCOL_SHA = '8d80f98a557c79b6dedad27bb3ef63c2ede4979150ba8373c893da8882a232b3'
@@ -81,7 +81,7 @@ def forecast_figure(frame,meta):
                 ax.scatter(points.actual_goal_cost_weighted,points.predicted_goal_cost_weighted,
                     s=18,alpha=.62,color=color,label=label+' plan',edgecolors='none')
             ax.set_xlim(0,maximum*1.04); ax.set_ylim(0,maximum*1.04); clean(ax)
-            model_label = ('Unsteered','Intervention','Random')[row]
+            model_label = ('Unsteered','Learned','Random')[row]
             ax.set_title(('Reach' if task=='reach' else 'Reach-Wall')+' / '+model_label+' model',loc='left',fontsize=10.5)
             if col==0:ax.set_ylabel('Predicted H3 goal cost')
             if row==2:ax.set_xlabel('Actual encoded H3 goal cost')
@@ -95,12 +95,13 @@ def forecast_figure(frame,meta):
 def effects_figure(primary,summary,meta):
     fig, axes = plt.subplots(3,2,figsize=(7.8,8.2),sharey='row')
     fig.subplots_adjust(left=.145,right=.98,top=.84,bottom=.135,hspace=.36,wspace=.20)
-    fig.text(.055,.955,'Do changed plans improve their first physical prefix?',fontsize=16,weight='bold',color=INK)
-    fig.text(.055,.908,'Every paired state; diamonds and intervals report the registered aggregate.',fontsize=10.5,color=MUTED)
-    labels = ('Terminal end-effector distance\nEdited − unsteered plan',
-              'Actual encoded goal cost\nEdited − unsteered plan',
-              'Same unsteered-prefix forecast MSE\nEdited − unsteered model')
-    for row,metric in enumerate(METRICS):
+    fig.text(.055,.955,'Better forecasts; no established physical gain',fontsize=16,weight='bold',color=INK)
+    fig.text(.055,.908,'Same actions for prediction tests; each model’s chosen actions for execution.',fontsize=10.5,color=MUTED)
+    display_metrics = (METRICS[2], METRICS[0], METRICS[1])
+    labels = ('Forecast error, same actions\nChange in weighted MSE',
+              'Robot hand distance to goal\nChange after 15 actions',
+              'Actual encoded goal cost\nChange after 15 actions')
+    for row,metric in enumerate(display_metrics):
         for col,task in enumerate(TASKS):
             ax = axes[row,col]; ax.axhline(0,color=MUTED,lw=.8,zorder=0)
             for i,(arm,color) in enumerate(zip(ARMS[1:],COLORS[1:])):
@@ -111,11 +112,11 @@ def effects_figure(primary,summary,meta):
                 ax.plot(i+.23,s['mean'],'D',color=INK,ms=4.5)
                 ax.vlines(i+.23,s.bonferroni_95_low,s.bonferroni_95_high,color=INK,lw=1.3)
                 ax.hlines([s.bonferroni_95_low,s.bonferroni_95_high],i+.18,i+.28,color=INK,lw=1)
-            ax.set(xticks=[0,1],xticklabels=['Intervention','Random'],xlim=(-.3,1.43)); clean(ax)
+            ax.set(xticks=[0,1],xticklabels=['Learned edit','Random edit'],xlim=(-.3,1.43)); clean(ax)
             ax.set_title('Reach' if task=='reach' else 'Reach-Wall',loc='left',fontsize=12)
             if col==0:ax.set_ylabel(labels[row],fontsize=10.5)
-    fig.text(.055,.066,'n=28 paired states/task. Intervals: registered simultaneous family12, 95%.',fontsize=10.5,color=INK)
-    fig.text(.055,.028,'Lower is better for each endpoint; not full-task success or protected confirmation.',fontsize=10.5,color=MUTED)
+    fig.text(.055,.066,'28 paired states per task. Bars: simultaneous 95% intervals across 12 comparisons.',fontsize=10.5,color=INK)
+    fig.text(.055,.028,'Negative values favor the edit. Short executions on development states.',fontsize=10.5,color=MUTED)
     save(fig,'planned_prefix_effects',meta|dict(primary_cells=12,uncertainty='paired-context family12 Bonferroni95 intervals'))
 
 
