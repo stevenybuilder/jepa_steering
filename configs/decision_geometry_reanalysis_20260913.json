@@ -1,0 +1,25 @@
+{
+  "status": "exploratory_archival_reanalysis_fixed_before_computation",
+  "question": "Do intervention-induced changes in candidate costs exceed the native decision margins?",
+  "population": "All 192 completed canonical development scenarios in the September 10 common-candidate decision diagnostic; not protected confirmation",
+  "tasks": ["reach", "reach-wall"],
+  "arms": ["native", "refined", "random_refined", "coupling", "random_coupling"],
+  "candidates_per_scenario": 300,
+  "archive_sha256": "24ca62301773bbd2166f3af4c3790d4015c86b86a23a34b2b57d6cacdfb7809c",
+  "original_protocol_sha256": "ca0061a6861a9f0ddb2694d9277cffff142909db69eb8b75a6316ab85bb328dd",
+  "metrics": [
+    "Native winning index and second-best cost margin",
+    "Mean and centered RMS of intervention-minus-native candidate costs",
+    "Centered cost-change energy fraction (cost space, not activation coefficient space)",
+    "Largest centered pairwise cost perturbation divided by native runner-up margin",
+    "Sufficient no-flip certificate: perturbation range strictly below native runner-up margin",
+    "Exact per-candidate margin crossings relative to the native winner",
+    "Top-10 elite overlap and Spearman rank agreement",
+    "Descriptive score softmax entropy with temperature fixed to the native within-scenario population score standard deviation, shared across arms"
+  ],
+  "entropy_boundary": "This temperature-dependent cost-distribution diagnostic is not the entropy of the CEM sampling Gaussian or physical uncertainty.",
+  "analysis_unit": "Scenario; candidate rows are not independent replicates",
+  "uncertainty": "Descriptive paired scenario bootstrap, 20000 resamples, seed 2026091321, marginal 95% intervals; no new confirmatory significance claims",
+  "exclusions": "Only engineering records; fail on missing scientific records, hash failures, invalid scores or unregistered arms. No exclusion by outcome.",
+  "interpretation": "The common bank is the initial 300 candidates, not a full iterative CEM rollout. This analysis localizes cost/ranking changes but cannot establish the cause of protected behavioral outcomes."
+}

@@ -1,0 +1,1030 @@
+{
+  "status": "complete_exploratory_development_reanalysis",
+  "scenarios": 192,
+  "paired_arm_comparisons": 768,
+  "candidate_scores_per_arm": 300,
+  "plan": {
+    "status": "exploratory_archival_reanalysis_fixed_before_computation",
+    "question": "Do intervention-induced changes in candidate costs exceed the native decision margins?",
+    "population": "All 192 completed canonical development scenarios in the September 10 common-candidate decision diagnostic; not protected confirmation",
+    "tasks": [
+      "reach",
+      "reach-wall"
+    ],
+    "arms": [
+      "native",
+      "refined",
+      "random_refined",
+      "coupling",
+      "random_coupling"
+    ],
+    "candidates_per_scenario": 300,
+    "archive_sha256": "24ca62301773bbd2166f3af4c3790d4015c86b86a23a34b2b57d6cacdfb7809c",
+    "original_protocol_sha256": "ca0061a6861a9f0ddb2694d9277cffff142909db69eb8b75a6316ab85bb328dd",
+    "metrics": [
+      "Native winning index and second-best cost margin",
+      "Mean and centered RMS of intervention-minus-native candidate costs",
+      "Centered cost-change energy fraction (cost space, not activation coefficient space)",
+      "Largest centered pairwise cost perturbation divided by native runner-up margin",
+      "Sufficient no-flip certificate: perturbation range strictly below native runner-up margin",
+      "Exact per-candidate margin crossings relative to the native winner",
+      "Top-10 elite overlap and Spearman rank agreement",
+      "Descriptive score softmax entropy with temperature fixed to the native within-scenario population score standard deviation, shared across arms"
+    ],
+    "entropy_boundary": "This temperature-dependent cost-distribution diagnostic is not the entropy of the CEM sampling Gaussian or physical uncertainty.",
+    "analysis_unit": "Scenario; candidate rows are not independent replicates",
+    "uncertainty": "Descriptive paired scenario bootstrap, 20000 resamples, seed 2026091321, marginal 95% intervals; no new confirmatory significance claims",
+    "exclusions": "Only engineering records; fail on missing scientific records, hash failures, invalid scores or unregistered arms. No exclusion by outcome.",
+    "interpretation": "The common bank is the initial 300 candidates, not a full iterative CEM rollout. This analysis localizes cost/ranking changes but cannot establish the cause of protected behavioral outcomes."
+  },
+  "plan_sha256": "e5feb471f172e4368b3e1bb107df159abed1a1eb032439f31f413170a0bd354c",
+  "analysis_source_sha256": "5ecea19271655430e4df96b8d2be178f535a51e8970bc9dc54036c311bd922f7",
+  "record_sha256": {
+    "reach/episode-000/record.json": "ecda9855f9aaec341461948f54fd2dc59e33016acf28920d67046626f6e5ea81",
+    "reach/episode-001/record.json": "667440e6dab38a80aa53c204e54f7573e8d7e9df40e0b6d827811969e67b044b",
+    "reach/episode-002/record.json": "eb45d63442a63ba10722087fd161a4b2dbee726bd095bf3f2ca55131ef72e958",
+    "reach/episode-003/record.json": "a1a3a0f8a73bc76ad844bb19e9f6e4e759632afec61aa61fa930010756158cc2",
+    "reach/episode-004/record.json": "57c7826d1477eafc5dddd1f16ec85841ebb470c7ad15d2e08fdf722845f856b1",
+    "reach/episode-005/record.json": "e10716469c4bf1ed3583d662b3687288b94d10faee1092f7595a6c3b18769e06",
+    "reach/episode-006/record.json": "995a75f25bdae9b7048b43dc38f1cfbcd2e0c771d608293a507627062681e50a",
+    "reach/episode-007/record.json": "0c265dbd3ed1527bb7d75cbae11fe4f2528b3d942df371c7232d3ad410191670",
+    "reach/episode-008/record.json": "e405707d4a42e80709d3a7aab54682527e61f338ad5921b74c0b17add48453c8",
+    "reach/episode-009/record.json": "efb2180028058402fe85b928fdbf2cae9034053aadd60f83b2922a96807b5750",
+    "reach/episode-010/record.json": "19fe78316396bea09bce3327218105e76b2a364c6921153c0c1e0a04d898fb3a",
+    "reach/episode-011/record.json": "cd108a4bbbacf9072f8901075c19046488f8e236846355dae5a555bcf32ad785",
+    "reach/episode-012/record.json": "6dd78fa3d516b10782a780e4c7b5c0a50065ba6f51824a0488b294252ed5c388",
+    "reach/episode-013/record.json": "972544588e7a07ff645214ef990b1976b5b7282007b399dc802d36d981543423",
+    "reach/episode-014/record.json": "5977a451c4fcb8e5c28a23c650e1efc0225c37fd0ffbd8fd8967b15b807a8c33",
+    "reach/episode-015/record.json": "47a0f2727db2d3588b2823805ca80cd883dfd70e49fba487076504cd3bb75fa1",
+    "reach/episode-016/record.json": "f8cc7b1f255369aab9149a4753a40bc2e0f86cf78f6220635b0a5506c437d673",
+    "reach/episode-017/record.json": "6e1dbd6560e89a8340a5427f7e1ff8f011b45740e0add8c5d217156d6f8aa600",
+    "reach/episode-018/record.json": "3ffc1dffe3bfb14f443168f6be488591f822b5f6e6f8b2be342714ef780ed41f",
+    "reach/episode-019/record.json": "7befeab37d7ef8a5b3ca1acaab5ad9f967ec8e5995167b9aa1bf80864155322a",
+    "reach/episode-020/record.json": "876ac375c5983a117f5dc9cd6628d682143be3636cc8f35d9d465e463a8876c2",
+    "reach/episode-021/record.json": "cb94c9a5a0538c6f777ec54ff55c0479bc3cb05c8fb4c6b957c84b20fae33893",
+    "reach/episode-022/record.json": "248a4b09b65210963e67a72a155f6b49e0ce1a64cc3d89570633028555a7743e",
+    "reach/episode-023/record.json": "f8c4f85719992e3eeb71ebe22fed4a3548b5e5ad5013a7e9cea562251dae8e4a",
+    "reach/episode-024/record.json": "6a195e3a0a8cb2d2d738bafb30f0994db3990ab9c71eece2c0dd3c1eda7d1c96",
+    "reach/episode-025/record.json": "6cf1a0ac98b6e3af6773cbbddc2ae98b203e2c797e0478cfa61808e41e77c7f1",
+    "reach/episode-026/record.json": "fdd321956d12e29e4ef1f410831486b42025979871a3f1b958e7f6d63f6109d4",
+    "reach/episode-027/record.json": "2fc5806e65083cacc2a34e0cac9d51c45a738a33110d844e61474593bcd40489",
+    "reach/episode-028/record.json": "bb6dd8290a5c7c41bb43b8cf93af29553b9ff248b1eae0b5ffd9cafd7c27ec0a",
+    "reach/episode-029/record.json": "bcd94ec0f1226a746970cb86c72d5cd6992c9901db6df35070136f4ab119af1f",
+    "reach/episode-030/record.json": "fd6302eded5b9e76297152e966e91c40823977b32aa5f895271b8ed742468366",
+    "reach/episode-031/record.json": "a166aad4c96ef12062655494f85b0b5a17fd8e75643129cf9ad1d2f0a125ca3a",
+    "reach/episode-032/record.json": "7f51ce14d91e8e066ba643883623df4d2b61147ead3d65d4aacc31b2be39659c",
+    "reach/episode-033/record.json": "ed3ba7563788eab129d5007886a8335a52287f1642df43aab391cc1ae51cbfc3",
+    "reach/episode-034/record.json": "fb59ff8800202aa5fe0843cb03ac6fbe4e4356b6bb7417f7dfa8d9c98603fda0",
+    "reach/episode-035/record.json": "04e70506dbd483033cc778eff9d782daa37379fcbf0248355b5e20c0d7101663",
+    "reach/episode-036/record.json": "c374f465ebf04ff8a0abe5b27effe65fdde540b844da6ec57355bd485700a7f9",
+    "reach/episode-037/record.json": "83ba506d05ab28c622a45857e2e82a8353867181d824e3d43f13ba428b5db380",
+    "reach/episode-038/record.json": "f37fc752a3ee8815f8637c7a6ca2a9602e5422a431d87ff54e2e8e46e391c3ef",
+    "reach/episode-039/record.json": "d7af3ee9a077d61737a9a6a5eddfa3948fed142ee438460e530349a7606414b8",
+    "reach/episode-040/record.json": "049c52b7c495afda9f8f74d2aee64677230c6e54f651e174d39db4921be5a0a2",
+    "reach/episode-041/record.json": "b0940521cea7575c04a4ae1dc482120497b2876923ec57791a2243389cbdf887",
+    "reach/episode-042/record.json": "4675bf8b99ee9a09e4f4b6df4abadbcd768bed4c84c206c815ada7b77420cfe1",
+    "reach/episode-043/record.json": "7194bc4d3a26de9dabf6c7f41bd191b666bebcb6ca8d13c8a5867ea35128125d",
+    "reach/episode-044/record.json": "1ff74f8892230c48f45196861f63822f333e8aae9f51dbc6748ab2362efc9fac",
+    "reach/episode-045/record.json": "d9c9e6b674263738a44050d32d03a628148b21f5b3891e46978ec7a581eac55f",
+    "reach/episode-046/record.json": "a457c3efbf62ff399a80471f15b62a10463f9a2e63d2bc8789a4268fbeafcb13",
+    "reach/episode-047/record.json": "3b853d767e5e71fb1cdb7f42d01679a728c20b96e0a7defa50fa50ef5266aba8",
+    "reach/episode-048/record.json": "f64f2b21f7609ed4cbeeb650ee9292770fcd7f2b08ca7b0bef658a971af079f8",
+    "reach/episode-049/record.json": "de6a3d1d8de00cc768f824e7caa154bd514c159648fbc9f22c6451a3fdb6d19f",
+    "reach/episode-050/record.json": "b299f748602664c4031116610ba91c4cdab3ccb0ced7b65f7f898a98c764f4f2",
+    "reach/episode-051/record.json": "3bd5affb356dcaa15a742e7d674edd4e07ebb0c2191f662c85d3adfc9a6090c5",
+    "reach/episode-052/record.json": "1d61d7d19a3d3bd66799f5884185bc6908121634b790bee421cb1451a97e5469",
+    "reach/episode-053/record.json": "d51d0ef9087468a2e0e8debead7b12a362947bdd893ee5f1822862b6586c4de7",
+    "reach/episode-054/record.json": "2013dfe39514e21baf330b76b46d35c0f46d2bd2ed09036bd4e178aefe76fd7e",
+    "reach/episode-055/record.json": "3bf12e9b110e06ed8e4e88975feda015d355646f5c47c22d19fe7d98ccaf9649",
+    "reach/episode-056/record.json": "4cf0ef7a19cab432f4e238d5b130d083b29d29a859ed765530a5fe98bb4b43b0",
+    "reach/episode-057/record.json": "4844342c46c9d6dfa7725fff1e556df296345d5a7a6d96b92f608bd7de95c6d4",
+    "reach/episode-058/record.json": "8b17e28375cd9d232940e36a58eb38d6806a80523c9a28b70d356368c5df8770",
+    "reach/episode-059/record.json": "1a0ffbc5387ba11a59bc02064b31a9da9ee1caf53eb3188d632592558c9398ca",
+    "reach/episode-060/record.json": "e8eb5db821c76b7f685091d3f698a0f98ed8dd8cfe2750e5067b7ef5ea5afb2b",
+    "reach/episode-061/record.json": "87ce2d14ddb260234979368dbda47349e3b1290e28ecd8a5cc01e41d427a2b22",
+    "reach/episode-062/record.json": "f3a3b189aa278af81e5a494bad4b05115d3ff95d3b076d3b76fba95e12621abb",
+    "reach/episode-063/record.json": "d08a52a47601a178813a5432603e87ff129ef80a6247d400a4c89f3ea7326ca2",
+    "reach/episode-064/record.json": "a9a4d4ef6f96a4e5eee0943a6cc4363277e0523ee31078c85cfaf50a50faf586",
+    "reach/episode-065/record.json": "9cd93f6a4aeca5a178b39378277f7d3f61eb4c080eb8c7c4a522db73085ee005",
+    "reach/episode-066/record.json": "404a402ce6a5bc1387582f83ce2974de0201393d9f90c47eecef7d4a7d508d05",
+    "reach/episode-067/record.json": "5576f4b249d5bc8ad13385665177640abe4b7d9960f4cad9725793a05ae99201",
+    "reach/episode-068/record.json": "94e6078ca0a5d76a903a47e67560d2f2d3d011a1003f8749fab561b1348dd7d5",
+    "reach/episode-069/record.json": "96aaeb137e163cfb9ba6bbce4eeb5bc86539eee2d3f4fcb8db37b970c71f10eb",
+    "reach/episode-070/record.json": "978b15f617ead20ff3b853762f86fc3b0cf90f452c17194d1e0d240e037643ab",
+    "reach/episode-071/record.json": "e679e7750683d4f2fea6d92bf0a222e7b530a99a14dde403ce1a95d3a0ac226c",
+    "reach/episode-072/record.json": "ba5ef17ac3dd1169ab32af2b84692fc69801a7d8d4062d4ccde99ff1490332e1",
+    "reach/episode-073/record.json": "f94c81e7e2cf8e117d4ad873ae10c5a03e972ffc5dcf76ee5b95d75ce1d0043d",
+    "reach/episode-074/record.json": "c22182ff1026f2c0aa05c3a3e4db20899b1b39899834f155106497dd26377395",
+    "reach/episode-075/record.json": "da37aae395e951e8cdb1393f349f807abf4845517a9c76d5ca8367c2b7c28a2f",
+    "reach/episode-076/record.json": "537e9523812fc83878ad024082a18db7206be3b11fc7fbe31bf66f0d69a61f3b",
+    "reach/episode-077/record.json": "36d76030447dca24224e1b7df9d35815ba1ba1bb86cac55808cdfcae7845eb77",
+    "reach/episode-078/record.json": "e5b1a3a8407258532d623b183dcc6a1be0242ba567a539db16e3b9e6abf99963",
+    "reach/episode-079/record.json": "dc1a9e0809feada6a09d154043b14023257200391d41d8109b69dd524dffc0c8",
+    "reach/episode-080/record.json": "79a0424ba89d1d798ec73201a74cbeb7b7e1b764acb9a40fac3c2d558414af5e",
+    "reach/episode-081/record.json": "e73889d2f28841510f81fb3e4e512efbf3f64a40e26900f755047581ff240cb3",
+    "reach/episode-082/record.json": "2db11a99f627a479e4217eb3c9d15a818bfa4e920242b070faaf17848350e250",
+    "reach/episode-083/record.json": "8286d437537b7348f192c983dbc3b4f04afae03070a7fb1d5c7d6679f9541902",
+    "reach/episode-084/record.json": "a13681a5870d7cf8e83afac81858cb943e7c8dd6eae1e80fc81bbe1a1ccfff3f",
+    "reach/episode-085/record.json": "c1638ef724dda4a2b1523ee25de4c8d5fa7ae53e4d1f7169a3449c7fea46139e",
+    "reach/episode-086/record.json": "95f558340eff364b4bc510c2fba7b035e6e61cd4da6f45d95220057dbc28b135",
+    "reach/episode-087/record.json": "005f559fda14a646aab88dda06099daa0d2b93cb194c618a36c6c5791e284552",
+    "reach/episode-088/record.json": "848f1fa4f8b5c1f4902dce3c7d25e816cc8b6d4b1435f3f89e40ea58299c9e55",
+    "reach/episode-089/record.json": "d99bf19d434ec3ba6151d1b0f833c1fe1635d87ce5b13dc3faf57d2006e5c557",
+    "reach/episode-090/record.json": "5a7fa525b8b9c8c2af85eb4aa94238be8f6281fb7f095472f465fafa6039e78a",
+    "reach/episode-091/record.json": "f39b9017bb9cba8c39bfe2dfcb3ca3f8142fb13072d7f97c1d799b5fd2d0ad44",
+    "reach/episode-092/record.json": "03aacfb08890b3e50ed77497638013bf46bcb1df2d02413c2e754b1886bc67d8",
+    "reach/episode-093/record.json": "810a799a03060a279968cd403d8fca362dece6decc3cbcfd2f759ba0e8755063",
+    "reach/episode-094/record.json": "391236d411a7534d2ca5a56ec06b4107a4e7f9931d98b738fb18b6002f659f5a",
+    "reach/episode-095/record.json": "77791e73b66358ee3c6ecdd6dda09007f30d138f2dd781c05c905d2dce460b7e",
+    "reach-wall/episode-000/record.json": "1c45dae8fda6ecfce6398dcec9922d045c1fcab654561430c6e53a30889e51aa",
+    "reach-wall/episode-001/record.json": "c097e5ac06003f5799b5e1bf6a806633f4915b2b8053bac978a671b29d6e7e4e",
+    "reach-wall/episode-002/record.json": "ad2629de21e5eb563c134d61c7114bbc33849510f23e084b96b7adbcaeb7a6ba",
+    "reach-wall/episode-003/record.json": "fc0cc657ea7208a175aa7ee35d3627292453a5304368454f6f77e3d8fb65c084",
+    "reach-wall/episode-004/record.json": "41334399025a3a94edafef415678ad41513e050eeedf4196ebca7b5ddd1f3e96",
+    "reach-wall/episode-005/record.json": "2042f44819a2133d0ca58da1c7591173d16713ae15529dbb598b19c0aa1bc65f",
+    "reach-wall/episode-006/record.json": "fb4dc5a59b23cf51099f4ff3e1c03ceedc2bc00a42ac1c373d288330bb5765a6",
+    "reach-wall/episode-007/record.json": "3c9346262d7d7ff3d64483cbf9a6d558d9f5677994196699a8ebd3c146be8198",
+    "reach-wall/episode-008/record.json": "0b953ebf207b29b624d4d2c4f3db89f0b782d9c9c260d0457344c37c872b5f56",
+    "reach-wall/episode-009/record.json": "a69ca534d6aa8f53c4861d81667b6d54612ab3c9096d3ad65cfd18f663751478",
+    "reach-wall/episode-010/record.json": "2de94cd027d360cb6785ab8308c0b6ca44ee7e50cc8b4ae40efbbcd7bec06dd5",
+    "reach-wall/episode-011/record.json": "ccb7dadf7ac067d39ed51b636722aa237a4ef486a560af5cf450d4f6feef7891",
+    "reach-wall/episode-012/record.json": "82855d29eedcd81cbbde6d3198f20f4d1d2803bf8f1c4de41643b4183717dc98",
+    "reach-wall/episode-013/record.json": "4abbad79b58f3692d3688195aad98c21af9597acfb12b71e747d010a382cb76a",
+    "reach-wall/episode-014/record.json": "28579bd8faa007d13e800459cc86a585d5b8728c86a722d74de6970af80689d2",
+    "reach-wall/episode-015/record.json": "7bb56a8e4d6529a3cafe3253653f1a34f609f51d7bce7f5eeace73917dbe1d3e",
+    "reach-wall/episode-016/record.json": "e049d5e676cebeaaeaa59539af78889aa45988f18946d2b51747e4693b880e42",
+    "reach-wall/episode-017/record.json": "216fe18da8a9c20e2af955c0b27e8975dad65a2afdf4838fe339af0266e10bee",
+    "reach-wall/episode-018/record.json": "ea7da1e758cdb79132c9fa1512955e4ec10f14286bb988b4ca0b122e3c9507fb",
+    "reach-wall/episode-019/record.json": "a64b431b0ef2e406ca03d8b4659a49df773ccf6fef113a8a9ddada9c338945e6",
+    "reach-wall/episode-020/record.json": "5076d43c2d7dc327a942eb76cb0d14b048bf626744b4f3652d1e1be7b413896e",
+    "reach-wall/episode-021/record.json": "3e93dd2bbcffabae5e671f64c230b43d4810808ab0f0b3ea688b36fb50eb9fe5",
+    "reach-wall/episode-022/record.json": "821f50d2962c25bb8dd7ccd557cec15c6690f6940d81f23bd43a703d5d899207",
+    "reach-wall/episode-023/record.json": "58652c0a0a2d784ab757fead17902283c9e2a4ad15a48b61ad34b809c7d84c2c",
+    "reach-wall/episode-024/record.json": "55264060f7b6a91dc852854be0d85e00598ae212ac7dd78097f3093726e4f064",
+    "reach-wall/episode-025/record.json": "c7ccd82f6f1b2d5493b45ffb97725d6ebf5f83e22604e3635b1a1da94f73e3e5",
+    "reach-wall/episode-026/record.json": "f4ba50a286da7560606997617927780d9dc101ef3b2ac07748f6e7cc1d88d45c",
+    "reach-wall/episode-027/record.json": "a69202558cb7d3a27d93b79d2bed9f277e4eb43cad63843739f854fbb418e55b",
+    "reach-wall/episode-028/record.json": "dfacdf524516552f5a9a333ffc9d9ef55b357966173ac022b0795812f8266082",
+    "reach-wall/episode-029/record.json": "51c8dbfba828339c73e5bde84f41d877bdadd2c778f9ef71b8fd5253f2e00656",
+    "reach-wall/episode-030/record.json": "d2a920d442b7a4e25f6e5c611c93ed2e9da1c082c973ae6930276760e9c2ab1d",
+    "reach-wall/episode-031/record.json": "92bb94f1b8c506c16787544e6b34169c93a5b8d3f60eb867d0c1d77f16134640",
+    "reach-wall/episode-032/record.json": "c1e9eddb8fd6b274eb18bf9402b306ee72a2b17abd8656967b7980ad8759e47b",
+    "reach-wall/episode-033/record.json": "c82a5826ac4436ccd182f221121bdada76214733c8724c89a377abf677f3966d",
+    "reach-wall/episode-034/record.json": "5cab5602deb39430ceebf0a825f8c02b2c042358a02da51e844ec8de1c52ffc7",
+    "reach-wall/episode-035/record.json": "d3ef6f03cd65f8930723092ed3918ed95ab0360c2154e22226fda5f129cffe99",
+    "reach-wall/episode-036/record.json": "596bfb60f91a646a7421969dc4cfd2cf07494440593ec6ef84e25d0b5353105b",
+    "reach-wall/episode-037/record.json": "e9231bdc0b06c347a30d2374e146c1435dc78a78ab39ae5211bcd85fef581b77",
+    "reach-wall/episode-038/record.json": "425009d3043d594ea0e63c1be4c7ca50ad2a8b5fc9a7d4a595edb2eb825d5654",
+    "reach-wall/episode-039/record.json": "a204304557fe27b244df1deb7fc3de79561b0abed57479ec197b3e877669e0a7",
+    "reach-wall/episode-040/record.json": "72bf1bde67e88215c686f47c3f5d45c4e621e7bb826363c9b4d76ff0c2636195",
+    "reach-wall/episode-041/record.json": "fd2046c6643998852c897b64d351d9f3e6fe65f4ab562cd68edef7bce0e3b2d8",
+    "reach-wall/episode-042/record.json": "72883a0a6a6284bf59825888cd7d94601592353ca0ee5ca53addbe83ba95eb78",
+    "reach-wall/episode-043/record.json": "3f49e62f2e0e2186333064732eef9be8e1ae46838d5a1bf63b4870a900ba3d54",
+    "reach-wall/episode-044/record.json": "1ba37e4b2905a38c56d82c8b4342f1d36de978612b761a1ae686b6fd1b1bce33",
+    "reach-wall/episode-045/record.json": "f4b7e285a47d5eedc2c1dc9920c05cb6675f329e0e5a36d93c54c718ce776c3e",
+    "reach-wall/episode-046/record.json": "ea0ea4534834a5ab674fbb7782fa52fa1214bda2d4aadd875dc3e10a2ab9fac3",
+    "reach-wall/episode-047/record.json": "aa92280dabbe44f256c809d27d8dc33be8f45f92305d2aee39cdcc1792497fda",
+    "reach-wall/episode-048/record.json": "367bc874ce5617f9d87cec932d611e0812f9436c67f87b9386218b9b54f2995c",
+    "reach-wall/episode-049/record.json": "ac90eeec6b20e258e9383fb926b1cd18b502f2e1e3b8c8b8c74b13c945c4838c",
+    "reach-wall/episode-050/record.json": "99b41a702c2cc1f5e5c8a667826140c5bfa4004c58bdb0a047b6cf93cc05c2a5",
+    "reach-wall/episode-051/record.json": "4d9ea5f425a5b85db90c0988e952e66dde4a36ba58b69f7b6d06aa59b9355e2a",
+    "reach-wall/episode-052/record.json": "ce6546ef7b66bcf2aa941737d696e4243e99f6ed9d23f261341368b42b7cf8f3",
+    "reach-wall/episode-053/record.json": "15ceb859a318af3aa9f20c3b75c85dd43ec516c655676cf7b5ffa404963df967",
+    "reach-wall/episode-054/record.json": "5d70a9a55aa9d50997de742faebb57b86514a5973b8ad4155f3a53b9b5ad8b4d",
+    "reach-wall/episode-055/record.json": "d0dffe1158185b50bd43a8955a5c76bcdd4873a467b599ba5a07d9bf38012732",
+    "reach-wall/episode-056/record.json": "c8dd76b3c68391254826f1ae9430051ec5ecde54857b337a88f2466d0632f2cf",
+    "reach-wall/episode-057/record.json": "0f2d22f2a517ad5b0df3fa0bb250ce13f697827bdbbfd5ea461c4cca3473c9d2",
+    "reach-wall/episode-058/record.json": "900f7b56a400051f5e71fe804d2ee7d9077decf9c5e177da3f26a7233e30c84a",
+    "reach-wall/episode-059/record.json": "adfc2e1ca149ebaab04a70ac4f2e4a2640a522af1c2ce0176916f6620263f792",
+    "reach-wall/episode-060/record.json": "4a07b62b9d0b222fd375905870551b9ea359a754c5ea9d1bf9f32c77df95b4a7",
+    "reach-wall/episode-061/record.json": "bd8b49eb59ccbd20597c2ae147cd19bb7cecb3fe67a42bd49e52e50b160ecbcd",
+    "reach-wall/episode-062/record.json": "c40fb1c227f572edbc3e3844895f4e4e9f0e38574c704fb229efb50cc737d4b5",
+    "reach-wall/episode-063/record.json": "b770ad646b48c213e58be391b485160745461e64f90040ea67aeab3f9bf02d1c",
+    "reach-wall/episode-064/record.json": "6841f3334cc2a896b8503f1dd8f3d70f02bd4d2aa5a8d3c30366f74c0e27c2b9",
+    "reach-wall/episode-065/record.json": "5a669d82bef21b59b9d3f19a40342ce90cb1edaae0ed8ab9e30e44bdc69074fb",
+    "reach-wall/episode-066/record.json": "f16a18b3192331d6ceb0a68f2375822090237bfed0d49095ff1345e0ef366169",
+    "reach-wall/episode-067/record.json": "6a33b10285433e99f9f28d58e16e22037e02f8fafaa323de07e7c3be29b63b6a",
+    "reach-wall/episode-068/record.json": "23cdef7fd3abd226bfb6660c84db4362e64a91e555c0ef38ed9fa3a305210302",
+    "reach-wall/episode-069/record.json": "bb4aedbd0367cc91379a2b459bfffc6134a66caeb5204b1b752a440121be3c5d",
+    "reach-wall/episode-070/record.json": "32d9900f6efe5bf6d62c22582b41143c0f5999a93321ff2a0f2f88ad96ddd3e6",
+    "reach-wall/episode-071/record.json": "11e39779850c0da6ec513417a7ccef808193bd0dd99529f191b3ad37f182d324",
+    "reach-wall/episode-072/record.json": "b387cbe690e3d95d81810745ea93c38b8b73a260ec0dc21d7c0abf9ac8253bbc",
+    "reach-wall/episode-073/record.json": "25346199e0a4e857b13ebd277fb92ac043add73212e843ddb90d2f8a27d870bd",
+    "reach-wall/episode-074/record.json": "e4a6affb6814185a6b5d3fb02d4af7a297fd4d9125c204cc8041930a567ec42b",
+    "reach-wall/episode-075/record.json": "ec3fd0b171af7c3852d05dd04b5bec7c52d71b5d05f12d428769dc827e36b496",
+    "reach-wall/episode-076/record.json": "d66cc3fccc97c614d64654e58240ee68cbedf54a374193a271e4aeb4e1a19eb3",
+    "reach-wall/episode-077/record.json": "bb0e280f8ba0ef33b64ef8789ed4143b7abf5685e78e4430d4668c1bc02a9014",
+    "reach-wall/episode-078/record.json": "1764d88d957bede4500f98ad27a67370369a87d127dc7f26f633d8ee1b928303",
+    "reach-wall/episode-079/record.json": "31e3f92548b13109bda5ace0bb3f2808575d57438679c3b3a877b5c6c55b9b92",
+    "reach-wall/episode-080/record.json": "a0341f7a128cdcb3bc2fd921d44245539ea23d6e6ede183d1352fd0061a99e27",
+    "reach-wall/episode-081/record.json": "257e6b56d10553de9e5f536059fc27314db94eac2e85e51fa716161b14443379",
+    "reach-wall/episode-082/record.json": "6633eec199024ef08c2202e74694ef82bbd31f3b15920cd9e89f97ea4fad615d",
+    "reach-wall/episode-083/record.json": "43e668c7677190c635b9a04de78ee4f37552585c5b27b30b23840084a924e1c7",
+    "reach-wall/episode-084/record.json": "e35d9f7336a0c0d2dcb0b22ffe8b426555b05008ffc3517b5899a752a78d3b4d",
+    "reach-wall/episode-085/record.json": "bfe3e5635f3a16bd5eb6d51bad414f1389aec78cb303558897ee9b3333c80f1c",
+    "reach-wall/episode-086/record.json": "244e4eb083d0204a50db42b13e2e5c7163aa149f7fb8796ba3df53b181bf0b62",
+    "reach-wall/episode-087/record.json": "cab0e28fb3abe893b81933981fc94d200825551faaff4d7d65f7eb617395985b",
+    "reach-wall/episode-088/record.json": "0d0211a20c1498a3541e55ad4367056bff04ff7ab99e861ab5be165f5463931f",
+    "reach-wall/episode-089/record.json": "2f5d5f899b9eab5b94f14b536bd3ad515788b419cbdeae07ab0b9f71caa5fa98",
+    "reach-wall/episode-090/record.json": "405e2069b8003b84a71c33f248944aedb52d4fb8e99de1b908e8242ea7feb9c1",
+    "reach-wall/episode-091/record.json": "75cd0a9bd0cf2b94915abca3ce954c20aaab6a40d07aaa427d7b19b3983a4ae2",
+    "reach-wall/episode-092/record.json": "b09b96b3a8ada8f7a629dd1b0e9bdcfbe22fbb6410b651d3f0939fc59ded662b",
+    "reach-wall/episode-093/record.json": "913164835643105fa2009891bed419bb70802698250cb503df13cae6c93414f4",
+    "reach-wall/episode-094/record.json": "e157be3cadebe244d2016efc0302c45658622937fe737a4699efe271950e8c10",
+    "reach-wall/episode-095/record.json": "6ca0d5be506c099d671a1dd26ef72e0f1df89da75f90466d8d59de9a49fa4b7e"
+  },
+  "summaries": [
+    {
+      "task": "reach",
+      "arm": "refined",
+      "n_scenarios": 96,
+      "changed": 0,
+      "no_flip_certified": 94,
+      "metrics": {
+        "native_margin": {
+          "undefined": 0,
+          "mean": 0.0677184487382571,
+          "median": 0.0458642840385437,
+          "marginal_95_mean_interval": [
+            0.05469678612425923,
+            0.08179710231100519
+          ]
+        },
+        "delta_mean": {
+          "undefined": 0,
+          "mean": 0.0003477261049879921,
+          "median": 0.0003752724329630534,
+          "marginal_95_mean_interval": [
+            0.00027084261489411195,
+            0.000420714973265098
+          ]
+        },
+        "centered_delta_rms": {
+          "undefined": 0,
+          "mean": 0.00034170398424641213,
+          "median": 0.00032980647400827315,
+          "marginal_95_mean_interval": [
+            0.0003294374824548535,
+            0.0003548435361940177
+          ]
+        },
+        "centered_delta_energy_fraction": {
+          "undefined": 0,
+          "mean": 0.4747872191264287,
+          "median": 0.4086896846175855,
+          "marginal_95_mean_interval": [
+            0.41485190950122647,
+            0.53596286860304
+          ]
+        },
+        "range_to_margin": {
+          "undefined": 0,
+          "mean": 0.14335497490052604,
+          "median": 0.05164856199096486,
+          "marginal_95_mean_interval": [
+            0.0949174503694858,
+            0.2042953031971697
+          ]
+        },
+        "centered_rms_to_native_std": {
+          "undefined": 0,
+          "mean": 0.0024660737891644773,
+          "median": 0.0023332712061971627,
+          "marginal_95_mean_interval": [
+            0.002313576364559114,
+            0.002628984307154937
+          ]
+        },
+        "spearman": {
+          "undefined": 0,
+          "mean": 0.9999827266598396,
+          "median": 0.9999846109392789,
+          "marginal_95_mean_interval": [
+            0.9999808770732389,
+            0.9999844535308797
+          ]
+        },
+        "top10_overlap": {
+          "undefined": 0,
+          "mean": 0.9968749999999998,
+          "median": 1.0,
+          "marginal_95_mean_interval": [
+            0.9927083333333334,
+            1.0
+          ]
+        },
+        "native_score_entropy_nats": {
+          "undefined": 0,
+          "mean": 5.11793841425218,
+          "median": 5.125664228987278,
+          "marginal_95_mean_interval": [
+            5.0897581092384225,
+            5.145020871138751
+          ]
+        },
+        "score_entropy_delta_nats": {
+          "undefined": 0,
+          "mean": 0.00045728121771850444,
+          "median": 0.00041905885634285767,
+          "marginal_95_mean_interval": [
+            0.0002729068184247725,
+            0.000641564150653839
+          ]
+        }
+      }
+    },
+    {
+      "task": "reach",
+      "arm": "random_refined",
+      "n_scenarios": 96,
+      "changed": 0,
+      "no_flip_certified": 95,
+      "metrics": {
+        "native_margin": {
+          "undefined": 0,
+          "mean": 0.0677184487382571,
+          "median": 0.0458642840385437,
+          "marginal_95_mean_interval": [
+            0.05469678612425923,
+            0.08179710231100519
+          ]
+        },
+        "delta_mean": {
+          "undefined": 0,
+          "mean": 0.0003511089314189222,
+          "median": 0.00034993906815846765,
+          "marginal_95_mean_interval": [
+            0.0003143853318567078,
+            0.0003877285382089516
+          ]
+        },
+        "centered_delta_rms": {
+          "undefined": 0,
+          "mean": 0.00030046155545506304,
+          "median": 0.00028797031567656846,
+          "marginal_95_mean_interval": [
+            0.0002869278812761427,
+            0.0003146226376154378
+          ]
+        },
+        "centered_delta_energy_fraction": {
+          "undefined": 0,
+          "mean": 0.4772630268197529,
+          "median": 0.37790479657239007,
+          "marginal_95_mean_interval": [
+            0.4303413456472667,
+            0.5270619148973921
+          ]
+        },
+        "range_to_margin": {
+          "undefined": 0,
+          "mean": 0.14396940161950814,
+          "median": 0.04286437518952389,
+          "marginal_95_mean_interval": [
+            0.09292897784102348,
+            0.21064424756268205
+          ]
+        },
+        "centered_rms_to_native_std": {
+          "undefined": 0,
+          "mean": 0.002116165989109077,
+          "median": 0.001997471572081163,
+          "marginal_95_mean_interval": [
+            0.002012642107890421,
+            0.0022237855533204613
+          ]
+        },
+        "spearman": {
+          "undefined": 0,
+          "mean": 0.999986182716818,
+          "median": 0.9999864442938254,
+          "marginal_95_mean_interval": [
+            0.9999850079063184,
+            0.9999872973125041
+          ]
+        },
+        "top10_overlap": {
+          "undefined": 0,
+          "mean": 0.9958333333333332,
+          "median": 1.0,
+          "marginal_95_mean_interval": [
+            0.9916666666666667,
+            0.9989583333333334
+          ]
+        },
+        "native_score_entropy_nats": {
+          "undefined": 0,
+          "mean": 5.11793841425218,
+          "median": 5.125664228987278,
+          "marginal_95_mean_interval": [
+            5.0897581092384225,
+            5.145020871138751
+          ]
+        },
+        "score_entropy_delta_nats": {
+          "undefined": 0,
+          "mean": 0.0005675910151058394,
+          "median": 0.000433931014602873,
+          "marginal_95_mean_interval": [
+            0.00043414179478010786,
+            0.0007054677975248305
+          ]
+        }
+      }
+    },
+    {
+      "task": "reach",
+      "arm": "coupling",
+      "n_scenarios": 96,
+      "changed": 1,
+      "no_flip_certified": 82,
+      "metrics": {
+        "native_margin": {
+          "undefined": 0,
+          "mean": 0.0677184487382571,
+          "median": 0.0458642840385437,
+          "marginal_95_mean_interval": [
+            0.05469678612425923,
+            0.08179710231100519
+          ]
+        },
+        "delta_mean": {
+          "undefined": 0,
+          "mean": 0.0003779429942369461,
+          "median": 0.00039474368095397954,
+          "marginal_95_mean_interval": [
+            0.0002825702480557892,
+            0.0004724889344846208
+          ]
+        },
+        "centered_delta_rms": {
+          "undefined": 0,
+          "mean": 0.0010829956484323569,
+          "median": 0.0010493939523811343,
+          "marginal_95_mean_interval": [
+            0.0010442008151318508,
+            0.0011232125069701136
+          ]
+        },
+        "centered_delta_energy_fraction": {
+          "undefined": 0,
+          "mean": 0.7964540590515843,
+          "median": 0.8639991878970827,
+          "marginal_95_mean_interval": [
+            0.7548294700032124,
+            0.8365144902025575
+          ]
+        },
+        "range_to_margin": {
+          "undefined": 0,
+          "mean": 0.43752856370223414,
+          "median": 0.14739486483382402,
+          "marginal_95_mean_interval": [
+            0.29005322587756355,
+            0.6267986648742168
+          ]
+        },
+        "centered_rms_to_native_std": {
+          "undefined": 0,
+          "mean": 0.00762490108998562,
+          "median": 0.007239222989493237,
+          "marginal_95_mean_interval": [
+            0.007310728944647218,
+            0.007959181682384929
+          ]
+        },
+        "spearman": {
+          "undefined": 0,
+          "mean": 0.9999217063056421,
+          "median": 0.9999268880765341,
+          "marginal_95_mean_interval": [
+            0.9999154561493682,
+            0.9999277643877333
+          ]
+        },
+        "top10_overlap": {
+          "undefined": 0,
+          "mean": 0.9885416666666668,
+          "median": 1.0,
+          "marginal_95_mean_interval": [
+            0.9822916666666667,
+            0.9947916666666666
+          ]
+        },
+        "native_score_entropy_nats": {
+          "undefined": 0,
+          "mean": 5.11793841425218,
+          "median": 5.125664228987278,
+          "marginal_95_mean_interval": [
+            5.0897581092384225,
+            5.145020871138751
+          ]
+        },
+        "score_entropy_delta_nats": {
+          "undefined": 0,
+          "mean": 0.0008933451792199528,
+          "median": 0.000627527646777537,
+          "marginal_95_mean_interval": [
+            0.00032363450365782026,
+            0.0014737814393247924
+          ]
+        }
+      }
+    },
+    {
+      "task": "reach",
+      "arm": "random_coupling",
+      "n_scenarios": 96,
+      "changed": 0,
+      "no_flip_certified": 92,
+      "metrics": {
+        "native_margin": {
+          "undefined": 0,
+          "mean": 0.0677184487382571,
+          "median": 0.0458642840385437,
+          "marginal_95_mean_interval": [
+            0.05469678612425923,
+            0.08179710231100519
+          ]
+        },
+        "delta_mean": {
+          "undefined": 0,
+          "mean": 1.0972234110037485e-05,
+          "median": -1.9341707229614258e-05,
+          "marginal_95_mean_interval": [
+            -4.37328281501929e-05,
+            6.800876309474304e-05
+          ]
+        },
+        "centered_delta_rms": {
+          "undefined": 0,
+          "mean": 0.00048603450313232903,
+          "median": 0.00045848079401777025,
+          "marginal_95_mean_interval": [
+            0.0004659465918778819,
+            0.0005068609863443893
+          ]
+        },
+        "centered_delta_energy_fraction": {
+          "undefined": 0,
+          "mean": 0.8032689976641696,
+          "median": 0.8481842406877412,
+          "marginal_95_mean_interval": [
+            0.7673393002325885,
+            0.8386888019746072
+          ]
+        },
+        "range_to_margin": {
+          "undefined": 0,
+          "mean": 0.21413134019368138,
+          "median": 0.06751962766667441,
+          "marginal_95_mean_interval": [
+            0.13623285677485547,
+            0.32122898109761827
+          ]
+        },
+        "centered_rms_to_native_std": {
+          "undefined": 0,
+          "mean": 0.00346073741594761,
+          "median": 0.0033394268110369064,
+          "marginal_95_mean_interval": [
+            0.0032690369652437932,
+            0.0036593759360072672
+          ]
+        },
+        "spearman": {
+          "undefined": 0,
+          "mean": 0.9999730992380922,
+          "median": 0.9999739997111079,
+          "marginal_95_mean_interval": [
+            0.9999710355577843,
+            0.9999750680099854
+          ]
+        },
+        "top10_overlap": {
+          "undefined": 0,
+          "mean": 0.9968749999999998,
+          "median": 1.0,
+          "marginal_95_mean_interval": [
+            0.9927083333333334,
+            1.0
+          ]
+        },
+        "native_score_entropy_nats": {
+          "undefined": 0,
+          "mean": 5.11793841425218,
+          "median": 5.125664228987278,
+          "marginal_95_mean_interval": [
+            5.0897581092384225,
+            5.145020871138751
+          ]
+        },
+        "score_entropy_delta_nats": {
+          "undefined": 0,
+          "mean": -0.0008580482689753699,
+          "median": -0.000809888989381502,
+          "marginal_95_mean_interval": [
+            -0.0011259905313615965,
+            -0.0006053295448194268
+          ]
+        }
+      }
+    },
+    {
+      "task": "reach-wall",
+      "arm": "refined",
+      "n_scenarios": 96,
+      "changed": 1,
+      "no_flip_certified": 90,
+      "metrics": {
+        "native_margin": {
+          "undefined": 0,
+          "mean": 0.06500753884514172,
+          "median": 0.046169161796569824,
+          "marginal_95_mean_interval": [
+            0.05297531122341752,
+            0.07850386820112665
+          ]
+        },
+        "delta_mean": {
+          "undefined": 0,
+          "mean": 0.0004566165639294519,
+          "median": 0.00043913125991821287,
+          "marginal_95_mean_interval": [
+            0.0003986207623448637,
+            0.000515045295159022
+          ]
+        },
+        "centered_delta_rms": {
+          "undefined": 0,
+          "mean": 0.00037001083199274726,
+          "median": 0.0003770566181878102,
+          "marginal_95_mean_interval": [
+            0.0003610702714869435,
+            0.00037890734555855914
+          ]
+        },
+        "centered_delta_energy_fraction": {
+          "undefined": 0,
+          "mean": 0.4840735537430203,
+          "median": 0.4551675035146592,
+          "marginal_95_mean_interval": [
+            0.42281840219777544,
+            0.5458431558028836
+          ]
+        },
+        "range_to_margin": {
+          "undefined": 0,
+          "mean": 0.2937952222930152,
+          "median": 0.049568372516042694,
+          "marginal_95_mean_interval": [
+            0.14248391785422454,
+            0.4858427183179521
+          ]
+        },
+        "centered_rms_to_native_std": {
+          "undefined": 0,
+          "mean": 0.0027863602199858276,
+          "median": 0.0027008015407988676,
+          "marginal_95_mean_interval": [
+            0.002658796271650985,
+            0.002918368400184077
+          ]
+        },
+        "spearman": {
+          "undefined": 0,
+          "mean": 0.9999797393580542,
+          "median": 0.9999813331259236,
+          "marginal_95_mean_interval": [
+            0.999978159479508,
+            0.9999812069669647
+          ]
+        },
+        "top10_overlap": {
+          "undefined": 0,
+          "mean": 0.9958333333333332,
+          "median": 1.0,
+          "marginal_95_mean_interval": [
+            0.9916666666666667,
+            0.9989583333333334
+          ]
+        },
+        "native_score_entropy_nats": {
+          "undefined": 0,
+          "mean": 5.198767685066845,
+          "median": 5.211105583062807,
+          "marginal_95_mean_interval": [
+            5.177779016235013,
+            5.218752574377837
+          ]
+        },
+        "score_entropy_delta_nats": {
+          "undefined": 0,
+          "mean": 0.00020001014654868107,
+          "median": 9.418509617198367e-05,
+          "marginal_95_mean_interval": [
+            6.674924739709885e-05,
+            0.0003440193436701412
+          ]
+        }
+      }
+    },
+    {
+      "task": "reach-wall",
+      "arm": "random_refined",
+      "n_scenarios": 96,
+      "changed": 0,
+      "no_flip_certified": 89,
+      "metrics": {
+        "native_margin": {
+          "undefined": 0,
+          "mean": 0.06500753884514172,
+          "median": 0.046169161796569824,
+          "marginal_95_mean_interval": [
+            0.05297531122341752,
+            0.07850386820112665
+          ]
+        },
+        "delta_mean": {
+          "undefined": 0,
+          "mean": 0.0005112928069300123,
+          "median": 0.0005382951100667318,
+          "marginal_95_mean_interval": [
+            0.0004747473737224937,
+            0.0005474752218772967
+          ]
+        },
+        "centered_delta_rms": {
+          "undefined": 0,
+          "mean": 0.00038975883981387776,
+          "median": 0.0003913589386966508,
+          "marginal_95_mean_interval": [
+            0.0003797943943381897,
+            0.000399922441441624
+          ]
+        },
+        "centered_delta_energy_fraction": {
+          "undefined": 0,
+          "mean": 0.40940191646942264,
+          "median": 0.3405962549794814,
+          "marginal_95_mean_interval": [
+            0.3698738347691214,
+            0.44994606770262174
+          ]
+        },
+        "range_to_margin": {
+          "undefined": 0,
+          "mean": 0.2842112587797357,
+          "median": 0.0537040039147408,
+          "marginal_95_mean_interval": [
+            0.14906295728166652,
+            0.4503317941310116
+          ]
+        },
+        "centered_rms_to_native_std": {
+          "undefined": 0,
+          "mean": 0.002921633818453529,
+          "median": 0.0028154702233135,
+          "marginal_95_mean_interval": [
+            0.0027973777738888833,
+            0.0030511486957836846
+          ]
+        },
+        "spearman": {
+          "undefined": 0,
+          "mean": 0.9999792405098389,
+          "median": 0.999980722006945,
+          "marginal_95_mean_interval": [
+            0.9999776987680693,
+            0.9999806664516377
+          ]
+        },
+        "top10_overlap": {
+          "undefined": 0,
+          "mean": 0.9947916666666666,
+          "median": 1.0,
+          "marginal_95_mean_interval": [
+            0.9895833333333334,
+            0.9989583333333334
+          ]
+        },
+        "native_score_entropy_nats": {
+          "undefined": 0,
+          "mean": 5.198767685066845,
+          "median": 5.211105583062807,
+          "marginal_95_mean_interval": [
+            5.177779016235013,
+            5.218752574377837
+          ]
+        },
+        "score_entropy_delta_nats": {
+          "undefined": 0,
+          "mean": -0.0002497683415586353,
+          "median": -0.00035642646051980975,
+          "marginal_95_mean_interval": [
+            -0.0003413515328329458,
+            -0.00015068415315492477
+          ]
+        }
+      }
+    },
+    {
+      "task": "reach-wall",
+      "arm": "coupling",
+      "n_scenarios": 96,
+      "changed": 2,
+      "no_flip_certified": 81,
+      "metrics": {
+        "native_margin": {
+          "undefined": 0,
+          "mean": 0.06500753884514172,
+          "median": 0.046169161796569824,
+          "marginal_95_mean_interval": [
+            0.05297531122341752,
+            0.07850386820112665
+          ]
+        },
+        "delta_mean": {
+          "undefined": 0,
+          "mean": -2.0753923389646734e-05,
+          "median": -2.0411014556884765e-05,
+          "marginal_95_mean_interval": [
+            -0.00013369850317637125,
+            9.295182468162633e-05
+          ]
+        },
+        "centered_delta_rms": {
+          "undefined": 0,
+          "mean": 0.0014490213647122944,
+          "median": 0.0014234711538467864,
+          "marginal_95_mean_interval": [
+            0.001408888508204363,
+            0.001490407267743235
+          ]
+        },
+        "centered_delta_energy_fraction": {
+          "undefined": 0,
+          "mean": 0.8858817447657478,
+          "median": 0.9387458495129866,
+          "marginal_95_mean_interval": [
+            0.8574968372084447,
+            0.9120500807761406
+          ]
+        },
+        "range_to_margin": {
+          "undefined": 0,
+          "mean": 0.9605536174862861,
+          "median": 0.20406782067088208,
+          "marginal_95_mean_interval": [
+            0.5216050588231568,
+            1.4973530224479707
+          ]
+        },
+        "centered_rms_to_native_std": {
+          "undefined": 0,
+          "mean": 0.010786441864575882,
+          "median": 0.01058581264309675,
+          "marginal_95_mean_interval": [
+            0.010389532591222304,
+            0.011196585895284463
+          ]
+        },
+        "spearman": {
+          "undefined": 0,
+          "mean": 0.9998853447901217,
+          "median": 0.9998931099234435,
+          "marginal_95_mean_interval": [
+            0.9998770738071686,
+            0.9998930069993929
+          ]
+        },
+        "top10_overlap": {
+          "undefined": 0,
+          "mean": 0.9875000000000002,
+          "median": 1.0,
+          "marginal_95_mean_interval": [
+            0.9802083333333335,
+            0.99375
+          ]
+        },
+        "native_score_entropy_nats": {
+          "undefined": 0,
+          "mean": 5.198767685066845,
+          "median": 5.211105583062807,
+          "marginal_95_mean_interval": [
+            5.177779016235013,
+            5.218752574377837
+          ]
+        },
+        "score_entropy_delta_nats": {
+          "undefined": 0,
+          "mean": 0.00177103865165959,
+          "median": 0.0020928763528713645,
+          "marginal_95_mean_interval": [
+            0.001351187442500958,
+            0.0021961787902587747
+          ]
+        }
+      }
+    },
+    {
+      "task": "reach-wall",
+      "arm": "random_coupling",
+      "n_scenarios": 96,
+      "changed": 1,
+      "no_flip_certified": 88,
+      "metrics": {
+        "native_margin": {
+          "undefined": 0,
+          "mean": 0.06500753884514172,
+          "median": 0.046169161796569824,
+          "marginal_95_mean_interval": [
+            0.05297531122341752,
+            0.07850386820112665
+          ]
+        },
+        "delta_mean": {
+          "undefined": 0,
+          "mean": 0.00022957554294003382,
+          "median": 0.0002424919605255127,
+          "marginal_95_mean_interval": [
+            0.00015107998810708523,
+            0.00030746363434526653
+          ]
+        },
+        "centered_delta_rms": {
+          "undefined": 0,
+          "mean": 0.0006366678241432151,
+          "median": 0.0006217474582889417,
+          "marginal_95_mean_interval": [
+            0.0006118562390677925,
+            0.0006625694073648156
+          ]
+        },
+        "centered_delta_energy_fraction": {
+          "undefined": 0,
+          "mean": 0.7547967296392472,
+          "median": 0.8118308800458303,
+          "marginal_95_mean_interval": [
+            0.7135602170544405,
+            0.7944648650192713
+          ]
+        },
+        "range_to_margin": {
+          "undefined": 0,
+          "mean": 0.547015219236668,
+          "median": 0.09358843249715286,
+          "marginal_95_mean_interval": [
+            0.2825365951597304,
+            0.8671566941868544
+          ]
+        },
+        "centered_rms_to_native_std": {
+          "undefined": 0,
+          "mean": 0.004747746512848716,
+          "median": 0.004660274227703811,
+          "marginal_95_mean_interval": [
+            0.004529292767908386,
+            0.004975720613334026
+          ]
+        },
+        "spearman": {
+          "undefined": 0,
+          "mean": 0.9999598398311331,
+          "median": 0.9999617773530817,
+          "marginal_95_mean_interval": [
+            0.9999571719773721,
+            0.9999624452131947
+          ]
+        },
+        "top10_overlap": {
+          "undefined": 0,
+          "mean": 0.9916666666666667,
+          "median": 1.0,
+          "marginal_95_mean_interval": [
+            0.9854166666666667,
+            0.9968749999999998
+          ]
+        },
+        "native_score_entropy_nats": {
+          "undefined": 0,
+          "mean": 5.198767685066845,
+          "median": 5.211105583062807,
+          "marginal_95_mean_interval": [
+            5.177779016235013,
+            5.218752574377837
+          ]
+        },
+        "score_entropy_delta_nats": {
+          "undefined": 0,
+          "mean": -0.0004148852904674964,
+          "median": -0.00030226563277668816,
+          "marginal_95_mean_interval": [
+            -0.0007486360894164379,
+            -0.00011182996843816706
+          ]
+        }
+      }
+    }
+  ]
+}

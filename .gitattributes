@@ -1,2 +1,6 @@
 # Preserve the original exported CSV bytes, including CRLF provenance.
 paper/data/*.csv -text whitespace=cr-at-eol
+# Keep reproducible evidence, but collapse generated assets in code review.
+paper/data/*.csv linguist-generated
+# Matplotlib emits harmless spaces inside multi-line SVG path coordinates.
+docs/figures/*.svg linguist-generated whitespace=-blank-at-eol
