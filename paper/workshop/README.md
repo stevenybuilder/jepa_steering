@@ -6,7 +6,7 @@ Mechanism-focused preprint updated September 13, 2026. The official NeurIPS 2026
 
 ## Scope and evidence
 
-The manuscript separates the earlier rank-one layer sweep, later fixed-response rank-four operator, historical fixed-bank decision diagnostic, local pathway/geometry experiments, new 64-context attention/component replay, eight-context actual-CEM follow-up, and protected closed-loop confirmation. It does not infer an end-to-end causal mechanism across those populations. The completed GPU diagnostics use development inputs and do not execute robot actions.
+The manuscript separates the earlier rank-one layer sweep, later fixed-response rank-four operator, historical fixed-bank decision diagnostic, local pathway/geometry experiments, 64-context attention/component replay, controlled 64-context arithmetic comparison, 16-context action-conditioning specificity, eight-context actual-CEM pilot, and protected closed-loop confirmation. It does not infer an end-to-end causal mechanism across those populations. The completed GPU diagnostics use development inputs and do not execute robot actions. The 56-context CEM extension and physical-prefix follow-up remain pending in this version.
 
 | Evidence | Authoritative source | Scope |
 |---|---|---|
@@ -17,6 +17,8 @@ The manuscript separates the earlier rank-one layer sweep, later fixed-response 
 | Interpolation and pathway geometry | `paper/data/pathway_geometry.json`, `pathway_geometry_*summary.csv` | 17 verified source reports; precision-specific fits/doses; matched requested dose is not exact realized-energy equality |
 | Native attention and cached-component replay | `paper/data/pilot_summary.json`, `pilot_summary_*.csv` | All 64 development contexts; exact cache/zero parity; native-energy components; bulk-preservation status separate from compact analysis readiness |
 | Actual steered CEM | `paper/data/cem_steering_summary.json`, `cem_steering_*.csv` | Eight development contexts; both learned/random arms; 15 iterations; returned 60-coordinate prefix, no executed actions |
+| Controlled arithmetic | `paper/data/controlled_geometry_summary.json`, `controlled_geometry_*.csv` | All 64 contexts, six blocks, three conditions; fixed weights/inputs/action axis; output rounding alone does not reproduce actual BF16 computation |
+| Action-conditioning specificity | `paper/data/action_condition_summary.json`, `action_condition_*.csv` | All 16 contexts, six blocks, two banks; donor interchange versus equal-norm isotropic edits; small ranking effects, not physical success |
 | Author and historical comparison | `paper/data/benchmark_comparison_sources.json`, `benchmark_comparison.csv` | External context and exposed development; never pooled into fresh confirmation |
 | Literature | `docs/LITERATURE_MECHANISMS.md`, `references.bib` | Primary-source metadata and explicit endpoint boundaries |
 
@@ -28,7 +30,7 @@ The planner objective in the analyzed MetaWorld configuration is visual goal MSE
 
 ## Figures and build
 
-All current figures are referenced from `../../docs/figures`, not the old workshop `figures/` directory. Main figures: clean architecture, one separate ablation matrix, rank-one layer heatmap, candidate-margin geometry, precision/pathway geometry, and provenance-separated headline benchmark. Historical workshop PDFs remain on disk but are not included.
+All current figures are referenced from `../../docs/figures`, not the old workshop `figures/` directory. The updated architecture, benchmark, decision-margin and controlled-geometry figures share the readable README designs. Ablations use a compact text table. The small CEM pilot remains in prose rather than the headline. Historical workshop PDFs remain on disk but are not included.
 
 From the repository root, regenerate the architecture/table and benchmark figures with:
 
@@ -36,6 +38,7 @@ From the repository root, regenerate the architecture/table and benchmark figure
 .venv/bin/python scripts/build_readme_figures.py --only architecture ablation
 .venv/bin/python scripts/build_comparison_figures.py
 .venv/bin/python scripts/build_paper_figures.py
+.venv/bin/python scripts/build_publication_figures.py
 .venv/bin/python scripts/check_public_results.py
 .venv/bin/python scripts/check_manuscript.py
 ```
