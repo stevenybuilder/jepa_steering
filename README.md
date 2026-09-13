@@ -1,175 +1,179 @@
-# Steering JEPA World Models
+# Activation Steering in JEPA World Models
 
-**Can correcting a world model's predictions help a robot choose better actions?**
+We study **activation steering and representational geometry in frozen JEPA-WM
+checkpoints**. We compare low-rank predictor corrections, visual and
+action-conditioning edits, and matched random controls, with layer sweeps and
+component ablations. The question is how the geometry of an edit affects future
+predictions, candidate rankings, and the plans ultimately executed.
 
-A world model predicts what will happen after an action. **JEPA-WM** does this in
-learned feature vectors, called embeddings: it predicts a representation of the
-future image and robot state. A planner compares these predicted futures with a
-goal to decide how the robot should move.
+Sonia Joseph et al.'s [*Interpreting Physics in Video World Models*](https://arxiv.org/html/2602.07050v1)
+provides an important reference: their **Physics Emergence Zone** analysis connects
+layerwise access to physical variables with distributed subspaces and targeted
+interventions. Here we investigate the action-conditioned JEPA-WM predictor.
+We test whether low-rank corrections and local interpolation provide useful
+steering directions, where their effects are strongest, and how those effects
+propagate through a sampling planner.
 
-We test whether small edits inside a trained JEPA-WM can improve that process,
-without retraining the model. This is **activation steering**.
-
-**We improved some forecasts, but did not establish better robot success.**
-The useful distinction is between predicting an outcome more accurately and
-choosing an action that brings the robot closer to its goal. Our experiments
-measure both, and inspect what happens between them.
+**Key results:** the rank-four edit reduces H6 proprioceptive forecast MSE by
+**2.36% / 2.19%** on Reach / Reach-Wall. A score-margin bound certifies an unchanged
+winner in **184/192 fixed candidate banks**, while later adaptive searches can
+return different plans. Local reconstruction reverses between FP32 and BF16.
+The separate **3,072-run protected evaluation** establishes no reliable success
+gain; the experiments below distinguish these endpoints.
 
 [Paper](paper/workshop/main.pdf) · [Methods](docs/METHODS.md) · [All results](docs/RESULTS.md) · [Reproduce](docs/REPRODUCING.md)
 
-## How JEPA-WM chooses an action
+## Model and interventions
 
-
-For each decision, the planner samples **300 possible action sequences**. JEPA-WM
-predicts the future for each sequence and scores how close it comes to the goal.
-The planner keeps the best ten, samples more plans around them, and repeats. This
-is the Cross-Entropy Method (CEM). The robot executes the beginning of the chosen
-plan, observes what happened, and plans again.
+We keep the encoders, six-block predictor, and planning objective fixed.
+Interventions enter at imagined step **H3** of an **H6** forecast. CEM scores
+300 candidate action sequences against the encoded goal, refits its proposal
+from ten elites, and repeats before executing a prefix and replanning.
 
 ![Frozen encoders, six-block predictor, goal scoring and CEM, with alternative activation-edit sites.](docs/figures/architecture_readable.png)
 
-We compare the unchanged model with seven edits: a learned four-direction
-correction inside the predictor, edits to its visual and action inputs, and
-randomized and component controls. The diagram marks these alternative sites
-with R, V and A. B0–B5 are the six predictor blocks; H3 is the third imagined step.
-[All eight arms and fitting details](docs/METHODS.md).
+| Family | Intervention | Control or ablation |
+|---|---|---|
+| Predictor correction (R) | Learned rank-four edit at B3's output | Response-calibrated random subspace; same rank, site, and prescribed dose |
+| Visual–action coupling (V+A) | Visual-input and B3 action-conditioning edits, each scaled by 1/√2 | Random directions with the same sites and dose policy |
+| Component ablations | Original-dose joint visual and action edits | Visual-only and action-only |
 
-<details>
-<summary>Evaluation stages: offline predictions, earlier behavior, unseen confirmation</summary>
+Together with the unsteered checkpoint, these form eight arms. R and V/A are
+alternative interventions. Directions and calibration are fitted on fitting
+trajectories; recorded development trajectories inform the recipe. The final
+four-task confirmation uses new scenarios after that recipe is frozen.
+[Operator equations, fitting, and dose definitions](docs/METHODS.md).
 
-1. **Offline development:** fit on fitting trajectories, then test forecasts on
-   separate recorded trajectories. These development measurements informed the recipe.
-2. **Behavioral development:** evaluate the released checkpoints and edits across
-   Reach, Reach-Wall, Push-T, PointMaze, Wall and DROID.
-3. **Protected confirmation:** freeze the eight-arm recipe, then evaluate 96 new
-   scenarios per task on Reach, Reach-Wall, PointMaze and Wall. Exposure audits
-   found no overlap with the fitting/development sources checked.
+## Simulated executions
 
-Push-T and DROID were **not** rerun in protected confirmation. DROID measures
-recorded-action agreement, not closed-loop robot success. These stages are
-separate populations; earlier baselines cannot replace concurrent fresh baselines.
+![Synchronized Reach and Reach-Wall executions of unsteered, learned rank-four, and random-subspace selected plans.](docs/media/jepa_prefix_comparison.gif)
 
-</details>
+Saved 15-action prefixes from the first registered follow-up case in each task,
+replayed from the recorded simulator states. Playback is slowed 16×; these clips
+show the initial execution, not full-task completion. The examples were selected
+by case order. [HD video](docs/media/jepa_prefix_comparison_hd.mp4) ·
+[Replay verification and reproduction](docs/media/README.md).
 
-## What did we learn?
+## How an activation edit reaches the planner
 
-### Better forecasts did not give a reliable success gain
+### A score-margin bound identifies stable choices
 
-On recorded development trajectories, the learned four-direction edit reduced
-six-step robot-state embedding error by **2.36% on Reach and 2.19% on Reach-Wall**.
-This measures how accurately the model predicts a recorded future.
-
-We also evaluated eight conditions on **384 new scenarios across four tasks**:
-3,072 runs in total. None of the 48 registered comparisons established a success
-gain under the simultaneous confidence intervals. This leaves small effects
-unresolved; it does not prove that steering has no effect.
-
-For a concrete example, unsteered and learned-steering models each succeeded on
-**52 of 96 Reach scenarios**. Steering rescued 21 failures and broke 21 successes.
-The robot's behavior changed, but the total number of successes stayed the same.
-[All arms and paired uncertainty](docs/RESULTS.md#protected-confirmation).
-
-### A more accurate forecast can leave the chosen plan unchanged
-
-We held the same 300 possible action sequences fixed in **192 development states**.
-The learned edit changed the lowest-cost plan in **only one state**. In 184 states,
-the changes in scores were too small to overcome the original winner's lead.
+For 192 development states, we rescore the same 300 candidates under each edit.
+If the range of cost changes is smaller than the original winner's lead, the
+winner cannot change. This bound certifies **184/192** learned-edit comparisons;
+the winning candidate actually changes in **1/192**.
 
 ![Size of score changes relative to the lead of the best plan, for all four edits on Reach and Reach-Wall.](docs/figures/decision_margin_story.png)
 
-Read the plot as a threshold test: **left of 1, the winning plan must stay the
-same**. The vertical axis counts the fraction of starting states below each
-threshold. A correction can improve a prediction while leaving the planner with
-the same choice. Later rounds of search can still change; this plot tests one
-fixed set of plans. [Scores and proof](docs/MECHANISMS.md).
+The horizontal axis is the cost-change range divided by the original winning
+margin. Values below one certify an unchanged winner. This connects edit size
+to a specific decision boundary, while leaving later CEM updates unconstrained.
+[Derivation and all four edit arms](docs/MECHANISMS.md).
 
-### Changed plans did not establish better physical outcomes
+### Adaptive search produces different plans
 
-The full search adapts its next set of plans to the current scores. In a follow-up
-on **56 development states**, both learned and random activation edits changed
-the returned plans. We then executed the first 15 actions of each selected plan
-from identical simulator resets.
+In a separate 56-context extension, both learned and random edits change later
+CEM proposals and the returned action prefixes. All fifteen iterations and
+paired prefix endpoints are retained. The six registered learned-versus-random
+intervals include zero: the demonstrated effect is search sensitivity, without
+an established advantage for learned edits. [Search curves](docs/figures/cem_expansion_search.png)
+· [All paired prefixes and inference](docs/CEM_EXPANSION.md).
 
+## Layer structure and forecast correction
 
-![All paired physical-prefix effects and the twelve registered simultaneous intervals.](docs/figures/planned_prefix_effects.png)
-
-**How to read this figure:** negative values mean improvement over unsteered.
-The top row measures prediction error when the actions are held fixed. The lower
-rows measure where the robot actually ends up after executing the chosen actions.
-The learned edit improves the forecasts in both tasks. All eight physical-outcome
-intervals cross zero, so these trials do not establish that either edit brings
-the robot closer to the goal. These are short executions, separate from the
-full-task success evaluation. [Results and all model/plan forecasts](docs/PLANNED_PREFIX_REPLAY.md).
-
-## Layer and attention maps
-
-
-The completed analyses and figures are listed in the [experiment inventory](docs/ANALYSIS_COMPLETION.md).
-The detailed reports retain every tested arm, uncertainty estimate and limitation.
-
-### Where in the predictor do edits change forecasts?
+An earlier rank-one sweep measures every predictor block, both visual and
+proprioceptive forecasts, six horizons, and FP32/BF16 execution. Early-block edits
+produce larger H6 proprioceptive corrections on Reach and Reach-Wall in both
+precisions. Push-T has a different response, so the layer pattern is task-dependent.
 
 ![Layer-by-layer BF16 forecast-error changes across six blocks, six horizons, two modalities and three tasks.](docs/figures/layer_mechanism_bfloat16_native.png)
 
-**Read the heatmap:** columns follow the forecast into the future; rows identify
-which predictor block receives the edit. Positive values mean lower prediction
-error relative to unsteered; the image and robot-state panels use different color
-scales. Earlier blocks give larger forecast corrections on Reach and Reach-Wall in this
-rank-one sweep; Push-T does not show the same pattern. These independently fitted operators differ from the later
-rank-four edit. [All 576 cells, FP32 and random controls](docs/MECHANISMS.md#layer-response-map).
+Cells show MSE reduction as a percentage of unsteered error; positive is better.
+H1–H2 precede the H3 intervention. Visual and proprioceptive panels use separate
+color scales. The B2+B3 and all-six rows retain the multi-block controls.
+[All 576 cells, FP32, and random comparisons](docs/MECHANISMS.md#layer-response-map).
 
-### Attention by head and layer
+The later **rank-four B3 correction** reduces H6 proprioceptive MSE by **2.36%
+on Reach and 2.19% on Reach-Wall**. This operator is fitted separately from the
+rank-one sweep; the sweep does not establish where to place the rank-four edit.
+
+## Additional geometry and mechanism analyses
+
+<details>
+<summary>Shared corrections, action history, numerical precision, and attention maps</summary>
+
+### Shared corrections can change relative goal costs
+
+In a 64-context replay, the component shared across candidates reconstructs the
+full edit's candidate-centered cost changes with scores of **0.983 / 0.998** on
+Reach / Reach-Wall. A shared activation shift can affect rankings because its
+contribution to squared goal distance depends on each candidate's prediction.
+Random-subspace edits show a similar pattern. Components retain their original
+magnitudes, so this is a decomposition of the delivered edit, not an equal-energy
+comparison of steering directions. [Component replay](docs/PILOT_MECHANISMS.md).
+
+### Consistent action patches must include both context windows
+
+The H3 action appears as the newest action at H3 and as history at H4.
+Patching both appearances across all six blocks reproduces the raw input-action
+counterfactual exactly through H6. A one-time patch diverges when the original
+action returns as history. This 16-context, two-bank experiment distinguishes a
+coherent action substitution from a local condition edit.
+[Timing figure, full layer map, and range controls](docs/ACTION_COUNTERFACTUAL.md).
+
+### Local reconstruction depends on numerical precision
+
+We test the geometry of the predictor's response along fixed action perturbations.
+With the same weights, inputs, and interpolation coefficients, **FP32 favors cubic
+reconstruction at every block, while BF16 favors linear reconstruction**.
+Rounding only the FP32 outputs removes much of the cubic advantage but does not
+reproduce the full BF16 result.
+
+![Cubic versus linear activation reconstruction under FP32, rounded FP32 outputs, and BF16, across all six blocks.](docs/figures/geometry_control_story.png)
+
+The 64-context control identifies sensitivity to numerical computation. The
+separate five-task interpolation study finds small, mixed downstream forecast
+benefits after matching requested edit doses. Local reconstruction accuracy
+therefore needs its own controls and a separate test of steering utility.
+[Controlled arithmetic](docs/CONTROLLED_GEOMETRY.md) · [Five-task geometry and visual–action interactions](docs/PATHWAY_GEOMETRY.md).
+
+### Attention across layers and heads
 
 ![Spatial attention distance for all sixteen heads and six predictor blocks on Reach and Reach-Wall.](docs/figures/paper_pilot_attention.png)
 
-This map averages 32 development contexts per task at H6 on the fixed zero-action
-candidate. Attention distance describes where attention falls; it does not identify
-a causal physics circuit. [All horizons and uncertainty](docs/PILOT_MECHANISMS.md).
+Each cell averages H6 spatial attention distance over 32 development contexts per
+task for the fixed zero-action candidate. This describes the predictor's attention
+structure; identifying a causal circuit would require targeted interventions of
+the kind used in Joseph et al.'s study. [All horizons and uncertainty](docs/PILOT_MECHANISMS.md).
 
-### Does an internal action edit represent a consistent action?
-
-One action appears in two consecutive input windows. Replacing its internal
-representation at both appearances reproduces a changed input action exactly
-through six prediction steps. Replacing only the first appearance stops matching
-when the old action reappears as history. An action edit needs to remain consistent
-with what the model remembers. This was tested on 16 development states and two
-sets of candidate plans. [Figure and complete controls](docs/ACTION_COUNTERFACTUAL.md).
-
-### Can numerical precision change a geometry result?
-
-Yes. With the same weights, inputs and action perturbations, cubic interpolation
-reconstructs an omitted activation better than linear interpolation in FP32,
-but worse in BF16, at all six blocks. This 64-state test shows why an apparent
-shape in activation space needs numerical controls before receiving a physical
-interpretation. [Figure and controlled comparison](docs/CONTROLLED_GEOMETRY.md).
-
-<details>
-<summary>Component tests and complete search diagnostics</summary>
-
-- **Shared versus candidate-specific corrections:** [64-context replay](docs/PILOT_MECHANISMS.md).
-  The common component reconstructs the full edit's relative cost change with
-  scores **0.983 / 0.998** on Reach / Reach-Wall. Random-subspace edits show the
-  same pattern; component energies were not equalized.
-- **Adaptive CEM search:** [complete 56-context extension](docs/CEM_EXPANSION.md).
-  Both learned and random edits change later search paths and returned plans.
-  All six registered learned-versus-random intervals include zero; greater plan
-  divergence is not better control. [All paired plans](docs/figures/cem_expansion_prefixes.png)
-  · [search curves](docs/figures/cem_expansion_search.png)
-  · [entropy](docs/figures/cem_expansion_entropy.png). The original eight cases remain separate.
-- **Action-conditioned rankings:** [all-six-layer donor tests](docs/ACTION_CONDITION_SPECIFICITY.md)
-  and [action-history/range controls](docs/ACTION_COUNTERFACTUAL.md). Small global
-  rank changes can affect the top-ten elite set; input-reachable and off-range
-  directions are distinct controls.
-- **Visual–action interactions:** [factorial analysis](docs/PATHWAY_GEOMETRY.md).
-  Output nonadditivity is separated from the cross-term introduced by squared error.
-
-The original protected runs did not log numerical candidate costs or elite ranks.
-These development diagnostics cannot retrospectively recover those missing traces
-or establish why aggregate protected success failed to improve.
 
 </details>
 
+## Physical execution and behavioral evaluation
+
+In the **56-context physical replay**, every model forecasts every selected plan,
+and each prefix executes for fifteen elementary actions from an identical reset.
+The learned edit improves same-action forecast error in both tasks. All eight
+physical-distance and encoded-goal-cost intervals include zero under the registered
+correction. [All paired effects and the 3×3 model/plan grid](docs/PLANNED_PREFIX_REPLAY.md).
+
+The protected evaluation covers **384 fresh scenarios × eight arms = 3,072 runs**
+on Reach, Reach-Wall, PointMaze, and Wall. All 48 registered simultaneous contrast
+intervals include zero, so this panel does not establish a reliable success gain.
+Steering nevertheless changes which scenarios succeed: on Reach, the learned edit
+rescues 21 failures and loses 21 successes, leaving both it and unsteered at 52/96.
+[All arms and paired uncertainty](docs/RESULTS.md#protected-confirmation).
+
+Development diagnostics and protected behavior use different inputs and planner
+randomness. Protected runs did not save numerical candidate costs or elite ranks,
+so these diagnostics cannot identify the cause of their outcome changes. Push-T
+and DROID remain development-only; DROID measures recorded-action agreement.
+[Completed experiments and remaining evidence gaps](docs/ANALYSIS_COMPLETION.md).
+
 ## Benchmark context
+
+<details>
+<summary>Published baselines and post hoc best-arm comparisons</summary>
 
 ### Robot success and published benchmark context
 
@@ -197,6 +201,8 @@ PointMaze / Wall. Across the full **384 paired scenarios × eight arms = 3,072
 evaluations**, we did not establish a reliable overall success improvement.
 The internal effects above are findings, not a demonstrated cause of that outcome.
 [Paired analysis](docs/RESULTS.md#protected-confirmation).
+
+</details>
 
 ## Final protected results and earlier benchmarks
 
@@ -238,19 +244,14 @@ are substituted for fresh baselines. [Provenance](paper/data/benchmark_compariso
 
 </details>
 
-## What this suggests for steering world models
+## What this contributes
 
-Unlike steering a policy's action output, editing JEPA-WM must pass through a
-**prediction → goal score → planner → execution** chain. Our results motivate
-testing edits against candidate ordering and coherent action histories, rather
-than judging them only by activation reconstruction or forecast error.
-
-This is one frozen-checkpoint case study, not evidence that steering cannot work
-in world models. We have not discovered a universal physical coordinate system or
-proved that these mechanisms caused the protected behavioral results.
-[Comparison with COAST, Physics Emergence Zone and Manifold Steering](docs/LITERATURE_MECHANISMS.md).
-Observed-transition adaptation, test-time training and longer-memory rollouts are
-future experiments, not results reported here.
+The study connects activation geometry to measurable changes in prediction,
+relative goal scores, and adaptive planning. The margin bound identifies when an
+edit cannot change a fixed choice; component, history, and precision controls help
+interpret the edit itself. These are mechanisms within the tested computations,
+with behavioral utility assessed separately.
+[Relation to Physics Emergence Zone, COAST, and Manifold Steering](docs/LITERATURE_MECHANISMS.md).
 
 ## Reproduce and inspect
 
@@ -267,12 +268,6 @@ These checks and figure builds run on CPU from committed aggregates. Full model
 replay needs the pinned upstream code, licensed inputs, checkpoints and archived
 records; bulk assets are not bundled or publicly downloadable from this repo.
 [Complete reproduction instructions](docs/REPRODUCING.md).
-
-**Engineering:** PyTorch model replicas process independent scenarios; each GPU
-batches 300 candidate trajectories, keeps paired comparisons together and archives
-completed records to GCS. The Ultra-Scale Playbook and JAX Scaling Book informed
-batching and transfer decisions—not a JAX port or distributed-training rewrite.
-[GPU execution and limits](docs/COMPUTE.md).
 
 `src/` implements interventions and evaluation; `analysis/mechanism/` contains
 diagnostics; `tests/` checks them; `paper/data/` and `reports/` preserve the evidence.

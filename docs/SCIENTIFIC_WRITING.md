@@ -1,10 +1,9 @@
 # Scientific writing and presentation
 
-The central question is whether correcting a JEPA world model's predictions helps
-its planner choose better actions. Lead with the model, explain what the robot
-does, and state the measured answer before introducing the internal diagnostics.
-A reader should understand the question and result without knowing CEM, AdaLN,
-rank-four steering, or the difference between H3 and B3.
+The audience is ML researchers. Establish frozen JEPA-WM, activation steering,
+ablations, and representational-geometry questions upfront. Use ordinary direct
+sentences without elementary definitions of embeddings or activation steering.
+Introduce technical detail when it is needed to assess the experiment.
 
 ## Structural references
 
@@ -49,7 +48,7 @@ automated rewriting service or use detector scores as a quality measure.
 ## Editing rules for this repository
 
 - Start each result with the question, measurement, and answer. Explain the consequence immediately after the evidence.
-- Introduce an ordinary description before its technical name: for example, the original winner's lead before the decision margin.
+- Use standard research terminology directly. Explain the experimental operation and measured quantity; avoid tutorial phrases such as “this is called.”
 - Keep the measured quantity explicit. Forecast error, goal cost, action difference, physical distance, and task success are separate endpoints.
 - Give one concrete example when it explains more than another abstract sentence. The Reach result is 52 successes in both conditions, with 21 rescues and 21 losses.
 - Keep uncertainty with the claim it limits. An interval crossing zero leaves effects unresolved; it does not prove equality.
@@ -58,15 +57,18 @@ automated rewriting service or use detector scores as a quality measure.
 
 ## Visual review
 
-The September 13 GitHub review found a ranking figure before the architecture or
-robot-success result. The revised opening names JEPA, explains feature prediction,
-and states the outcome before the visible architecture. The layer-response and
-attention heatmaps remain outside collapsed sections. The main physical figure
-now places same-action forecast error above the two executed-outcome rows.
+The final opening identifies the model, intervention families, geometry questions,
+and Joseph et al.'s Physics Emergence Zone study. It summarizes measured findings
+without making the lack of behavioral gain the entire research contribution.
+The architecture, paired simulator GIF, decision-margin plot, and layer heatmap
+remain visible. Secondary geometry, history, attention, and benchmark details are
+expandable. This follows the supplied README review's advice on density while
+rejecting an unsupported causal chain from development margins to protected success.
 
-A paired simulator GIF would help readers see the tasks. Use the same starting
-state and synchronized unsteered, learned, and random-edit executions, with an HD
-MP4 link and the example-selection rule stated. Existing DROID/Push-T input clips
-are not edited JEPA rollouts. The saved physical-prefix records do not contain
-intermediate rendered frames, so a faithful GIF requires a separate rendering
-replay. No such GIF is claimed in this release.
+The paired GIF and HD MP4 replay the first registered extension case (episode 4)
+in each task, with all three saved plan arms. No favorable-outcome selection or
+new model inference is involved. All fifteen states per trajectory, rewards,
+and success/termination flags are checked against the saved execution. See the
+[media receipt and reproduction](media/README.md). The clips cover 0.1875 seconds
+of simulator time, slowed 16× with initial/final holds; they do not show complete
+task episodes.

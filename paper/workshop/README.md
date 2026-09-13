@@ -1,6 +1,6 @@
 # Workshop manuscript
 
-**Steering JEPA World Models: Do Better Predictions Lead to Better Plans?**
+**Activation Steering and Representational Geometry in JEPA World Models**
 
 Question-led preprint rewritten September 13, 2026. The official NeurIPS 2026 style is retained in preprint mode with an anonymous author line. No affiliation, workshop acceptance, or final page count is asserted.
 

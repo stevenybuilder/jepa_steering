@@ -18,7 +18,7 @@
 \newcommand{\RMS}{\operatorname{RMS}}
 \newcommand{\Var}{\operatorname{Var}}
 \newcommand{\figroot}{../../docs/figures}
-\title{Steering JEPA World Models:\\Do Better Predictions Lead to Better Plans?}
+\title{Activation Steering and Representational Geometry\\in JEPA World Models}
 \author{Anonymous authors}
 
 \begin{document}
@@ -26,18 +26,18 @@
 \maketitle
 
 \begin{abstract}
-JEPA world models plan by predicting where candidate actions will lead. We ask whether correcting those predictions through activation steering helps the robot choose better actions. We edit a frozen JEPA-WM predictor and measure forecast error, plan selection, and executed behavior separately. A learned four-direction edit reduces six-step robot-state embedding error by 2.36\% on Reach and 2.19\% on Reach-Wall on recorded development trajectories. Yet it changes the best plan in only one of 192 fixed sets of 300 candidates. A simple score-margin bound certifies that the winner cannot change in 184 of these sets. Iterative search can still return different plans. In a 56-state simulator follow-up, the learned edit improves forecasts for the same actions without establishing better physical endpoints for its selected plans. Finally, eight conditions evaluated on 384 fresh scenarios produce no reliable success gain under the registered simultaneous intervals. These results show why forecast improvement alone is insufficient evidence for better planning. They also provide separate tests of where an edit changes the computation and whether that change helps the robot.
+We study activation steering and representational geometry in frozen JEPA-WM checkpoints, comparing low-rank predictor corrections, visual and action-conditioning edits, and matched random controls. Layer sweeps, component ablations, and controlled replays measure how internal edits propagate into forecasts and planning. A learned rank-four correction reduces six-step proprioceptive forecast MSE by 2.36\% on Reach and 2.19\% on Reach-Wall. A score-margin bound certifies unchanged winners in 184 of 192 fixed candidate banks, while iterative search can still return different plans. Action-condition patches reproduce an input-action counterfactual only when both appearances in the context history are replaced. Under fixed weights and inputs, the comparison between cubic and linear activation reconstruction reverses between FP32 and BF16 at every predictor block. A 56-state physical replay and a separate 3,072-run protected evaluation assess the behavioral consequences; neither establishes improved physical performance under the registered simultaneous intervals. The study connects properties of activation edits to specific changes in prediction, scoring, and search, with control performance evaluated separately.
 \end{abstract}
 
 \section{Introduction}
 
-A robot using a world model can compare possible actions before executing them. JEPA-WM predicts their consequences in learned image and robot-state features, then chooses a plan whose predicted future is close to a goal \citep{terver2025jepawm}. This makes the prediction a possible target for intervention: if we correct what the model expects to happen, can it choose a better action?
+We investigate activation steering inside frozen JEPA-WM checkpoints \citep{terver2025jepawm}. Our starting questions concern representation: which predictor layers respond to low-rank corrections, whether local interpolation provides useful steering directions, and how visual and action-conditioning edits interact. Because JEPA-WM scores candidate actions through its predictions, we can also follow these interventions into candidate rankings, adaptive search, and physical execution.
 
-That question has two parts. A forecast can become more accurate for a given action. A planner must also use its forecasts to choose between actions. These objectives are related, but an improvement in one need not improve the other. For example, lowering the predicted costs of every plan by the same amount leaves their ordering unchanged. More generally, score changes can be too small to displace the current best plan.
+Joseph et al.'s Physics Emergence Zone study provides a useful reference \citep{joseph2026interpretingphysics}. Their layerwise probes, subspace analyses, and targeted interventions characterize distributed physical representations in video encoders. We examine an action-conditioned predictor and its planner. This changes both the intervention target and the relevant endpoints: a direction that changes an internal representation must also affect the relative scores of candidate plans to influence selection.
 
-We study this distinction by editing the internal activations of released JEPA-WM checkpoints while keeping their weights and planning objective fixed. We fit small corrections using recorded fitting trajectories, compare them with random edits and component ablations, and measure their effects at three stages: future prediction, plan selection, and execution. The main analysis follows a learned four-direction correction inside the predictor. A separate evaluation compares all eight conditions on new scenarios after the intervention recipe is frozen.
+We compare a learned four-direction predictor correction with a response-calibrated random subspace, visual--action coupling with matched random directions, and joint versus single-component edits. Earlier layer and interpolation sweeps provide complementary measurements with their own fitted operators. Throughout, base weights and the planning objective remain fixed. Fitting, development diagnostics, and protected behavioral evaluation retain separate data populations.
 
-The learned correction improves some forecasts, but we do not establish a success gain. Our contribution is a set of measurements that makes this result more informative. A bound on score changes certifies when a fixed set of plans must retain its winner. Repeated-search tests show that this initial stability can coexist with a changed final plan. Simulator replay then tests the physical consequences of those plans. Additional layer, action-history, and numerical-precision experiments examine how to interpret internal changes. These experiments have different inputs and scopes; together they motivate evaluating steering at each stage, without identifying a single cause of the final success result.
+The study follows layer responses and forecast corrections into fixed-bank selection, adaptive search, and physical execution. Action-history and numerical-precision controls test how to interpret the edits. A separate protected evaluation assesses behavioral utility. This organization connects internal effects with their downstream consequences while retaining the boundaries between experiments.
 
 \begin{figure}[t]
 \centering
@@ -84,7 +84,7 @@ On recorded development trajectories, the four-direction edit reduces H6 robot-s
 
 An earlier rank-one sweep finds larger H6 forecast corrections at early predictor blocks on both tasks, in FP32 and BF16. Push-T does not show the same pattern. The sweep uses independently fitted rank-one operators; it does not test moving the later four-direction edit to another layer. Appendix~\ref{sec:layers} retains the full layer analysis.
 
-\subsection{The best plan usually stays the same in a fixed candidate set}
+\subsection{A score-margin bound characterizes fixed-bank selection}
 
 We next score identical banks of 300 action sequences in 192 development states, 96 per MetaWorld task. The learned edit changes the winning plan in zero Reach states and one Reach-Wall state.
 
@@ -107,7 +107,7 @@ CEM changes its next candidate population using the current elite plans. Small s
 
 Both edits change the returned action prefixes. Mean RMS differences from unsteered are 0.697/0.578 for learned/random on Reach and 0.500/0.217 on Reach-Wall, in normalized action coordinates. All six registered learned-minus-random intervals include zero. These measurements establish changed plans, but do not establish an advantage for the learned edit or measure physical displacement. Complete search curves and contrasts appear in Appendix~\ref{sec:replay}.
 
-\subsection{Improved forecasts do not establish better executed prefixes}
+\subsection{Physical replay separates forecast accuracy from plan quality}
 
 We execute each condition's selected prefix from the same simulator reset in all 56 extension states. Each trajectory contains fifteen elementary actions. A repeated unsteered execution checks exact reset and trajectory agreement, giving 224 trajectories. All three models also predict all three selected plans, giving 504 model/plan forecasts.
 
@@ -122,7 +122,13 @@ Thus we can detect better same-action forecasts in this experiment without estab
 \label{fig:physical-prefix}
 \end{figure}
 
-\subsection{Protected evaluation does not establish a success gain}
+\subsection{Action history and precision constrain the interpretation of an edit}
+
+The action-conditioned predictor provides a controlled test of intervention semantics. An H3 action appears twice in its two-frame context: newest at H3, then older at H4. Across sixteen development contexts and two candidate banks, replacing the action-derived condition at both appearances and all six blocks reproduces the raw input-action substitution exactly through H6. A one-time patch matches at H3 but diverges when the original action returns as history. Appendix~\ref{sec:history} retains the full layer contrasts and input-range controls.
+
+We also test local activation reconstruction along fixed action perturbations. Holding weights, inputs, and interpolation coefficients fixed across 64 contexts, cubic reconstruction outperforms linear reconstruction at every block in FP32; BF16 reverses the comparison. Rounding only the FP32 output moves the two estimators toward equality but does not reproduce actual BF16 computation. A separate five-task study finds small, mixed downstream forecast benefits after matching requested edit doses. These results distinguish local interpolation quality from the utility of the resulting correction. Appendix~\ref{sec:geometry} gives the numerical controls and complete measurements.
+
+\subsection{Protected behavioral evaluation}
 \label{sec:behavior}
 
 The protected panel evaluates eight arms on 384 fresh scenarios across four tasks, for 3,072 runs. Table~\ref{tab:main-rates} gives every arm. All 48 registered simultaneous intervals include zero, covering comparisons with unsteered, learned versus random edits, and component interactions. This is insufficient evidence for a reliable success gain; it is not an equivalence result.
@@ -156,13 +162,11 @@ For a JEPA planner, the practical test of a prediction correction is whether it 
 
 The fixed-bank bound gives a precise explanation for many unchanged initial choices. It does not explain the protected success result: those episodes used different inputs and random seeds, and did not retain numerical candidate costs or elite identities. The physical follow-up measures three selected plans per state, not the true physical ranking of all 300 candidates. We therefore cannot conclude that a particular ranking error caused the lack of a success gain.
 
-The internal diagnostics impose further limits on interpretation. Action-condition edits must replace both appearances of an action to reproduce a coherent alternative history (Appendix~\ref{sec:history}). Cubic-versus-linear reconstruction reverses between FP32 and BF16 under fixed weights and inputs (Appendix~\ref{sec:geometry}). Attention distance is descriptive (Appendix~\ref{app:attention}). These controls test specific properties of this predictor; they do not establish a universal physical representation.
-
-Finally, the study uses one released checkpoint per task, task-specific fitted edits, and 96 protected scenarios per task. It has no independent training-seed replication and leaves small behavioral effects unresolved. Development diagnostics informed the analysis and should not be read as additional protected confirmation. Full source tables retain negative results, random controls, and unavailable historical cells.
+The study uses one released checkpoint per task, task-specific fitted edits, and 96 protected scenarios per task. It has no independent training-seed replication and leaves small behavioral effects unresolved. Development diagnostics informed the analysis and should not be read as additional protected confirmation. Full source tables retain negative results, random controls, and unavailable historical cells.
 
 \section{Conclusion}
 
-Activation steering improves some JEPA-WM forecasts and changes some plans, but these experiments do not establish better robot success. Evaluating the intermediate decisions makes that result more useful: a forecast correction can leave a fixed choice unchanged, and a changed search can return a plan without a demonstrated physical advantage. World-model steering should be assessed through both prediction and execution.
+The experiments characterize activation steering in a frozen JEPA world model through layer responses, component effects, action-history consistency, and numerical controls. A score-margin bound links cost perturbations to fixed-bank selection; adaptive-search and simulator replays extend the measurement to returned plans and physical endpoints. These interventions improve some forecasts and alter some plans, while the protected evaluation leaves behavioral gains unestablished. The distinction makes both the internal effects and their practical limits explicit.
 
 \clearpage
 \bibliographystyle{plainnat}

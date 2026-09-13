@@ -24,7 +24,12 @@ Completion means the registered cohort was analyzed and its figures exist, not t
 
 Push-T and DROID remain development-only in the six-task comparison. They were not rerun in the four-task protected protocol. DROID measures recorded-action agreement. Historical base-1 confirmation notes describe a separate unfinished protocol, not missing cases from the completed fresh four-task panel. Full-population physical candidate ranking, further adaptation and new testbeds remain future work.
 
-Qualitative rollout media is a separate presentation task and is not yet produced. No paired JEPA rollout videos were found in the local media inventory. The physical-prefix recorder retained actions, states and endpoint observations, but not intermediate visual frames. A synchronized unsteered/learned/random GIF would therefore require a rendering replay, with task/context provenance and an explicit H3-prefix label. The existing plots do not require that replay.
+Qualitative rollout media is now available as a [paired GIF and HD video](media/README.md).
+It renders the first registered follow-up case in Reach and Reach-Wall, retaining
+unsteered, learned, and random-subspace plans. The saved simulator state is restored
+before executing each archived fifteen-action prefix; all 90 resulting states are
+checked against the original records. This is a rendering replay, not a new
+scientific evaluation or a demonstration of full-task success.
 
 ## Verification and preservation
 
