@@ -5,6 +5,7 @@ import shutil
 import sys
 import tempfile
 import unittest
+from unittest.mock import patch
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT/"scripts"))
@@ -14,6 +15,48 @@ spec.loader.exec_module(module)
 
 
 class PublicationFigureTests(unittest.TestCase):
+    def test_benchmark_labels_preserve_exact_intervention(self):
+        self.assertEqual(module.BENCHMARK_LOCAL_ARMS,
+                         (("native", "Unsteered"), ("fixed_rank4", "Intervention")))
+
+    def test_benchmark_uses_fresh_count_based_rates(self):
+        source, report = module.load_data()
+        expected_counts = {"reach": (52, 52), "reach-wall": (28, 20),
+                           "pointmaze": (83, 85), "wall": (78, 77)}
+        for task, counts in expected_counts.items():
+            self.assertEqual(report["results"][task]["n"], 96)
+            for (arm, _), count in zip(module.BENCHMARK_LOCAL_ARMS, counts):
+                self.assertAlmostEqual(report["results"][task]["success_percent"][arm], count/96*100)
+        self.assertEqual(source["development_rows"][0]["values"][0], 44.79)
+
+    def test_benchmark_tick_labels_do_not_collide(self):
+        module.style()
+        with patch.object(module, "save") as save:
+            module.benchmark()
+        fig = save.call_args.args[0]
+        try:
+            fig.canvas.draw()
+            renderer = fig.canvas.get_renderer()
+            for ax in fig.axes:
+                boxes = [tick.get_window_extent(renderer) for tick in ax.get_xticklabels()]
+                self.assertTrue(all(a.x1 + 2 < b.x0 for a, b in zip(boxes, boxes[1:])))
+        finally:
+            module.plt.close(fig)
+
+    def test_margin_legend_clears_panel_titles(self):
+        module.style()
+        with patch.object(module, "save") as save:
+            module.margins()
+        fig = save.call_args.args[0]
+        try:
+            fig.canvas.draw()
+            renderer = fig.canvas.get_renderer()
+            legend = fig.legends[0].get_window_extent(renderer)
+            for ax in fig.axes:
+                self.assertGreater(legend.y0, ax._left_title.get_window_extent(renderer).y1 + 2)
+        finally:
+            module.plt.close(fig)
+
     def test_episode_se_is_not_sd_or_ci(self):
         self.assertAlmostEqual(module.episode_se(50, 96), 5.103103630798288)
         self.assertEqual(module.episode_se(0, 96), 0)

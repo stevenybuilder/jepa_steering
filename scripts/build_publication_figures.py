@@ -25,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 INK, MUTED, TEAL, AMBER, BLUE = "#24343e", "#63737c", "#247f85", "#bd7836", "#4b72a3"
 TASKS = ("reach", "reach-wall", "pointmaze", "wall")
 LABELS = {"reach": "Reach", "reach-wall": "Reach-Wall", "pointmaze": "PointMaze", "wall": "Wall"}
+BENCHMARK_LOCAL_ARMS = (("native", "Unsteered"), ("fixed_rank4", "Intervention"))
 
 
 def sha(path):
@@ -65,19 +66,22 @@ def episode_se(percent, n):
 
 def benchmark():
     source, report = load_data()
-    fig, axes = plt.subplots(2, 2, figsize=(7.8, 6.5), sharey=True)
-    fig.subplots_adjust(left=.085, right=.975, top=.82, bottom=.15, hspace=.40, wspace=.20)
-    fig.text(.055, .94, "Robot success: context and added effect", fontsize=18, weight="bold", color=INK)
-    fig.text(.055, .888, "Published baselines  |  Our frozen checkpoint on fresh scenarios", fontsize=11, color=MUTED)
-    names = ["DINO-WM", "JEPA-WM", "Native", "Refined"]
+    fig, axes = plt.subplots(2, 2, figsize=(8.8, 6.8), sharey=True)
+    fig.subplots_adjust(left=.085, right=.975, top=.81, bottom=.18, hspace=.42, wspace=.23)
+    fig.text(.055, .94, "Does steering improve task success?", fontsize=19, weight="bold", color=INK)
+    fig.text(.055, .89, "Our comparison: the same checkpoint, the same 96 unseen scenarios per task", fontsize=11, color=MUTED)
+    names = ["DINO-WM", "JEPA-WM"] + [label for _, label in BENCHMARK_LOCAL_ARMS]
     colors = ["#d7ddd9", "#b0bcb6", BLUE, TEAL]
     measures = []
     for ax, task in zip(axes.flat, TASKS):
         j = source["task_order"].index(task)
         values = [r["values"][j] for r in source["author_rows"][:2]]
         errors = [r["published_dispersion"][j] for r in source["author_rows"][:2]]
-        local = [report["results"][task]["success_percent"][arm] for arm in ("native", "fixed_rank4")]
-        local_errors = [episode_se(v, 96) for v in local]
+        n = report["results"][task]["n"]
+        if n != source["fresh_source"]["n_per_task_arm"]:
+            raise ValueError("Benchmark cohort size disagrees with provenance")
+        local = [report["results"][task]["success_percent"][arm] for arm, _ in BENCHMARK_LOCAL_ARMS]
+        local_errors = [episode_se(v, n) for v in local]
         values += local
         errors += local_errors
         ax.axvspan(-.55, 1.5, color="#f4f6f3", zorder=0)
@@ -87,14 +91,21 @@ def benchmark():
             ax.text(i, v+err+2.1, display(v), ha="center", fontsize=9.7, color=INK)
         ax.axvline(1.5, color="#bcc9c2", lw=.7, ls=(0, (3, 3)))
         ax.set_title(LABELS[task], loc="left", fontsize=12.5, weight="bold", color=INK, pad=11)
-        ax.set(ylim=(0, 108), xlim=(-.6, 3.6), xticks=np.arange(4), xticklabels=names, yticks=[0, 25, 50, 75, 100])
+        ax.text(.5, 109, "Published", ha="center", fontsize=9, color=MUTED)
+        ax.text(2.5, 109, "Our evaluation", ha="center", fontsize=9, color=INK)
+        ax.set(ylim=(0, 116), xlim=(-.6, 3.6), xticks=np.arange(4), xticklabels=names, yticks=[0, 25, 50, 75, 100])
         clean(ax)
+        ax.tick_params(axis="x", labelsize=9)
+        for tick, color in zip(ax.get_xticklabels()[2:], (BLUE, TEAL)):
+            tick.set_color(color)
         measures.append(dict(task=task, values=values, error_bars=errors,
+                             labels=names, local_arm_ids=[arm for arm, _ in BENCHMARK_LOCAL_ARMS], n=n,
                              published="reported late-epoch SD", local="one Bernoulli episode SE, n96"))
     axes[0, 0].set_ylabel("Success (%)")
     axes[1, 0].set_ylabel("Success (%)")
-    fig.text(.055, .071, "Bars: published reported SD; ours ±1 episode SE (n=96), not confidence intervals.", fontsize=9.5, color=MUTED)
-    fig.text(.055, .035, "Different sources are not paired. All eight arms and all six tasks are in the results table.", fontsize=9.5, color=MUTED)
+    fig.text(.055, .105, "Unsteered = no edit. Intervention = our fixed four-direction activation edit.", fontsize=10.5, color=INK)
+    fig.text(.055, .066, "Error bars: published late-epoch SD; our evaluation ±1 episode SE, not confidence intervals.", fontsize=9.5, color=MUTED)
+    fig.text(.055, .030, "Published models are external context, not paired controls. Earlier development results are separate.", fontsize=9.5, color=MUTED)
     save(fig, "benchmark_readable", dict(source_sha256=sha(ROOT/"paper/data/benchmark_comparison_sources.json"),
          report_sha256=source["fresh_source"]["sha256"], values=measures,
          scope="Fixed refined arm shown, not taskwise best arm; paired inference remains in final report"))
@@ -124,12 +135,12 @@ def load_margins(root=ROOT):
 
 def margins():
     frame = load_margins()
-    fig, axes = plt.subplots(1, 2, figsize=(7.8, 4.8), sharex=True, sharey=True)
-    fig.subplots_adjust(left=.095, right=.97, top=.68, bottom=.22, wspace=.16)
+    fig, axes = plt.subplots(1, 2, figsize=(7.8, 5.3), sharex=True, sharey=True)
+    fig.subplots_adjust(left=.095, right=.97, top=.63, bottom=.25, wspace=.16)
     fig.text(.055, .94, "Most edits stay below the decision margin", fontsize=18, weight="bold", color=INK)
     fig.text(.055, .877, "Below 1: the original winning candidate is guaranteed to stay first.", fontsize=11, color=MUTED)
     arms = ("refined", "random_refined", "coupling", "random_coupling")
-    names = ("Refined", "Random R", "V–A coupling", "Random V–A")
+    names = ("Intervention", "Random subspace", "Visual + action", "Random visual + action")
     colors = (TEAL, TEAL, AMBER, AMBER)
     styles = ("-", "--", "-", "--")
     lo = 10**np.floor(np.log10(frame.range_to_margin.min()))
@@ -143,14 +154,14 @@ def margins():
         ax.set_title(LABELS[task], loc="left", fontsize=12.5, weight="bold", color=INK, pad=12)
         ax.set_xscale("log")
         ax.set(xlim=(lo, hi), ylim=(0, 102), yticks=[0, 25, 50, 75, 100])
-        ax.set_xlabel("Edit range / native winning margin", fontsize=10.5, labelpad=8)
+        ax.set_xlabel("Edit range / unsteered winning margin", fontsize=10.5, labelpad=8)
         clean(ax)
     axes[0].set_ylabel("Cumulative scenarios (%)")
     fig.legend([Line2D([0], [0], color=c, lw=2, ls=s) for c, s in zip(colors, styles)], names,
-               loc="upper left", bbox_to_anchor=(.045, .82), ncol=4, frameon=False,
+               loc="upper left", bbox_to_anchor=(.045, .82), ncol=2, frameon=False,
                fontsize=10, columnspacing=1.3, handlelength=1.8)
     refined = frame[frame.arm == "refined"]
-    fig.text(.055, .092, f"Refined: {int(refined.no_flip_certified.sum())}/192 certified unchanged; {int(refined.changed.sum())}/192 observed winner changes.", fontsize=11, weight="bold", color=TEAL)
+    fig.text(.055, .092, f"Intervention: {int(refined.no_flip_certified.sum())}/192 certified unchanged; {int(refined.changed.sum())}/192 observed winner changes.", fontsize=10.5, weight="bold", color=TEAL)
     fig.text(.055, .04, "96 contexts/task · same 300 actions per comparison · initial population, not an entire CEM search", fontsize=9.5, color=MUTED)
     save(fig, "decision_margin_story", dict(source_sha256=sha(ROOT/"paper/data/decision_geometry_scenarios.csv"),
          scope="Complete empirical cumulative distributions; all arms, all observations; algebraic certificate, no statistical test"))

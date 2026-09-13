@@ -13,7 +13,7 @@ REPORT_SHA = '8123d71497835fc164f09f5094c430308647a3ee2462c66746baea32633a0b15'
 
 
 def check_headline(root, readme, report):
-    section = readme.split('### Robot success and published benchmark context')[1].split('## Architecture')[0]
+    section = readme.split('### Robot success and published benchmark context')[1].split('\n## ')[0]
     delta_text = section.split('Against concurrent unsteered JEPA-WM')[1].split('percentage points')[0]
     actual = [Decimal(n) for n in re.findall(r'[+−-]?\d+\.\d+', delta_text.replace('−', '-'))]
     deltas = [(Decimal(str(report['results'][t]['success_percent']['fixed_rank4'])) -
