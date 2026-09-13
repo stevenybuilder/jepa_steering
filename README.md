@@ -4,14 +4,49 @@ Activation steering inside a **frozen world-model predictor**, evaluated from of
 forecast error through closed-loop robot planning. Built with Python and PyTorch on
 the [JEPA-WM](https://github.com/facebookresearch/jepa-wms) implementation.
 
-**Finding:** selected edits improved offline forecast error, but the final protected
-evaluation did **not establish a reliable task-success improvement**. This is a
-negative efficacy result, not proof of zero effect or an identified failure mechanism.
-
 [Methods & ablations](docs/METHODS.md) · [Results & limitations](docs/RESULTS.md) ·
 [Reproduce](docs/REPRODUCING.md) · [GPU execution](docs/COMPUTE.md)
 
-![Study design: offline fitting and development, followed by a frozen four-task evaluation.](docs/figures/study_overview.png)
+## Three findings
+
+### 1. A single four-direction edit improves offline forecasts
+
+The refined intervention reduced H6 proprioceptive embedding prediction error by
+**2.36% on Reach and 2.19% on Reach-Wall** in the primary BF16 development evaluation
+(33 and 27 trajectories). An offline-calibrated response map applies the edit inside
+one forward pass, with **zero online response probes or extra native-shadow forecasts**.
+This establishes an inexpensive forecast correction, not a task-success gain.
+[Estimates and intervals](paper/data/reported_contrasts.csv) · [Implementation](src/offline_study/fixed_response.py).
+
+### 2. Low-rank corrections are spatially distributed—and use their directions unevenly
+
+The fitted directions span image patches rather than identifying individual semantic
+neurons. During the protected rollouts, the four-dimensional coefficient space had
+an effective dimensionality of **1.37–3.07**, depending on the task. Low rank in
+feature space does not imply spatial localization or equal use of each direction.
+This is a descriptive measurement of the applied edits, not a discovered physical code.
+[Basis maps](#geometry-of-the-fitted-edits) · [Coefficient audit](reports/fresh-confirmation/mechanism_audit.json).
+
+### 3. The same aggregate score can hide different successes
+
+On fresh Reach scenarios, native and refined planning both succeeded **52/96** times,
+but the edit **rescued 21 failures and regressed on 21 successes**: outcomes changed
+on **42/96 scenarios** despite an unchanged aggregate score. Paired evaluation exposes
+this behavioral sensitivity that a success-rate table alone misses. Across the full
+panel, these changes did not establish a reliable net improvement.
+[Paired outcomes](docs/RESULTS.md#mechanistic-diagnostics).
+
+## Architecture and ablation sites
+
+![JEPA-WM architecture with visual-input, action-conditioning and block-output intervention sites, plus the eight-arm ablation matrix.](docs/figures/ablation_architecture.png)
+
+**V** edits the predictor's visual input; **A** edits block B3's action conditioning;
+**R** applies the refined rank-four correction at B3's output. Sites are shown at
+imagined step H3 within an H6 forecast. B0–B5 are zero-indexed predictor blocks.
+The diagram shows alternative arms, **not three edits applied together**. The frozen
+encoders, model weights and CEM objective are unchanged across arms.
+CEM repeats candidate proposal/scoring; simulator observations refresh at replanning.
+[Exact arm definitions](docs/METHODS.md).
 
 ## Question and hypotheses
 
@@ -79,21 +114,16 @@ paired-scenario bootstrap draws with a Bonferroni family of 48. Intervals are wi
 the study neither establishes a reliable gain nor demonstrates equivalence.
 [Exact estimates and intervals](reports/fresh-confirmation/report.json).
 
-## What the follow-up analyses tell us
-
-The interventions were not simply inactive. The refined edit rescued 21 native
-failures on Reach but regressed on 21 native successes. On Reach-Wall, it rescued
-6 and regressed on 14. Delivered coupling energy matched its comparator.
-
-The four allowed coefficient directions were used unevenly: effective dimensionality
-ranged from **1.37 to 3.07**, from uncentered coefficient second moments.
-That is descriptive geometry, not identification of physical concepts.
+## Geometry of the fitted edits
 
 ![Spatial squared loadings of fitted rank-four bases; not attention or saliency.](docs/figures/fitted_basis.png)
 
 These are **fixed basis loadings**, not attention maps, semantic neurons, or per-example
 explanations. Action hashes changed, but fresh candidate costs and elite ranks
 were not logged; the forecast-to-decision link remains unresolved.
+Coefficient effective dimensionality uses uncentered second moments, so it includes
+the mean direction. Delivered coupling energy matched its comparator; an absent edit
+is not supported as a simple explanation of the behavioral results.
 [Analysis details](docs/RESULTS.md#mechanistic-diagnostics).
 
 ## PyTorch GPU execution

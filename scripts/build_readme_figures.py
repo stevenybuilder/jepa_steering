@@ -48,6 +48,81 @@ def overview():
     save(fig, 'study_overview')
 
 
+def architecture():
+    """Schematic of actual hook sites, not a measurement or simultaneous edit."""
+    fig, ax = plt.subplots(figsize=(15, 9))
+    ax.set(xlim=(0, 16), ylim=(0, 9.6))
+    ax.axis('off')
+
+    def box(x, y, w, h, text, color='#eef3f8', edge='#bdcbdc', size=10):
+        ax.add_patch(FancyBboxPatch((x,y), w,h, boxstyle='round,pad=.035',
+                                   facecolor=color, edgecolor=edge, linewidth=1.2))
+        ax.text(x+w/2, y+h/2, text, ha='center', va='center', fontsize=size, color=INK)
+
+    def arrow(start, end, color='#64748b', style='-'):
+        ax.annotate('', end, start, arrowprops={'arrowstyle':'->','color':color,
+                                               'lw':1.5,'linestyle':style})
+
+    ax.text(.1,9.23,'Where we intervene in JEPA-WM',fontsize=22,weight='bold',color=INK)
+    ax.text(.1,8.82,'Frozen model • batched candidate forecasts • alternative ablation arms',
+            fontsize=12,color='#526174')
+    box(.1,6.9,1.8,.95,'Observation\nimage + state')
+    box(2.25,6.9,2.05,.95,'Frozen encoders\nvisual + proprio')
+    arrow((1.94,7.38),(2.2,7.38)); arrow((4.35,7.38),(4.53,7.38))
+    # The V hook changes only the visual stream at the predictor input.
+    box(4.57,7.14,.55,.48,'V',color='#dceef0',edge=TEAL,size=12)
+    arrow((5.17,7.38),(5.48,7.38))
+    box(5.55,6.45,5.25,1.9,'',color='#f8fafc')
+    ax.text(8.17,8.48,'Dynamics predictor at imagined step H3',ha='center',size=11,weight='bold',color=INK)
+    for i in range(6):
+        x=5.76+i*.82
+        box(x,7.0,.6,.77,f'B{i}',color='#dce7f5' if i==3 else 'white',edge=BLUE if i==3 else '#bdcbdc')
+        if i<5: arrow((x+.64,7.38),(x+.78,7.38))
+    # R sits on the output edge of B3, not on the action-conditioning input.
+    ax.text(8.94,7.97,'R',ha='center',weight='bold',size=13,color=BLUE)
+    arrow((8.94,7.82),(8.94,7.4),BLUE)
+    ax.text(5.82,6.65,'Unrolled to H6',ha='left',size=10,color='#526174')
+    box(11.15,6.9,1.55,.95,'Latent\nforecasts')
+    box(13.08,6.9,2.72,.95,'CEM planner\nscore → elites → action')
+    arrow((10.84,7.38),(11.1,7.38)); arrow((12.74,7.38),(13.02,7.38))
+    box(13.57,8.14,1.75,.38,'Encoded goal',size=9)
+    arrow((14.44,8.12),(14.44,7.91))
+    box(.1,5.05,2.8,.87,'CEM proposal batch\n300 action trajectories')
+    box(3.4,5.05,3.2,.87,'Action-conditioning pathway\nconditions all predictor blocks')
+    arrow((2.96,5.48),(3.35,5.48))
+    # Dashed line shows the specific edited conditioning connection at B3.
+    arrow((6.65,5.48),(8.52,6.12),TEAL,'--')
+    box(8.25,6.14,.55,.42,'A',color='#dceef0',edge=TEAL,size=12)
+    arrow((8.52,6.59),(8.52,6.95),TEAL,'--')
+    box(11.95,5.05,3.85,.87,'Execute selected actions\nin the simulator')
+    arrow((14.44,6.85),(14.44,5.97))
+    ax.text(8.1,4.53,'V: visual input     A: B3 conditioning     R: B3 output',
+            ha='center',fontsize=12,weight='bold',color=INK)
+    ax.text(.1,3.99,'Eight paired arms',fontsize=15,weight='bold',color=INK)
+    rows=[
+        ['Native','—','—','—'],
+        ['Refined four-direction','learned','—','—'],
+        ['Calibrated random subspace','random','—','—'],
+        ['Equal-budget coupling','—','scaled','scaled'],
+        ['Dose-matched random directions','—','random','random'],
+        ['Unscaled joint','—','original','original'],
+        ['Visual only','—','original','—'],
+        ['Action-conditioning only','—','—','original'],
+    ]
+    table=ax.table(cellText=rows,colLabels=['Arm','R','V','A'],cellLoc='center',
+                   colWidths=[.46,.13,.13,.13],bbox=[.006,.025,.66,.36])
+    table.auto_set_font_size(False); table.set_fontsize(10)
+    for (row,col),cell in table.get_celld().items():
+        cell.set_edgecolor('#d3dde9')
+        cell.set_facecolor('#e8eef6' if row==0 else ('#f6f8fb' if row%2==0 else 'white'))
+        if row==0: cell.set_text_props(weight='bold',color=INK)
+        if col==0: cell.set_text_props(ha='left')
+    ax.text(11.05,3.45,'Controlled comparisons',fontsize=12,weight='bold',color=INK)
+    ax.text(11.05,2.99,'R: learned basis vs calibrated\nrandom subspace.\n\nV + A: joint vs drop-one arms;\nequal-budget vs random directions.\n\nRefined R is not combined with V/A\nin this eight-arm panel.',
+            va='top',fontsize=11,linespacing=1.45,color='#526174')
+    save(fig,'ablation_architecture')
+
+
 def outcomes(report, audit):
     fig, (ax, bx) = plt.subplots(1, 2, figsize=(12, 6), gridspec_kw={'width_ratios':[1.35, 1]})
     labels = []
@@ -110,5 +185,5 @@ def basis():
 if __name__ == '__main__':
     plt.rcParams.update({'font.family':'DejaVu Sans', 'font.size':10, 'svg.fonttype':'none'})
     report, audit = check()
-    overview(); outcomes(report, audit); basis()
-    print(f'Wrote three PNG/SVG figures to {OUT}')
+    overview(); architecture(); outcomes(report, audit); basis()
+    print(f'Wrote four PNG/SVG figures to {OUT}')
