@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "analysis": "lcfm_history_ranking_v1",
+  "created_utc": "2026-09-13T23:48:57.340979+00:00",
+  "status": "fixed_before_new_pairwise_ranking_calculation",
+  "source_commit": "5bd57f6332eb30ae32e9cd05d1c58c10f19b9e6b",
+  "source_summary_sha256": "952826353a989493848f89b209852398295c0ae574c093dc7e1fb6a13bba2c3a",
+  "scientific_role": "post_hoc_development_reanalysis_of_completed_experiment",
+  "question": "Does patching both action-history appearances preserve candidate ordering under the coherent raw-action counterfactual better than patching H3 only?",
+  "hypothesis": "Persistent patches are closer to the coherent raw-action candidate ordering than H3-only patches; all-block persistent parity is an implementation control, not an independent discovery.",
+  "tasks": [
+    "reach",
+    "reach-wall"
+  ],
+  "episodes_per_task": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "banks": [
+    "original",
+    "fresh"
+  ],
+  "sites": [
+    "all_blocks",
+    "B0",
+    "B1",
+    "B2",
+    "B3",
+    "B4",
+    "B5"
+  ],
+  "endpoint": "H6 official goal costs: archived FP32 visual MSE + 0.1 proprioceptive MSE",
+  "horizons_unavailable_for_ranking": [
+    3,
+    4
+  ],
+  "arms": "native; coherent_raw_h3; all_blocks_h3_donor; all_blocks_persistent_donor; donor_h3_B0..B5; donor_persistent_B0..B5",
+  "primary_reference": "coherent_raw_h3",
+  "primary_pairs": [
+    "H3_only vs coherent_raw_h3",
+    "persistent vs coherent_raw_h3"
+  ],
+  "secondary_pairs": [
+    "persistent vs H3_only at every site",
+    "native vs coherent_raw_h3 once per bank"
+  ],
+  "metrics": [
+    "tie-aware Spearman rho over all300 costs",
+    "intersection count of actual archived top10 elite sets",
+    "winner mismatch using minimum candidate ID among exact minimum-cost ties"
+  ],
+  "tie_audits": [
+    "number of minimum-cost ties",
+    "top10 cutoff ties",
+    "argmin-set intersection; disjoint minimum sets indicate forced winner change independent of tie breaking"
+  ],
+  "aggregation": "8 whole contexts per task; banks retained separately; no pooling candidates, banks or sites as independent samples; report all case values and descriptive means/counts",
+  "uncertainty": "No new significance tests or confidence intervals. Individual contexts and complete counts are retained; descriptive findings are restricted to these recorded contexts.",
+  "undefined": "constant cost ranks yield null Spearman; no dropping cases or selective means; malformed/nonfinite cost arrays abort",
+  "complete_counts": {
+    "source_contexts": 16,
+    "task_context_banks": 32,
+    "selected_cost_vectors": 512,
+    "paired_rows": 704,
+    "primary_paired_contrast_rows": 224
+  },
+  "selection": "No new best-layer selection. Report all seven sites, both banks, both tasks and all three metrics regardless of outcome.",
+  "execution": {
+    "new_model_calls": 0,
+    "new_physical_rollouts": 0,
+    "new_gpu_rentals": 0,
+    "protected_data_used": false
+  }
+}
