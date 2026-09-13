@@ -1,5 +1,10 @@
 # Validation receipt
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 Executed in the available CPU workspace on 2026-09-07.
 
 - Twenty-four unit checks passed. They cover exact split counts/order stability, duplicate

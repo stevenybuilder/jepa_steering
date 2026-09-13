@@ -1,5 +1,10 @@
 # MetaWorld exact-duplicate correction — 2026-09-07
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 ## Finding
 
 The official release has the paper-reported 12,600 MetaWorld rows: 300 for each

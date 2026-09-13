@@ -1,5 +1,10 @@
 # DROID baseline reconciliation audit
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 Audit date: 2026-09-11. Scope: existing evidence only; no scientific runs,
 protocol changes, GPU rentals, or original-result modifications.
 
@@ -28,7 +33,7 @@ aggregate supplies the score for our particular checkpoint and input manifest.
 The paper describes 16 Franka evaluation recordings, while the released configs
 select 15. These are recorded-action comparisons, not physical-robot executions.
 
-The [existing source-alignment contract](../docs/DROID_METHOD_ALIGNMENT.md)
+The existing source-alignment contract (archived reference: `../docs/DROID_METHOD_ALIGNMENT.md`)
 records the executable late-window interpretation: selected checkpoints in
 epochs [215,315], not a requirement to evaluate 100 distinct checkpoints. This
 audit did not launch or complete those training histories.
@@ -80,7 +85,7 @@ intervals for its 16 frozen contrasts. Source inspection and CPU tests support
 that implementation; this audit did **not** rerun the entire 576-record
 comparative analysis. Such intervals do not supply missing training-seed
 variation or resolve the historical-baseline discrepancy. See the existing
-[DROID findings](KEY_FINDINGS.md#10-droid-supplies-a-completed-additional-endpoint-not-robot-success)
+DROID findings (archived reference: `KEY_FINDINGS.md#10-droid-supplies-a-completed-additional-endpoint-not-robot-success`)
 for the separately completed comparison.
 
 ## Fresh validation performed

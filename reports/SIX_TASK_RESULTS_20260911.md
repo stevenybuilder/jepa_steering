@@ -1,5 +1,10 @@
 # Six-task results: completed measurements
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 Updated September11,2026. All scheduled Push-T, Wall and PointMaze continuation
 runs and their complete frozen analyses are finished. **The entire requested
 matrix is not finished:**14 cells require experiments that have not been run.
@@ -40,7 +45,7 @@ to `matched_random_fixed_rank4`; the coupling control maps to
 `matched_random_equal_standardized_energy` in the other displayed task panels.
 Both control comparisons hold intervention location fixed. They do not establish
 that location matters more than direction, or that learned and random edits are
-equivalent. See [control definitions](../matched%20random%20control.md#4-our-controls-exact-definitions-and-gaps).
+equivalent. See control definitions (archived reference: `../matched random control.md#4-our-controls-exact-definitions-and-gaps`).
 
 Author values come from [JEPA-WM v4, Tables11–12](https://arxiv.org/html/2512.24497v4).
 The first three published rows use late-training aggregation; the final-checkpoint

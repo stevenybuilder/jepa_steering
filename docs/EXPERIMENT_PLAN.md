@@ -1,9 +1,14 @@
 # Frozen-model offline study: active plan
 
+> Original evolving design contract, retained for provenance. The final four-task
+> confirmation is described in [Methods](METHODS.md); completed results are in
+> [Results](RESULTS.md). Historical status statements below are not current.
+
+
 ## Missing MetaWorld component cells — September 11, 19:08 UTC
 
 The three missing component arms on Reach and Reach-Wall now have a separate
-[execution and analysis contract](METAWORLD_COMPONENT_COMPLETION.md), tested
+execution and analysis contract (archived reference: `METAWORLD_COMPONENT_COMPLETION.md`), tested
 runner, and immutable pre-execution source freeze `component-extension-v1/freeze`.
 Use the existing coupling fits and canonical96 scenarios per task; four conditions
 including a receiving-runtime native reference produce768 evaluations,576 of
@@ -72,7 +77,7 @@ unaltered 100-step native planner and all eight original paired contrasts.
 No retraining, old expensive solver, HMM/combined successor or other task resumes.
 This sample is not a claim of adequate power for a five-point gain. The retained
 artifact exposure audit and its inaccessible-disk limitation are explicit in
-[the validation execution document](FINAL_STATISTICAL_VALIDATION.md).
+the validation execution document (archived reference: `FINAL_STATISTICAL_VALIDATION.md`).
 Preserve complete raw results/logs/inputs and verified analysis in private Drive,
 then release only the new owned workers. Deadline backstop stops compute while
 retaining source storage if preservation fails. No completion claim follows from
@@ -81,7 +86,7 @@ this plan entry. All previous results and freezes remain unchanged.
 ## Independent statistical validation requested — September 10, 2026
 
 The user requests completion of the existing independent-validation stage.
-[Execution readiness](FINAL_STATISTICAL_VALIDATION.md) links the original
+Execution readiness (archived reference: `FINAL_STATISTICAL_VALIDATION.md`) links the original
 one-shot/behavioral confirmation provisions and records what is still missing.
 Both the 960-episode core and 192-scenario diagnostic are complete and preserved;
 neither is an untouched confirmation result. The new CPU statistical supplement
@@ -95,7 +100,7 @@ restart follows from this readiness entry alone.
 ## Bounded diagnostic continuation — user approved September 10, 2026
 
 The user now authorizes one planner-decision diagnostic and final analysis/write-up.
-Follow [its separate contract](PLANNER_DECISION_DIAGNOSTIC.md): the existing five
+Follow its separate contract (archived reference: `PLANNER_DECISION_DIAGNOSTIC.md`): the existing five
 conditions on Reach and Reach-Wall, 96 canonical scenarios each, one shared
 300-candidate action bank and one 15-step physical prefix per selected action.
 This does not restart full closed-loop panels, other tasks/intervention families,
@@ -112,7 +117,7 @@ material in **Google Drive**, then stop the remaining owned LA rental. Retain
 source volumes; do not destroy storage containing unarchived older histories.
 The user's pause supersedes all earlier autonomous extension authorizations.
 See [the completed result](../reports/CORE_METAWORLD_BEHAVIORAL_RESULTS.md) and
-[execution status](../reports/EXECUTION_STATUS.md) for preservation/shutdown receipts.
+execution status (archived reference: `../reports/EXECUTION_STATUS.md`) for preservation/shutdown receipts.
 
 ## Immediate execution priority — user approved September 8, 2026
 
@@ -143,7 +148,7 @@ while this priority is active.
 Refined combined engineering addition (September8): implement the already
 requested cheaper Reach combination using its unchanged coupling and fixed-map
 banks, with native B3/H3 features captured by a four-block predictor-prefix
-replay. [The engineering contract](FIXED_COMBINED_ENGINEERING.md) distinguishes
+replay. The engineering contract (archived reference: `FIXED_COMBINED_ENGINEERING.md`) distinguishes
 this extra prefix work from a full native shadow and from the old online-probe
 operator. Local tests pass; receiving equivalence, fitting-stimulus provenance,
 full-planner validation and a new behavioral freeze remain required. At18:50UTC
@@ -159,7 +164,7 @@ efficacy result, protected access or completed behavioral claim is inherited.
 DROID preparation addition (September8): native-eligible raw fitting inputs and
 their exact loader/identity audit are separate from the15Franka evaluation files.
 Prepare the pre-existing vision/action factorial for the DROID12-block/H3 model
-using the [task-specific coupling contract](DROID_COUPLING_BEHAVIOR.md). This is
+using the task-specific coupling contract (archived reference: `DROID_COUPLING_BEHAVIOR.md`). This is
 not a six-block/H6 adapter transfer. The separate fit and eleven full-planner
 engineering checks completed on September 8. The coupling comparison completed
 and its frozen analysis was independently verified at15:12UTC:576 endpoints,
@@ -175,7 +180,7 @@ this plan alone, for actual completion counts.
 
 HMM behavioral addition (September8): implement the user's explicit paired
 constant/memoryless/HMM comparison around the refined fixed-response edit while
-non-routed rollouts continue. [The HMM contract](HMM_FIXED_RESPONSE_BEHAVIOR.md)
+non-routed rollouts continue. The HMM contract (archived reference: `HMM_FIXED_RESPONSE_BEHAVIOR.md`)
 supersedes the older conditional eligibility-only admission rule for this new
 behavioral-development comparison. Negative fit-only history diagnostics remain
 reported; no qualified-history, success or confirmation claim is inferred.
@@ -187,14 +192,14 @@ Push-T behavioral addition (September8): prepare the complete existing static
 coupling factorial on the same96-total native replication streams. Reuse the
 original128-family fit, keep the full published planner, verify exact source
 segments and receiving-device native/zero/source parity, and cluster uncertainty
-by original initial-state family. See [the Push-T coupling contract](PUSHT_COUPLING_BEHAVIOR.md).
+by original initial-state family. See the Push-T coupling contract (archived reference: `PUSHT_COUPLING_BEHAVIOR.md`).
 Preparation is not completed candidate engineering, efficacy or confirmation.
 
 PointMaze history execution (September8): the full native50-epoch/1139-update
 schedule,1800/200train/validation rows,16x8effectivebatch and five native validation
 events per epoch are now implemented separately from Wall. The source validation
 sampler retains its final partial batch; checkpoint resumes retain its cursor.
-See [the PointMaze training-history contract](POINTMAZE_TRAINING_HISTORY.md).
+See the PointMaze training-history contract (archived reference: `POINTMAZE_TRAINING_HISTORY.md`).
 Receiving input/CPU checks do not establish completed training, late-checkpoint
 behavioral comparisons or confirmation. Seeds234/235/236 remain required.
 Correction at12:38UTC: the actual pinned upstream PointMaze train AND validation
@@ -212,7 +217,7 @@ state or substitute234 for236. Optional cache checks do not block these historie
 
 MetaWorld/Push-T history readiness (September 8): the existing required histories
 need separate native 32-rank adapters (global batch 256), with 3,543/7,741 updates per
-epoch and 50 epochs. The [read-only readiness report](../reports/NATIVE_32RANK_HISTORY_READINESS.md)
+epoch and 50 epochs. The read-only readiness report (archived reference: `../reports/NATIVE_32RANK_HISTORY_READINESS.md`)
 records verified schedules, partial validation batches, RNG/resume requirements
 and implementation ownership. Complete raw-input bytes were verified onIndiana
 at15:07UTC and the separate32-rank update core is CPU-tested. A native caller-bound
@@ -238,7 +243,7 @@ distinction without changing either prior records or current episode counts.
 Execution-only processing amendment (September8): rebalance intact unstarted
 navigation RNG streams across already rented US devices as other assignments
 finish. Do not change96TOTAL, arms, fits, scenarios or the strict-FP32 planner.
-The [scaling notes](../jax_scaling_notes.md) distinguish implemented, activated and
+The scaling notes (archived reference: `../jax_scaling_notes.md`) distinguish implemented, activated and
 measured optimizations. A bounded precision diagnostic found only1.10x/1.13x
 forecast speedups and changed outputs, so no scientific precision switch follows.
 Frozen visual-feature caching is preparation only until numerical/RNG/update
@@ -260,7 +265,7 @@ Latest operator amendment (September 7, late evening EDT): the user supplied
 `rank 4 intervention.md` and its linked `Rank Edit.md`, authorizing the cheaper
 replacement before subsequent behavioral launches. The first engineering choice is
 **Design 1: an offline-fitted fixed response map**, separately named
-`fixed_response_rank4_v1`. See [the executable successor contract](FIXED_RESPONSE_RANK4.md).
+`fixed_response_rank4_v1`. See the executable successor contract (archived reference: `FIXED_RESPONSE_RANK4.md`).
 It retains B3/H3, four distributed directions and task-specific dose, but removes all
 online response probes and native shadows. It does not inherit old efficacy results
 or the old cross-arm zero rule. The legacy expensive rank/combined panel remains
@@ -274,7 +279,7 @@ not a simulator or newly executed physical-robot task-success experiment. Its
 64-episode evaluation, three training seeds, released-code sparse aggregation
 within epochs 215–315 (18 checkpoints at native cadence), distinct
 model/inputs and source discrepancies are specified in
-[DROID_METHOD_ALIGNMENT.md](DROID_METHOD_ALIGNMENT.md) and executable
+DROID_METHOD_ALIGNMENT.md (archived reference: `DROID_METHOD_ALIGNMENT.md`) and executable
 `offline_study.droid_contract`. The other five tasks retain 96 episodes and ten
 late epochs. The multi-seed/history track is required, not optional; absent
 histories cannot be supplied by repeatedly evaluating the released checkpoint.
@@ -285,7 +290,7 @@ retain the existing three tasks, and compare predefined interventions using plan
 success alongside prediction metrics. The old significant-offline-improvement rule
 remains part of the completed offline study, but is NOT a mandatory admission rule
 for the new behavioral-development stage. Preserve all prior measurements and exposure
-records. See [the behavioral amendment](BEHAVIORAL_EVALUATION_AMENDMENT.md) for the
+records. See the behavioral amendment (archived reference: `BEHAVIORAL_EVALUATION_AMENDMENT.md`) for the
 expanded scope, separate development/confirmation roles, multi-training-seed and
 checkpoint-history track, rerun accounting, and outstanding pre-execution freezes.
 
@@ -304,7 +309,7 @@ See [corrected results and exact completion evidence](../reports/CORRECTED_OFFLI
 The predeclared Reach combined/drop-one stage completed on all eight US GPUs after
 both precision-specific fit-only checks passed. Its exact
 ten arms, source component bindings, complete 33-row previously exposed population
-and fixed analysis are recorded in [COMBINED_DEVELOPMENT.md](COMBINED_DEVELOPMENT.md).
+and fixed analysis are recorded in COMBINED_DEVELOPMENT.md (archived reference: `COMBINED_DEVELOPMENT.md`).
 This does not open another untouched reserve or establish closed-loop efficacy.
 The subsequent durable audit verifies 88 artifact hashes and all 33 paired trajectories.
 It selects the unchanged non-routed coupling-plus-rank4 recipe for Reach, retains rank4
@@ -733,4 +738,4 @@ have been measured. CPU synthetic timings must not fill that field.
 - [Pinned upstream repository](https://github.com/facebookresearch/jepa-wms/tree/13cf1d9c7e476f53c17714d2e0f1dc239a883ce0)
 - [Upstream MetaWorld splitting](https://github.com/facebookresearch/jepa-wms/blob/13cf1d9c7e476f53c17714d2e0f1dc239a883ce0/app/plan_common/datasets/traj_dset.py)
 - [Upstream Push-T loader](https://github.com/facebookresearch/jepa-wms/blob/13cf1d9c7e476f53c17714d2e0f1dc239a883ce0/app/plan_common/datasets/pusht_dset.py)
-- Historical source tree: [archive](../archive/2026-09-07-workspace/)
+- Historical source tree: archive (archived reference: `../archive/2026-09-07-workspace/`)

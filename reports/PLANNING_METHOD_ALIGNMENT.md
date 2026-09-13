@@ -1,5 +1,10 @@
 # Paper-aligned planning preparation (2026-09-07)
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 This is a setup/provenance report, not planning results or proof of confirmation.
 The governing study remains [EXPERIMENT_PLAN.md](../docs/EXPERIMENT_PLAN.md).
 Implementation: `src/offline_study/planning_contract.py`, `planning_env_smoke.py`.

@@ -9,6 +9,9 @@ description = "Lineage-aware offline evaluation and throughput measurement for f
 requires-python = ">=3.10"
 dependencies = ["numpy>=1.24", "torch>=2.7", "PyYAML>=6", "einops>=0.8"]
 
+[project.optional-dependencies]
+analysis = ["pandas>=2", "scipy>=1.10", "matplotlib>=3.7"]
+
 [project.scripts]
 jepa-inventory = "offline_study.inventory:main"
 jepa-benchmark = "offline_study.benchmark:main"

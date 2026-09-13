@@ -1,5 +1,10 @@
 # Matched-random control audit — September 11, 2026
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 ## Bottom line
 
 The saved MetaWorld controls pass the checks performed here: the paired inputs,
@@ -79,9 +84,9 @@ separate prospectively specified comparison, not relabeling this development pan
 
 ## Reproducible evidence
 
-- [Paired records and delivered-energy audit](../artifacts/offline_study/table-completion-20260911-v1/CONTROL_AUDIT_REPORT.json)
-- [Saved direction/bank audit](../artifacts/offline_study/table-completion-20260911-v1/CONTROL_BANK_AUDIT.json)
-- [Archive restoration receipt](../artifacts/offline_study/table-completion-20260911-v1/CONTROL_AUDIT_RESTORED.json)
+- Paired records and delivered-energy audit (archived reference: `../artifacts/offline_study/table-completion-20260911-v1/CONTROL_AUDIT_REPORT.json`)
+- Saved direction/bank audit (archived reference: `../artifacts/offline_study/table-completion-20260911-v1/CONTROL_BANK_AUDIT.json`)
+- Archive restoration receipt (archived reference: `../artifacts/offline_study/table-completion-20260911-v1/CONTROL_AUDIT_RESTORED.json`)
 - [CPU record-audit script](../scripts/vast/audit_core_random_controls.py)
 - [CPU bank-audit script](../scripts/vast/audit_control_banks.py)
 - [Unchanged primary behavioral analysis](CORE_METAWORLD_BEHAVIORAL_RESULTS.md)

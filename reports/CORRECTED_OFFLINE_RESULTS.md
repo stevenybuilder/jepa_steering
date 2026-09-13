@@ -1,5 +1,10 @@
 # Corrected primary offline results — 2026-09-07
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 All five frozen sweeps completed in BF16 (primary) and FP32 (sensitivity) on all three
 primary author-validation pools. Exact upstream input, context, rollout and metric
 checks passed. This finishes those corrected offline comparisons, **not the entire
@@ -45,7 +50,7 @@ equal-budget coupling plus rank4 improves the primary error by **4.824%**, inter
 **[3.668%, 5.980%]**, against its paired native arm. It passes the frozen minimum
 against matched-random combined and both component-removal arms. This secondary
 development stage uses its own simultaneous contrast family; do not merge its
-intervals into the original one-factor family. See [combined evidence](../docs/COMBINED_DEVELOPMENT.md).
+intervals into the original one-factor family. See combined evidence (archived reference: `../docs/COMBINED_DEVELOPMENT.md`).
 
 BF16 native H6 errors are 0.0008585703183 (Reach), 0.0008200658457 (Reach-Wall),
 and 0.0002192615816 (Push-T). All listed comparisons delivered energy within the

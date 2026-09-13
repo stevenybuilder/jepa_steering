@@ -1,5 +1,10 @@
 # PointMaze training sampler correction — September 8, 2026
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 Confirmed at approximately12:37UTC using the pinned actual upstream `init_data`,
 its unchanged caller statements and real2000-row PointMaze metadata on Texas.
 This is an implementation defect, not a changed experimental choice.

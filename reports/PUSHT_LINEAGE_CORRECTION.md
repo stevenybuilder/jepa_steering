@@ -1,5 +1,10 @@
 # Push-T lineage correction — 2026-09-07
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 ## Finding
 
 The released Push-T train tensors contain 18,685 distinct rollout rows arranged as

@@ -1,5 +1,10 @@
 # Author-validation coverage and rerun accounting — 2026-09-07
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 Status: metadata verified; no author-matched evaluation has run. Existing results
 are preserved as custom offline development evidence. Counts below are prospective
 full-pool coverage, not claimed sample counts behind the authors' published curves.

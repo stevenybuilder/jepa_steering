@@ -1,5 +1,10 @@
 # Ablation coverage — latest verified execution, 2026-09-08, 16:16 UTC
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 The historical inventory below remains evidence of prior state. Current additions:
 
 | Comparison | Completed | Running or prepared | Still missing |
@@ -28,7 +33,7 @@ Report SHA256 `b998218db8f1b87d18150bed04b9eec29731ef50af5e8c203f7ba028b9f83de8`
 Geometry offline closure has also been freshly verified for all four navigation
 task/precision scopes:32/32 shards, existing aggregates, and all bound raw records.
 This needs preservation, not recomputation. See
-[exact coverage/evidence audit](NAVIGATION_GEOMETRY_CLOSURE_READINESS.md).
+exact coverage/evidence audit (archived reference: `NAVIGATION_GEOMETRY_CLOSURE_READINESS.md`).
 
 ## Historical inventory — 08:53 UTC
 

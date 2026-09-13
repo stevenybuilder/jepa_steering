@@ -1,5 +1,10 @@
 # MetaWorld paired-stimulus repair — 2026-09-07
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 This is an engineering correction to the frozen behavioral panel, not a new
 method, dataset split, sample-selection rule or confirmation cohort.
 

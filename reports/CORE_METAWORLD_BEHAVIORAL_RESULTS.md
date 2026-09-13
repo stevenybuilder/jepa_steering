@@ -1,5 +1,10 @@
 # Completed core MetaWorld behavioral-development comparison
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 ## Bottom line
 
 The complete five-arm panel does **not establish an intervention-driven improvement
@@ -80,8 +85,8 @@ paired initial/goal setups, and source/freeze bindings passed the receiving chec
 An independent CPU reload and recomputation exactly reproduced the frozen analysis.
 The complete eight-contrast family was retained; no partial-result selection was used.
 
-- [Mirrored analysis](../artifacts/offline_study/core-completion-preservation-20260908-v1/ANALYSIS_REPORT.json)
-- [Independent verification receipt](../artifacts/offline_study/core-completion-preservation-20260908-v1/SCIENCE_VERIFIED.json)
+- Mirrored analysis (archived reference: `../artifacts/offline_study/core-completion-preservation-20260908-v1/ANALYSIS_REPORT.json`)
+- Independent verification receipt (archived reference: `../artifacts/offline_study/core-completion-preservation-20260908-v1/SCIENCE_VERIFIED.json`)
 - Original worker report SHA256: `0bcfbae89587430782451429f8cad950fc5f8ecc3c0e4ae5a9a2acf88eae977a`.
 - Frozen protocol SHA256: `853e8bf6b71c65c1e61d249ba84d8d57d6172ba1bd3a15e0424dc2d9e32cfa1f`.
 - Frozen analysis-source SHA256: `229eea2764034cff7a4a5455ec759d57385c624dcbbbfab15021b699c61540dc`.
@@ -89,12 +94,12 @@ The complete eight-contrast family was retained; no partial-result selection was
 The final core/paused-HMM Google Cloud archive passed complete byte/member
 readback. Google Drive verification and rental lifecycle are separate operational
 gates: see the latest execution checkpoint and
-[restoration guide](../artifacts/offline_study/core-completion-preservation-20260908-v1/RESTORE.md)
+restoration guide (archived reference: `../artifacts/offline_study/core-completion-preservation-20260908-v1/RESTORE.md`)
 for the archive locations, verification receipts and shutdown status.
 The later user-authorized storage closeout supersedes the original blanket
 source-volume hold: verified rentals have been deleted after Drive preservation;
 two inaccessible disks remain retained. See the dated
-[final storage-release report](VAST_FINAL_STORAGE_RELEASE_20260910.md).
+final storage-release report (archived reference: `VAST_FINAL_STORAGE_RELEASE_20260910.md`).
 HMM, combined extensions, additional tasks, fresh confirmation, and training
 histories remain paused/deferred under
 the user's core-first priority. This completes the agreed core comparison, not

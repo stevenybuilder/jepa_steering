@@ -1,5 +1,10 @@
 # Completed common-action planner-decision diagnostic
 
+> Historical development report. For the completed protected evaluation and current
+> interpretation, see [Results](../docs/RESULTS.md). Archived references below are
+> retained as paths; bulk evidence is not bundled.
+
+
 This is a **development diagnostic**, not a new full-task success trial.
 Reach and Reach-Wall each contribute96 canonical scenarios and five conditions.
 Each model scores the same initial300-candidate H6 population; its selected

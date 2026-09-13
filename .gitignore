@@ -75,7 +75,50 @@ id_ed25519
 
 # Local paper-development notes.
 /reproducibility.md
+/results_verification.md
 
 # Local-only bulk archive and scratch
 /archive/
 /tmp/
+
+# Public-repository curation. These files remain on disk; older commits are not rewritten.
+/docs/archive/
+/analysis/out/
+*.log
+*.out
+*.err
+.pytest_cache/
+*.egg-info/
+
+# Root working notes; current scientific entry point is README + docs below.
+/*.md
+!/README.md
+!/AGENTS.md
+
+# Keep the current concise methods and the original experiment contract.
+/docs/*.md
+!/docs/METHODS.md
+!/docs/RESULTS.md
+!/docs/COMPUTE.md
+!/docs/REPRODUCING.md
+!/docs/EXPERIMENT_PLAN.md
+
+# Manuscript drafts/old rendered figures are local; retain machine-readable evidence.
+/paper/*
+!/paper/data/
+!/paper/data/**
+
+# Operational status, billing and storage notes, not scientific result reports.
+/reports/ETA_COST_20260908.md
+/reports/EXECUTION_STATUS.md
+/reports/GOOGLE_RESULTS_ARCHIVE_README.md
+/reports/NATIVE_32RANK_HISTORY_READINESS.md
+/reports/NAVIGATION_GEOMETRY_CLOSURE_READINESS.md
+/reports/NAVIGATION_STORAGE_RELOCATION.md
+/reports/RESUME_2026-09-07.md
+/reports/RETAINED_STORAGE_AUDIT_20260908.md
+/reports/SIX_TASK_TABLE_PROGRESS_20260911.md
+/reports/VAST_FINAL_STORAGE_RELEASE_20260910.md
+/reports/DECISION_DIAGNOSTIC_STATUS.md
+/reports/KEY_FINDINGS.md
+.gstack/
