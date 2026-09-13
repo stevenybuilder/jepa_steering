@@ -23,7 +23,9 @@ jobs:
       - name: Install package
         run: python -m pip install '.[analysis]'
       - name: Check published result consistency
-        run: python scripts/check_public_results.py
+        run: |
+          python scripts/check_public_results.py
+          python scripts/check_manuscript.py
       # Full integration coverage also needs pinned vendor source and private
       # archive fixtures. This job deliberately reports only the portable suite.
       - name: Run public CPU tests
@@ -44,6 +46,13 @@ jobs:
             test_candidate_score_trace.py \
             test_layer_attention_pilot.py \
             test_steering_specificity.py \
+            test_decision_geometry.py \
+            test_pathway_geometry.py \
+            test_candidate_replay_pilot.py \
+            test_pilot_summary.py \
+            test_cem_steering_summary.py \
+            test_steered_cem_pilot.py \
+            test_manuscript.py \
             test_public_results.py; do
             python -m unittest discover -s tests -p "$test_file" -v
           done

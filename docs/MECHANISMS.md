@@ -1,239 +1,186 @@
-# Activation steering in a frozen world model
+# From internal edits to planner decisions
 
-Research and analysis date: September 13, 2026. New analyses are exploratory;
-the original offline experiments and protected behavioral analysis remain unchanged.
+The evidence separates four endpoints: activation reconstruction, recorded-action
+forecast error, candidate scoring, and closed-loop success. An improvement at one
+does not establish an improvement at the next. September 13, 2026 reanalyses are
+exploratory; the original offline experiments and frozen protected analysis remain
+unchanged.
 
-## 1 Executive finding and recommendation
+The earlier layer sweep used independently fitted rank-one operators. The later
+fixed-response rank-four successor reduced development H6 proprioceptive MSE by
+2.360% on Reach and 2.192% on Reach-Wall. Neither is a treatment-invariant causal
+chain into protected behavior. Fresh Reach has 21 refined rescues and 21 regressions:
+both native and refined succeed in 52/96 scenarios. The complete protected panel
+contains 384 paired scenarios and 3,072 evaluations, without an established net
+success gain. [Results and uncertainty](RESULTS.md).
 
-**The refined edit is dominated by a component shared across candidate plans,
-while the paired behavioral records show substantial changes in which scenarios
-succeed.** This is a measured property of the applied steering computation, not
-yet the reason it fails to produce a reliable net success gain.
+## Layer response map
 
-Two additional CPU analyses are complete: a recount of the archived layer sweeps
-and a nested decomposition of applied coefficients from 768 fresh arm records.
-They add a spatially and computationally specific account to the success table.
-Recommendation: **run a limited shared-candidate replay pilot**, not another broad
-success-rate campaign. Confidence is high in the descriptive arithmetic and lower
-in any proposed downstream causal explanation.
+The recount verifies **576 task/precision/support/modality/horizon cells** from six
+hash-verified reports against the published export. It retains all six singleton
+blocks, B2+B3, all-six support, and matched-random comparisons. Native and zero-dose
+metrics agree. Independent units remain 33 Reach, 27 Reach-Wall and 21 Push-T
+lineages, not cells, windows, or horizons.
 
-## 2 The question
+![Registered BF16 layer response map](figures/layer_mechanism_bfloat16_native.png)
 
-Where is a frozen JEPA-WM predictor susceptible to useful latent correction, and
-does its steering computation distinguish alternative actions? These are different
-from asking whether a physical concept is decodable, whether attention is local,
-or whether a planner succeeds more often.
+Singleton H6 proprioceptive-error reductions decline monotonically from B0 to B5
+on both MetaWorld tasks in both numerical conditions:
 
-The layer sweeps used the earlier rank-one operator, independently fitted at each
-registered support. The coefficient analysis examines the later fixed-response
-rank-four operator. They are complementary experiments, not a longitudinal causal
-chain through one unchanged intervention.
-
-## 3 Literature and interpretation
-
-| Primary work and checked version | Relevant evidence | Implication for this study |
-|---|---|---|
-| [Interpreting Physics in Video World Models, v1, February 4 2026](https://arxiv.org/html/2602.07050v1) | Reports attention locality and targeted local-attention suppression alongside physical-variable probes. | A head-distance heatmap is descriptive; causal localization requires an intervention and a measured endpoint. Its V-JEPA video representation is not our six-block action-conditioned predictor. |
-| [Towards Best Practices of Activation Patching, v2, January 17 2024](https://arxiv.org/abs/2309.16042v2) | Shows that metric and corruption choices can change interpretability conclusions. | Fix the action bank, endpoint, dose and comparison before examining a new diagnostic; avoid selecting the most attractive layer afterward. |
-| [How to use and interpret activation patching, v1, April 23 2024](https://arxiv.org/html/2404.15255v1) | Separates exploratory localization from confirmation and discusses path patching and necessity versus sufficiency. | Our layer sweep identifies intervention susceptibility, not a complete circuit. A downstream patch-back can test mediation more directly than another correlation. |
-| [How Should World Models Be Evaluated for Embodied Decision-Making, v2, June 28 2026](https://arxiv.org/abs/2606.15032v2) | A position paper advocating decision-relevant evaluation, including action fidelity and ranking. | Motivation for measuring candidate ranking separately from forecast loss; not independent empirical proof of our proposed mechanism. |
-
-No novelty priority or universal physics-emergence claim follows from this search.
-The useful contribution is a reproducible, task-specific intervention case study.
-
-## 4 Completed analysis and best next step
-
-### Layer response map
-
-Recounted **576 task/precision/support/modality/horizon cells** directly from six
-hash-verified reports containing per-lineage metrics. All recounted means match
-the existing published CSV export. Each support retains its matched random arm;
-zero-dose checks reproduce native metrics. The independent units remain 33 Reach,
-27 Reach-Wall and 21 Push-T lineages, not 576 independent experiments.
-
-![BF16 layer effects across forecast horizons](figures/layer_mechanism_bfloat16_native.png)
-
-For the singleton sweep, H6 proprioceptive-error reductions decline monotonically
-from B0 to B5 on both MetaWorld tasks in **both** precisions:
-
-| Task | BF16 B0 / B5 reduction | FP32 B0 / B5 reduction |
+| Task | BF16 B0 / B5 | FP32 B0 / B5 |
 |---|---:|---:|
 | Reach | 3.026% / 0.475% | 3.050% / 0.494% |
 | Reach-Wall | 1.526% / 0.298% | 1.334% / 0.228% |
 
-The original BF16 simultaneous intervals for B0 minus B5 are [1.769, 3.333]
-and [0.243, 2.214] percentage points of native MSE, respectively. B0 also beats
-its matched random subspace in those registered contrasts. This does **not** isolate
-B0 from every other block: Reach B0 versus B1 remains unresolved. It does not
-establish an intrinsically privileged semantic layer, and it is not a test of the
-later rank-four operator at B0.
+Original BF16 simultaneous B0-minus-B5 intervals are [1.769, 3.333] and
+[0.243, 2.214] percentage points of native MSE. Reach B0 versus B1 remains
+unresolved. Push-T does not reproduce the MetaWorld H6 benefit; its BF16 B0
+proprioceptive error worsens 2.25% at H3 but is nearly native at H6.
 
-The pattern is task-dependent: Push-T does not reproduce the MetaWorld H6 benefit.
-In its BF16 B0 arm, proprioceptive error worsens by 2.25% at H3 but is nearly native
-at H6. This horizon profile is descriptive; it does not identify contact physics.
-An unchanged early endpoint is expected because editing starts at H3.
+This identifies intervention susceptibility, not a unique physics layer. Fits,
+activation scale, delivered dose, and downstream computation vary with support.
+H1–H2 precede the H3 intervention. The sweep does not test moving the later
+rank-four operator to B0.
 
-[Matched-random heatmap](figures/layer_mechanism_bfloat16_random.png) ·
-[FP32 sensitivity](figures/layer_mechanism_float32_native.png) ·
-[FP32 matched-random comparison](figures/layer_mechanism_float32_random.png) ·
-[All cells](../paper/data/layer_mechanism_grid.csv).
+[All 576 cells](../paper/data/layer_mechanism_grid.csv) ·
+[Matched-random map](figures/layer_mechanism_bfloat16_random.png) ·
+[FP32 native](figures/layer_mechanism_float32_native.png) ·
+[FP32 random](figures/layer_mechanism_float32_random.png).
 
-### Candidate-specific versus common correction
+## Candidate-specific versus common correction
 
-For scenario s, call j and candidate i, let c(s,j,i) be the logged four-component
-coefficient vector after dose scaling. Decompose it into the mean over candidates
-in that call and its candidate-centered residual. Further split call means into
-the scenario mean and the between-call residual. The squared energies add exactly:
+For scenario s, call j and candidate i, decompose the logged, dose-scaled
+four-component coefficient c(s,j,i) into its call mean and candidate-centered
+residual. Split call means again into scenario mean and between-call variation:
 
-`total = within-call candidate-centered + between-call mean variation + scenario mean`.
+> Total squared energy = candidate-centered energy + between-call mean variation
+> + scenario-mean energy.
 
-The analysis verifies this identity numerically, checks coefficient norms against
-the logged requested edit norms, and checks every source arm hash against its
-completed scenario report and the immutable final report. The fixed orthonormal
-basis makes coefficient geometry informative about requested activation edits;
-it is not output forecast geometry or CEM cost geometry.
+The identity is checked numerically, coefficient norms match requested edit norms,
+and each arm hash links to its completed scenario report and immutable final report.
+An orthonormal basis relates these coefficients to **requested activation edits**,
+not to forecast error or goal costs.
 
-| Task | Refined candidate-centered share | Refined shared share | Random-subspace candidate-centered share |
+| Task | Refined centered | Refined shared | Random-subspace centered |
 |---|---:|---:|---:|
 | Reach | 1.145% | 98.855% | 0.361% |
 | Reach-Wall | 0.385% | 99.615% | 0.774% |
 | PointMaze | 15.646% | 84.354% | 12.059% |
 | Wall | 8.299% | 91.701% | 5.858% |
 
-Each entry averages 96 scenario-level ratios. A ratio is formed after summing
-energies across all eligible calls within that scenario. This avoids treating
-correlated candidates as independent observations. The analysis includes 40,320
-candidate batches across both arms, each with 300 candidates, but its sample size
-is still 96 scenarios per task.
+Each entry averages 96 scenario-level ratios, after summing energies across eligible
+calls. The 768 protected arm records contain 40,320 candidate batches of 300; these
+are not additional independent replicates. Marginal descriptive 95% intervals use
+20,000 scenario-bootstrap draws, seed 20260913.
 
-![Candidate coefficient decomposition](figures/candidate_specificity.png)
+Shared does not mean temporally constant. Reach's refined energy splits into
+25.04% changing call means and 73.81% scenario mean; Reach-Wall gives 11.76% and
+87.86%. PointMaze's centered share falls from 41.28% at the first CEM iteration
+to 1.76% at the last; random falls from 31.08% to 1.89%. This is compatible with
+candidate convergence, not proof of controller collapse. Later action banks differ
+between arms.
 
-The common component is **not constant throughout the episode**. For refined Reach,
-25.04% of energy is changing call means and 73.81% is the scenario mean. The
-corresponding shares are 11.76% and 87.86% on Reach-Wall. The randomized comparators
-also have substantial common components, so this pattern is not unique evidence
-for learned semantic directions.
+For squared goal cost, even a constant final-latent translation d changes cost by
 
-In PointMaze, the candidate-centered share falls from 41.28% at the first CEM
-iteration to 1.76% at the last iteration of that planning call. The random-subspace
-arm falls from 31.08% to 1.89%. This is compatible with candidate convergence, not
-proof that the controller itself collapses. The two arms' later candidates are
-different action inputs and are not directly cross-scored here.
+> ||z_i+d−g||² − ||z_i−g||² = 2d·(z_i−g) + ||d||².
 
-### Why a shared correction can still change planning
+The first term varies across candidates. Our internal edit also passes through a
+nonlinear predictor. Thus 99% shared coefficient energy does **not** imply 99%
+decision-irrelevant information or explain protected rescues and regressions.
 
-Even an identical final-latent translation d need not preserve goal-distance ranking.
-For squared L2 cost, `C_i = ||z_i - g||²`, the shift changes cost by
-`2 d · (z_i - g) + ||d||²`. The second term is common but the first depends on
-the candidate. Our actual intervention happens inside a nonlinear predictor, making
-a constant cost offset an even stronger unsupported assumption.
+[Decomposition figure](figures/candidate_specificity.png) ·
+[Hash-bound receipt](../paper/data/candidate_specificity.json) ·
+[Scenario ratios](../paper/data/candidate_specificity_scenarios.csv).
 
-Therefore “99% common coefficient energy” does **not** mean “99% irrelevant to
-planning.” Small differential components can also matter near an elite-selection
-boundary. The raw traces do not establish which component drove the 21 Reach
-rescues and 21 regressions. A fixed-action-bank replay is the shortest way to test it.
+## Decision-margin reanalysis
 
-## 5 Falsifiable mechanism hypotheses
+A separate September 10 development archive contains **192 scenarios × five arms
+× 300 identical candidate actions**. Its archive SHA and all 192 record hashes
+are verified; engineering records are excluded. Four non-native arms yield 768
+paired comparisons under a [fixed reanalysis scope](../configs/decision_geometry_reanalysis_20260913.json).
 
-| Hypothesis | Current evidence | Discriminating test or falsifier |
-|---|---|---|
-| The refined computation is dominated by a common candidate shift. | Supported for MetaWorld coefficient energy; also present in the randomized arms. | Decomposition would be weakened by large candidate-centered energy. It says nothing alone about score changes. |
-| Earlier intervention sites have more forecast-correction leverage. | Registered rank-one B0–B5 effects support an early-to-late gradient on MetaWorld. | A layer-matched response/Jacobian and output patch-back test could separate downstream amplification from fit quality and representation scale. |
-| Common-mode versus candidate-centered components affect CEM differently. | Not measured: fresh candidate costs and actual actions were not logged. | Replay native, full, common-only and centered-only edits on identical candidate actions; measure centered cost changes and elite overlap. |
-| The mechanism improves physical action ranking. | Not established by forecast errors, coefficient geometry or changed action hashes. | Evaluate candidate physical outcomes under matched simulator forks; rank predictions against those outcomes. |
+For native winner k, native costs C and changes ΔC, each edited relative margin is
 
-## 6 Fixed protocol for a subsequent causal pilot
+> (C_i−C_k) + (ΔC_i−ΔC_k).
 
-This is a **proposed** experiment, not a launched or completed comparison. Freeze
-input IDs, goals, checkpoint, bank and source hashes before new model execution.
-Use the existing fitting-row pilot to qualify instrumentation first. Never advertise
-one fitting trajectory as population-level mechanistic confirmation.
+Let m be the native best–runner-up margin and r = max(ΔC)−min(ΔC). If r < m,
+every competitor remains more expensive. This is an exact sufficient finite-bank
+certificate, not a statistical test; failure to certify does not imply a flip.
+Ties retain lowest-index selection.
+This diagnostic selects the bank's best candidate; production CEM updates from
+ten elites. A stable best index alone does not certify an identical CEM update.
 
-Then use an independently frozen set of development trajectories, not selected
-rescues or a new success-rate winner. On each native-generated fixed candidate bank:
+| Task | Arm | Certified / 96 | Changed / 96 | Centered RMS / native SD |
+|---|---|---:|---:|---:|
+| Reach | Refined | 94 | 0 | 0.247% |
+| Reach | Random subspace | 95 | 0 | 0.212% |
+| Reach | Coupling | 82 | 1 | 0.762% |
+| Reach | Random directions | 92 | 0 | 0.346% |
+| Reach-Wall | Refined | 90 | 1 | 0.279% |
+| Reach-Wall | Random subspace | 89 | 0 | 0.292% |
+| Reach-Wall | Coupling | 81 | 2 | 1.079% |
+| Reach-Wall | Random directions | 88 | 1 | 0.475% |
 
-1. Score native and the existing full refined edit with exact action-array identity.
-2. Cache the full edit at B3/H3; replay its within-bank mean alone and its centered
-   residual alone. These are additive component interventions, not fresh fits.
-3. Include a full cached-edit replay to check exact equivalence, a zero-edit replay,
-   and corresponding decompositions of the calibrated random-subspace arm.
-4. Preserve natural component energy for decomposition; report it. Separately frozen
-   dose-matched versions can address magnitude versus structure, but must not be
-   silently conflated with the additive decomposition.
-5. Save actual candidate actions, scores, elite IDs, margins, final forecasts and
-   instrumentation parity. Separate shared-bank scoring from adaptive CEM searches.
+RMS percentages average within-bank ratios. The certificate explains stable
+**initial-bank** choices, not full iterative CEM or later replanning. The actual
+MetaWorld objective is visual goal MSE **plus 0.1 × proprioceptive goal MSE**;
+recorded-future proprioceptive error has a different target.
 
-An optional patch-back at a later block can test which downstream computation
-mediates the measured forecast/score effect. Attention maps can guide a future
-registered test; they are not grounds for retrospectively naming a causal head.
+Refined cost changes have 47.5% / 48.4% centered energy here, unlike the protected
+coefficient ratios. Different spaces, populations, and RNG prevent interpreting
+their difference as amplification. Protected numeric candidate costs and elite
+identities were not retained; hashes cannot recover them or establish replanning
+drift as the cause of outcome changes.
 
-## 7 Metrics and decision gates
+Mean score-softmax entropy changes across the eight task/arm comparisons stay
+within 0.0018 nats, using native within-bank cost SD as the shared temperature.
+This is neither CEM proposal entropy, attention entropy, nor physical uncertainty.
 
-Primary proposed endpoint: fraction of the full edit's **candidate-centered cost
-change** reproduced by the common-only replay, evaluated per trajectory. Also
-report the absolute norm, since a ratio is unstable if the full effect is nearly zero.
-Secondary: rank agreement, top-10 elite overlap, selection-boundary margins and
-endpoint-specific forecast changes. No physical-quality claim without physical targets.
+[Figure](figures/decision_geometry.png) · [Receipt](../paper/data/decision_geometry.json) ·
+[768 comparison rows](../paper/data/decision_geometry_scenarios.csv).
+Marginal 95% scenario-bootstrap intervals use 20,000 draws, seed 2026091321.
 
-For a bounded diagnostic, a prospective operational gate could be: common-only
-replay explains at least 80% of centered score-change energy with at least 90%
-top-10 agreement with the full edit across the sampled inputs. These are proposed
-practical thresholds, not observed findings or established scientific constants.
-Failure would weaken common-component mediation and favor differential or nonlinear
-interaction explanations. Do not tune thresholds after seeing pilot scores.
+## Geometry, scope, and next evidence
 
-## 8 Statistical scope and sample size
+The [pathway and interpolation recount](PATHWAY_GEOMETRY.md) verifies 17 sources.
+It separates output nonadditivity from squared-loss cross terms and raw
+reconstruction from recorded-future error. Cubic reconstruction beats equal-anchor
+linear in FP32 but loses in BF16 across five tasks; requested-dose-matched H6
+advantages remain small and mixed. Precision-specific fits and realized doses
+prevent attributing the contrast solely to rounding. Four symmetric anchors do not
+identify third-order dynamics, a dense manifold, or model-native physical axes.
 
-The completed coefficient analysis uses 20,000 bootstrap draws over scenarios,
-seed 20260913. Its 95% intervals are marginal descriptive intervals, not a corrected
-family of discoveries. Do not infer a significant learned-versus-random difference
-from separate intervals. No scenario was selected by outcome.
+The separate GPU replay is complete on all 64 fixed development contexts. Common-only
+learned corrections reconstruct the full candidate-centered cost change with scores
+0.9827 / 0.9975 on Reach / Reach-Wall; calibrated-random corrections show the same
+pattern. Components retain their natural energy. The separate eight-context actual-CEM
+follow-up preserves all ten initial elites yet produces different returned prefixes
+after adaptive search. [Pilot mechanisms](PILOT_MECHANISMS.md) reports the complete
+attention maps, replay controls, proposal traces, intervals, and preservation boundary.
+These measurements do not retrospectively recover missing protected traces or establish
+better physical ranking. Attention pictures alone cannot identify a causal circuit.
 
-The layer plots retain the original lineage averaging and H6 simultaneous-contrast
-family; no new significance labels are assigned to H1–H5. BF16 remains primary
-and FP32 sensitivity remains visible. A prospective causal replay should group
-windows and candidate banks by source trajectory and fix its contrast family before
-execution. The one-trajectory engineering pilot has no inferential power claim;
-its measured variance and runtime would inform a separately approved sample size.
+One checkpoint per task, shared across the two MetaWorld tasks, supplies no
+independent-training-seed replication. Whole-episode success factorials measure
+closed-loop behavioral interaction, not same-input output interaction after
+trajectories diverge. [Primary-source comparison](LITERATURE_MECHANISMS.md) distinguishes
+policy steering, physics probes, manifold interpolation, adaptation, and memory
+from the endpoints measured here.
 
-## 9 Limitations and unresolved evidence
+## Reproducibility
 
-- These analyses use one released checkpoint per task; Reach/Reach-Wall share one.
-- Layer-specific fitted operators vary with their support. Depth effects include
-  fit quality, activation scale and downstream computation, not only layer identity.
-- BF16 can change delivered edit energy; the FP32 pattern is a sensitivity check,
-  not a reconstruction of the authors' independent-training-seed uncertainty.
-- A coefficient decomposition is not a causal mediation analysis. It cannot recover
-  fresh candidate rankings, counterfactual physical quality, or head-level attention.
-- The protected success result and its uncertainty remain in [Results](RESULTS.md).
-  A stronger mechanistic framing does not turn that result into an efficacy claim.
-- No new GPU execution or head-by-head attention heatmap has been completed. The
-  native observer is implemented and CPU-tested, awaiting a new bounded GPU allowance.
+[Fixed follow-up scope](../configs/mechanism_followup_20260913.json) and linked receipts
+bind source, protocol, archive and record hashes. Public aggregates support CPU-only
+figures; source replay requires authorized private archives and leaves scientific
+records and fits unchanged.
 
-## 10 Assessment and reproducibility
-
-The project is better framed as an intervention study of a world-model/planner
-interface than as a new best-performing robot controller. Its strongest current
-assets are controlled layer interventions, a directly audited steering computation,
-and paired behavior that aggregate scores hide. More plots alone would not establish
-a circuit; the next useful experiment is the fixed-candidate component replay.
-
-The new computation is specified in [the fixed follow-up scope](../configs/mechanism_followup_20260913.json)
-and implemented in [steering_specificity.py](../analysis/mechanism/steering_specificity.py).
-The [JSON receipt](../paper/data/candidate_specificity.json) includes every raw arm hash,
-source and protocol hashes, counts and uncertainty estimates. The [scenario table](../paper/data/candidate_specificity_scenarios.csv)
-and [layer grid](../paper/data/layer_mechanism_grid.csv) support CPU-only figure regeneration:
-
-```bash
+~~~bash
 python analysis/mechanism/steering_specificity.py
+python -m analysis.mechanism.decision_geometry
+python -m analysis.mechanism.pathway_geometry --plots-only
 python -m unittest discover -s tests -p test_steering_specificity.py -v
-```
+python -m unittest discover -s tests -p test_decision_geometry.py -v
+~~~
 
-With private raw records and archived offline reports restored, add
-`--recount-layers --results /path/to/results-v2` to repeat the source-bound recount.
-This never modifies the source records, fits, or frozen behavioral analysis.
-
-Primary sources: [Physics interpretation](https://arxiv.org/abs/2602.07050v1),
-[patching metrics](https://arxiv.org/abs/2309.16042v2),
-[patching interpretation](https://arxiv.org/abs/2404.15255v1),
-[decision-centric evaluation](https://arxiv.org/abs/2606.15032v2).
+For the original layer recount, supply the coefficient script with
+--recount-layers --results /path/to/results-v2 and the required archived sources.

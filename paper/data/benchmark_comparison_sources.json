@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "task_order": ["reach", "reach-wall", "pusht", "pointmaze", "wall", "droid"],
+  "unit": "percent",
+  "metric_by_task": {"reach": "simulator success", "reach-wall": "simulator success", "pusht": "simulator success", "pointmaze": "simulator success", "wall": "simulator success", "droid": "recorded-action agreement score; not physical robot success"},
+  "author_source": {
+    "url": "https://arxiv.org/html/2512.24497v4",
+    "verified_date": "2026-09-13",
+    "scope": "Primary-source Tables 2, 11, and 12, CEM L2 rows. Maze is mapped to PointMaze. RoboCasa is outside this study and not included.",
+    "comparison_limit": "Author aggregates use different checkpoints, populations, RNG and numerical settings from local runs. They are external context, not paired controls. Tables 2/11 and final-checkpoint Table 12 use different aggregation conventions.",
+    "uncertainty": "Published parenthesized dispersion values are retained below but NOT plotted as error bars: they are not the paired confidence intervals used for fresh confirmation."
+  },
+  "author_rows": [
+    {"id": "dino_wm", "label": "DINO-WM", "table": "2/11", "values": [44.8, 35.1, 66.0, 81.6, 64.1, 39.4], "published_dispersion": [8.9, 9.4, 4.7, 3.4, 4.6, 2.1]},
+    {"id": "jepa_improved", "label": "JEPA-WM improved", "table": "2/11", "values": [58.2, 41.6, 70.2, 83.9, 78.8, 48.2], "published_dispersion": [9.3, 10.0, 2.8, 2.3, 3.9, 1.8]},
+    {"id": "jepa_final", "label": "JEPA-WM final checkpoint", "table": "12", "values": [49.0, 29.2, 69.4, 83.3, 80.9, 46.5], "published_dispersion": [9.4, 11.5, 4.0, 3.1, 4.9, 0.4]}
+  ],
+  "development_source": {
+    "kind": "Historical author-supplied table, corroborated by local results/runbook; not a new raw-record audit",
+    "paths": ["docs/RESULTS.md", "docs/GPU_RUN_PLAN_20260912.md", "reports/CORE_METAWORLD_BEHAVIORAL_RESULTS.md"],
+    "supplied_by": "User history and explicit figure-task data, 2026-09-13",
+    "comparison_limit": "Different scenario populations and planner RNG from fresh confirmation. Do not pool or subtract these native rates from fresh arms. Historical component MetaWorld results also used an amended device-equivalence gate.",
+    "component_native": {"reach": 45.83, "reach-wall": 29.17},
+    "component_native_applies_to": ["joint", "visual_only", "action_condition_only"],
+    "component_native_note": "Canonical historical native 44.79/30.21 is NOT the concurrent native for these MetaWorld component arms. Plots show descriptive absolute values, never component-minus-canonical-native effects."
+  },
+  "development_rows": [
+    {"id": "native", "values": [44.79, 30.21, 59.38, 80.21, 76.04, 51.10]},
+    {"id": "fixed_rank4", "values": [51.04, 31.25, 59.38, 85.42, 78.13, 51.05]},
+    {"id": "matched_random_fixed_rank4", "values": [50.0, 23.96, 61.46, 79.17, 76.04, 51.0]},
+    {"id": "coupling_only", "values": [48.96, 26.04, 61.46, 77.08, 82.29, 51.07]},
+    {"id": "matched_random_coupling", "values": [60.42, 28.13, 60.42, 84.38, 77.08, 51.27]},
+    {"id": "joint", "values": [52.08, 29.17, 61.46, 79.17, 78.13, 50.85]},
+    {"id": "visual_only", "values": [50.0, 38.54, 60.42, 81.25, 73.96, 50.83]},
+    {"id": "action_condition_only", "values": [42.71, 36.46, 58.33, 86.46, 76.04, 51.11]}
+  ],
+  "fresh_source": {
+    "path": "reports/fresh-confirmation/report.json",
+    "sha256": "8123d71497835fc164f09f5094c430308647a3ee2462c66746baea32633a0b15",
+    "tasks": ["reach", "reach-wall", "pointmaze", "wall"],
+    "n_per_task_arm": 96,
+    "arms_per_task": 8,
+    "scientific_evaluations": 3072,
+    "scope": "New protected scenarios, same-physical-GPU paired arms within each scenario. All eight arms are shown in protocol order, without ranking by outcome.",
+    "uncertainty": "Bars are descriptive point estimates, with no invented error bars. All 48 frozen simultaneous 95% paired contrast intervals include zero. See protected_results for paired uncertainty."
+  },
+  "style_sources": ["User-provided Desktop/baseline.png: small-multiple vertical bars, zero baseline and direct numeric labels", "https://stevenybuilder.github.io/pick-it-up/: restrained ink/green/blue/amber palette, whitespace, light chart rules"],
+  "architecture_sources": ["src/offline_study/fixed_response.py:118-171", "src/offline_study/operator_fit.py:53-100,197-252", "https://arxiv.org/html/2512.24497v4#S3"],
+  "architecture_scope": "Inference schematic for the six-block checkpoints used by this intervention study, not every architecture in the original paper. All base weights frozen during intervention. V visual input, A B3 condition, R B3 output; hooks at H3 within H6; no R+V/A arm."
+}

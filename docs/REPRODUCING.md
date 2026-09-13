@@ -6,11 +6,20 @@ Install `pip install -e '.[analysis]'`, then run:
 
 ```bash
 python scripts/check_public_results.py
+python scripts/check_manuscript.py
 python scripts/build_readme_figures.py
 python analysis/mechanism/steering_specificity.py
+python -m analysis.mechanism.decision_geometry
+python scripts/build_comparison_figures.py
+python -m analysis.mechanism.pathway_geometry --plots-only
+python -m analysis.mechanism.pilot_summary --plots-only
+python scripts/build_paper_figures.py
+python -m unittest discover -s tests -p test_decision_geometry.py -v
 python -m unittest discover -s tests -p 'test_steering_specificity.py' -v
 python -m unittest discover -s tests -p 'test_fresh_confirmation.py' -v
 python -m unittest discover -s tests -p 'test_mechanism_energy_schema.py' -v
+python -m unittest discover -s tests -p 'test_pilot_summary.py' -v
+python -m unittest discover -s tests -p 'test_cem_steering_summary.py' -v
 ```
 
 These check committed aggregates, their hashes and derived figures. They do not
@@ -59,6 +68,14 @@ See [analysis data contract](../analysis/mechanism/DATA_CONTRACT.md) for layouts
 Real model execution additionally needs upstream [JEPA-WM](https://github.com/facebookresearch/jepa-wms),
 its checkpoints, licensed data and environment dependencies; no paid launcher is
 part of the CPU reproduction commands.
+
+## Workshop manuscript
+
+The curated LaTeX source, bibliography, official style and rendered draft are in
+`paper/workshop/`. Figures reference the same committed `docs/figures/` assets as
+the README. Build with `tectonic main.tex` from that directory after regenerating
+figures. The author line is anonymous; this is a draft, not a claim of workshop
+acceptance or a completed camera-ready submission.
 
 ## Repository curation
 

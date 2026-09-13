@@ -1,4 +1,5 @@
 """Generate README figures from checked aggregates. No model or GPU calls."""
+import argparse
 import json
 from pathlib import Path
 
@@ -15,12 +16,15 @@ BLUE, TEAL, RED, INK = '#3264a8', '#087f8c', '#c85c48', '#223248'
 LABELS = dict(zip(TASKS, ('Reach', 'Reach-Wall', 'PointMaze', 'Wall')))
 
 
-def save(fig, name):
+def save(fig, name, *, pdf=False):
     OUT.mkdir(parents=True, exist_ok=True)
     fig.savefig(OUT / f'{name}.png', dpi=180, facecolor='white', bbox_inches='tight')
     fig.savefig(OUT / f'{name}.svg', facecolor='white', bbox_inches='tight')
     svg = OUT / f'{name}.svg'
     svg.write_text('\n'.join(line.rstrip() for line in svg.read_text().splitlines()) + '\n')
+    if pdf:
+        fig.savefig(OUT / f'{name}.pdf', facecolor='white', bbox_inches='tight',
+                    metadata={'CreationDate': None, 'ModDate': None})
     plt.close(fig)
 
 
@@ -49,78 +53,106 @@ def overview():
 
 
 def architecture():
-    """Schematic of actual hook sites, not a measurement or simultaneous edit."""
-    fig, ax = plt.subplots(figsize=(15, 9))
-    ax.set(xlim=(0, 16), ylim=(0, 9.6))
+    """Inference-only six-block checkpoint; colored sites are alternatives."""
+    fig, ax = plt.subplots(figsize=(15, 6.3))
+    ax.set(xlim=(0, 16), ylim=(0, 6.7))
     ax.axis('off')
+    ink, muted, blue, green, amber = '#242a26', '#73776f', '#4e6fa5', '#24796c', '#b67930'
 
-    def box(x, y, w, h, text, color='#eef3f8', edge='#bdcbdc', size=10):
+    def box(x, y, w, h, text, color='white', edge='#cdd3cc', size=10.5, zorder=3):
         ax.add_patch(FancyBboxPatch((x,y), w,h, boxstyle='round,pad=.035',
-                                   facecolor=color, edgecolor=edge, linewidth=1.2))
-        ax.text(x+w/2, y+h/2, text, ha='center', va='center', fontsize=size, color=INK)
+                                   facecolor=color, edgecolor=edge, linewidth=1.1, zorder=zorder))
+        ax.text(x+w/2, y+h/2, text, ha='center', va='center', fontsize=size, color=ink, zorder=4)
 
-    def arrow(start, end, color='#64748b', style='-'):
-        ax.annotate('', end, start, arrowprops={'arrowstyle':'->','color':color,
-                                               'lw':1.5,'linestyle':style})
+    def arrow(start, end, color=muted, style='-'):
+        ax.annotate('', end, start, zorder=2, arrowprops={'arrowstyle':'->','color':color,
+                                               'lw':1.3,'linestyle':style})
 
-    ax.text(.1,9.23,'Where we intervene in JEPA-WM',fontsize=22,weight='bold',color=INK)
-    ax.text(.1,8.82,'Frozen model • batched candidate forecasts • alternative ablation arms',
-            fontsize=12,color='#526174')
-    box(.1,6.9,1.8,.95,'Observation\nimage + state')
-    box(2.25,6.9,2.05,.95,'Frozen encoders\nvisual + proprio')
-    arrow((1.94,7.38),(2.2,7.38)); arrow((4.35,7.38),(4.53,7.38))
-    # The V hook changes only the visual stream at the predictor input.
-    box(4.57,7.14,.55,.48,'V',color='#dceef0',edge=TEAL,size=12)
-    arrow((5.17,7.38),(5.48,7.38))
-    box(5.55,6.45,5.25,1.9,'',color='#f8fafc')
-    ax.text(8.17,8.48,'Dynamics predictor at imagined step H3',ha='center',size=11,weight='bold',color=INK)
-    for i in range(6):
-        x=5.76+i*.82
-        box(x,7.0,.6,.77,f'B{i}',color='#dce7f5' if i==3 else 'white',edge=BLUE if i==3 else '#bdcbdc')
-        if i<5: arrow((x+.64,7.38),(x+.78,7.38))
-    # R sits on the output edge of B3, not on the action-conditioning input.
-    ax.text(8.94,7.97,'R',ha='center',weight='bold',size=13,color=BLUE)
-    arrow((8.94,7.82),(8.94,7.4),BLUE)
-    ax.text(5.82,6.65,'Unrolled to H6',ha='left',size=10,color='#526174')
-    box(11.15,6.9,1.55,.95,'Latent\nforecasts')
-    box(13.08,6.9,2.72,.95,'CEM planner\nscore → elites → action')
-    arrow((10.84,7.38),(11.1,7.38)); arrow((12.74,7.38),(13.02,7.38))
-    box(13.57,8.14,1.75,.38,'Encoded goal',size=9)
-    arrow((14.44,8.12),(14.44,7.91))
-    box(.1,5.05,2.8,.87,'CEM proposal batch\n300 action trajectories')
-    box(3.4,5.05,3.2,.87,'Action-conditioning pathway\nconditions all predictor blocks')
-    arrow((2.96,5.48),(3.35,5.48))
-    # Dashed line shows the specific edited conditioning connection at B3.
-    arrow((6.65,5.48),(8.52,6.12),TEAL,'--')
-    box(8.25,6.14,.55,.42,'A',color='#dceef0',edge=TEAL,size=12)
-    arrow((8.52,6.59),(8.52,6.95),TEAL,'--')
-    box(11.95,5.05,3.85,.87,'Execute selected actions\nin the simulator')
-    arrow((14.44,6.85),(14.44,5.97))
-    ax.text(8.1,4.53,'V: visual input     A: B3 conditioning     R: B3 output',
-            ha='center',fontsize=12,weight='bold',color=INK)
-    ax.text(.1,3.99,'Eight paired arms',fontsize=15,weight='bold',color=INK)
+    ax.text(.1,6.27,'Edit the forecast, then let the planner act',fontsize=23,weight='bold',color=ink)
+    ax.text(.1,5.83,'JEPA-WM inference  ·  All base weights frozen  ·  The eight arms use alternative edits',
+            fontsize=12,color=muted)
+    box(.1,4.30,1.45,.70,'Image')
+    box(1.94,4.30,1.80,.70,'DINO visual\nencoder')
+    arrow((1.60,4.65),(1.89,4.65)); arrow((3.79,4.65),(4.29,4.65))
+    box(4.34,4.43,.48,.44,'V',color='#e4f0ed',edge=green,size=12)
+    arrow((4.87,4.65),(5.76,4.65))
+    box(.1,3.12,1.45,.70,'Proprioception',size=9.7)
+    box(1.94,3.12,1.80,.70,'State encoder')
+    arrow((1.60,3.47),(1.89,3.47))
+    # Proprioception is not changed by the visual-input edit.
+    ax.plot([3.80,4.04,4.04,5.35,5.35],[3.47,3.47,4.05,4.05,4.65],color=muted,lw=1.3)
+    arrow((5.35,4.65),(5.76,4.65))
+    box(5.72,3.22,5.55,2.30,'',color='#f7f8f5',zorder=0)
+    ax.text(8.49,5.26,'Six-block dynamics predictor',ha='center',fontsize=11,weight='bold',color=ink)
+    xs=[5.95,6.70,7.45,8.20,9.48,10.23]
+    for i,x in enumerate(xs):
+        box(x,4.25,.58,.80,f'B{i}',color='#e8eef6' if i==3 else 'white',edge=blue if i==3 else '#cdd3cc')
+        if i<5: arrow((x+.61,4.65),(xs[i+1]-.04,4.65))
+    box(8.98,4.43,.39,.44,'R',color='#e8eef6',edge=blue,size=11)
+    # The unedited action path conditions every block; A modifies B3 only.
+    ax.plot([5.15,10.52],[3.50,3.50],color=muted,lw=1.3)
+    for i,x in enumerate(xs):
+        arrow((x+.29,3.50),(x+.29,4.19),amber if i==3 else muted)
+    box(8.29,3.69,.40,.37,'A',color='#f8eddc',edge=amber,size=11)
+    ax.text(8.49,3.01,'Hooks active only at H3 of the H6 imagined rollout',ha='center',fontsize=10,color=muted)
+    box(11.66,4.25,1.54,.80,'Latent\nforecast')
+    box(13.68,4.25,2.12,.80,'Encoded-goal\nL2 cost')
+    arrow((11.30,4.65),(11.61,4.65)); arrow((13.25,4.65),(13.62,4.65))
+    box(13.92,5.35,1.66,.38,'Goal encoders',size=9.5)
+    arrow((14.75,5.31),(14.75,5.11))
+    box(.10,1.76,2.47,.85,'300 candidate\naction sequences',color='#f7f8f5')
+    box(3.04,1.76,2.05,.85,'Action encoder')
+    arrow((2.62,2.18),(2.99,2.18))
+    ax.plot([5.14,5.15],[2.18,3.50],color=muted,lw=1.3)
+    ax.text(5.48,2.10,'Actions condition every block',fontsize=10.5,color=muted)
+    box(11.05,1.76,2.21,.85,'CEM\nrefit to elite plans',color='#f7f8f5')
+    box(13.72,1.76,2.08,.85,'Execute prefix\nObserve + replan')
+    ax.plot([14.75,14.75,12.15],[4.18,3.45,3.45],color=muted,lw=1.3)
+    arrow((12.15,3.45),(12.15,2.66))
+    arrow((13.31,2.18),(13.67,2.18))
+    # CEM resamples its proposals, not the frozen model weights.
+    ax.plot([12.15,12.15,1.33],[1.71,1.21,1.21],color=muted,lw=1.3)
+    arrow((1.33,1.21),(1.33,1.71))
+    ax.text(7.0,1.29,'Refine the proposal distribution; repeat candidate scoring',ha='center',fontsize=10,color=muted)
+    for x,letter,label,color in ((.1,'V','visual input',green),(4.25,'A','B3 action conditioning',amber),(9.40,'R','rank-four B3 output',blue)):
+        ax.text(x,.57,letter,color=color,fontsize=14,weight='bold')
+        ax.text(x+.30,.57,label,color=ink,fontsize=11)
+    ax.text(.1,.08,'Colored markers locate possible edits, not a joint R + V + A arm. The separate ablation table defines each intervention.',fontsize=10,color=muted)
+    save(fig,'ablation_architecture',pdf=True)
+
+
+def ablation_table():
+    """One standalone table, with no result-dependent arm selection."""
+    fig, ax = plt.subplots(figsize=(12, 5.1))
+    ax.axis('off')
+    ax.text(.01,1.00,'Eight arms, three intervention sites',transform=ax.transAxes,
+            fontsize=21,weight='bold',color=INK)
+    ax.text(.01,.91,'Within each task: the same frozen checkpoint and H3 hook timing; native has no edit.',
+            transform=ax.transAxes,fontsize=11,color='#73776f')
     rows=[
         ['Native','—','—','—'],
         ['Refined four-direction','learned','—','—'],
         ['Calibrated random subspace','random','—','—'],
-        ['Equal-budget coupling','—','scaled','scaled'],
-        ['Dose-matched random directions','—','random','random'],
-        ['Unscaled joint','—','original','original'],
-        ['Visual only','—','original','—'],
-        ['Action-conditioning only','—','—','original'],
+        ['Equal-budget coupling','—','scaled learned','scaled learned'],
+        ['Dose-matched random directions','—','scaled random','scaled random'],
+        ['Unscaled joint','—','original dose','original dose'],
+        ['Visual only','—','original dose','—'],
+        ['Action-conditioning only','—','—','original dose'],
     ]
-    table=ax.table(cellText=rows,colLabels=['Arm','R','V','A'],cellLoc='center',
-                   colWidths=[.46,.13,.13,.13],bbox=[.006,.025,.66,.36])
-    table.auto_set_font_size(False); table.set_fontsize(10)
+    table=ax.table(cellText=rows,colLabels=['Arm','R · B3 output','V · visual input','A · B3 condition'],cellLoc='center',
+                   colWidths=[.40,.20,.20,.20],bbox=[.01,.14,.98,.71])
+    table.auto_set_font_size(False); table.set_fontsize(11)
     for (row,col),cell in table.get_celld().items():
-        cell.set_edgecolor('#d3dde9')
-        cell.set_facecolor('#e8eef6' if row==0 else ('#f6f8fb' if row%2==0 else 'white'))
+        cell.set_edgecolor('#dedfd6')
+        cell.set_linewidth(.7)
+        cell.set_facecolor('#edf0ea' if row==0 else ('#f8f9f6' if row%2==0 else 'white'))
         if row==0: cell.set_text_props(weight='bold',color=INK)
         if col==0: cell.set_text_props(ha='left')
-    ax.text(11.05,3.45,'Controlled comparisons',fontsize=12,weight='bold',color=INK)
-    ax.text(11.05,2.99,'R: learned basis vs calibrated\nrandom subspace.\n\nV + A: joint vs drop-one arms;\nequal-budget vs random directions.\n\nRefined R is not combined with V/A\nin this eight-arm panel.',
-            va='top',fontsize=11,linespacing=1.45,color='#526174')
-    save(fig,'ablation_architecture')
+    ax.text(.01,.055,'Scaled: each V/A component uses 1/√2 of its original standardized dose. R arms never include V or A.',
+            transform=ax.transAxes,fontsize=10,color='#73776f')
+    ax.text(.01,.005,'Compare learned R with its calibrated random subspace; compare learned V/A with dose-matched random directions.',
+            transform=ax.transAxes,fontsize=10,color='#73776f')
+    save(fig,'ablation_table',pdf=True)
 
 
 def outcomes(report, audit):
@@ -183,7 +215,13 @@ def basis():
 
 
 if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--only', nargs='+', choices=['overview', 'architecture', 'ablation', 'outcomes', 'basis'])
+    args = parser.parse_args()
     plt.rcParams.update({'font.family':'DejaVu Sans', 'font.size':10, 'svg.fonttype':'none'})
     report, audit = check()
-    overview(); architecture(); outcomes(report, audit); basis()
-    print(f'Wrote four PNG/SVG figures to {OUT}')
+    selected = args.only or ['overview', 'architecture', 'ablation', 'outcomes', 'basis']
+    for name in selected:
+        {'overview': overview, 'architecture': architecture, 'ablation': ablation_table,
+         'outcomes': lambda: outcomes(report, audit), 'basis': basis}[name]()
+    print(f'Wrote {len(selected)} PNG/SVG figures to {OUT}')

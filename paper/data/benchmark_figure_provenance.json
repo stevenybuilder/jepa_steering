@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "generator": "scripts/build_comparison_figures.py",
+  "curated_source": "paper/data/benchmark_comparison_sources.json",
+  "curated_source_sha256": "39479051eb0a6304c451fe974d7c5d4341c21da72ead09c8a582557b6968f07a",
+  "fresh_report_sha256": "8123d71497835fc164f09f5094c430308647a3ee2462c66746baea32633a0b15",
+  "numeric_rows": 98,
+  "captions": {
+    "ablation_architecture": "Inference schematic for the frozen six-block JEPA-WM checkpoints used here. The visual-input (V), B3 action-conditioning (A), and rank-four B3-output (R) markers identify alternative hook sites at H3 within H6. Actions normally condition all blocks. CEM scores 300 candidate plans by encoded-goal L2 cost, executes a prefix, and replans. No R+V/A arm is tested.",
+    "ablation_table": "The complete eight-arm design. R-only corrections and V/A interventions are alternatives. Equal-budget learned and random V/A components share scaled standardized doses; unscaled joint and drop-one arms retain the original per-component dose.",
+    "benchmark_comparison": "Descriptive comparison across three separate evidence sources: author-reported JEPA-WM paper aggregates, historical development measurements, and fresh protected confirmation. Rows are not pooled or paired across sources. DROID is recorded-action agreement rather than physical robot success. Historical MetaWorld component arms have their own concurrent native 45.83/29.17. All fresh arms are shown in protocol order; the full 48-comparison simultaneous interval family includes zero.",
+    "protected_benchmark": "Success rates on the complete protected four-task, eight-arm, 96-scenario panel. These are descriptive bars without synthesized error bars; inferential comparisons are paired against the fresh concurrent native. All 48 simultaneous 95% contrast intervals include zero.",
+    "headline_benchmark": "Published DINO-WM, improved JEPA-WM and final-checkpoint references in a shaded band, alongside all eight fresh arms in fixed protocol order. Published and fresh values differ in checkpoint/aggregation/cohort and are not paired treatment comparisons. No error bars are synthesized; paired uncertainty remains in the frozen result report."
+  },
+  "rendering": "Matplotlib; vector text retained; point estimates only; no outcome-sorted arms"
+}
