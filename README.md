@@ -1,40 +1,47 @@
-# JEPA-WM: Do Better Forecasts Make Better Plans?
+# Inside JEPA-WM: How Latent Steering Changes Planning
 
-Activation steering inside a **frozen world-model predictor**, evaluated from offline
-forecast error through closed-loop robot planning. Built with Python and PyTorch on
-the [JEPA-WM](https://github.com/facebookresearch/jepa-wms) implementation.
+A model-biology case study of activation steering inside a **frozen world-model
+predictor**: where corrections work, how they vary across imagined actions, and
+what changes when a robot plans with them. Built with Python and PyTorch on
+[JEPA-WM](https://github.com/facebookresearch/jepa-wms).
 
-[Methods & ablations](docs/METHODS.md) · [Results & limitations](docs/RESULTS.md) ·
+[Mechanism analysis](docs/MECHANISMS.md) · [Methods & ablations](docs/METHODS.md) · [Results](docs/RESULTS.md) ·
 [Reproduce](docs/REPRODUCING.md) · [GPU execution](docs/COMPUTE.md)
 
-## Three findings
+## The finding: a mostly shared latent edit can change which robot trials succeed
 
-### 1. A single four-direction edit improves offline forecasts
+On Reach and Reach-Wall, **98.85% and 99.62% of the refined edit's coefficient
+energy is shared across candidates within a planning batch**. The four-direction
+correction changes much more across planning calls than across the 300 candidate
+plans in one call. Yet on fresh Reach scenarios, it changes success/failure on
+**42 of 96 trials**: 21 rescues and 21 regressions, leaving the aggregate score unchanged.
 
-The refined intervention reduced H6 proprioceptive embedding prediction error by
-**2.36% on Reach and 2.19% on Reach-Wall** in the primary BF16 development evaluation
-(33 and 27 trajectories). An offline-calibrated response map applies the edit inside
-one forward pass, with **zero online response probes or extra native-shadow forecasts**.
-This establishes an inexpensive forecast correction, not a task-success gain.
-[Estimates and intervals](paper/data/reported_contrasts.csv) · [Implementation](src/offline_study/fixed_response.py).
+That separates two properties often conflated in steering: **changing latent
+predictions** and **selectively favoring better actions**. We directly measure the
+former and its behavioral consequences; whether the shared or candidate-specific
+component drives the decisions remains a testable mechanism hypothesis.
 
-### 2. Low-rank corrections are spatially distributed—and use their directions unevenly
+![Decomposition of steering coefficients into shared and candidate-specific components across four tasks.](docs/figures/candidate_specificity.png)
 
-The fitted directions span image patches rather than identifying individual semantic
-neurons. During the protected rollouts, the four-dimensional coefficient space had
-an effective dimensionality of **1.37–3.07**, depending on the task. Low rank in
-feature space does not imply spatial localization or equal use of each direction.
-This is a descriptive measurement of the applied edits, not a discovered physical code.
-[Basis maps](#geometry-of-the-fitted-edits) · [Coefficient audit](reports/fresh-confirmation/mechanism_audit.json).
+The decomposition covers **768 hash-verified arm records and 40,320 candidate batches**,
+aggregated over 96 independent scenarios per task. Random-subspace edits also show
+shared components; this is not a property unique to learned directions. A shared
+activation shift need not be a shared cost offset in a nonlinear predictor.
+[Derivation, alternatives and proposed causal test](docs/MECHANISMS.md).
 
-### 3. The same aggregate score can hide different successes
+### Three pieces of evidence
 
-On fresh Reach scenarios, native and refined planning both succeeded **52/96** times,
-but the edit **rescued 21 failures and regressed on 21 successes**: outcomes changed
-on **42/96 scenarios** despite an unchanged aggregate score. Paired evaluation exposes
-this behavioral sensitivity that a success-rate table alone misses. Across the full
-panel, these changes did not establish a reliable net improvement.
-[Paired outcomes](docs/RESULTS.md#mechanistic-diagnostics).
+1. **Depth matters.** In the registered rank-one sweep, Reach H6 forecast-error
+   reduction falls from **3.03% at B0 to 0.48% at B5**. Reach-Wall shows the same
+   early-to-late gradient, and both persist in FP32. Push-T does not reproduce the
+   MetaWorld benefit. This maps intervention susceptibility, not a universal physics layer.
+2. **Low rank does not mean candidate-specific.** The later rank-four edit uses
+   distributed patch directions, but only **1.15% / 0.38%** of its MetaWorld coefficient
+   energy distinguishes candidates within a batch. PointMaze and Wall show larger
+   candidate-specific shares: **15.65% / 8.30%**.
+3. **Aggregate scores hide behavioral reorganization.** Native and refined Reach
+   planning both succeed **52/96** times, with different successful scenarios.
+   Paired outcomes expose this sensitivity; they do not establish a net improvement.
 
 ## Architecture and ablation sites
 
@@ -47,6 +54,24 @@ The diagram shows alternative arms, **not three edits applied together**. The fr
 encoders, model weights and CEM objective are unchanged across arms.
 CEM repeats candidate proposal/scoring; simulator observations refresh at replanning.
 [Exact arm definitions](docs/METHODS.md).
+
+## Layer-by-layer intervention map
+
+![Measured effects of rank-one activation edits at each predictor block, across tasks, modalities and forecast horizons.](docs/figures/layer_mechanism_bfloat16_native.png)
+
+These are **measured intervention effects, not attention weights**. Each row edits
+one registered layer support at H3; each column measures a later forecast endpoint.
+H1–H2 remain unchanged. The heatmap reaggregates saved lineage metrics and includes
+all six blocks, B2+B3 and all-block support—without selecting a favorable layer.
+Total rank and requested energy are held fixed; BF16 rounding can affect delivered dose.
+
+The B0–B5 gradient is supported by the original paired layer contrasts. It does not
+prove that B0 contains a unique physical concept: layer-specific fitting and downstream
+computation are alternative explanations. This earlier rank-one sweep is separate from
+the later fixed-response rank-four planner experiment.
+[Matched-random map](docs/figures/layer_mechanism_bfloat16_random.png) ·
+[FP32 map](docs/figures/layer_mechanism_float32_native.png) ·
+[All 576 cells and analysis](docs/MECHANISMS.md#layer-response-map).
 
 ## Question and hypotheses
 
@@ -106,24 +131,26 @@ native row below, not an older checkpoint evaluation on different scenarios.
 | Visual only | 54.17 | 22.92 | 81.25 | 80.21 |
 | Action-conditioning only | 47.92 | 17.71 | 81.25 | 78.13 |
 
-![Paired effects versus native with simultaneous intervals, and rescue/regression counts.](docs/figures/protected_results.png)
-
-All **48 prespecified simultaneous 95% intervals** include zero, including comparisons
-against native, randomized comparators, and pathway contrasts. We use 20,000
-paired-scenario bootstrap draws with a Bonferroni family of 48. Intervals are wide:
-the study neither establishes a reliable gain nor demonstrates equivalence.
-[Exact estimates and intervals](reports/fresh-confirmation/report.json).
+The full panel does not establish a reliable net success gain. Its mechanistic value
+is in the paired changes, pathway ablations and recorded intervention behavior.
+[Paired-effect figure](docs/figures/protected_results.png) ·
+[Prespecified uncertainty analysis](docs/RESULTS.md#protected-confirmation) ·
+[Exact estimates](reports/fresh-confirmation/report.json).
 
 ## Geometry of the fitted edits
 
 ![Spatial squared loadings of fitted rank-four bases; not attention or saliency.](docs/figures/fitted_basis.png)
 
-These are **fixed basis loadings**, not attention maps, semantic neurons, or per-example
-explanations. Action hashes changed, but fresh candidate costs and elite ranks
-were not logged; the forecast-to-decision link remains unresolved.
-Coefficient effective dimensionality uses uncentered second moments, so it includes
-the mean direction. Delivered coupling energy matched its comparator; an absent edit
-is not supported as a simple explanation of the behavioral results.
+These are **fixed basis loadings**, not attention maps or semantic neurons.
+An offline-calibrated response map applies the refined edit inside one forward pass,
+with no online response probes or extra native-shadow forecasts. It reduced BF16 H6
+proprioceptive embedding MSE by **2.36% on Reach and 2.19% on Reach-Wall** in separate
+development evaluation. That forecast result is not a physical-task success claim.
+
+Fresh candidate costs and elite ranks were not logged. The next targeted experiment
+is to replay the same candidate actions with the full edit, its shared component,
+and its candidate-centered component. A head-by-head attention observer is prepared
+but has not yet produced GPU measurements; no attention heatmap is implied here.
 [Analysis details](docs/RESULTS.md#mechanistic-diagnostics).
 
 ## PyTorch GPU execution
@@ -151,6 +178,7 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[analysis]'
 python scripts/build_readme_figures.py
+python analysis/mechanism/steering_specificity.py
 python scripts/check_public_results.py
 python -m unittest discover -s tests -p 'test_fresh_confirmation.py' -v
 ```

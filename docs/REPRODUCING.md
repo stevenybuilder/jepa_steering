@@ -7,6 +7,8 @@ Install `pip install -e '.[analysis]'`, then run:
 ```bash
 python scripts/check_public_results.py
 python scripts/build_readme_figures.py
+python analysis/mechanism/steering_specificity.py
+python -m unittest discover -s tests -p 'test_steering_specificity.py' -v
 python -m unittest discover -s tests -p 'test_fresh_confirmation.py' -v
 python -m unittest discover -s tests -p 'test_mechanism_energy_schema.py' -v
 ```

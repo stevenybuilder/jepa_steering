@@ -36,6 +36,13 @@ context and are not directly paired causal comparisons with our interventions.
 
 ## Mechanistic diagnostics
 
+The subsequent [layer and candidate-specificity analysis](MECHANISMS.md) adds a
+hash-verified recount of 576 layer-grid cells and a nested decomposition of 768 raw
+arm records. On Reach / Reach-Wall, 98.855% / 99.615% of refined coefficient energy
+is common within candidate batches. The earlier rank-one layer sweep shows stronger
+forecast correction at early blocks in both precisions. These are distinct measured
+properties, not proof of a causal explanation for the aggregate success result.
+
 All six post-confirmation analysis scripts completed on the real panel. Their
 completion is not six independent experiments or a proven mechanism. An independent
 recount of all arm records produced the committed [headline audit](../reports/fresh-confirmation/mechanism_audit.json).

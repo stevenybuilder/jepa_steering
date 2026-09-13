@@ -1,0 +1,37 @@
+{
+  "status": "exploratory_post_confirmation_analysis_fixed_before_new_computation",
+  "date": "2026-09-13",
+  "purpose": "Separate intervention localization, candidate-specific correction and downstream behavioral sensitivity",
+  "prior_knowledge": "Success tables, rescue/regression counts and uncentered coefficient participation ratios were already inspected. This is not preregistered confirmation.",
+  "layer_reanalysis": {
+    "tasks": ["reach", "reach-wall", "pusht"],
+    "precisions": ["bfloat16", "float32"],
+    "category": "distribution_layer",
+    "supports": ["single_block0", "single_block1", "single_block2", "single_block3", "single_block4", "single_block5", "intermediate_blocks2_3", "all_six_blocks"],
+    "endpoints": ["proprio_mse", "visual_mse"],
+    "horizons": [1, 2, 3, 4, 5, 6],
+    "comparison": "Native minus learned, and support-matched random minus learned, divided by native lineage-mean MSE",
+    "unit": "Original fitting-disjoint development lineage; retain all 33 Reach, 27 Reach-Wall and 21 Push-T units",
+    "scope": "Recount saved lineage metrics and visualize already-executed rank-one intervention experiments; not attention, a new GPU evaluation, or the later rank-four recipe",
+    "inference": "Reuse original H6 simultaneous intervals; other horizons descriptive; no new layer winner selection"
+  },
+  "candidate_decomposition": {
+    "tasks": ["reach", "reach-wall", "pointmaze", "wall"],
+    "arms": ["fixed_rank4", "matched_random_fixed_rank4"],
+    "scenarios_per_task": 96,
+    "calls": "All H6 calls with 300 candidates and complete 300 by 4 applied coefficient arrays",
+    "primary_quantity": "Within-call candidate-centered coefficient squared energy divided by total coefficient squared energy; aggregate numerator and denominator within scenario first",
+    "secondary_quantities": ["Common-to-candidates energy", "Between-call mean energy within scenario", "Scenario mean energy", "First versus last iteration of first planning call"],
+    "identity": "Total = within-call centered + between-call centered means + scenario mean squared energy",
+    "uncertainty": "20000 scenario bootstrap replicates, seed 20260913; marginal 95 percent intervals for descriptive means only, not a familywise discovery test",
+    "interpretation_gate": "At least 90 percent mean common energy suggests common-mode coefficient dominance, not constant output shifts or unchanged action ranks",
+    "falsifier": "Substantial candidate-centered energy weakens common-mode dominance; common-mode dominance in both learned and comparator arms is not learned-direction-specific",
+    "exclusions": "No outcome-based scenario selection, no candidate-level independent n, no comparing candidate index across diverged searches"
+  },
+  "gpu_pilot": {
+    "status": "awaiting_new_budget_approval",
+    "scope": "Existing single-fitting-trajectory native attention observer and optional native candidate trace",
+    "causal_followup": "A separately frozen shared-action-bank mean-only versus candidate-centered edit replay is required before attributing planning effects to common-mode geometry",
+    "unchanged": "No intervention refitting, new protected success panel, automatic successor search or transfer of the closed campaign budget"
+  }
+}
