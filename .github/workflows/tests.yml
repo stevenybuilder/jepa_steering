@@ -14,6 +14,15 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+      - name: Restore pinned public crop fixture
+        uses: actions/checkout@v4
+        with:
+          repository: facebookresearch/jepa-wms
+          ref: 13cf1d9c7e476f53c17714d2e0f1dc239a883ce0
+          path: vendor/jepa-wms
+          sparse-checkout: src/datasets/utils/video/transforms.py
+          sparse-checkout-cone-mode: false
+          persist-credentials: false
       - uses: actions/setup-python@v5
         with:
           python-version: "3.10"
