@@ -11,11 +11,12 @@ outcomes we follow.
 
 Three findings explain how steering affects this world model:
 
-- **An action patch can match now and change the plan later.** It reproduces the
-  changed-input forecast at first, then diverges when the action returns as history.
-  In the primary comparison across 200 fresh states, the selected candidate changes
-  in 42% of Reach and 59% of Reach-Wall cases, with roughly 2% higher mean reference cost. Updating both
-  appearances restores exact agreement. [Experiment and figure](#an-action-patch-can-match-now-and-diverge-later).
+- **An action patch can match now and change the plan later** (*second-read
+  divergence*). It reproduces the changed-input forecast at first, then diverges
+  when the action returns as history. In the primary comparison across 200 fresh
+  states, the selected candidate changes in 42% of Reach and 59% of Reach-Wall
+  cases, with roughly 2% higher mean reference cost. Updating both appearances
+  restores exact agreement. [Experiment and figure](#an-action-patch-can-match-now-and-diverge-later).
 - **An edit can change how the planner searches.** Even when its first choice
   stays the same, changes to other candidate scores can lead later search steps
   toward different action sequences. Both learned and random edits have this effect.
@@ -343,5 +344,8 @@ records; bulk assets are not bundled or publicly downloadable from this repo.
 
 `src/` implements interventions and evaluation; `analysis/mechanism/` contains
 diagnostics; `tests/` checks them; `paper/data/` and `reports/` preserve the evidence.
+Each directory has a README describing its contents: [docs](docs/README.md) ·
+[analysis](analysis/README.md) · [scripts](scripts/README.md) · [configs](configs/README.md) ·
+[paper/data](paper/data/README.md) · [reports](reports/README.md) · [src](src/offline_study/README.md) · [tests](tests/README.md).
 Operational logs and bulk assets are excluded. No independent training-seed
 replication was performed. This is an independent study, not the authors' official implementation.
