@@ -40,3 +40,7 @@ scientific evaluation or a demonstration of full-task success.
 - GPU closeout is complete: no Vast instances or volumes. Private cloud storage remains intentional; no raw archive is deleted during publication cleanup.
 
 Private durable storage is under `gs://rgt-jepa-archive-2026/fresh-campaign-20260912-v2/` and `gs://rgt-jepa-archive-2026/mechanism-20260913/`. Publication snapshots use an immutable commit-specific object; the matching `publication-<commit>-CLOUD_VERIFIED.json` receipt is retained in the local campaign operations folder. Access to the Git repository does not grant access to these private archives.
+
+## LCFM action-history ranking reanalysis
+
+Completed post hoc from the preserved H6 goal costs: all sixteen contexts, both banks, all seven sites, and the rank/elite/winner comparisons. This adds no model execution or protected trials. [Protocol, full results, and public reproduction](LCFM_HISTORY_RANKING.md).

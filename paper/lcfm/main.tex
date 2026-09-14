@@ -102,6 +102,9 @@ Replacing both appearances at all six blocks reproduces the raw-action substitut
 
 Single-block interventions give a depth-dependent response. Persistent minus H3-only reconstruction is positively separated at B0--B3 in both tasks and both banks: sixteen of twenty-four cells under the registered simultaneous correction. B4/B5 remain unresolved. B1 has the largest observed persistence difference, $\Delta R=0.4991$--$0.5057$; its persistent H6 reconstruction is $0.7320$--$0.7421$, versus $0.2286$--$0.2387$ for H3-only. B1 is an illustrative post hoc choice, not a newly selected steering site. Appendix~\ref{sec:history} retains all six layers, input-range controls, and all 72 primary contrasts.
 
+\paragraph{The mismatch reaches candidate selection.}
+A post hoc reanalysis of the saved H6 costs compares each patch with the coherent raw-action reference. For all-block H3-only patches, mean Spearman agreement is 0.878--0.894 and mean top-ten overlap is 5.75--6.88 across task/bank cells. Their winning candidate differs from the reference in 17 of 32 banks (two banks per context); persistent all-block patches agree exactly. B1 persistence improves mean rank agreement and elite overlap in every task/bank cell, while winner agreement improves in three of four. These descriptive comparisons retain all sites and contexts. They measure fixed-bank selection, not a new CEM or physical rollout (Appendix~\ref{app:history-ranking}).
+
 For world-model intervention studies, the practical consequence is to validate an intended input counterfactual across the rolling context, not just at the first edited step. The experiment does not show that every useful activation edit must correspond to a raw-action change. Nor does it establish that history consistency improves physical control; the static steering experiments below test different operators and outcomes.
 
 \subsection{The learned edit improves some forecasts}
@@ -404,6 +407,40 @@ Range-random edits disrupt native rankings more than off-range random edits at B
 \includegraphics[width=\textwidth]{\figroot/paper_action_counterfactual.pdf}
 \caption{\textbf{All 72 registered action-counterfactual contrasts.} All six predictor blocks, both tasks, and both original/fresh banks are retained. The top comparison measures persistent minus H3-only reconstruction. The other comparisons retain the action-encoder range controls. Intervals use the registered simultaneous correction; these differ from the marginal bands in Figure~\ref{fig:main-history}.}
 \label{fig:history-all-layers}
+\end{figure}
+
+\clearpage
+\subsection{Action-history consistency and candidate selection}
+\label{app:history-ranking}
+
+The ranking reanalysis uses the original H6 goal-cost arrays, $\MSE_v+0.1\MSE_p$ in their archived FP32 arithmetic, with 300 shared candidate IDs per bank. The primary reference is the coherent raw H3 action substitution. At each of the six single-layer sites and the all-block site, we compare H3-only and persistent patches with that reference. Secondary comparisons retain persistent versus H3-only directly and native versus the coherent reference. The new analysis protocol was fixed before calculating these pairwise metrics; the original reconstruction outcomes were already known, so this is post hoc development analysis.
+
+Spearman correlation uses average ranks for exact ties. Elite overlap is the intersection of the actual archived top-ten sets, whose validity is checked against their costs. Winner comparisons use the lowest candidate ID among equal minimum costs, and we separately audit minimum-set overlap and top-ten cutoff ties. Every minimum is unique and no cutoff is tied in these records. There are no undefined rank correlations. Only H6 cost arrays were preserved; the H3/H4 reconstruction endpoints cannot supply intermediate rankings.
+
+\begin{table}[h]
+\centering\small
+\caption{All-block H3-only agreement with the coherent raw-action reference. Each row contains eight contexts. Persistent all-block patches have Spearman 1, overlap 10, and zero different winners in every row. Original/fresh banks share contexts.}
+\begin{tabular}{@{}llrrr@{}}
+\toprule
+Task & Bank & Spearman & Shared elites / 10 & Different winner / 8\\
+\midrule
+Reach & Original & 0.8775 & 6.625 & 3\\
+Reach & Fresh & 0.8814 & 6.875 & 5\\
+Reach-Wall & Original & 0.8940 & 5.750 & 5\\
+Reach-Wall & Fresh & 0.8907 & 6.875 & 4\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Persistent all-block equality is the prior computation-parity control. The additional observation is that omitting the historical occurrence changes not only forecast reconstruction but also rankings, elite membership, and the winning candidate. Figure~\ref{fig:history-ranking} retains all sites. B1 has a persistent-minus-H3-only Spearman difference of 0.1249--0.1371 and 1.75--3.125 additional shared elites per context. Its net gain in reference-winner matches is 0/8 and 3/8 on Reach (original/fresh) and 1/8 and 2/8 on Reach-Wall. Direct patch-to-patch winner changes are 3/8, 4/8, 2/8, and 4/8 respectively: a changed winner need not move toward the reference. Mean rank agreement improves at B0--B4 in every bank; B5 has small negative differences, from $-0.000154$ to $-0.000083$.
+
+All 704 pairwise records, 224 paired-difference records, and 84 descriptive mean differences are retained. Contexts are the units; banks and layers are shown separately. No new significance tests, confidence intervals, candidate filtering, or layer selection are performed. An independent SciPy/NumPy calculation agrees with all pairwise metrics. The input export binds 512 cost vectors to 80 hash-verified original archive members and sixteen cloud readback receipts. Agreement with a model counterfactual does not establish better physical plans.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{\figroot/lcfm_history_ranking.pdf}
+\caption{\textbf{Action history changes which candidates the model prefers.} Mean agreement with the coherent raw-action reference at H6, retaining both tasks, both original/fresh banks, and all seven intervention sites. Each mean contains eight contexts. Lines show descriptive values without new inferential intervals. Persistent all-block matching is exact; single-layer persistence has mixed effects on winner agreement.}
+\label{fig:history-ranking}
 \end{figure}
 
 \clearpage
