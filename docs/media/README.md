@@ -75,8 +75,8 @@ python scripts/render_task_demonstration.py
 
 ## Complete JEPA episodes used in the README
 
-[Real-time GIF](jepa_full_episodes.gif) · [1920×1080 MP4](jepa_full_episodes_hd.mp4) ·
-[Rendering receipt](jepa_full_episodes_receipt.json)
+[Real-time GIF](jepa_tasks_side_by_side.gif) · [1920×1080 MP4](jepa_tasks_side_by_side_hd.mp4) ·
+[Rendering receipt](jepa_tasks_side_by_side_receipt.json)
 
 These are new qualitative runs of the frozen MetaWorld JEPA-WM checkpoint in
 strict FP32, without activation steering. Reach and Reach-Wall both use seed 0,
@@ -88,14 +88,18 @@ so each capture contains 99 executed actions and 100 simulator states. The
 planner requests 100 actions in total; the environment executes 99 before the
 limit. Seven replans each retain fifteen CEM iterations and 300 candidates.
 The 99 executed actions cover 1.2375 seconds of simulation time per task. Playback
-omits planner computation and adds a half-second hold after each task.
-The MP4 retains every captured state at 80 fps; the 1280×720 GIF samples at
+shows both tasks simultaneously, omits planner computation, and adds a half-second
+hold at the end.
+The MP4 retains every captured state at 80 fps; the 1600×900 GIF samples at
 40 fps with the format's centisecond timing. It runs at approximately simulation
 speed, without the earlier prefix clip's 16× slowdown.
 
 All saved observations are checked against restored MuJoCo physics before
 rendering. The task and outcome labels occupy separate bands outside the robot
-view. A transparent green marker indicates the actual simulator target. The
+view. Both panels use the same fixed camera from the opposite side of the table,
+so the arm does not hide the wall. The existing target marker is coloured green.
+The earlier sequential clip cut between the two tasks and obscured the wall
+behind the robot; this replay replaces it using the same recorded physics. The
 presentation takes inspiration from the unobstructed workspace and visible goals
 in [Sholto Douglas's robotics videos](https://sholtodouglas.github.io/).
 
@@ -132,4 +136,12 @@ python scripts/render_jepa_episode.py \
   --input paper/data/jepa_episode_reach_wall.json --output /tmp/render-reach-wall
 python scripts/compose_jepa_episode_media.py \
   --renders /tmp/render-reach /tmp/render-reach-wall --output /tmp/jepa-media
+```
+
+Rebuild the simultaneous README replay from the retained captures:
+
+```bash
+python scripts/render_jepa_comparison.py \
+  --inputs paper/data/jepa_episode_reach.json paper/data/jepa_episode_reach_wall.json \
+  --output artifacts/jepa-comparison-render
 ```

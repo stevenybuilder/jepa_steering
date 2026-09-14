@@ -230,12 +230,12 @@ the context advances. These results concern the model's two-frame context.
 
 ## JEPA-WM planning in the simulator
 
-![Actual frozen JEPA-WM episodes at simulation speed: Reach and Reach-Wall, unsteered, seed 0. The target is highlighted in green.](docs/media/jepa_full_episodes.gif)
+![Actual frozen JEPA-WM episodes at simulation speed: Reach and Reach-Wall, unsteered, seed 0. The target is highlighted in green.](docs/media/jepa_tasks_side_by_side.gif)
 
 **Frozen JEPA-WM, with replanning throughout each episode.** Reach reaches the
 green target; Reach-Wall does not reach it within the episode limit. Both use
-seed 0, fixed before capture. Motion plays at simulation speed, with a brief
-hold between tasks. [1080p video](docs/media/jepa_full_episodes_hd.mp4) ·
+seed 0, fixed before capture. The tasks play side by side at simulation speed,
+with a shared camera that keeps the wall and target visible. [1080p video](docs/media/jepa_tasks_side_by_side_hd.mp4) ·
 [Actions, state verification, and reproduction](docs/media/README.md).
 
 ## Benchmark context
