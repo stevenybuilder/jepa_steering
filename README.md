@@ -11,9 +11,11 @@ outcomes we follow.
 
 Three findings explain how steering affects this world model:
 
-- **More accurate forecasts do not necessarily produce better plans.** Our learned
-  correction improves some predictions, but we have not established better task
-  success. We test prediction accuracy and robot outcomes separately.
+- **An action patch can match now and change the plan later.** It reproduces the
+  changed-input forecast at first, then diverges when the action returns as history.
+  In 200 fresh states, this changes the selected candidate in 42% of Reach and 59%
+  of Reach-Wall cases, with roughly 2% higher mean reference cost. Updating both
+  appearances restores exact agreement. [Experiment and figure](#an-action-patch-can-match-now-and-diverge-later).
 - **An edit can change how the planner searches.** Even when its first choice
   stays the same, changes to other candidate scores can lead later search steps
   toward different action sequences. Both learned and random edits have this effect.
