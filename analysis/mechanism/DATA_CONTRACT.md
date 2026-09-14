@@ -78,7 +78,7 @@ Common: `horizon` (1..6), `candidates` (300 for populations, 1 for the mean roll
 
 ## 2. Frozen analysis output (`--analysis ANALYSIS`)
 
-`ANALYSIS/report.json` written by `offline_study.fresh_confirmation analyze`:
+`ANALYSIS/report.json` written by `offline_study.experiments.fresh_confirmation analyze`:
 
 ```
 method, freeze_sha256, scientific_evaluations (3072), single_released_checkpoint_per_task (true),

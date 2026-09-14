@@ -125,5 +125,5 @@ source archives,contracts and the validated receiving proofs.
 The campaign-specific assembly scripts remain in the private execution archive.
 For analysis reproduction from the preserved self-contained output, put its
 `frozen-source` directory on `PYTHONPATH`,then run
-`python -m offline_study.navigation_coupling_analysis --root <output>/panel --reference <output>/reference --output <new-analysis>`.
+`python -m offline_study.tasks.navigation.navigation_coupling_analysis --root <output>/panel --reference <output>/reference --output <new-analysis>`.
 No model/checkpoint download or simulator launch is required for that calculation.

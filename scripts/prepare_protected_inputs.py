@@ -20,7 +20,7 @@ from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
-from offline_study.protocol import sha256, write_json
+from offline_study.core.protocol import sha256, write_json
 
 OUT = ROOT / 'artifacts/offline_study/protected-preparation-20260912-v1'
 ART = ROOT / 'artifacts/offline_study'
@@ -35,7 +35,7 @@ def fresh_dir(path):
 
 
 def freeze():
-    from offline_study.droid_fit_inputs import CATALOGUE
+    from offline_study.tasks.droid.droid_fit_inputs import CATALOGUE
     if sha256(CAT) != CATALOGUE:
         raise ValueError('Historical catalogue checksum differs')
     fresh_dir(OUT)
@@ -138,7 +138,7 @@ def pusht():
 
 
 def droid_exclusions():
-    from offline_study.droid_fit_availability import order
+    from offline_study.tasks.droid.droid_fit_availability import order
     catalogue = json.loads(CAT.read_text())
     excluded = {str(Path(r['name']).parent) for r in order(catalogue)[:160]}
     pattern = re.compile(r'robotics/droid_raw/1\.0\.1/[^"\n\\]+')
@@ -162,7 +162,7 @@ def droid_exclusions():
 
 
 def droid_metadata():
-    from offline_study.droid_fit_availability import inspect_record
+    from offline_study.tasks.droid.droid_fit_availability import inspect_record
     check(); target = OUT / 'droid'; fresh_dir(target)
     catalogue, excluded = droid_exclusions()
     ordered = sorted((r for r in catalogue if str(Path(r['name']).parent) not in excluded),
@@ -194,7 +194,7 @@ def droid_metadata():
 def droid_download():
     import numpy as np
     import h5py
-    from offline_study.droid_fit_download import download_object
+    from offline_study.tasks.droid.droid_fit_download import download_object
     p = check(); target = OUT / 'droid'; report = json.loads((target / 'metadata_report.json').read_text())
     if sha256(target / 'metadata_candidates.json') != report['candidates_sha256']:
         raise ValueError('Metadata candidates changed')

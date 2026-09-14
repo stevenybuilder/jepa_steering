@@ -32,7 +32,7 @@ TASKS = ("reach", "reach-wall", "pointmaze", "wall")
 ARMS = ("native", "fixed_rank4", "matched_random_fixed_rank4", "coupling_only",
         "matched_random_coupling", "joint", "visual_only", "action_condition_only")
 BASE = {"reach": 0.45, "reach-wall": 0.30, "pointmaze": 0.80, "wall": 0.76}
-# The 12 registered contrasts per task, copied from offline_study.fresh_confirmation.CONTRASTS
+# The 12 registered contrasts per task, copied from offline_study.experiments.fresh_confirmation.CONTRASTS
 # (7 arm-vs-native + refined-random, coupling-random, joint-visual, joint-action, factorial-interaction);
 # 12 x 4 tasks = family_size 48.
 CONTRASTS = {f"{a}-native": {a: 1, "native": -1} for a in ARMS[1:]}

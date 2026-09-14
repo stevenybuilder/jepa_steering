@@ -12,6 +12,8 @@ jobs:
   unit:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+    env:
+      JEPA_FROZEN_SOURCE_ROOT: ${{ github.workspace }}/vendor/frozen-study/src/offline_study
     steps:
       - uses: actions/checkout@v4
       - name: Restore pinned public crop fixture
@@ -22,6 +24,16 @@ jobs:
           path: vendor/jepa-wms
           sparse-checkout: src/datasets/utils/video/transforms.py
           sparse-checkout-cone-mode: false
+          persist-credentials: false
+      - name: Restore source snapshot for historical hash checks
+        uses: actions/checkout@v4
+        with:
+          ref: 40fa529afc782165f5f610e6dac436931e429772
+          path: vendor/frozen-study
+          sparse-checkout: |
+            src/offline_study
+            analysis/mechanism
+          sparse-checkout-cone-mode: true
           persist-credentials: false
       - uses: actions/setup-python@v5
         with:
@@ -36,47 +48,7 @@ jobs:
           python scripts/check_public_repository.py
           python scripts/check_public_results.py
           python scripts/check_lcfm_replication.py
-      # Full integration coverage also needs pinned vendor source and private
-      # archive fixtures. This job deliberately reports only the portable suite.
+      # Integration tests need additional vendor source, private archives or GPUs.
+      # Run them explicitly with: python -m pytest tests/integration
       - name: Run public CPU tests
-        shell: bash
-        run: |
-          set -euo pipefail
-          for test_file in \
-            test_protocol.py \
-            test_benchmark.py \
-            test_pipeline.py \
-            test_interventions.py \
-            test_fixed_response.py \
-            test_decision_diagnostic.py \
-            test_statistical_validation.py \
-            test_fresh_confirmation.py \
-            test_fresh_engineering.py \
-            test_mechanism_energy_schema.py \
-            test_candidate_score_trace.py \
-            test_layer_attention_pilot.py \
-            test_steering_specificity.py \
-            test_decision_geometry.py \
-            test_pathway_geometry.py \
-            test_candidate_replay_pilot.py \
-            test_pilot_summary.py \
-            test_cem_steering_summary.py \
-            test_steered_cem_pilot.py \
-            test_cem_expansion_pilot.py \
-            test_cem_expansion_summary.py \
-            test_cem_expansion_figures.py \
-            test_planned_prefix_replay.py \
-            test_planned_prefix_summary.py \
-            test_planned_prefix_figures.py \
-            test_story_figures.py \
-            test_precision_story.py \
-            test_publication_figures.py \
-            test_action_history_figure.py \
-            test_action_condition_specificity.py \
-            test_action_condition_summary.py \
-            test_public_results.py; do
-            python -m unittest discover -s tests -p "$test_file" -v
-          done
-      - name: Run numerical mechanism controls
-        run: |
-          python -m pytest -q tests/test_controlled_geometry_pilot.py tests/test_controlled_geometry_summary.py tests/test_action_counterfactual_pilot.py tests/test_action_counterfactual_summary.py tests/test_lcfm_history_ranking.py tests/test_full_episode_capture.py tests/test_lcfm_replication.py tests/test_lcfm_replication_summary.py tests/test_drain_lcfm_case.py tests/test_collect_fresh_metadata.py tests/test_direct_gcs_archive.py tests/test_fresh_parallel_download.py tests/test_profile_fresh_forecast.py
+        run: python -m pytest -q tests/unit

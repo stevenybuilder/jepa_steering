@@ -14,16 +14,20 @@ analysis = ["pandas>=2", "scipy>=1.10", "matplotlib>=3.7"]
 test = ["pytest==8.4.2"]
 
 [project.scripts]
-jepa-inventory = "offline_study.inventory:main"
-jepa-benchmark = "offline_study.benchmark:main"
-jepa-compare-runs = "offline_study.compare:main"
-jepa-intervene = "offline_study.intervention_runner:main"
-jepa-fit-coupling = "offline_study.operator_fit:main"
-jepa-intervention-multigpu = "offline_study.intervention_multigpu:main"
-jepa-aggregate-interventions = "offline_study.intervention_multigpu:aggregate_main"
-jepa-analyze-development = "offline_study.development_analysis:main"
-jepa-multigpu = "offline_study.multigpu:main"
-jepa-author-validation-audit = "offline_study.author_validation:main"
+jepa-inventory = "offline_study.data.inventory:main"
+jepa-benchmark = "offline_study.runtime.benchmark:main"
+jepa-compare-runs = "offline_study.runtime.compare:main"
+jepa-intervene = "offline_study.runtime.intervention_runner:main"
+jepa-fit-coupling = "offline_study.fitting.operator_fit:main"
+jepa-intervention-multigpu = "offline_study.runtime.intervention_multigpu:main"
+jepa-aggregate-interventions = "offline_study.runtime.intervention_multigpu:aggregate_main"
+jepa-analyze-development = "offline_study.evaluation.development_analysis:main"
+jepa-multigpu = "offline_study.runtime.multigpu:main"
+jepa-author-validation-audit = "offline_study.evaluation.checkpoint.author_validation:main"
 
 [tool.setuptools.packages.find]
 where = ["src"]
+
+[tool.pytest.ini_options]
+# Integration tests require additional fixtures; select tests/integration explicitly.
+testpaths = ["tests/unit"]

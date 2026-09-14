@@ -4,6 +4,7 @@ No GPU use, fit updates, partial-cohort aggregation, or edits to published8 outp
 The frozen eight-case module supplies only trace-validation/comparison functions.
 """
 from __future__ import annotations
+from offline_study._paths import frozen_source_path, frozen_analysis_path
 
 import argparse
 from datetime import datetime, timezone
@@ -65,8 +66,9 @@ def require(condition, message):
 
 
 def frozen_helper():
-    require(sha(HELPER) == HELPER_SHA, "Frozen pure-function source changed")
-    spec = importlib.util.spec_from_file_location("cem_expansion_frozen_helper", HELPER)
+    helper = frozen_analysis_path("cem_steering_summary.py", HELPER_SHA)
+    require(sha(helper) == HELPER_SHA, "Frozen pure-function source changed")
+    spec = importlib.util.spec_from_file_location("cem_expansion_frozen_helper", helper)
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
@@ -354,7 +356,7 @@ def run(args):
     bindings = {(row["task"], row["episode"]): row for row in read(args.input_manifest)["records"]}
     gpus = assigned_gpus(manifest)
     for name, digest in manifest["source_sha256"].items():
-        require(Path(name).name == name and sha(ROOT / "src/offline_study" / name) == digest, "Execution source changed: " + name)
+        require(Path(name).name == name and sha(frozen_source_path(name, digest)) == digest, "Execution source changed: " + name)
     for name, digest in manifest.get("vendor_source_sha256", {}).items():
         require(".." not in Path(name).parts and not Path(name).is_absolute() and sha(ROOT / "vendor/jepa-wms" / name) == digest,
                 "Pinned vendor source changed: " + name)

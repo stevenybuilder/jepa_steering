@@ -1,5 +1,6 @@
 """Source-bound complete16 CPU analysis of frozen action-condition diagnostic B."""
 from __future__ import annotations
+from offline_study._paths import frozen_source_path
 
 import argparse
 import hashlib
@@ -36,7 +37,7 @@ def read(path):
 
 
 def frozen_module(path=None):
-    path = path or ROOT/"src/offline_study/action_condition_specificity.py"
+    path = path or frozen_source_path("action_condition_specificity.py", SOURCE_SHA)
     if sha(path) != SOURCE_SHA:
         raise ValueError("Frozen statistical/source implementation changed")
     spec = importlib.util.spec_from_file_location("frozen_action_condition_specificity",path)

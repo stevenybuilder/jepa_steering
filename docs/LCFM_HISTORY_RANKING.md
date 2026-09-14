@@ -70,7 +70,7 @@ Every row below is retained. Positive differences mean closer agreement with the
 ```bash
 python -m analysis.mechanism.lcfm_history_ranking --output /tmp/lcfm-ranking-reproduction
 python scripts/build_lcfm_ranking_figure.py
-python -m pytest -q tests/test_lcfm_history_ranking.py
+python -m pytest -q tests/unit/analysis/test_lcfm_history_ranking.py
 ```
 
 The analysis command uses the committed cost-vector export and refuses to overwrite existing outputs. To rebuild that export from the original preserved case files, use `--export-source PATH_TO_COMPLETE16_CASES --output NEW_DIRECTORY`.

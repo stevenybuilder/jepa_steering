@@ -23,7 +23,7 @@ os.environ.setdefault('SDL_AUDIODRIVER', 'dummy')
 os.environ.setdefault('MPLBACKEND', 'Agg')
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
-from offline_study.protocol import sha256, write_json
+from offline_study.core.protocol import sha256, write_json
 
 INPUT = ROOT / 'artifacts/offline_study/protected-preparation-20260912-v1'
 OUT = ROOT / 'artifacts/offline_study/protected-input-cpu-validation-20260912-v1'

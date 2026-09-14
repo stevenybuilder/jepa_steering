@@ -44,9 +44,9 @@ def run(project, output):
     import random
     import numpy as np
     import torch
-    from offline_study import fresh_confirmation as fc
-    from offline_study.intervention_runner import _model_versions
-    from offline_study.protocol import write_json
+    from offline_study.experiments import fresh_confirmation as fc
+    from offline_study.runtime.intervention_runner import _model_versions
+    from offline_study.core.protocol import write_json
     from torch.profiler import profile, ProfilerActivity
     output = validate_output(project, output)
     if hashlib.sha256((project / 'fresh-freeze-v2/protocol.json').read_bytes()).hexdigest() != FREEZE:

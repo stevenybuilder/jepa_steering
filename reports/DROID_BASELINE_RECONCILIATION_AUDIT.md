@@ -90,7 +90,7 @@ for the separately completed comparison.
 
 ## Fresh validation performed
 
-- Called `offline_study.verify_droid_replication.verify` directly, without its
+- Called `offline_study.tasks.droid.verify_droid_replication.verify` directly, without its
   output-writing CLI, on the preserved reference directory below.
 - Independently extracted and executed the pinned upstream sampling and DROID
   metric branches on existing metadata/actions: **64/64 exact matches** for
@@ -125,11 +125,11 @@ Primary reference directory:
 | Released predictor bytes, as verified in original receipt | `daa69198aef764932f1cb809239a4e19c71da20a93c6a0b9f3869cb30a13f4aa` |
 
 Local implementation evidence:
-[contract](../src/offline_study/droid_contract.py),
-[native wrapper](../src/offline_study/droid_native.py),
-[reference runner](../src/offline_study/droid_replication.py),
-[record verifier](../src/offline_study/verify_droid_replication.py), and
-[paired analysis](../src/offline_study/droid_coupling_behavior.py).
+[contract](../src/offline_study/tasks/droid/droid_contract.py),
+[native wrapper](../src/offline_study/tasks/droid/droid_native.py),
+[reference runner](../src/offline_study/tasks/droid/droid_replication.py),
+[record verifier](../src/offline_study/tasks/droid/verify_droid_replication.py), and
+[paired analysis](../src/offline_study/tasks/droid/droid_coupling_behavior.py).
 
 Pinned upstream evidence:
 [evaluation config](https://github.com/facebookresearch/jepa-wms/blob/13cf1d9c7e476f53c17714d2e0f1dc239a883ce0/configs/evals/simu_env_planning/droid/jepa-wm/droid_L2_cem_sourcedset_H3_nas3_maxnorm01_ctxt2_gH3_r256_alpha0_ep64_decode.yaml),

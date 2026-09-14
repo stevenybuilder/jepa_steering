@@ -42,7 +42,7 @@ def assert_same_process(current, original):
 
 def validate_process(identity, task, manifest_sha, output):
     args = identity['args']
-    if '-m' not in args or args[args.index('-m')+1:args.index('-m')+3] != ['offline_study.lcfm_replication', 'execute']:
+    if '-m' not in args or args[args.index('-m')+1:args.index('-m')+3] != ['offline_study.experiments.lcfm_replication', 'execute']:
         raise ValueError('PID is not the registered replication executor')
     for flag, value in (('--task', task), ('--manifest-sha256', manifest_sha), ('--output', str(output))):
         if args.count(flag) != 1 or args[args.index(flag)+1] != value:

@@ -2,7 +2,7 @@
 
 ## Public, CPU-only checks
 
-Install `pip install -e '.[analysis]'`, then run:
+Install `pip install -e '.[analysis,test]'`, then run:
 
 ```bash
 python scripts/check_public_repository.py
@@ -18,19 +18,12 @@ python -m analysis.mechanism.pilot_summary --plots-only
 python scripts/build_paper_figures.py
 python scripts/build_cem_expansion_figures.py
 python scripts/build_planned_prefix_figures.py
-python -m unittest discover -s tests -p test_decision_geometry.py -v
-python -m unittest discover -s tests -p 'test_steering_specificity.py' -v
-python -m unittest discover -s tests -p 'test_fresh_confirmation.py' -v
-python -m unittest discover -s tests -p 'test_mechanism_energy_schema.py' -v
-python -m unittest discover -s tests -p 'test_pilot_summary.py' -v
-python -m unittest discover -s tests -p 'test_cem_steering_summary.py' -v
-python -m unittest discover -s tests -p 'test_planned_prefix_summary.py' -v
-python -m unittest discover -s tests -p 'test_planned_prefix_figures.py' -v
-python -m unittest discover -s tests -p 'test_story_figures.py' -v
-python -m unittest discover -s tests -p 'test_precision_story.py' -v
 ```
 
-These check committed aggregates, their hashes and derived figures. They do not
+Run the [portable CPU tests](../tests/README.md) with `python -m pytest tests/unit`
+after restoring the two pinned source fixtures described there.
+
+These checks verify committed aggregates, their hashes and derived figures. They do not
 independently reproduce simulator outcomes. Public CI tests portable components;
 full integration tests need the pinned vendor and private fixtures.
 
@@ -38,19 +31,19 @@ full integration tests need the pinned vendor and private fixtures.
 
 | Start with | Purpose |
 |---|---|
-| [model_loader.py](../src/offline_study/model_loader.py) and [backends.py](../src/offline_study/backends.py) | Load the frozen checkpoint and call its predictor |
-| [interventions.py](../src/offline_study/interventions.py) and [fixed_response.py](../src/offline_study/fixed_response.py) | Apply activation edits and the fitted rank-four correction |
-| [fresh_confirmation.py](../src/offline_study/fresh_confirmation.py) | Run paired protected scenarios and their frozen analysis |
-| [action_counterfactual_pilot.py](../src/offline_study/action_counterfactual_pilot.py) and [lcfm_replication.py](../src/offline_study/lcfm_replication.py) | Compare input changes with one-time and persistent conditioning patches |
-| [steered_cem_pilot.py](../src/offline_study/steered_cem_pilot.py) and [planned_prefix_replay.py](../src/offline_study/planned_prefix_replay.py) | Trace adaptive planning and replay selected actions in the simulator |
+| [model_loader.py](../src/offline_study/models/model_loader.py) and [backends.py](../src/offline_study/models/backends.py) | Load the frozen checkpoint and call its predictor |
+| [interventions.py](../src/offline_study/interventions/interventions.py) and [fixed_response.py](../src/offline_study/interventions/fixed_response.py) | Apply activation edits and the fitted rank-four correction |
+| [fresh_confirmation.py](../src/offline_study/experiments/fresh_confirmation.py) | Run paired protected scenarios and their frozen analysis |
+| [action_counterfactual_pilot.py](../src/offline_study/experiments/action_counterfactual_pilot.py) and [lcfm_replication.py](../src/offline_study/experiments/lcfm_replication.py) | Compare input changes with one-time and persistent conditioning patches |
+| [steered_cem_pilot.py](../src/offline_study/experiments/steered_cem_pilot.py) and [planned_prefix_replay.py](../src/offline_study/experiments/planned_prefix_replay.py) | Trace adaptive planning and replay selected actions in the simulator |
 | [Mechanism analyses](../analysis/mechanism/) | Reconstruct statistics and figures from recorded experiments |
 
 The repository separates configuration, execution, analysis, and presentation:
 
 - `configs/` defines study settings and pinned input assets.
-- `src/offline_study/` contains experiment implementations, data preparation, and
-  validation. Task-specific modules cover MetaWorld, Push-T, navigation, and DROID.
-  `refined_panel/` contains the corresponding panel analysis and MetaWorld amendment.
+- [src/offline_study/](../src/offline_study/README.md) groups model interfaces,
+  interventions, planning, fitting, experiments, and evaluation. `tasks/` separates
+  MetaWorld, Push-T, navigation, and DROID implementations.
 - `analysis/mechanism/` contains CPU analyses of completed experiments.
 - `scripts/` provides entry points, result checks, and figure/media builders.
   `scripts/vast/` retains archive, transfer, profiling, and scientific audit utilities.
@@ -59,12 +52,13 @@ The repository separates configuration, execution, analysis, and presentation:
   and `wm-approaches/` hold the protected and earlier behavioral summaries.
 - `docs/` explains methods and findings. `docs/figures/` and `docs/media/` contain
   the displayed assets and their reproduction information.
-- `tests/` covers experiment contracts, statistics, and engineering controls.
-  [Public CI](../.github/workflows/tests.yml) lists the supported CPU checks.
+- [tests/](../tests/README.md) separates the portable CPU suite in `unit/` from
+  explicitly selected `integration/` checks. [Public CI](../.github/workflows/tests.yml)
+  runs the unit suite and all three published-result checkers.
 
 ## Source and data boundaries
 
-The scientific runner is [fresh_confirmation.py](../src/offline_study/fresh_confirmation.py).
+The scientific runner is [fresh_confirmation.py](../src/offline_study/experiments/fresh_confirmation.py).
 It binds source, banks, audited inputs, checkpoints, scenario RNG, pairing and
 analysis. [study.json](../configs/study.json) describes the broader development
 study; the final confirmation is a separate freeze, not that older config alone.
@@ -88,6 +82,10 @@ Archive identity and access can be requested from the repository owner. No claim
 of fully public raw-data reproducibility is made.
 
 ## Replay with authorized archive access
+
+The command below uses the original module name inside the restored snapshot.
+Current package paths have been reorganized; source hash checks intentionally
+reject substituting the reorganized checkout for an executed snapshot.
 
 After restoring and verifying the archive hashes, use its frozen source snapshot
 and matching result/freeze trees. The current checkout also contains later

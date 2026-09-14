@@ -62,7 +62,7 @@ features, adds an intercept, and applies a precomputed 4×4 coefficient map. A
 final batched product with four basis directions reconstructs the edit. The
 response inverse is calibrated offline; the online path uses thin matrix
 products instead of rerunning response probes for each candidate. See
-[`compose_map` and the output hook](../src/offline_study/fixed_response.py).
+[`compose_map` and the output hook](../src/offline_study/interventions/fixed_response.py).
 
 An excluded engineering benchmark timed ten warmed forecasts per mode:
 strict FP32 **3.13847 s**, TF32 **2.85019 s**, BF16 **2.77808 s** median. The
@@ -74,9 +74,9 @@ describe whole forecasts, not an isolated GEMM benchmark or full-episode speedup
 
 | Principle | Application | Implementation |
 |---|---|---|
-| Replicate a model that fits | Independent single-GPU scenario jobs; keep eight paired arms together | [Scenario executor](../src/offline_study/fresh_confirmation.py) |
-| Batch within a GPU | Preserve upstream batches of 300 candidate trajectories | [Executor](../src/offline_study/fresh_confirmation.py) |
-| Remove repeated online work | Offline response-map calibration; no online probes/shadows for the refined arm | [Fixed response](../src/offline_study/fixed_response.py) |
+| Replicate a model that fits | Independent single-GPU scenario jobs; keep eight paired arms together | [Scenario executor](../src/offline_study/experiments/fresh_confirmation.py) |
+| Batch within a GPU | Preserve upstream batches of 300 candidate trajectories | [Executor](../src/offline_study/experiments/fresh_confirmation.py) |
+| Remove repeated online work | Offline response-map calibration; no online probes/shadows for the refined arm | [Fixed response](../src/offline_study/interventions/fixed_response.py) |
 | Stage bulk data outside the inner loop | Worker-local weights/inputs with hash checks | [Range downloader](../scripts/vast/fresh_parallel_download.py) |
 | Overlap collection and computation | Snapshot published records while remaining scenarios run | [Snapshotter](../scripts/vast/fresh_stream_backup.py), [verified archive upload](../scripts/vast/direct_gcs_archive.py) |
 | Count validated throughput | Collect complete scenarios with hash and engineering receipts | [Collector](../scripts/vast/collect_fresh_metadata.py) |
@@ -132,7 +132,7 @@ does not stall collection from the rest of the fleet.
 
 The final statistical analysis requires every registered case, checks each
 original result-file hash, and retains all six layers and matched random
-controls. [Frozen execution source](../src/offline_study/lcfm_replication.py) ·
+controls. [Frozen execution source](../src/offline_study/experiments/lcfm_replication.py) ·
 [Boundary drain controller](../scripts/vast/drain_lcfm_case.py) ·
 [Case audits and aggregation](../analysis/mechanism/lcfm_replication_summary.py).
 

@@ -105,10 +105,10 @@ def main():
     if args.output.exists():
         raise ValueError('Use a new output directory')
     import torch
-    from offline_study.backends import JepaBackend
-    from offline_study.planning_contract import prepare
-    from offline_study.planning_native_smoke import CHECKPOINTS, run_episode
-    from offline_study.planning_scenarios import close_expert_environments
+    from offline_study.models.backends import JepaBackend
+    from offline_study.planning.planning_contract import prepare
+    from offline_study.planning.planning_native_smoke import CHECKPOINTS, run_episode
+    from offline_study.planning.planning_scenarios import close_expert_environments
     if not torch.cuda.is_available():
         raise RuntimeError('Capture needs a qualified CUDA worker; no hardware is rented automatically')
     random.seed(0); np.random.seed(0); torch.manual_seed(0)

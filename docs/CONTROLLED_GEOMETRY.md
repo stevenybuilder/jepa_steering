@@ -116,7 +116,7 @@ Reproducible outputs:
 - [All 1,152 context-level metric rows](../paper/data/controlled_geometry_case_metrics.csv),
   [180 summary rows](../paper/data/controlled_geometry_summary.csv), and
   [36 paired layer contrasts](../paper/data/controlled_geometry_contrasts.csv).
-- [Measurement implementation](../src/offline_study/controlled_geometry_pilot.py)
+- [Measurement implementation](../src/offline_study/experiments/controlled_geometry_pilot.py)
   and [independent CPU analysis](../analysis/mechanism/controlled_geometry_summary.py).
   Execution manifest SHA256 is
   `b27dd0e0409fab9e6ad1251281edb7456a78e95878978fac2781ce1979108e9c`.

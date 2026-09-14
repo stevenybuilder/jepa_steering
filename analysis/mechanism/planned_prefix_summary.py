@@ -1,5 +1,6 @@
 """Complete56, source-bound H3 physical-prefix analysis; never partial means."""
 from __future__ import annotations
+from offline_study._paths import frozen_source_path, frozen_analysis_path
 
 import argparse
 from datetime import datetime, timezone
@@ -47,7 +48,7 @@ def require(condition,message):
 
 
 def parent_helper():
-    path=Path(__file__).with_name('cem_expansion_summary.py')
+    path=frozen_analysis_path('cem_expansion_summary.py', PARENT_HELPER_SHA)
     require(sha(path)==PARENT_HELPER_SHA,'Frozen parent validation helper changed')
     spec=importlib.util.spec_from_file_location('planned_prefix_parent_helper',path)
     module=importlib.util.module_from_spec(spec);spec.loader.exec_module(module)
@@ -66,7 +67,7 @@ def protocol():
 
 def freeze(path,prior_freeze=None):
     protocol();parent_helper()
-    require(sha(ROOT/'src/offline_study/planned_prefix_replay.py')==RUNNER_SHA,'Physical runner changed')
+    require(sha(frozen_source_path('planned_prefix_replay.py', RUNNER_SHA))==RUNNER_SHA,'Physical runner changed')
     receipt={'status':'analysis_frozen_before_physical_prefix_outcomes',
         'frozen_at_utc':datetime.now(timezone.utc).isoformat(),'analysis_source_sha256':sha(__file__),
         'execution_source_sha256':RUNNER_SHA,'parent_helper_sha256':PARENT_HELPER_SHA,
@@ -325,7 +326,7 @@ def run(args):
     for registry in (manifest,parent_manifest):
         require(registry['source_sha256'] and registry['vendor_source_sha256'],'Missing exact local/vendor source bindings')
         for name,digest in registry['source_sha256'].items():
-            require(Path(name).name==name and sha(ROOT/'src/offline_study'/name)==digest,'Pinned local source changed: '+name)
+            require(Path(name).name==name and sha(frozen_source_path(name, digest))==digest,'Pinned local source changed: '+name)
         for name,digest in registry['vendor_source_sha256'].items():
             require(not Path(name).is_absolute() and '..' not in Path(name).parts and
                 sha(ROOT/'vendor/jepa-wms'/name)==digest,'Pinned vendor source changed: '+name)

@@ -14,7 +14,7 @@ from pathlib import Path
 
 import numpy as np
 
-from src.offline_study.decision_diagnostic import ARMS, rank_agreement, validate_records
+from offline_study.experiments.decision_diagnostic import ARMS, rank_agreement, validate_records
 
 ROOT = Path(__file__).resolve().parents[2]
 PLAN = ROOT / "configs/decision_geometry_reanalysis_20260913.json"

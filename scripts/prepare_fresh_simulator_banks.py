@@ -15,8 +15,8 @@ from types import SimpleNamespace
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / 'src'))
-from offline_study.planning_contract import prepare, seed_schedule
-from offline_study.protocol import sha256, write_json
+from offline_study.planning.planning_contract import prepare, seed_schedule
+from offline_study.core.protocol import sha256, write_json
 
 VENDOR = ROOT / 'vendor/jepa-wms'
 OUT = ROOT / 'artifacts/offline_study/fresh-simulator-banks-20260912-v1'
@@ -74,7 +74,7 @@ def freeze():
     write_json(OUT / 'protocol.json', {'role': 'fresh_input_preparation_not_evaluation',
         'script_sha256': sha256(Path(__file__)), 'tasks': contracts,
         'exclusions_sha256': sha256(OUT / 'exclusions.json'),
-        'existing_generator_sha256': sha256(ROOT / 'src/offline_study/planning_scenarios.py'),
+        'existing_generator_sha256': sha256(ROOT / 'src/offline_study/planning/planning_scenarios.py'),
         'vendor_commit': '13cf1d9c7e476f53c17714d2e0f1dc239a883ce0',
         'outcome_filtering': False, 'learned_policy_calls': 0,
         'scientific_launch_ready': False, 'source_family_audit_complete': False})
@@ -84,17 +84,17 @@ def freeze():
 def run(task, rank):
     import numpy as np
     import torch
-    from offline_study.vendor import use_vendor
+    from offline_study.models.vendor import use_vendor
     use_vendor(VENDOR)
-    from offline_study.planning_scenarios import prepare_episode
-    from offline_study.planning_env_smoke import observation_digest
+    from offline_study.planning.planning_scenarios import prepare_episode
+    from offline_study.planning.planning_env_smoke import observation_digest
     from omegaconf import OmegaConf
     from evals.simu_env_planning.envs.init import make_env
     from evals.simu_env_planning.planning.utils import make_td
     p = json.loads((OUT / 'protocol.json').read_text())
     if sha256(OUT / 'protocol.json') != json.loads((OUT / 'FROZEN.json').read_text())['protocol_sha256']:
         raise ValueError('Input protocol changed')
-    if p['script_sha256'] != sha256(Path(__file__)) or p['existing_generator_sha256'] != sha256(ROOT / 'src/offline_study/planning_scenarios.py'):
+    if p['script_sha256'] != sha256(Path(__file__)) or p['existing_generator_sha256'] != sha256(ROOT / 'src/offline_study/planning/planning_scenarios.py'):
         raise ValueError('Input generation source changed')
     if sha256(OUT / 'exclusions.json') != p['exclusions_sha256']:
         raise ValueError('Exposure exclusions changed')

@@ -203,7 +203,7 @@ def metaworld(token):
         rows = pq.read_table(io.BytesIO(raw), columns=['task', 'seed', 'episode', 'states', 'actions']).to_pylist()
         return entry, rows
     sys.path.insert(0, str(ROOT / 'src'))
-    from offline_study.inventory import _metaworld_trajectory_group
+    from offline_study.data.inventory import _metaworld_trajectory_group
     all_rows, receipts = {'mw-reach': [], 'mw-reach-wall': []}, []
     with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:
         for entry, rows in pool.map(download, files):

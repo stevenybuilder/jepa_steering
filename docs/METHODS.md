@@ -16,9 +16,9 @@ successor to the earlier expensive online operator, not an equivalent implementa
 
 Vision–action coupling edits visual predictor inputs and action-conditioning
 pathways. The unscaled joint factorial and equal-budget efficacy arm are distinct.
-Implementation: [fixed_response.py](../src/offline_study/fixed_response.py),
-[interventions.py](../src/offline_study/interventions.py),
-[fresh_confirmation.py](../src/offline_study/fresh_confirmation.py).
+Implementation: [fixed_response.py](../src/offline_study/interventions/fixed_response.py),
+[interventions.py](../src/offline_study/interventions/interventions.py),
+[fresh_confirmation.py](../src/offline_study/experiments/fresh_confirmation.py).
 
 ## Fitting, selection and exposure
 
