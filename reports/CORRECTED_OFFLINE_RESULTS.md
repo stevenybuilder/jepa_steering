@@ -9,8 +9,8 @@ All five frozen sweeps completed in BF16 (primary) and FP32 (sensitivity) on all
 primary author-validation pools. Exact upstream input, context, rollout and metric
 checks passed. This finishes those corrected offline comparisons, **not the entire
 offline confirmation/routing work or end-to-end study**.
-The governing design is [EXPERIMENT_PLAN.md](../docs/EXPERIMENT_PLAN.md), with its
-explicit author-validation correction in [author_correction.json](../configs/author_correction.json).
+The historical study design is preserved in the private source archive; its
+author-validation correction is recorded in [author_correction.json](../configs/author_correction.json).
 
 ## Coverage and unit of analysis
 

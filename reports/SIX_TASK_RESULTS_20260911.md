@@ -47,7 +47,7 @@ Both control comparisons hold intervention location fixed. They do not establish
 that location matters more than direction, or that learned and random edits are
 equivalent. See control definitions (archived reference: `../matched random control.md#4-our-controls-exact-definitions-and-gaps`).
 
-Author values come from [JEPA-WM v4, Tables11–12](https://arxiv.org/html/2512.24497v4).
+Author values come from JEPA-WM v4, Tables11–12.
 The first three published rows use late-training aggregation; the final-checkpoint
 row still averages three trained seeds. Our rows use one released checkpoint.
 Published numbers are context, not substitutes for our matched unsteered reference
@@ -122,9 +122,8 @@ The original analysis module is byte-identical to the current checked-in module;
 execution imports the complete preserved source package. `ASSEMBLY.json` records
 source archives,contracts and the validated receiving proofs.
 
-Reproduce the complete assembly into a new output directory with
-`python scripts/vast/analyze_completed_navigation.py --output <new-output>`.
-For analysis-only reproduction from the preserved self-contained output,put its
+The campaign-specific assembly scripts remain in the private execution archive.
+For analysis reproduction from the preserved self-contained output, put its
 `frozen-source` directory on `PYTHONPATH`,then run
 `python -m offline_study.navigation_coupling_analysis --root <output>/panel --reference <output>/reference --output <new-analysis>`.
 No model/checkpoint download or simulator launch is required for that calculation.

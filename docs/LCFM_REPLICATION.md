@@ -109,13 +109,12 @@ Every completed case has a generation-pinned GCS archive with a full download-SH
 check and hashes of all original result files. Those private raw archives require
 authorized storage access; the derived tables above are committed to the repository.
 
-Regenerate figures, report, and manuscript values from the public tables:
+Regenerate figures and the report from the public tables:
 
 ```bash
 python scripts/check_lcfm_replication.py
 python scripts/build_lcfm_replication_figures.py
 python scripts/write_lcfm_replication_report.py
-python scripts/write_lcfm_replication_numbers.py
 ```
 
 To repeat the statistical aggregation after restoring all 200 verified case audits:
@@ -129,5 +128,4 @@ The aggregator rejects incomplete cohorts, repeated states, changed protocols,
 and cases without cloud verification. It retains every registered condition.
 
 [Earlier sixteen-state reconstruction study](ACTION_COUNTERFACTUAL.md) ·
-[Earlier ranking reanalysis](LCFM_HISTORY_RANKING.md) ·
-[Design and sample-size rationale](LCFM_FOLLOWUP_DESIGN.md)
+[Earlier ranking reanalysis](LCFM_HISTORY_RANKING.md).

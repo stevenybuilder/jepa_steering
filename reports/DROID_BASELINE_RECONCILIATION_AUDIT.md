@@ -25,7 +25,7 @@ audit.
 
 ## Reference comparison
 
-The [JEPA-WM v4 paper](https://arxiv.org/html/2512.24497v4) reports DROID CEM-L2
+The JEPA-WM v4 paper reports DROID CEM-L2
 48.2 (1.8) in its main comparison and 46.5 (0.4) for final checkpoints across
 three training seeds in Table 12. Its main result uses late-training aggregation;
 our audited reference uses one released epoch-315 checkpoint. Neither published
@@ -72,7 +72,7 @@ not a completed submission-wide checklist or license review.
 | Limits and compute | Disclose unverified full upstream GPU equivalence and unavailable matched histories. This audit used CPU record checks only; no new paid workloads. It is not a reconciliation of historical project spending. |
 
 The methodological reference is Patterson et al.,
-[Empirical Design in Reinforcement Learning](https://jmlr.org/papers/v25/23-0183.html)
+Empirical Design in Reinforcement Learning
 (2024), especially sections 2.2, 4.1, 4.4–4.5, and 6. Its guidance supports
 comparable baselines, explicitly identified randomness, paired differences when
 appropriate, and inspection of implementation details before attributing a

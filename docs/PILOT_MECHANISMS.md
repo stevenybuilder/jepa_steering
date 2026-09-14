@@ -71,11 +71,17 @@ Learned and calibrated-random arms are retained throughout. The public tables in
 
 Each complete case requires its original `report.json`, `DONE.json`, `attention.json`, `scores.json`, derived `cem_summary.json`, and verified-cloud preservation receipt. Original compact files must match the hashes in the case report; the CEM summary must have its own preservation hash and parent trace hash. The cloud receipt must attest archive-member verification and downloaded archive hash agreement. The aggregate receipt records these source bindings and all exported-table hashes.
 
-A root-approved operational amendment permits analysis from verified compact-only archives while the initial eight bulk H6 archives finish offloading. Such a receipt must explicitly say `archive_scope=compact-derived-only`, `compact_files_hash_verified=true`, and `raw_preservation_pending=true`, with exact hashes for all five compact members. It cannot claim that all raw report files are cloud-verified. Aggregate provenance exposes the pending-case count and `all_raw_preservation_complete`; those fields must be refreshed once full archive receipts arrive. Compact analysis readiness neither authorizes raw-data deletion nor completes the final preservation handoff.
+The initial analysis used verified compact records while the first eight bulk H6
+archives were being preserved. All 64 cases now have their required archives
+verified, with `raw_preservation_pending_case_count=0` and
+`all_raw_preservation_complete=true` in the source receipt. Updating preservation
+status left the scientific CSV hashes unchanged.
 
 Full/cache and native/zero score arrays are checked exactly on CPU. Exact H6 forecast and unchanged-RNG checks were executed on the GPU; the CPU report labels these as execution-attested because the bulk H6 tensors stay in cloud storage. Cases 0–3 per task preserve full H6 forecasts; later cases compute and check them but archive scalar summaries rather than those bulk tensors. This is a retention difference, not extra independent evidence.
 
-The provenance skill guided the separation between locally verified bytes, hash-bound derived summaries, and execution-attested identities. The original records are preserved; failed or missing evidence blocks the aggregate rather than being rewritten into a successful result.
+The report distinguishes locally verified bytes, hash-bound derived summaries, and
+identities checked during model execution. Original records remain preserved; the
+aggregate rejects failed or missing evidence.
 
 ## Separate prospective eight-case actual-CEM addon
 
@@ -102,7 +108,7 @@ The first column uses the actual 60-coordinate returned prefix; the last uses al
 
 An engineering-only v2 amendment corrects the callback-count guard: each fifteen-iteration search makes fifteen population-batch forecasts plus fifteen updated-mean forecasts, hence thirty unroll callbacks per traced or untraced search. The original guard expected fifteen and stopped two attempts before completion. Those v1 logs remain preserved without `DONE`; they are not successful cases or extra scientific samples. The v2 manifest changes this guard, not the fixed seeds, arms, or planner algorithm.
 
-## Reproduce after completion
+## Reproduce the completed analysis
 
 For complete64, pass both frozen execution manifests and both corresponding input manifests using repeated `--execution-manifest` and `--input-manifest` arguments to `.venv/bin/python analysis/mechanism/pilot_summary.py --cohort 64`. Its default compact directory includes only the original `development-v1` and `expansion-v2` result roots, excludes the separate actual-CEM addon, and rejects duplicate task/episode reports. The eight-case fallback requires `--cohort 8` and only its original execution/input manifest; its receipt and all figures say instrumentation-only.
 

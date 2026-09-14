@@ -5,8 +5,11 @@ Scope: analyses that run **after** the fresh four-task confirmation
 artifacts only. They never call the model, the simulator, or a GPU. They never modify
 `src/offline_study` (its hash is frozen into the protocol).
 
-Python: `.venv/bin/python` (3.10; numpy 1.26, torch 2.2.2, pandas, scipy, matplotlib).
-Run every script from the repository root.
+The original CPU reanalysis environment used Python 3.10, NumPy 1.26, PyTorch
+2.2.2, pandas, SciPy, and Matplotlib. Current public installation requirements
+and the CPU CI environment are defined in [pyproject.toml](../../pyproject.toml)
+and [the test workflow](../../.github/workflows/tests.yml). Run scripts from the
+repository root; restore the recorded environment when reproducing archived runs.
 
 ## 1. Fresh confirmation results tree (`--results RESULTS`)
 
@@ -114,7 +117,7 @@ its own paired bootstrap it must use `common.paired_bootstrap` (scenario-cluster
 | artifact | path | use |
 |---|---|---|
 | Development core panel (Reach/Reach-Wall, 5 arms, exposed scenarios) | `reports/wm-approaches/core-analysis.json` | replication comparison (sign/shrinkage), wins/losses |
-| Development Push-T / navigation / DROID panels | see `paper/workshop/README.md` | replication comparison |
+| Development Push-T / navigation / DROID panels | [six-task development results](../../reports/SIX_TASK_RESULTS_20260911.md) | replication comparison |
 | Offline forecast contrasts (all sweeps, BF16/FP32) | `paper/data/all_task_ablation_contrasts.csv` | forecast → decision → outcome chain |
 | Planner-decision diagnostic (development) | `reports/PLANNER_DECISION_DIAGNOSTIC_RESULTS.md` (tables) | decision-level reference |
 | Fitted refined operator banks | `artifacts/offline_study/fixed-response-20260908-v1/fits/{reach,reach-wall}/operator_bank.pt` (`operators.fixed_rank4.basis` [4×256×400], `.map` [4×4]; `matched_random_fixed_rank4` likewise) | representation geometry |

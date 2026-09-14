@@ -72,15 +72,17 @@ The geometry arms have matched requested dose within a task/precision cell; this
 
 Across precision, requested doses differ greatly: Reach cubic mean L2 is 7.4422 in BF16 versus 0.0065586 in FP32; Reach-Wall is 7.6218 versus 0.0064007. Thus the downstream precision contrast changes both numerical computation and delivered perturbation scale, alongside precision-specific fitted banks. The raw reconstruction reversal itself occurs before dose normalization, but its explanation is not isolated by these archives. Amplification of numerical noise by interpolation weights is a falsifiable candidate explanation, not a measured mechanism.
 
-## Association, limits, and finite next tests
+## Association and follow-up measurements
 
 The [association table](../paper/data/pathway_geometry_associations.csv) contains every prespecified task/precision/modality/H3-or-H6 Pearson and Spearman comparison between cubic-minus-linear reconstruction error and cubic-minus-linear recorded-future error. Signs and magnitudes vary; no common monotone relationship is established. These are descriptive lineage correlations, not causal mediation estimates. The [cross-precision table](../paper/data/pathway_geometry_cross_precision.csv) pairs exact lineage IDs; matching identities does not remove the fit/dose confounds.
 
-The finite priorities following this recount are:
-
-1. For a common fixed candidate set, preserve full outputs for the native/V/A/joint factorial and repeat under a common requested and audited realized dose. This tests whether the precision-sensitive scalar interaction survives energy control and reveals its output direction.
-2. At the same frozen direction and donors, separate model-computation precision from interpolation arithmetic and repeat the center plus held-out off-center coordinates. A shared bank/dose and a quadratic comparator distinguish precision effects from the specific cubic label. Freeze these cells before reading outcomes.
-3. Follow the resulting forecast changes into candidate-score margins and rank crossings under one fixed scorer and candidate set before any closed-loop claim. Candidate-score softmax entropy, CEM proposal entropy, attention entropy, and coefficient-spectrum entropy are different measurements and must not be substituted for each other.
+The later [controlled arithmetic study](CONTROLLED_GEOMETRY.md) separates
+output rounding from BF16 rollout under a fixed checkpoint and action direction.
+The [decision-margin analysis](MECHANISMS.md#decision-margin-reanalysis) and
+[adaptive CEM study](CEM_EXPANSION.md) examine how forecast changes affect
+candidate scores and planning. They use their own fixed populations and
+interventions, so their results are separate evidence rather than additional
+measurements of this interpolation experiment.
 
 No archive-only calculation can establish that this geometry explains the fresh-control result, that a dense nonlinear physical manifold exists, or that mechanistic interpretability generally fails in robotics. Those remain broader hypotheses.
 

@@ -13,17 +13,17 @@ Three findings explain how steering affects this world model:
 
 - **An action patch can match now and change the plan later.** It reproduces the
   changed-input forecast at first, then diverges when the action returns as history.
-  In 200 fresh states, this changes the selected candidate in 42% of Reach and 59%
-  of Reach-Wall cases, with roughly 2% higher mean reference cost. Updating both
+  In the primary comparison across 200 fresh states, the selected candidate changes
+  in 42% of Reach and 59% of Reach-Wall cases, with roughly 2% higher mean reference cost. Updating both
   appearances restores exact agreement. [Experiment and figure](#an-action-patch-can-match-now-and-diverge-later).
 - **An edit can change how the planner searches.** Even when its first choice
   stays the same, changes to other candidate scores can lead later search steps
   toward different action sequences. Both learned and random edits have this effect.
-- **Numerical precision can change the geometry we measure.** The same model
-  appears more linear under lower-precision arithmetic. We check this before
-  interpreting the shape of its internal representations.
+- **Numerical precision can reverse a geometry result.** Cubic interpolation
+  reconstructs omitted activations better in FP32; linear interpolation wins in
+  BF16 with the same weights and inputs.
 
-[LCFM paper](paper/lcfm/main.pdf) · [Full study](paper/workshop/main.pdf) · [Methods](docs/METHODS.md) · [All results](docs/RESULTS.md) · [Reproduce](docs/REPRODUCING.md)
+[Methods](docs/METHODS.md) · [All results](docs/RESULTS.md) · [Reproduce](docs/REPRODUCING.md)
 
 ## Model and interventions
 
@@ -72,7 +72,7 @@ approach to batching, memory traffic, and parallel execution:
   protected evaluation kept strict FP32.
 
 The data pipeline indexed **31,306 trajectory records**: **12,600 MetaWorld**
-and **18,706 Push-T**. Pinned inputs totaled **8.02 GB**: **0.74 GB of MetaWorld
+and **18,706 Push-T**. Pinned inputs totaled **8.01 GB**: **0.74 GB of MetaWorld
 state/action records**, **2.79 GB of Push-T**, **2.39 GB of navigation datasets**,
 and **2.11 GB across 16 Franka recordings and companions** for DROID evaluation.
 External MetaWorld videos are additional to this input subtotal.
@@ -159,9 +159,9 @@ H1–H2 precede the H3 intervention. Visual and proprioceptive panels use separa
 color scales. The B2+B3 and all-six rows retain the multi-block controls.
 [All 576 cells, FP32, and random comparisons](docs/MECHANISMS.md#layer-response-map).
 
-The later **rank-four B3 correction** reduces H6 proprioceptive MSE by **2.36%
-on Reach and 2.19% on Reach-Wall**. This operator is fitted separately from the
-rank-one sweep.
+In the BF16 development evaluation, the later **rank-four B3 correction** reduces
+H6 proprioceptive MSE by **2.36% on Reach and 2.19% on Reach-Wall**. This operator
+is fitted separately from the rank-one sweep.
 
 ## Numerical geometry and attention
 
@@ -183,8 +183,9 @@ better. A separate five-task interpolation study finds small, mixed forecast ben
 
 ![Spatial attention distance for all sixteen heads and six predictor blocks on Reach and Reach-Wall.](docs/figures/paper_pilot_attention.png)
 
-Each cell averages H6 spatial attention distance over 32 development contexts per
-task for the fixed zero-action candidate. [All horizons and uncertainty](docs/PILOT_MECHANISMS.md).
+Color shows the **attention-weighted mean distance between image patches**, in
+patch-grid spacings. Smaller values indicate more local attention. Each cell
+averages 32 development contexts per task at H6 for the fixed zero-action candidate. [All horizons and uncertainty](docs/PILOT_MECHANISMS.md).
 
 ## Physical execution and behavioral evaluation
 
@@ -212,14 +213,15 @@ To check what an activation patch represents, we change one input action and
 use the resulting JEPA-WM forecast as a reference. The action enters the
 predictor at H3 and appears again as history at H4.
 
-Replacing its conditioning **only at H3** matches the immediate prediction,
+Replacing its conditioning **at all six blocks, only at H3**, matches the immediate prediction,
 then diverges when the original action returns at H4. Replacing it at **both
 appearances** reproduces the changed-input forecast through H6.
 
 ![An action patch matches at H3, diverges when the action returns as history, and changes the H6 candidate choice in 42% of Reach and 59% of Reach-Wall states.](docs/figures/lcfm_context_lifetime.png)
 
 The fresh replication uses **200 independent starting states**, 100 per task.
-The one-time patch changes the selected candidate in **42/100 Reach states**
+In the original candidate bank, the one-time patch changes the selected candidate
+in **42/100 Reach states**
 and **59/100 Reach-Wall states**, compared with changing the action at the input.
 Those choices have **1.81–2.56% higher reference cost on average** across
 tasks and candidate banks, including unchanged choices.
@@ -230,9 +232,7 @@ miss an action’s later influence on planning. This test follows that influence
 through the model’s two-frame context; the selected plans are scored but not
 executed. All six layers and matched random controls are retained.
 [Complete replication, layer heatmap, and uncertainty](docs/LCFM_REPLICATION.md) ·
-[Earlier sixteen-state study](docs/ACTION_COUNTERFACTUAL.md) ·
-[Focused LCFM paper](paper/lcfm/main.pdf) ·
-[LeWM follow-up assessment](docs/LEWM_FOLLOWUP_ASSESSMENT.md).
+[Earlier sixteen-state study](docs/ACTION_COUNTERFACTUAL.md).
 
 ## JEPA-WM planning in the simulator
 
@@ -240,8 +240,8 @@ executed. All six layers and matched random controls are retained.
 
 **Frozen JEPA-WM, with replanning throughout each episode.** Reach reaches the
 green target; Reach-Wall does not reach it within the episode limit. Both use
-seed 0, fixed before capture. The tasks play side by side at simulation speed,
-with a shared camera that keeps the wall and target visible. [1080p video](docs/media/jepa_tasks_side_by_side_hd.mp4) ·
+seed 0, fixed before capture. Each panel plays at simulation speed and holds at
+first success or the time limit. A shared camera keeps the wall and target visible. [1080p video](docs/media/jepa_tasks_side_by_side_hd.mp4) ·
 [Actions, state verification, and reproduction](docs/media/README.md).
 
 ## Benchmark context
@@ -261,7 +261,7 @@ adjusted for choosing the best arm.
 
 The protected Reach baseline is **54.17% (52/96)**. Gray published bars use the
 authors’ checkpoints and evaluation populations.
-[Published source](https://arxiv.org/html/2512.24497v4#S5.T2) ·
+Published reference: JEPA-WM v4, Table 2.
 [Exact values and error-bar definitions](paper/data/benchmark_comparison_sources.json).
 
 Against concurrent unsteered JEPA-WM, these observed maxima differ by
@@ -318,11 +318,11 @@ score bound, adaptive searches, and physical replays make these questions
 separately testable. The layer and precision analyses examine which internal
 structures those edits use and how reliably we can interpret them.
 
-Sonia Joseph et al.'s [*Interpreting Physics in Video World Models*](https://arxiv.org/html/2602.07050v1)
+Sonia Joseph et al.'s *Interpreting Physics in Video World Models*
 provides a reference for the layerwise work. Their **Physics Emergence Zone**
 analysis connects physical variables, distributed subspaces, and interventions
 in video encoders. We study the action-conditioned predictor and the planning
-computations it supports. [Relation to that study, COAST, and Manifold Steering](docs/LITERATURE_MECHANISMS.md).
+computations it supports. [Relation to that study, COAST, and Manifold Steering](docs/RELATED_WORK.md).
 
 ## Reproduce and inspect
 
@@ -331,7 +331,7 @@ python -m venv .venv
 source .venv/bin/activate
 python -m pip install -e '.[analysis]'
 python scripts/check_public_results.py
-python scripts/check_manuscript.py
+python scripts/check_lcfm_replication.py
 python scripts/build_publication_figures.py
 ```
 

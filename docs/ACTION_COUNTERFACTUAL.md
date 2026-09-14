@@ -123,7 +123,7 @@ recomputes rank/elite and weighted-cost identities; checks candidate and
 scenario reconstruction formulas; audits norm and projector-energy identities;
 and verifies exact H3/H4 addressing and shared random draws. Full forecast
 byte parity remains execution-attested because full tensors are intentionally
-not retained. This boundary will remain explicit in the result receipt.
+not retained. The result receipt records this retention boundary.
 
 Completed compact CSVs are `action_counterfactual_case_metrics.csv` (whole-context
 means and ratio scores), `action_counterfactual_norm_audits.csv` (each targeted

@@ -1,4 +1,43 @@
-# JEPA-WM simulator replay
+# JEPA-WM planning in the simulator
+
+[Real-time GIF](jepa_tasks_side_by_side.gif) · [1080p MP4](jepa_tasks_side_by_side_hd.mp4) · [Replay verification](jepa_tasks_side_by_side_receipt.json)
+
+The README shows frozen, unsteered JEPA-WM replanning on Reach and Reach-Wall.
+Both runs use seed 0, selected before capture. Each panel holds at its first
+successful state or the episode limit. Reach succeeds after 0.50 seconds;
+Reach-Wall reaches the 1.2375-second limit without success. The saved complete
+episodes remain available below. These qualitative recordings are separate from
+the benchmark evaluation.
+
+The 1080p video renders the recorded motion at 80 frames per second. The GIF uses
+50 frames per second with uniform 20 ms timing and a shared palette without
+dithering. Holding Reach at its first success removes the subsequent controller
+oscillation from the showcase. Every displayed state is checked against the
+saved MuJoCo observation, with zero discrepancy in both tasks. Targets, actions,
+and physical states are unchanged; the existing goal marker is coloured green.
+
+The shared camera keeps the wall and goal visible. Labels sit outside the
+workspace. The presentation follows the clear task views in
+[Sholto Douglas's robotics videos](https://sholtodouglas.github.io/).
+
+[Capture protocol](../../paper/data/jepa_media_capture_protocol.json) ·
+[Reach actions and states](../../paper/data/jepa_episode_reach.json) ·
+[Reach-Wall actions and states](../../paper/data/jepa_episode_reach_wall.json)
+
+## Reproduce the README replay
+
+Use MuJoCo 3.3.0, MetaWorld 3.1.1, Gymnasium 1.3.0, NumPy 1.26.4,
+Pillow, imageio, imageio-ffmpeg, packaging, and FFmpeg. From the repository root:
+
+```bash
+python scripts/render_jepa_comparison.py \
+  --inputs paper/data/jepa_episode_reach.json paper/data/jepa_episode_reach_wall.json \
+  --output /tmp/jepa-comparison-render
+```
+
+The renderer restores recorded states; it requires no model inference.
+
+## Recorded action-prefix comparisons
 
 [GIF](jepa_prefix_comparison.gif) · [1920×1080 MP4](jepa_prefix_comparison_hd.mp4) · [Verification receipt](replay_receipt.json)
 
@@ -16,7 +55,7 @@ Each action advances 0.0125 seconds of simulator time. The 0.1875-second prefixe
 are shown at 16× slower playback, with an initial and final hold. The clips cover
 one selected prefix, without subsequent replanning or full-task completion.
 
-## Verification
+### Prefix verification
 
 The input export retains the actions, physical state, observation states, rewards,
 and flags from generation-pinned, SHA256-verified source archives. The renderer
@@ -29,7 +68,7 @@ rewards, success flags, and termination flags match. The camera uses upstream
 No model inference, refitting, new scientific evaluation, or cloud GPU rental is
 performed. The original analyses and their uncertainty are unchanged.
 
-## Reproduce on CPU
+### Reproduce the prefixes on CPU
 
 Use a separate Python 3.10 environment to keep rendering dependencies out of the
 analysis environment:
@@ -49,99 +88,3 @@ replay diagnostics rather than expecting pixel hashes to match across renderers.
 [Input records](../../paper/data/qualitative_replay_inputs.json) ·
 [Renderer](../../scripts/render_qualitative_rollouts.py) ·
 [Full physical-prefix analysis](../PLANNED_PREFIX_REPLAY.md)
-
-## Earlier scripted task illustration
-
-The earlier [task_demonstration.gif](task_demonstration.gif) remains available with a
-[1920×720 MP4](task_demonstration_hd.mp4). It shows the MetaWorld scripted Reach
-and Reach-Wall policies with the actual target highlighted in green. **It is a
-task illustration, not a JEPA-WM rollout or evidence for steering efficacy.**
-That distinction appears both in the clip and beside it in the README.
-
-Both tasks use seed 0 and 160 elementary actions without a seed search. Motion
-plays at simulation speed (two seconds), followed by a half-second final hold.
-The clip shows task completion; the short measured JEPA prefixes above remain
-available separately. Full JEPA episode logs preserve action hashes rather than
-numeric actions, so they cannot reconstruct an extended measured rollout.
-
-Reproduce with the same rendering environment:
-
-```bash
-python scripts/render_task_demonstration.py
-```
-
-[Scripted actions and distances](../../paper/data/task_demonstration_records.json) ·
-[Generation receipt](task_demonstration_receipt.json).
-
-## Complete JEPA episodes used in the README
-
-[Real-time GIF](jepa_tasks_side_by_side.gif) · [1920×1080 MP4](jepa_tasks_side_by_side_hd.mp4) ·
-[Rendering receipt](jepa_tasks_side_by_side_receipt.json)
-
-These are new qualitative runs of the frozen MetaWorld JEPA-WM checkpoint in
-strict FP32, without activation steering. Reach and Reach-Wall both use seed 0,
-chosen before capture. Reach succeeds; Reach-Wall does not. Both entire native
-agent executions are shown, with no seed search or outcome selection.
-
-The native episode limit is 100 steps. The agent loop starts at elapsed step 1,
-so each capture contains 99 executed actions and 100 simulator states. The
-planner requests 100 actions in total; the environment executes 99 before the
-limit. Seven replans each retain fifteen CEM iterations and 300 candidates.
-The 99 executed actions cover 1.2375 seconds of simulation time per task. Playback
-shows both tasks simultaneously, omits planner computation, and adds a half-second
-hold at the end.
-The MP4 retains every captured state at 80 fps; the 1600×900 GIF samples at
-40 fps with the format's centisecond timing. It runs at approximately simulation
-speed, without the earlier prefix clip's 16× slowdown.
-
-All saved observations are checked against restored MuJoCo physics before
-rendering. The task and outcome labels occupy separate bands outside the robot
-view. Both panels use the same fixed camera from the opposite side of the table,
-so the arm does not hide the wall. The existing target marker is coloured green.
-The earlier sequential clip cut between the two tasks and obscured the wall
-behind the robot; this replay replaces it using the same recorded physics. The
-presentation takes inspiration from the unobstructed workspace and visible goals
-in [Sholto Douglas's robotics videos](https://sholtodouglas.github.io/).
-
-The original logs retained episode summaries and action hashes, which cannot
-reconstruct full videos. These new numerical captures are separate from the
-published scientific evaluation. The first capture attempt had an incorrect
-100-action validation expectation; its 99-action record was preserved, and the
-same-seed retry produced identical actions. The corrected validator reads the
-native loop's actual remaining step count. Both completed records and technical
-logs were archived to Google Cloud and read back with matching SHA256 before
-releasing the GPU.
-
-[Capture protocol](../../paper/data/jepa_media_capture_protocol.json) ·
-[Reach actions and states](../../paper/data/jepa_episode_reach.json) ·
-[Reach-Wall actions and states](../../paper/data/jepa_episode_reach_wall.json).
-
-### Reproduce
-
-Capture on the pinned CUDA runtime:
-
-```bash
-python scripts/capture_jepa_episode.py \
-  --vendor vendor/jepa-wms --checkpoint /path/to/jepa_wm_metaworld.pth.tar \
-  --task reach --seed 0 --output /path/to/new-media-capture
-```
-
-Render locally with MuJoCo 3.3.0, MetaWorld 3.1.1, Gymnasium 1.3.0, NumPy 1.26.4,
-Pillow, imageio, imageio-ffmpeg, and packaging; the compositor also needs FFmpeg:
-
-```bash
-python scripts/render_jepa_episode.py \
-  --input paper/data/jepa_episode_reach.json --output /tmp/render-reach
-python scripts/render_jepa_episode.py \
-  --input paper/data/jepa_episode_reach_wall.json --output /tmp/render-reach-wall
-python scripts/compose_jepa_episode_media.py \
-  --renders /tmp/render-reach /tmp/render-reach-wall --output /tmp/jepa-media
-```
-
-Rebuild the simultaneous README replay from the retained captures:
-
-```bash
-python scripts/render_jepa_comparison.py \
-  --inputs paper/data/jepa_episode_reach.json paper/data/jepa_episode_reach_wall.json \
-  --output artifacts/jepa-comparison-render
-```

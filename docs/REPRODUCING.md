@@ -5,8 +5,8 @@
 Install `pip install -e '.[analysis]'`, then run:
 
 ```bash
+python scripts/check_public_repository.py
 python scripts/check_public_results.py
-python scripts/check_manuscript.py
 python scripts/build_readme_figures.py
 python analysis/mechanism/steering_specificity.py
 python -m analysis.mechanism.decision_geometry
@@ -33,6 +33,34 @@ python -m unittest discover -s tests -p 'test_precision_story.py' -v
 These check committed aggregates, their hashes and derived figures. They do not
 independently reproduce simulator outcomes. Public CI tests portable components;
 full integration tests need the pinned vendor and private fixtures.
+
+## Code guide
+
+| Start with | Purpose |
+|---|---|
+| [model_loader.py](../src/offline_study/model_loader.py) and [backends.py](../src/offline_study/backends.py) | Load the frozen checkpoint and call its predictor |
+| [interventions.py](../src/offline_study/interventions.py) and [fixed_response.py](../src/offline_study/fixed_response.py) | Apply activation edits and the fitted rank-four correction |
+| [fresh_confirmation.py](../src/offline_study/fresh_confirmation.py) | Run paired protected scenarios and their frozen analysis |
+| [action_counterfactual_pilot.py](../src/offline_study/action_counterfactual_pilot.py) and [lcfm_replication.py](../src/offline_study/lcfm_replication.py) | Compare input changes with one-time and persistent conditioning patches |
+| [steered_cem_pilot.py](../src/offline_study/steered_cem_pilot.py) and [planned_prefix_replay.py](../src/offline_study/planned_prefix_replay.py) | Trace adaptive planning and replay selected actions in the simulator |
+| [Mechanism analyses](../analysis/mechanism/) | Reconstruct statistics and figures from recorded experiments |
+
+The repository separates configuration, execution, analysis, and presentation:
+
+- `configs/` defines study settings and pinned input assets.
+- `src/offline_study/` contains experiment implementations, data preparation, and
+  validation. Task-specific modules cover MetaWorld, Push-T, navigation, and DROID.
+  `refined_panel/` contains the corresponding panel analysis and MetaWorld amendment.
+- `analysis/mechanism/` contains CPU analyses of completed experiments.
+- `scripts/` provides entry points, result checks, and figure/media builders.
+  `scripts/vast/` retains archive, transfer, profiling, and scientific audit utilities.
+- `paper/data/` contains machine-readable result tables, protocols, and provenance.
+  `reports/` documents results and methodological corrections; `fresh-confirmation/`
+  and `wm-approaches/` hold the protected and earlier behavioral summaries.
+- `docs/` explains methods and findings. `docs/figures/` and `docs/media/` contain
+  the displayed assets and their reproduction information.
+- `tests/` covers experiment contracts, statistics, and engineering controls.
+  [Public CI](../.github/workflows/tests.yml) lists the supported CPU checks.
 
 ## Source and data boundaries
 
@@ -77,15 +105,7 @@ Real model execution additionally needs upstream [JEPA-WM](https://github.com/fa
 its checkpoints, licensed data and environment dependencies; no paid launcher is
 part of the CPU reproduction commands.
 
-## Workshop manuscript
-
-The curated LaTeX source, bibliography, official style and rendered draft are in
-`paper/workshop/`. Figures reference the same committed `docs/figures/` assets as
-the README. Build with `tectonic main.tex` from that directory after regenerating
-figures. The author line is anonymous; this is a draft, not a claim of workshop
-acceptance or a completed camera-ready submission.
-
-## LCFM action-history replication
+## Action-history replication
 
 The [replication report](LCFM_REPLICATION.md) describes the separate 200-state
 protocol and links its public per-state selection and reconstruction tables.
@@ -96,23 +116,11 @@ states per task. The older sixteen-state study remains separate.
 python scripts/check_lcfm_replication.py
 python scripts/build_lcfm_replication_figures.py
 python scripts/write_lcfm_replication_report.py
-python scripts/write_lcfm_replication_numbers.py
-python scripts/check_lcfm_manuscript.py
-tectonic paper/lcfm/main.tex
 ```
 
 The checker recounts all public secondary means and checks primary Wilson
-intervals against SciPy. The figure and manuscript-value builders require the
+intervals against SciPy. The figure builder requires the
 complete, source-bound summary. Raw archives and per-case extraction require
 authorized cloud access; their generation and download-SHA proofs are retained
 in the public summary. The statistical aggregator rejects missing or repeated
 states and requires all 200 registered cases.
-
-## Repository curation
-
-Scientific source, tests, configurations, aggregate evidence and figure builders
-are retained. Historical operational notes, billing/host logs, scratch drafts and
-bulk run archives are ignored and removed from the Git index, **not deleted from
-local storage or cloud archives**. Existing Git history is not rewritten, so prior
-commits may still contain those files. This is presentation cleanup, not retroactive
-erasure of methodological amendments, negative results or execution limitations.

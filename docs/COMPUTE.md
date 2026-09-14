@@ -74,11 +74,11 @@ describe whole forecasts, not an isolated GEMM benchmark or full-episode speedup
 
 | Principle | Application | Implementation |
 |---|---|---|
-| Replicate a model that fits | Independent single-GPU scenario jobs; keep eight paired arms together | [Static queue](../scripts/vast/run_fresh_static_queue.py) |
+| Replicate a model that fits | Independent single-GPU scenario jobs; keep eight paired arms together | [Scenario executor](../src/offline_study/fresh_confirmation.py) |
 | Batch within a GPU | Preserve upstream batches of 300 candidate trajectories | [Executor](../src/offline_study/fresh_confirmation.py) |
 | Remove repeated online work | Offline response-map calibration; no online probes/shadows for the refined arm | [Fixed response](../src/offline_study/fixed_response.py) |
 | Stage bulk data outside the inner loop | Worker-local weights/inputs with hash checks | [Range downloader](../scripts/vast/fresh_parallel_download.py) |
-| Overlap collection and computation | Snapshot published records while remaining scenarios run | [Snapshotter](../scripts/vast/fresh_stream_backup.py), [backup loop](../scripts/vast/fresh_cloud_backup_loop.py) |
+| Overlap collection and computation | Snapshot published records while remaining scenarios run | [Snapshotter](../scripts/vast/fresh_stream_backup.py), [verified archive upload](../scripts/vast/direct_gcs_archive.py) |
 | Count validated throughput | Collect complete scenarios with hash and engineering receipts | [Collector](../scripts/vast/collect_fresh_metadata.py) |
 
 This is task-level data parallelism without gradient synchronization. No DDP
@@ -105,8 +105,8 @@ A bounded [CPU/CUDA profiling diagnostic](../scripts/vast/profile_fresh_forecast
 was added for an excluded input. Its existence does not demonstrate deployment of
 a measured kernel optimization. We do not report linear scaling, optimal hardware
 selection, or measured end-to-end speedup. Campaign launchers retain historical
-paths and guards; they are not portable one-command rentals and require new budget
-and host validation before reuse.
+paths and guards in the private execution archive. The public repository retains
+the scientific executor and the evidence, transfer, and profiling utilities above.
 
 ## Fresh action-history replication
 
@@ -138,4 +138,4 @@ controls. [Frozen execution source](../src/offline_study/lcfm_replication.py) ·
 
 All 200 scientific states and their derived records are preserved with verified
 cloud readback. The campaign is complete; its GPU instances and volumes have
-been released. The proposed LeWM pilot has not started.
+been released.

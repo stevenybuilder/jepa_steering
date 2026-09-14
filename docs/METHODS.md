@@ -91,9 +91,9 @@ exploratory unless explicitly replaying one of these frozen contrasts.
 
 ## Context and limits
 
-[JEPA-WM](https://arxiv.org/html/2512.24497v4) supplies the model/planner; its
+JEPA-WM supplies the model/planner; its
 multi-seed and checkpoint-aggregation results are context, not our paired baseline.
-[COAST](https://arxiv.org/html/2605.17144v1) also steers activation geometry, using
+COAST also steers activation geometry, using
 contrastive conceptors in a policy action expert. Our predictor-to-planner pathway
 differs; that motivates the question but does not explain the different gains.
 There is one released checkpoint per task, not independent-training-seed replication.

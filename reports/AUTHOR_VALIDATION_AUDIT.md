@@ -13,7 +13,7 @@ full-pool coverage, not claimed sample counts behind the authors' published curv
 
 - Governing legacy plan/config introduced in `8f07ad2` at 2026-09-06 23:25:53 EDT.
   That initial configuration already set `authors_split_reproduced: false`.
-- Paper: [JEPA-WM v4, Appendix G.2](https://arxiv.org/html/2512.24497v4#A7.SS2).
+- Paper: JEPA-WM v4, Appendix G.2.
 - Upstream commit: `13cf1d9c7e476f53c17714d2e0f1dc239a883ce0`.
 - Inventory source revision: `6116f042ae7ae4c8e3f1fd2f194f432615664182`.
 - Reference configs, relative to pinned upstream:

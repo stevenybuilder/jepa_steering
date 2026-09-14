@@ -1,5 +1,5 @@
 {
-  "role": "simultaneous_replay_of_two_preselected_model_episodes",
+  "role": "qualitative_replay_holding_each_task_at_first_success_or_time_limit",
   "tasks": [
     "reach",
     "reach-wall"
@@ -9,16 +9,18 @@
   "sources": [
     {
       "input_sha256": "dece484fd5bc5c24bf68fbf29f177a5ebaa65fe1890a6be4b94f40c9867285cb",
-      "states_checked": 100,
+      "unique_states_checked": 41,
+      "display_endpoint_frame": 40,
       "state_max_abs_error": 0.0
     },
     {
       "input_sha256": "5b5e20029a28463d03281c46d3f6e69f7146fefbaa30cf1fd11005b4140c2d2c",
-      "states_checked": 100,
+      "unique_states_checked": 100,
+      "display_endpoint_frame": 99,
       "state_max_abs_error": 0.0
     }
   ],
-  "renderer_sha256": "a9221b8bd8388896eea64cecbbfe8257603df1b90f61c78588433947914d7eeb",
+  "renderer_sha256": "11d2cd12a0289d2742e597cc0339aa07e0f5ca8848ca1c2c421abc62d1b6de13",
   "camera": {
     "lookat": [
       0.0,
@@ -30,8 +32,17 @@
     "elevation": -35.0
   },
   "display_changes": "Shared camera and green target site; physics and actions restored unchanged",
-  "motion_seconds_per_task": 1.2375,
   "final_hold_seconds": 0.5,
+  "displayed_motion_seconds": [
+    0.5,
+    1.2375
+  ],
+  "success_flags": [
+    true,
+    false
+  ],
+  "gif_fps": 50,
+  "gif_dither": "none",
   "mp4_resolution": [
     1920,
     1080
@@ -40,9 +51,10 @@
     1600,
     900
   ],
-  "gif_duration_seconds": 1.76,
+  "gif_duration_seconds": 1.74,
   "outputs": {
-    "jepa_tasks_side_by_side_hd.mp4": "35d28cc2b48f38e7e8a0e31f5eb625630d6a131d6788cd1eee270e98b6e09d10",
-    "jepa_tasks_side_by_side.gif": "2bf4d151f3f2b3e80a77829e8697a18dcbc9a781077f05e0eb42d4b700ca1083"
-  }
+    "jepa_tasks_side_by_side_hd.mp4": "c8420cfef367959ae51d414c97401d1bf5d8826058f1a43f4a825c76b9467659",
+    "jepa_tasks_side_by_side.gif": "00f71859bfcde12c45ef7a4257e593e6ca1ac2fd4da9996100fb26a4f906d503"
+  },
+  "recorded_motion_seconds_per_task": 1.2375
 }

@@ -51,6 +51,6 @@ The execution fixes strict FP32/TF32-off, the assigned GPU UUID, checkpoint and 
 
 The wrapper imports the hash-verified frozen implementation without changing it. It refuses partial cohorts and exports all 1,152 arm/layer/modality case comparisons, 384 delivered-norm summaries, and 144 complete-cohort contrast rows. Figure rebuilding checks public-table hashes and keeps all six layers and both banks, including negative or undefined effects.
 
-## Reproduce when all cases are preserved
+## Reproduce the completed analysis
 
 Run `.venv/bin/python analysis/mechanism/action_condition_summary.py` with its default frozen v2 paths, then use `--plots-only` for verified-table regeneration. Tests are `tests/test_action_condition_summary.py`; execution-hook tests remain separate in `tests/test_action_condition_specificity.py`. Public figures are exported as PNG/SVG/PDF. The CPU wrapper verifies exact FP32 visual-plus-weighted-proprio cost identity from saved values, and the receipt separates local recomputation from execution-attested full-forecast/RNG checks.

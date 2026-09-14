@@ -7,7 +7,7 @@ exploratory; the original offline experiments and frozen protected analysis rema
 unchanged.
 
 The earlier layer sweep used independently fitted rank-one operators. The later
-fixed-response rank-four successor reduced development H6 proprioceptive MSE by
+fixed-response rank-four successor reduced BF16 development H6 proprioceptive MSE by
 2.360% on Reach and 2.192% on Reach-Wall. Neither is a treatment-invariant causal
 chain into protected behavior. Fresh Reach has 21 refined rescues and 21 regressions:
 both native and refined succeed in 52/96 scenarios. The complete protected panel
@@ -163,7 +163,7 @@ better physical ranking. Attention pictures alone cannot identify a causal circu
 One checkpoint per task, shared across the two MetaWorld tasks, supplies no
 independent-training-seed replication. Whole-episode success factorials measure
 closed-loop behavioral interaction, not same-input output interaction after
-trajectories diverge. [Primary-source comparison](LITERATURE_MECHANISMS.md) distinguishes
+trajectories diverge. [Primary-source comparison](RELATED_WORK.md) distinguishes
 policy steering, physics probes, manifold interpolation, adaptation, and memory
 from the endpoints measured here.
 

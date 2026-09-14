@@ -1,4 +1,4 @@
-"""Replay the two recorded model episodes simultaneously from a clear camera."""
+"""Show saved model rollouts, holding each panel at first success or episode end."""
 import argparse
 import importlib.metadata
 import json
@@ -33,6 +33,11 @@ def main():
         if len(data['capture']['frames']) != 100 or not np.isclose(data['capture']['dt'], .0125):
             raise ValueError('Expected the two complete recorded 80 Hz episodes')
     args.output.mkdir(parents=True)
+    # A successful reaching task is complete before the native time limit.
+    # Hold its actual first-success state rather than replaying post-success
+    # controller oscillation. Never manufacture a successful endpoint.
+    endpoints = [next((i + 1 for i, success in enumerate(d['capture']['successes'])
+                       if success), len(d['capture']['frames']) - 1) for d in records]
     envs = []; renderers = []; errors = [0., 0.]; samples = []
     camera = mujoco.MjvCamera()
     camera.type = mujoco.mjtCamera.mjCAMERA_FREE
@@ -51,6 +56,7 @@ def main():
             env.model.site('goal').pos[:] = record['target']
             env.model.site('goal').rgba[:] = [.05, .9, .65, 1.]
             env.model.vis.global_.offwidth = 960; env.model.vis.global_.offheight = 960
+            env.model.vis.quality.offsamples = 4
             renderers.append(mujoco.Renderer(env.model, height=960, width=960))
         with imageio.get_writer(mp4, fps=80, codec='libx264', quality=8, macro_block_size=1,
                 ffmpeg_params=['-pix_fmt', 'yuv420p', '-movflags', '+faststart']) as writer:
@@ -58,7 +64,8 @@ def main():
                 canvas = Image.new('RGB', (1920, 1080), '#101820')
                 draw = ImageDraw.Draw(canvas)
                 for j, (env, renderer, data) in enumerate(zip(envs, renderers, records)):
-                    record = data['capture']; saved = record['frames'][i]
+                    record = data['capture']; frame_index = min(i, endpoints[j])
+                    saved = record['frames'][frame_index]
                     for key, value in saved['physics'].items():
                         if key == 'time': env.data.time = value
                         else: getattr(env.data, key)[:] = value
@@ -71,14 +78,14 @@ def main():
                     renderer.update_scene(env.data, camera=camera)
                     canvas.paste(Image.fromarray(renderer.render().copy()), (j*960, 68))
                     draw.text((j*960+24, 14), ['Reach', 'Reach-Wall'][j], font=font(34, True), fill='white')
-                    if i == 99:
-                        outcome = 'Target reached' if any(record['successes']) else 'Episode ends before reaching target'
+                    if i >= endpoints[j]:
+                        outcome = 'Target reached' if any(record['successes']) else 'Time limit · target not reached'
                         draw.text((j*960+24, 1039), outcome, font=font(25), fill='#ccd7df')
+                    else:
+                        draw.text((j*960+24, 1039), f'{frame_index*.0125:.2f} s · JEPA-WM planning',
+                                  font=font(25), fill='#ccd7df')
                 draw.line((960, 0, 960, 1080), fill='#101820', width=6)
                 draw.text((1420, 18), 'Green marker: target', font=font(25), fill='#78d9be')
-                if i < 99:
-                    draw.text((24, 1039), f'Frozen JEPA-WM · unsteered · {i*.0125:.2f} s simulated · real-time motion',
-                              font=font(25), fill='#ccd7df')
                 if i in (0, 25, 50, 75, 99):
                     samples.append(canvas.resize((960, 540), Image.Resampling.LANCZOS))
                 if i == 50:
@@ -88,9 +95,11 @@ def main():
     finally:
         for renderer in renderers: renderer.close()
         for env in envs: env.close()
-    filters = ('[0:v]fps=40,scale=1600:900:flags=lanczos,split[a][b];'
-               '[a]palettegen=stats_mode=diff[p];'
-               '[b][p]paletteuse=dither=bayer:bayer_scale=3:diff_mode=rectangle')
+    # 50 fps maps exactly to GIF's 20 ms clock ticks. A global palette without
+    # ordered dithering avoids the moving stipple around hands and object edges.
+    filters = ('[0:v]fps=50,scale=1600:900:flags=lanczos,split[a][b];'
+               '[a]palettegen=stats_mode=full[p];'
+               '[b][p]paletteuse=dither=none')
     subprocess.run(['ffmpeg', '-v', 'error', '-i', str(mp4), '-filter_complex', filters,
                     '-loop', '0', str(gif)], check=True)
     sheet = Image.new('RGB', (960, 540*len(samples)))
@@ -100,15 +109,19 @@ def main():
         durations = []
         for i in range(image.n_frames):
             image.seek(i); durations.append(image.info['duration'])
-    receipt = {'role': 'simultaneous_replay_of_two_preselected_model_episodes',
+    receipt = {'role': 'qualitative_replay_holding_each_task_at_first_success_or_time_limit',
         'tasks': ['reach', 'reach-wall'], 'seed': 0, 'new_model_inference': False,
-        'sources': [{'input_sha256': sha(p), 'states_checked': 100, 'state_max_abs_error': e}
-                    for p, e in zip(args.inputs, errors)],
+        'sources': [{'input_sha256': sha(p), 'unique_states_checked': endpoint + 1,
+                     'display_endpoint_frame': endpoint, 'state_max_abs_error': e}
+                    for p, endpoint, e in zip(args.inputs, endpoints, errors)],
         'renderer_sha256': sha(__file__),
         'camera': {'lookat': list(camera.lookat), 'distance': camera.distance,
                    'azimuth': camera.azimuth, 'elevation': camera.elevation},
         'display_changes': 'Shared camera and green target site; physics and actions restored unchanged',
-        'motion_seconds_per_task': 1.2375, 'final_hold_seconds': .5,
+        'recorded_motion_seconds_per_task': 1.2375, 'final_hold_seconds': .5,
+        'displayed_motion_seconds': [endpoint * .0125 for endpoint in endpoints],
+        'success_flags': [bool(any(d['capture']['successes'])) for d in records],
+        'gif_fps': 50, 'gif_dither': 'none',
         'mp4_resolution': [1920, 1080], 'gif_resolution': [1600, 900],
         'gif_duration_seconds': sum(durations)/1000,
         'outputs': {p.name: sha(p) for p in (mp4, gif)}}

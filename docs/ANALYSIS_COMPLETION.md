@@ -1,7 +1,7 @@
 # Experiment analysis and figure inventory
 
 Reconciled September 14, 2026. The cohorts below have completed analyses and
-figures. The fresh 200-state LCFM replication is separate from the original
+figures. The fresh 200-state action-history replication is separate from the original
 sixteen-state development experiment and the protected behavioral panel.
 
 | Experiment or reanalysis | Completed coverage | Analysis and figures |
@@ -39,20 +39,18 @@ scientific evaluation or a demonstration of full-task success.
 - Public CPU checks cover physical-runner contracts, cohort completeness, paired statistics, figure inputs, the earlier mechanism analyses, and the fresh replication. The replication publication check independently recounts every secondary mean and checks primary Wilson intervals against SciPy.
 - The physical analysis is rerun from its unchanged v2 freeze and verified compact records; published tables remain bound to the report/source hashes. Figure generation checks all 56 contexts, 504 crossed model/plan points and twelve primary cells.
 - Raw result archives and technical logs retain generation-pinned GCS download-SHA receipts. A fresh cloud metadata audit checks object generations and sizes against those receipts. It does not pretend to repeat model inference or every prior bulk download.
-- Repository source, public aggregates, figures and the rendered manuscript are versioned together. The publication archive also retains the six generated post-confirmation reports and the corrected dose-reader output; curated scientific interpretation is in [Results](RESULTS.md).
-- GPU closeout is complete, including the fresh replication: no project Vast instances or volumes remain. Private cloud storage remains intentional; no raw archive is deleted during publication cleanup.
+- Repository source, public aggregates, and figures are versioned together. The publication archive also retains the six generated post-confirmation reports and the corrected dose-reader output; curated scientific interpretation is in [Results](RESULTS.md).
 
 Private durable storage is under `gs://rgt-jepa-archive-2026/fresh-campaign-20260912-v2/` and `gs://rgt-jepa-archive-2026/mechanism-20260913/`. Publication snapshots use an immutable commit-specific object; the matching `publication-<commit>-CLOUD_VERIFIED.json` receipt is retained in the local campaign operations folder. Access to the Git repository does not grant access to these private archives.
 
-## LCFM action-history ranking reanalysis
+## Action-history ranking reanalysis
 
 Completed post hoc from the preserved H6 goal costs: all sixteen contexts, both banks, all seven sites, and the rank/elite/winner comparisons. This adds no model execution or protected trials. [Protocol, full results, and public reproduction](LCFM_HISTORY_RANKING.md).
 
-## Fresh LCFM replication
+## Fresh action-history replication
 
 The full 200-state cohort is analyzed with no pooling of the sixteen earlier
 states. All 42,000 per-state selection rows and 126,000 reconstruction rows are
 retained, covering every condition, bank, and modality. Primary selection rates
 use 100 independent states per task; secondary intervals resample states while
-preserving pairing. The report, three figures, README, and LCFM manuscript use
-the same hash-bound summary. [Results and reproduction](LCFM_REPLICATION.md).
+preserving pairing. The report, four figures, and README use the same hash-bound summary. [Results and reproduction](LCFM_REPLICATION.md).

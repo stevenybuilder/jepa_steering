@@ -400,8 +400,8 @@ def pilot_attention(spatial):
     assert len(selected) == 192
     lookup = {(r["task"], int(r["head"]), int(r["layer"])): pilot_point(r)[0] for r in selected}
     low, high = min(lookup.values()), max(lookup.values())
-    fig, axes = plt.subplots(1, 2, figsize=(6.8, 4.8), sharey=True)
-    fig.subplots_adjust(left=.10, right=.87, bottom=.24, top=.83, wspace=.16)
+    fig, axes = plt.subplots(1, 2, figsize=(7.6, 5.1), sharey=True)
+    fig.subplots_adjust(left=.10, right=.80, bottom=.22, top=.82, wspace=.18)
     for ax, task, title in zip(axes, ("reach", "reach-wall"), ("Reach", "Reach-Wall")):
         matrix = np.array([[lookup[task, head, layer] for layer in range(6)] for head in range(16)])
         im = ax.imshow(matrix, aspect="auto", cmap="viridis", origin="upper", vmin=low, vmax=high)
@@ -410,13 +410,13 @@ def pilot_attention(spatial):
         ax.tick_params(length=0)
         ax.set_title(title, fontsize=12, weight="bold")
     axes[0].set_ylabel("Head (zero-indexed)")
-    cb = fig.colorbar(im, cax=fig.add_axes([.90, .24, .023, .59]))
+    cb = fig.colorbar(im, cax=fig.add_axes([.83, .22, .023, .60]))
     cb.ax.tick_params(labelsize=10.5)
-    fig.text(.5, .965, "Native H6 spatial attention distance", ha="center", fontsize=12, weight="bold")
-    fig.text(.5, .91, "Visual-query → visual-key distance (patches); shared color scale", ha="center", fontsize=10.5)
-    fig.text(.5, .15, "16 heads × 6 blocks × 2 tasks; 32 scenarios per task.", ha="center", fontsize=10.5)
-    fig.text(.5, .095, "Archived zero-action candidate only; no causal-head claim.", ha="center", fontsize=10.5)
-    fig.text(.5, .04, "H1–H6 and cellwise intervals remain in the complete public grid.", ha="center", fontsize=10.5)
+    cb.set_label("Mean attention distance\n(patch spacings)", fontsize=10.5, labelpad=12)
+    fig.text(.5, .955, "Attention distance across layers and heads", ha="center", fontsize=13, weight="bold")
+    fig.text(.5, .90, "H6 forecast · visual queries to visual keys · shared color scale", ha="center", fontsize=10.5)
+    fig.text(.5, .13, "Unsteered · 32 starting states per task · zero-action candidate", ha="center", fontsize=10.5)
+    fig.text(.5, .065, "Shorter distances indicate more local attention on the image patch grid.", ha="center", fontsize=10.5)
     save(fig, "paper_pilot_attention")
 
 

@@ -94,40 +94,27 @@ id_ed25519
 # Root working notes; current scientific entry point is README + docs below.
 /*.md
 !/README.md
-!/AGENTS.md
 
-# Keep the current concise methods and the original experiment contract.
+# Keep curated methods, results, and reproduction guides.
 /docs/*.md
 !/docs/METHODS.md
 !/docs/CONTROLLED_GEOMETRY.md
 !/docs/ACTION_CONDITION_SPECIFICITY.md
 !/docs/ACTION_COUNTERFACTUAL.md
-!/docs/PLANNING_CONTROL_LITERATURE.md
-!/docs/INTERVENTION_MECHANISM_AUDIT.md
 !/docs/CEM_EXPANSION.md
 !/docs/PLANNED_PREFIX_REPLAY.md
 !/docs/ANALYSIS_COMPLETION.md
-!/docs/SCIENTIFIC_WRITING.md
 !/docs/MECHANISMS.md
-!/docs/LITERATURE_MECHANISMS.md
 !/docs/PATHWAY_GEOMETRY.md
 !/docs/PILOT_MECHANISMS.md
 !/docs/RESULTS.md
 !/docs/COMPUTE.md
 !/docs/REPRODUCING.md
-!/docs/EXPERIMENT_PLAN.md
 
-# Manuscript drafts/old rendered figures are local; retain machine-readable evidence.
+# Manuscripts remain local. Keep machine-readable scientific evidence public.
 /paper/*
 !/paper/data/
 !/paper/data/**
-!/paper/workshop/
-/paper/workshop/*
-!/paper/workshop/main.tex
-!/paper/workshop/main.pdf
-!/paper/workshop/references.bib
-!/paper/workshop/neurips_2026.sty
-!/paper/workshop/README.md
 
 # Operational status, billing and storage notes, not scientific result reports.
 /reports/ETA_COST_20260908.md
@@ -145,21 +132,95 @@ id_ed25519
 .gstack/
 /.playwright-cli/
 
-# Separate anonymous LCFM workshop manuscript.
-!/paper/lcfm/
-/paper/lcfm/*
-!/paper/lcfm/main.tex
-!/paper/lcfm/main.pdf
-!/paper/lcfm/references.bib
-!/paper/lcfm/neurips_2026.sty
-!/paper/lcfm/README.md
-
 !/docs/media/task_demonstration_hd.mp4
-
-!/paper/lcfm/checklist.tex
-!/paper/lcfm/replication_numbers.tex
 
 !/docs/LCFM_HISTORY_RANKING.md
 !/docs/LCFM_REPLICATION.md
 
-!/docs/LEWM_FOLLOWUP_ASSESSMENT.md
+# Private editorial tools and historical operational notes. Preserved on disk.
+/AGENTS.md
+/docs/EXPERIMENT_PLAN.md
+/docs/INTERVENTION_MECHANISM_AUDIT.md
+/docs/LCFM_FOLLOWUP_DESIGN.md
+/docs/LEWM_FOLLOWUP_ASSESSMENT.md
+/docs/SCIENTIFIC_WRITING.md
+/reports/ABLATION_COVERAGE_STATUS.md
+/reports/PLANNING_METHOD_ALIGNMENT.md
+/scripts/check_manuscript.py
+/scripts/check_lcfm_manuscript.py
+/scripts/write_lcfm_replication_numbers.py
+/tests/test_manuscript.py
+/tests/test_lcfm_manuscript.py
+
+/docs/LITERATURE_MECHANISMS.md
+/docs/PLANNING_CONTROL_LITERATURE.md
+!/docs/RELATED_WORK.md
+
+# Superseded qualitative media, retained locally.
+/docs/media/jepa_full_episodes*
+/docs/media/task_demonstration*
+
+# Completed campaign launch/recovery wrappers remain in local execution archives.
+/scripts/vast/*
+!/scripts/vast/fresh_parallel_download.py
+!/scripts/vast/fresh_stream_backup.py
+!/scripts/vast/collect_fresh_metadata.py
+!/scripts/vast/profile_fresh_forecast.py
+!/scripts/vast/drain_lcfm_case.py
+!/scripts/vast/direct_gcs_archive.py
+!/scripts/vast/fresh_gcs_download.py
+
+# Tests for private campaign wrappers and historical preparation notes.
+/tests/test_author_handoff.py
+/tests/test_component_boundary_job.py
+/tests/test_component_completion_tail.py
+/tests/test_component_execution_queue.py
+/tests/test_component_fit_behavior_chain.py
+/tests/test_component_handoff.py
+/tests/test_component_rental_capacity.py
+/tests/test_confirmation_management.py
+/tests/test_corrected_pointmaze_prepare.py
+/tests/test_corrected_pointmaze_queue.py
+/tests/test_decision_closeout.py
+/tests/test_drive_archive_readback.py
+/tests/test_final_preservation.py
+/tests/test_fresh_budget_watchdog.py
+/tests/test_fresh_campaign_stage.py
+/tests/test_fresh_mw_waves.py
+/tests/test_fresh_navigation_handoff.py
+/tests/test_fresh_residual_host.py
+/tests/test_fresh_static_queue.py
+/tests/test_google_result_backup.py
+/tests/test_la_supplement_selection.py
+/tests/test_live_snapshot.py
+/tests/test_navigation_geometry_archive_selection.py
+/tests/test_navigation_recovery.py
+/tests/test_navigation_recovery_collect.py
+/tests/test_navigation_redistribution.py
+/tests/test_navigation_table_analysis.py
+/tests/test_pause_archive.py
+/tests/test_pointmaze_seed236_queue.py
+/tests/test_pointmaze_tx_resume.py
+/tests/test_processing_audit.py
+/tests/test_rebase_fresh_budget.py
+/tests/test_refined_panel_queue.py
+/tests/test_resume_fresh_v2_host.py
+/tests/test_robotics_gpu_check_queue.py
+/tests/test_routing_priority.py
+/tests/test_run_combined_check_tx3.py
+/tests/test_run_combined_smoke_tx3.py
+/tests/test_split_fresh_mw_third_host.py
+/tests/test_stage_robotics_gpu_check.py
+/tests/test_stop_completed_core.py
+/scripts/archive_fresh_preparation.py
+/scripts/capture_preparation_runtime.py
+/scripts/pilot_fresh_pusht_trajectories.py
+/configs/execution_authorization_20260907.json
+/reports/VALIDATION.md
+
+# Read-only scientific control audits linked from the result reports.
+!/scripts/vast/audit_core_random_controls.py
+!/scripts/vast/audit_control_banks.py
+/scripts/render_task_demonstration.py
+/scripts/compose_jepa_episode_media.py
+/scripts/render_jepa_episode.py

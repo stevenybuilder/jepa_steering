@@ -163,7 +163,7 @@ def render():
 def render_lead(report, table, provenance):
     """One conceptual panel and two measured panels; no illustrative data."""
     fig = plt.figure(figsize=(10, 7.6))
-    fig.text(.045, .951, 'Correct at one step. A different plan three steps later.',
+    fig.text(.045, .951, 'A patch can match now and change the later choice.',
              fontsize=18, weight='bold', color=INK)
     fig.text(.045, .907, 'Frozen JEPA-WM · 200 independent starting states · two-frame context',
              fontsize=11, color=MUTED)
