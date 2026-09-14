@@ -76,16 +76,11 @@ approach to batching, memory traffic, and parallel execution:
   1.13× faster forecasts with TF32 / BF16**. Both changed predictions, so the
   protected evaluation kept strict FP32.
 
-The data pipeline indexed **31,306 trajectory records**: **12,600 MetaWorld**
-and **18,706 Push-T**. Pinned inputs totaled **8.01 GB**: **0.74 GB of MetaWorld
-state/action records**, **2.79 GB of Push-T**, **2.39 GB of navigation datasets**,
-and **2.11 GB across 16 Franka recordings and companions** for DROID evaluation.
-External MetaWorld videos are additional to this input subtotal.
-The final protected panel contains **3,072 arm evaluations**;
-the earlier mechanism studies produced **12.8 GB of compressed output archives**.
-The 200-state history replication adds **14,000 batched six-step forecasts**:
-**4.2 million candidate forecasts**, with 120,000 candidate sequences evaluated
-under 35 conditions.
+Inputs: **31,306 trajectory records** (12,600 MetaWorld, 18,706 Push-T) and
+**8.01 GB of pinned data** across MetaWorld, Push-T, navigation, and DROID.
+Outputs: **3,072 arm evaluations** in the protected panel, **12.8 GB** of
+archived mechanism-study results, and **4.2 million candidate forecasts** in the
+200-state history replication (120,000 candidate sequences under 35 conditions).
 [Dataset sizes, model counts, and execution details](docs/COMPUTE.md).
 
 ### Intervention families
