@@ -9,15 +9,17 @@ action-conditioning edits, matched random controls, and component ablations.
 Representational geometry motivates the edits; forecasting and planning are the
 outcomes we follow.
 
-The experiments follow a correction from the model's forecast to the planner's decisions:
+Three findings explain how steering affects this world model:
 
-- **Forecast correction varies by layer and task.** The learned rank-four B3 edit
-  reduces H6 proprioceptive MSE by **2.36% on Reach and 2.19% on Reach-Wall**.
-- **A corrected forecast can leave the first choice unchanged.** The learned edit
-  changes the best of 300 candidates in **1/192 states**. Later adaptive search
-  can still return different plans under both learned and random edits.
-- **Measured geometry depends on precision.** FP32 favors cubic over linear
-  reconstruction at every block; BF16 favors linear under the same weights and inputs.
+- **More accurate forecasts do not necessarily produce better plans.** Our learned
+  correction improves some predictions, but we have not established better task
+  success. We test prediction accuracy and robot outcomes separately.
+- **An edit can change how the planner searches.** Even when its first choice
+  stays the same, changes to other candidate scores can lead later search steps
+  toward different action sequences. Both learned and random edits have this effect.
+- **Numerical precision can change the geometry we measure.** The same model
+  appears more linear under lower-precision arithmetic. We check this before
+  interpreting the shape of its internal representations.
 
 [LCFM paper](paper/lcfm/main.pdf) · [Full study](paper/workshop/main.pdf) · [Methods](docs/METHODS.md) · [All results](docs/RESULTS.md) · [Reproduce](docs/REPRODUCING.md)
 
