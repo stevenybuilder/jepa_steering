@@ -201,12 +201,12 @@ def render_layers(table, provenance):
 
 
 def render_lead(report, table, provenance):
-    """Rolling-context diagram, measured discrepancy, and primary selection interval."""
+    """Headline figure: mechanism, forecast drift, decision effect, layer ablation, ranking."""
     REF, ONE = '#1a1a1a', '#a3261c'
-    fig = plt.figure(figsize=(7.2, 4.5))
-    timeline = fig.add_axes([.055, .60, .92, .34])
+    fig = plt.figure(figsize=(7.2, 6.3))
+    timeline = fig.add_axes([.055, .745, .92, .23])
     timeline.set(xlim=(0, 1), ylim=(0, 1)); timeline.axis('off')
-    timeline.text(0, .97, '(a)  Action reuse in the rolling context', weight='bold', fontsize=9.5)
+    timeline.text(0, .99, '(a)  One action is read twice in the rolling context', weight='bold', fontsize=9.5)
     for x, label in ((.40, 'H3: first read'), (.65, 'H4: second read (history)'), (.895, 'H5, H6')):
         timeline.text(x, .78, label, ha='center', fontsize=8.5, color=MUTED)
     rows = [('Changed input (reference)', .58, True),
@@ -215,7 +215,7 @@ def render_lead(report, table, provenance):
     for label, y, persists in rows:
         timeline.text(0, y, label, va='center', fontsize=9)
         for x in (.40, .65):
-            timeline.add_patch(Rectangle((x-.085, y-.087), .17, .174,
+            timeline.add_patch(Rectangle((x-.085, y-.09), .17, .18,
                 facecolor='white', edgecolor=REF, lw=.6))
         timeline.text(.358, y, '$a_2$', ha='center', va='center', fontsize=10.5)
         timeline.text(.442, y, '$a_3^*$', ha='center', va='center', fontsize=10.5)
@@ -226,9 +226,10 @@ def render_lead(report, table, provenance):
             timeline.annotate('', (x1, y), (x0, y), arrowprops=dict(arrowstyle='->', color=REF, lw=.6))
         timeline.text(.895, y, '= reference' if persists else '$\\neq$ reference', ha='center',
                       va='center', fontsize=9, color=REF if persists else ONE)
-    left = fig.add_axes([.085, .17, .30, .32])
-    right = fig.add_axes([.535, .17, .19, .32])
-    cost = fig.add_axes([.775, .17, .19, .32])
+    # row 2: forecast drift, selection change, excess cost
+    left = fig.add_axes([.085, .445, .30, .22])
+    right = fig.add_axes([.535, .445, .19, .22])
+    cost = fig.add_axes([.775, .445, .19, .22])
     for task, marker, linestyle in [('reach', 'o', '-'), ('reach-wall', 's', '--')]:
         rows = [cell(table, task, 'original', 'all_blocks_h3_donor', 'donor_reconstruction', h)
                 for h in (3, 4, 6)]
@@ -241,7 +242,7 @@ def render_lead(report, table, provenance):
                     'donor_reconstruction', h)['mean'] != 1:
                 raise ValueError('The persistent-patch parity control failed')
     left.plot([3, 4, 6], [0, 0, 0], color=REF, lw=1.2)
-    panel(left, '(b)', 'Forecast discrepancy')
+    panel(left, '(b)', 'Forecast drift after the second read')
     left.set(ylim=(-.035, .65), xlim=(2.9, 6.1), xticks=[3, 4, 6],
              xticklabels=['H3', 'H4', 'H6'], yticks=[0, .25, .5],
              ylabel='Relative discrepancy $E$', xlabel='Forecast step')
@@ -262,7 +263,7 @@ def render_lead(report, table, provenance):
                       [row.marginal_95_high-row['mean']]], fmt='o', color=REF, ms=4.5, lw=1, capsize=2.5)
         cost.annotate(f"{row['mean']:.2f}%", (row['mean'], y), xytext=(0, 8),
                       textcoords='offset points', ha='center', fontsize=8.5)
-    panel(right, '(c)', 'Selection change and excess cost')
+    panel(right, '(c)', 'The drift changes the planner\'s choice')
     right.set(xlim=(0, 100), ylim=(-.55, 1.55), xticks=[0, 25, 50, 75, 100],
               yticks=[1, 0], yticklabels=['Reach', 'Reach-Wall'],
               xlabel='States with a different choice (%)')
@@ -270,15 +271,54 @@ def render_lead(report, table, provenance):
     cost.set(xlim=(0, 3), ylim=(-.55, 1.55), xticks=[0, 1, 2, 3], yticks=[1, 0], yticklabels=[],
              xlabel='Mean excess cost (%)')
     axes_style(cost, 'x')
+    # row 3: single-block ablation and ranking agreement
+    layer = fig.add_axes([.085, .10, .42, .22])
+    rank = fig.add_axes([.62, .10, .345, .22])
+    blocks = np.arange(6)
+    for task, marker, linestyle in [('reach', 'o', '-'), ('reach-wall', 's', '--')]:
+        for mode, color in (('donor_h3', ONE), ('donor_persistent', REF)):
+            rows = [cell(table, task, 'original', f'{mode}_B{b}', 'donor_reconstruction', 6) for b in blocks]
+            layer.errorbar(blocks, [r['mean'] for r in rows],
+                yerr=[[r['mean']-r.marginal_95_low for r in rows], [r.marginal_95_high-r['mean'] for r in rows]],
+                color=color, marker=marker, ms=3.6, ls=linestyle, lw=1.1, capsize=2,
+                mfc='white' if marker == 's' else color)
+        randoms = [cell(table, task, 'original', f'{fam}_B{b}', 'donor_reconstruction', 6)['mean']
+                   for fam in ('random_range', 'random_off_range', 'random_isotropic') for b in blocks]
+        if max(randoms) > 0:
+            raise ValueError('Random controls should not exceed the unmodified forecast')
+    layer.axhspan(-.02, 0, color=MUTED, alpha=.25, lw=0)
+    layer.text(-.15, -.035, 'random controls (all three families)', fontsize=7.5, color=MUTED, ha='left', va='top')
+    panel(layer, '(d)', 'Single-block patches: the second read matters most at B1')
+    layer.set(xticks=blocks, xticklabels=[f'B{b}' for b in blocks], ylim=(-.1, 1.0), yticks=[0, .25, .5, .75, 1],
+              ylabel='Reconstruction $R$ at H6', xlabel='Patched predictor block')
+    axes_style(layer)
+    for i, (task, label) in enumerate(TASKS):
+        for j, (arm, color, hatch) in enumerate((('all_blocks_h3_donor', ONE, None), ('all_blocks_persistent_donor', REF, None))):
+            sp = cell(table, task, 'original', arm, 'reference_spearman')
+            ov = cell(table, task, 'original', arm, 'reference_top10_overlap')
+            x = i*2.6 + j*0.55
+            rank.bar(x, sp['mean'], width=.5, color=color, alpha=.9 if j else .75)
+            rank.bar(x+1.25, ov['mean']/10, width=.5, color=color, alpha=.9 if j else .75)
+            rank.text(x, sp['mean']+.02, f"{sp['mean']:.2f}", ha='center', fontsize=7.2)
+            rank.text(x+1.25, ov['mean']/10+.02, f"{ov['mean']:.1f}/10", ha='center', fontsize=7.2)
+    rank.set(ylim=(0, 1.28), yticks=[0, .5, 1], xticks=[.275, 1.525, 2.875, 4.125],
+             xticklabels=['Spearman', 'Top-10\noverlap', 'Spearman', 'Top-10\noverlap'],
+             ylabel='Agreement with reference')
+    rank.tick_params(axis='x', labelsize=7.5)
+    for x, label in ((.9, 'Reach'), (3.5, 'Reach-Wall')):
+        rank.text(x, 1.17, label, ha='center', fontsize=8.5)
+    panel(rank, '(e)', 'Whole ranking agrees; the top ten does not')
+    axes_style(rank)
     handles = [Line2D([0], [0], color=ONE, lw=1.2),
                Line2D([0], [0], color=REF, lw=1.2),
                Line2D([0], [0], color=REF, marker='o', lw=0, ms=3.6),
                Line2D([0], [0], color=REF, marker='s', lw=0, ms=3.6, mfc='white')]
     fig.legend(handles, ['H3 only', 'H3 + H4 (= reference)', 'Reach', 'Reach-Wall'],
-               loc='lower center', bbox_to_anchor=(.53, .015), ncol=4,
+               loc='lower center', bbox_to_anchor=(.53, .005), ncol=4,
                frameon=False, handlelength=1.8, columnspacing=1.6)
     save(fig, 'lcfm_context_lifetime', dict(provenance, discrepancy_metric='E=1-R',
-        selection_intervals='97.5% Wilson per task; two-task family coverage >=95%'))
+        selection_intervals='97.5% Wilson per task; two-task family coverage >=95%',
+        panels='a schematic; b E by step; c selection and cost; d single-block R at H6; e Spearman and top-10 overlap'))
 
 
 if __name__ == '__main__':
