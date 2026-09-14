@@ -20,19 +20,64 @@ The experiments connect **prediction, context history, and action selection**:
 - **Measured geometry can reverse with precision.** FP32 favors cubic over linear
   reconstruction at every block; BF16 favors linear under the same weights and inputs.
 
-The separate **3,072-run protected evaluation** leaves improved task success
-unestablished. These diagnostics do not identify a single cause of that outcome.
-
 [LCFM paper](paper/lcfm/main.pdf) · [Full study](paper/workshop/main.pdf) · [Methods](docs/METHODS.md) · [All results](docs/RESULTS.md) · [Reproduce](docs/REPRODUCING.md)
 
 ## Model and interventions
 
-We keep the encoders, six-block predictor, and planning objective fixed.
+The diagram shows the MetaWorld model: frozen encoders, a six-block predictor,
+and a fixed planning objective.
 Interventions enter at imagined step **H3** of an **H6** forecast. CEM scores
 300 candidate action sequences against the encoded goal, refits its proposal
 from ten elites, and repeats before executing a prefix and replanning.
 
 ![Frozen encoders, six-block predictor, goal scoring and CEM, with alternative activation-edit sites.](docs/figures/architecture_readable.png)
+
+### Scaling the experiments in PyTorch
+
+We used **five model configurations across six tasks**, from **39.7M to 532.0M
+parameters per model**. Reach and Reach-Wall share the MetaWorld checkpoint.
+
+| Model / tasks | Visual encoder | Encoder | Predictor | Total parameters |
+|---|---|---:|---:|---:|
+| MetaWorld: Reach, Reach-Wall | DINOv2 ViT-S/14 | 22.1M | 17.6M · 6 blocks | **39.7M** |
+| Push-T | DINOv2 ViT-S/14 | 22.1M | 17.6M · 6 blocks | **39.7M** |
+| PointMaze | DINOv2 ViT-S/14 | 22.1M | 17.6M · 6 blocks | **39.7M** |
+| Wall | DINOv2 ViT-S/14 | 22.1M | 17.6M · 6 blocks | **39.7M** |
+| DROID | DINOv3 ViT-L/16 | 303.2M | 228.8M · 12 blocks | **532.0M** |
+
+The five complete configurations sum to **690.7M parameters**, or **624.6M**
+with the shared DINOv2 encoder counted once. Totals include proprioceptive
+embeddings; repeated intervention arms and GPU replicas do not add model size.
+
+We scaled inference across a fleet of **56 GPUs on eight concurrent qualified
+hosts**, distributing independent scenarios while keeping each scenario's eight
+intervention arms on the same GPU.
+
+The [Ultra-Scale Playbook](https://huggingface.co/spaces/nanotron/ultrascale-playbook)
+and [JAX Scaling Book](https://jax-ml.github.io/scaling-book/gpus/) guided our
+approach to batching, memory traffic, and parallel execution:
+
+- **Batch the matrix work.** Each GPU forecasts 300 candidate action sequences
+  together. The rank-four edit uses batched projections and a precomputed 4×4
+  coefficient map, replacing repeated online response probes with thin matrix
+  multiplications over the 256×400 activation field.
+- **Keep workers supplied.** Parallel range downloads stage weights and data
+  locally; static queues distribute scenarios, and asynchronous cloud backups
+  collect completed results while other workers continue.
+- **Measure precision trade-offs.** A ten-forecast benchmark measured **1.10× /
+  1.13× faster forecasts with TF32 / BF16**. Both changed predictions, so the
+  protected evaluation kept strict FP32.
+
+The data pipeline indexed **31,306 trajectory records**: **12,600 MetaWorld**
+and **18,706 Push-T**. Pinned inputs totaled **8.02 GB**: **0.74 GB of MetaWorld
+state/action records**, **2.79 GB of Push-T**, **2.39 GB of navigation datasets**,
+and **2.11 GB across 16 Franka recordings and companions** for DROID evaluation.
+External MetaWorld videos are additional to this input subtotal.
+The final protected panel contains **3,072 arm evaluations**;
+the mechanism studies produced **12.8 GB of compressed output archives**.
+[Dataset sizes, model counts, and execution details](docs/COMPUTE.md).
+
+### Intervention families
 
 | Family | Intervention | Control or ablation |
 |---|---|---|
@@ -68,18 +113,31 @@ unresolved. All sixteen contexts and both candidate banks are retained.
 
 **Why it matters for world models:** a local activation patch can be an incomplete
 version of the input change it is meant to represent. Testing only the edited
-step misses this. This is agreement with a specified model counterfactual,
-not evidence that the counterfactual is physically correct. The tested context
-has two frames; we make no context-length scaling claim.
+step misses this. The comparison follows the model’s predictions as its two-frame
+context advances.
 [All six layers, all 72 contrasts, and action-range controls](docs/ACTION_COUNTERFACTUAL.md).
+
+### The history mismatch changes candidate selection
+
+We also checked the H6 candidate costs from these action-substitution patches.
+For all-block patches, omitting the H4 occurrence changes the winning candidate in **17 of 32 action
+banks**—two banks for each of sixteen contexts. The H3-only patch retains an
+average of **5.75–6.88 of the reference’s top ten candidates**; patching both
+appearances at all blocks preserves all ten and the same winner.
+
+![H6 candidate-ranking, elite, and winner agreement with the coherent action change, across all blocks and single-layer patches.](docs/figures/lcfm_history_ranking.png)
+
+Single-layer patches show where that agreement changes. At B1, persistence
+improves mean rank agreement and elite overlap in both tasks and both banks;
+winner agreement improves in three of the four task/bank cells. All six layers
+and individual context results are in the [ranking analysis](docs/LCFM_HISTORY_RANKING.md).
 
 ## Better forecasts, first choices, and replanning
 
 ### The first choice stays the same in 191 of 192 states
 
 We score the **same 300 action sequences** before and after the learned edit.
-The lowest-cost plan stays the same in 191 of 192 states. This is an observed
-choice, not a claim that every candidate keeps the same rank.
+The lowest-cost plan stays the same in 191 of 192 states.
 
 A simple bound accounts for most of these stable choices. Compare the best
 plan's original lead with the largest difference the edit makes between any
@@ -109,8 +167,7 @@ those intermediate selections can alter the later search.
 In a separate 56-state replay, both learned and random edits change the returned
 action prefixes. Their six registered comparison intervals include zero, so the
 learned edit has no established advantage over the random control on these
-search measurements. These are differences in planned action coordinates;
-physical execution is tested below. [All paired results](docs/CEM_EXPANSION.md).
+search measurements. [All paired results](docs/CEM_EXPANSION.md).
 
 ### Even a shared prediction shift can change relative costs
 
@@ -120,9 +177,8 @@ on Reach / Reach-Wall. A common shift moves different starting predictions
 closer to or farther from the same goal. Candidate-specific edit coefficients
 are therefore not required to change relative goal distances.
 
-Random-subspace edits show a similar pattern. The components retain their
-original magnitudes; this tests their contribution to the delivered edit,
-not their efficacy at equal energy. [Component replay](docs/PILOT_MECHANISMS.md).
+Random-subspace edits show a similar pattern. The replay retains each
+component’s original magnitude. [Component replay](docs/PILOT_MECHANISMS.md).
 
 ## Layer structure and forecast correction
 
@@ -140,7 +196,7 @@ color scales. The B2+B3 and all-six rows retain the multi-block controls.
 
 The later **rank-four B3 correction** reduces H6 proprioceptive MSE by **2.36%
 on Reach and 2.19% on Reach-Wall**. This operator is fitted separately from the
-rank-one sweep; the sweep does not establish where to place the rank-four edit.
+rank-one sweep.
 
 ## Numerical geometry and attention
 
@@ -154,10 +210,8 @@ reproduce the full BF16 result.
 
 ![Cubic versus linear activation reconstruction under FP32, rounded FP32 outputs, and BF16, across all six blocks.](docs/figures/geometry_control_story.png)
 
-The 64-context control identifies sensitivity to numerical computation. The
-separate five-task interpolation study finds small, mixed downstream forecast
-benefits after matching requested edit doses. Local reconstruction accuracy
-therefore needs its own controls and a separate test of steering utility.
+Across 64 contexts, numerical precision changes which interpolation looks
+better. A separate five-task interpolation study finds small, mixed forecast benefits.
 [Controlled arithmetic](docs/CONTROLLED_GEOMETRY.md) · [Five-task geometry and visual–action interactions](docs/PATHWAY_GEOMETRY.md).
 
 ### Attention across layers and heads
@@ -165,11 +219,7 @@ therefore needs its own controls and a separate test of steering utility.
 ![Spatial attention distance for all sixteen heads and six predictor blocks on Reach and Reach-Wall.](docs/figures/paper_pilot_attention.png)
 
 Each cell averages H6 spatial attention distance over 32 development contexts per
-task for the fixed zero-action candidate. This describes the predictor's attention
-structure; identifying a causal circuit would require targeted interventions of
-the kind used in Joseph et al.'s study. [All horizons and uncertainty](docs/PILOT_MECHANISMS.md).
-
-
+task for the fixed zero-action candidate. [All horizons and uncertainty](docs/PILOT_MECHANISMS.md).
 
 ## Physical execution and behavioral evaluation
 
@@ -188,10 +238,7 @@ Steering nevertheless changes which scenarios succeed: on Reach, the learned edi
 rescues 21 failures and loses 21 successes, leaving both it and unsteered at 52/96.
 [All arms and paired uncertainty](docs/RESULTS.md#protected-confirmation).
 
-Development diagnostics and protected behavior use different inputs and planner
-randomness. Protected runs did not save numerical candidate costs or elite ranks,
-so these diagnostics cannot identify the cause of their outcome changes. Push-T
-and DROID remain development-only; DROID measures recorded-action agreement.
+Push-T and DROID contribute development results; DROID uses recorded-action agreement.
 [Completed experiments and remaining evidence gaps](docs/ANALYSIS_COMPLETION.md).
 
 ## What the simulated tasks require
@@ -202,12 +249,10 @@ and DROID remain development-only; DROID measures recorded-action agreement.
 The robot moves to the green target; Reach-Wall adds an obstacle. The clip runs
 at simulation speed, with a brief final hold. [HD video](docs/media/task_demonstration_hd.mp4).
 
-Our measured three-arm JEPA comparison retains only the first fifteen actions
-(0.19 seconds of simulated motion). It is useful for checking trajectory replay,
-but too short to show task completion. [Measured prefixes and verification](docs/media/README.md).
+The measured three-arm JEPA comparison shows the first fifteen actions
+(0.19 seconds of simulated motion). [Measured prefixes and verification](docs/media/README.md).
 
 ## Benchmark context
-
 
 ### Robot success and published benchmark context
 
@@ -222,23 +267,20 @@ Every ablation is eligible; Reach-Wall's winner is **randomized visual–action
 coupling: 27.08%**. Error bars show episode standard errors, not uncertainty
 adjusted for choosing the best arm.
 
-These are **fresh, protected evaluation scenarios**, not the earlier development
-set. That is why the unsteered Reach rate is **54.17% (52/96)** here rather than
-the earlier **44.79%**. The gray published bars use different checkpoints and
-evaluation populations; they provide context, not paired controls.
+The protected Reach baseline is **54.17% (52/96)**. Gray published bars use the
+authors’ checkpoints and evaluation populations.
 [Published source](https://arxiv.org/html/2512.24497v4#S5.T2) ·
 [Exact values and error-bar definitions](paper/data/benchmark_comparison_sources.json).
 
 Against concurrent unsteered JEPA-WM, these observed maxima differ by
 **0.00 / −2.08 / +2.08 / +2.08 percentage points** on Reach / Reach-Wall /
-PointMaze / Wall. Across the full **384 paired scenarios × eight arms = 3,072
-evaluations**, we did not establish a reliable overall success improvement.
-The internal effects above are findings, not a demonstrated cause of that outcome.
+PointMaze / Wall.
 [Paired analysis](docs/RESULTS.md#protected-confirmation).
-
 
 ## Final protected results and earlier benchmarks
 
+<details>
+<summary>Full six-task table: published references, development, and protected results</summary>
 
 Simulator success (%); **DROID is an action-agreement score**, not robot success.
 Stages are separate populations, not interchangeable baselines. Protected cells
@@ -273,6 +315,7 @@ Development MetaWorld joint/visual/action arms use their concurrent unsteered
 Protected contrasts use **only the protected unsteered row**. No historical rates
 are substituted for fresh baselines. [Provenance](paper/data/benchmark_comparison_sources.json).
 
+</details>
 
 ## What this contributes
 

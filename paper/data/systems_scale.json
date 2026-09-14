@@ -1,0 +1,280 @@
+{
+  "schema_version": 1,
+  "role": "descriptive_systems_inventory_no_new_model_execution",
+  "model": {
+    "task": "MetaWorld Reach and Reach-Wall",
+    "visual_encoder": "DINOv2 ViT-S/14",
+    "visual_encoder_parameters": 22056576,
+    "predictor_parameters": 17630480,
+    "predictor_blocks": 6,
+    "source": {
+      "path": "artifacts/offline_study/layer-pilot-20260913-v1/native-v1.log",
+      "sha256": "efaf97c098351fd60dbb87d96b6d92cba283bc472127cc50e5b769da951b6599"
+    },
+    "log_excerpts": [
+      "[INFO    ][2026-09-13 16:40:56][root                ][init_video_model         ] \ud83e\udde0 Encoder: DinoEncoder (22,056,576 params, frozen=True)",
+      "[INFO    ][2026-09-13 16:40:56][root                ][init_video_model         ] \ud83d\udd2e Predictor: VisionTransformerAdaLN (17,630,480 params)"
+    ],
+    "count_scope": "Encoder and predictor separately; visualization decoder and optimizer state excluded."
+  },
+  "fleet": {
+    "snapshot_utc": "2026-09-13T03:51:08.343Z",
+    "qualified_running_hosts": 8,
+    "gpus_on_these_hosts": 56,
+    "source": {
+      "path": "artifacts/offline_study/fresh-campaign-stage-20260912-v1/billing-snapshot-20260913T035108Z.json",
+      "sha256": "84825d8b9a1299667038a8157d498be42ab1a7d796996e58dda8bb091d34188f"
+    },
+    "hosts": [
+      {
+        "instance_id": 50806821,
+        "gpus": 8,
+        "gpu_name": "RTX PRO 6000 S",
+        "source": {
+          "path": "artifacts/offline_study/fresh-fleet-20260912-v11-pro6000-trial/summary.json",
+          "sha256": "ccdfa666f95041e23836c5564936f0db3fb66074f18a186d5c7ae160bc703817"
+        }
+      },
+      {
+        "instance_id": 50819364,
+        "gpus": 8,
+        "gpu_name": "A100 SXM4",
+        "source": {
+          "path": "artifacts/offline_study/fresh-fleet-20260912-v16-150438-232710/150438.json",
+          "sha256": "7171407c16fc61971f6e1eef81d527e96b7a8544dc4de146bb4b78f9935a44cf"
+        }
+      },
+      {
+        "instance_id": 50827072,
+        "gpus": 8,
+        "gpu_name": "RTX 5090",
+        "source": {
+          "path": "artifacts/offline_study/fresh-fleet-20260913-v17-149629-004251/149629.json",
+          "sha256": "eb3d27b7389ed27febbcbfde09844df000f9f383e94991bb957e59c7b9a2e672"
+        }
+      },
+      {
+        "instance_id": 50828583,
+        "gpus": 8,
+        "gpu_name": "RTX 5090",
+        "source": {
+          "path": "artifacts/offline_study/fresh-fleet-20260913-v18-fivehost-005605/140475.json",
+          "sha256": "5d7381a1cf015671f5676de3b7dd0caed7b3f73d7ec2ed997f031c4321754e86"
+        }
+      },
+      {
+        "instance_id": 50828584,
+        "gpus": 8,
+        "gpu_name": "RTX 4090",
+        "source": {
+          "path": "artifacts/offline_study/fresh-fleet-20260913-v18-fivehost-005605/15686.json",
+          "sha256": "6f74008f823c1410146d0ee188b89fc2e7a443bd1f91b32e47550a46ddf1b2fb"
+        }
+      },
+      {
+        "instance_id": 50833029,
+        "gpus": 4,
+        "gpu_name": "RTX 5090",
+        "source": {
+          "path": "artifacts/offline_study/fresh-fleet-20260913-v19-55189-0140/55189.json",
+          "sha256": "680f9c53f8e3d9576a066b5f60814492da99c5121b8e0de45f192df0b4d05b15"
+        }
+      },
+      {
+        "instance_id": 50836730,
+        "gpus": 4,
+        "gpu_name": "RTX 5090",
+        "source": {
+          "path": "artifacts/offline_study/fresh-fleet-20260913-v22-sameprovider-91308/91308.json",
+          "sha256": "c497b2c7789b3bc8965c2e62b41f0f81702b4e6cca47acd6ae32e24682f02469"
+        }
+      },
+      {
+        "instance_id": 50839961,
+        "gpus": 8,
+        "gpu_name": "RTX 4090",
+        "source": {
+          "path": "artifacts/offline_study/fresh-fleet-20260913-v23-florida-eight/148995.json",
+          "sha256": "ade70185ba9f75c62de78d47867736a1ad3438f97201e3db2249455298d2aa2b"
+        }
+      }
+    ],
+    "count_scope": "Capacity on concurrently running qualified hosts; not a claim that all GPUs were busy at every instant."
+  },
+  "staged_dataset_assets": [
+    {
+      "name": "point_maze/point_maze.zip",
+      "bytes": 718363945,
+      "sha256": "6c48ccf22c90b9af8dcf0e2cd70849aec8dd8e214ac5f1f09552bf8bc9494acc"
+    },
+    {
+      "name": "wall/wall_single.zip",
+      "bytes": 1668205895,
+      "sha256": "2b4ae4ed0ad03b337efac637f17752e7e7e27f864fec39dc25b51fef490c980d"
+    },
+    {
+      "name": "pusht/pusht_noise.zip",
+      "bytes": 2785304515,
+      "sha256": "442f5dee246edf670964ed7bdecd248683cd6d00580fa0e4d458abb53f92da08"
+    },
+    {
+      "name": "16 Franka evaluation recordings and companions",
+      "bytes": 2105926429,
+      "source": {
+        "path": "configs/droid_assets.json",
+        "sha256": "498a6490709b42a4145f01286386576d5e11a84fa84aacd1bb3b2f1c02fa0c5c"
+      },
+      "full_raw_droid_training_corpus_included": false
+    },
+    {
+      "name": "MetaWorld state/action Parquet shards",
+      "files": 126,
+      "bytes": 737175770,
+      "source": {
+        "path": "artifacts/offline_study/combined-fit-stimulus-preparation-20260908-v1/stimulus/official_manifest.json",
+        "sha256": "b1f7ba9b0999ae88dcb8553592c393f3110a9522a7c9d23a6737a2b04518f89e"
+      },
+      "scope": "State/action records; external videos excluded from this byte count"
+    }
+  ],
+  "selected_dataset_asset_bytes": 8014976554,
+  "dataset_scope": "Pinned source assets, each counted once: MetaWorld state/action Parquet, compressed Push-T and navigation archives, Franka HDF5 recordings and companions. External MetaWorld videos and replica copies excluded.",
+  "mechanism_archive": {
+    "objects": 287,
+    "compressed_bytes": 12785795681,
+    "source": {
+      "path": "artifacts/offline_study/layer-pilot-20260913-v1/operations/CLOUD_METADATA_AUDIT_20260913.json",
+      "sha256": "807e2c801cf08ebe6267ac79d8e986a0ca94f340e047f18af0bb064b21b90a66"
+    },
+    "count_scope": "Stored mechanism campaign output archives, separate from input dataset sizes."
+  },
+  "precision_benchmark": {
+    "forecasts_per_mode": 10,
+    "warmed_forecast_median_seconds": {
+      "fp32": 3.13847,
+      "tf32": 2.85019,
+      "bf16": 2.77808
+    },
+    "source": {
+      "path": "reports/EXECUTION_STATUS.md",
+      "sha256": "0e965b2c6491b14f082fa51cdf5d4ef2b9baf57c90ff5af242305c39cba2fe63"
+    },
+    "report_sha256": "fba9b63ba9555ff0b6265e71fc230e15203103661532224d70d8411998a8efbc",
+    "scope": "Excluded engineering forecast benchmark; both alternative modes changed predictions; protected evaluation retained strict FP32."
+  },
+  "models": [
+    {
+      "tasks": "MetaWorld (Reach and Reach-Wall)",
+      "visual_encoder": "DINOv2 ViT-S/14",
+      "visual_encoder_parameters": 22056576,
+      "predictor_parameters": 17630480,
+      "external_proprio_encoder_parameters": 80,
+      "total_parameters": 39687136,
+      "predictor_blocks": 6,
+      "source": {
+        "path": "artifacts/offline_study/layer-pilot-20260913-v1/native-v1.log",
+        "sha256": "efaf97c098351fd60dbb87d96b6d92cba283bc472127cc50e5b769da951b6599"
+      },
+      "log_excerpts": [
+        "[INFO    ][2026-09-13 16:40:56][root                ][init_video_model         ] \ud83e\udde0 Encoder: DinoEncoder (22,056,576 params, frozen=True)",
+        "[INFO    ][2026-09-13 16:40:56][root                ][init_video_model         ] \ud83d\udd2e Predictor: VisionTransformerAdaLN (17,630,480 params)"
+      ]
+    },
+    {
+      "tasks": "Push-T",
+      "visual_encoder": "DINOv2 ViT-S/14",
+      "visual_encoder_parameters": 22056576,
+      "predictor_parameters": 17626480,
+      "external_proprio_encoder_parameters": 80,
+      "total_parameters": 39683136,
+      "predictor_blocks": 6,
+      "source": {
+        "path": "artifacts/offline_study/resume-20260907/remote/geometry/pusht-fit.log",
+        "sha256": "507d8574f685ea2b8ec0fbaebd7bc3b0e372fbed3643f1c26fbe557a640952d9"
+      },
+      "log_excerpts": [
+        "[INFO    ][2026-09-07 09:55:36][root                ][init_video_model         ] \ud83e\udde0 Encoder: DinoEncoder (22,056,576 params, frozen=True)",
+        "[INFO    ][2026-09-07 09:55:37][root                ][init_video_model         ] \ud83d\udd2e Predictor: VisionTransformerAdaLN (17,626,480 params)"
+      ]
+    },
+    {
+      "tasks": "PointMaze",
+      "visual_encoder": "DINOv2 ViT-S/14",
+      "visual_encoder_parameters": 22056576,
+      "predictor_parameters": 17626480,
+      "external_proprio_encoder_parameters": 80,
+      "total_parameters": 39683136,
+      "predictor_blocks": 6,
+      "source": {
+        "path": "artifacts/offline_study/fresh-campaign-stage-20260912-v1/receiving-50795722/worker-logs-v2/pointmaze-worker0.log",
+        "sha256": "298848f43444f6c9aa7305777474a50fb9d7839938bae7d0455fab6ad6aa9bb9"
+      },
+      "log_excerpts": [
+        "[INFO    ][2026-09-12 20:37:39][root                ][init_video_model         ] \ud83e\udde0 Encoder: DinoEncoder (22,056,576 params, frozen=True)",
+        "[INFO    ][2026-09-12 20:37:39][root                ][init_video_model         ] \ud83d\udd2e Predictor: VisionTransformerAdaLN (17,626,480 params)"
+      ]
+    },
+    {
+      "tasks": "Wall",
+      "visual_encoder": "DINOv2 ViT-S/14",
+      "visual_encoder_parameters": 22056576,
+      "predictor_parameters": 17626480,
+      "external_proprio_encoder_parameters": 48,
+      "total_parameters": 39683104,
+      "predictor_blocks": 6,
+      "source": {
+        "path": "artifacts/offline_study/fresh-campaign-stage-20260912-v1/receiving-50795722/worker-logs-v2/wall-worker0.log",
+        "sha256": "3cbbf596283e22fa029efbbc0e3d54a27917a824e3e700870e3e9f32b8cba262"
+      },
+      "log_excerpts": [
+        "[INFO    ][2026-09-12 20:37:39][root                ][init_video_model         ] \ud83e\udde0 Encoder: DinoEncoder (22,056,576 params, frozen=True)",
+        "[INFO    ][2026-09-12 20:37:39][root                ][init_video_model         ] \ud83d\udd2e Predictor: VisionTransformerAdaLN (17,626,480 params)"
+      ]
+    },
+    {
+      "tasks": "DROID",
+      "visual_encoder": "DINOv3 ViT-L/16",
+      "visual_encoder_parameters": 303154176,
+      "predictor_parameters": 228835328,
+      "external_proprio_encoder_parameters": 0,
+      "total_parameters": 531989504,
+      "predictor_blocks": 12,
+      "source": {
+        "path": "artifacts/offline_study/table-completion-20260911-v1/restored/50259194/batch-000/jepa-runtime/droid-coupling-behavior-20260908-v3/queue-gpu2/matched_random-shard-6.log",
+        "sha256": "35b67ff3287b0062a8bae09cc57dfacc0f1fda919cdb96700a1437cd25c5720e"
+      },
+      "log_excerpts": [
+        "INFO:root:\ud83e\udde0 Encoder: DinoEncoder (303,154,176 params, frozen=True)",
+        "INFO:root:\ud83d\udd2e Predictor: VisionTransformerAdaLN (228,835,328 params)"
+      ]
+    }
+  ],
+  "parameter_totals": {
+    "sum_of_five_complete_model_configurations": 690726016,
+    "shared_dinov2_encoder_counted_once": 624556288,
+    "scope": "One complete encoder/predictor configuration per task family; MetaWorld checkpoint shared by Reach and Reach-Wall counted once. Repeated intervention arms and GPU replicas excluded. Optional visualization heads and optimizer states excluded.",
+    "proprio_count_derivation": "Conv1d with kernel_size=1, 16 outputs and bias: 16*(4+1)=80 for MetaWorld, Push-T and PointMaze; 16*(2+1)=48 for Wall; no proprio encoder for DROID. Action encoders are included in predictor counts.",
+    "proprio_constructor_source": {
+      "path": "vendor/jepa-wms/app/plan_common/models/prop_embedding.py",
+      "sha256": "22ab8c47b39a906d37e747a342959f9b492f54776ae80bcb675ee738573c7c51"
+    }
+  },
+  "corpus_indices": [
+    {
+      "dataset": "MetaWorld",
+      "trajectory_records_indexed": 12600,
+      "source": {
+        "path": "artifacts/offline_study/2026-09-07-metaworld-dedup-correction/metaworld-inventory-v4-deduplicated-exposure-preserving/inventory.json",
+        "sha256": "871f421c37316843e1779f8ba3277b7d518e8576f6b080f413cd39837582a671"
+      }
+    },
+    {
+      "dataset": "Push-T",
+      "trajectory_records_indexed": 18706,
+      "source": {
+        "path": "artifacts/offline_study/2026-09-07-pusht-family-correction/pusht-inventory-v3-development-exposed/inventory.json",
+        "sha256": "ca84359a2e275e9fc005f59325592d2d5abf7b15a28059f802082344867ecf45"
+      }
+    }
+  ]
+}

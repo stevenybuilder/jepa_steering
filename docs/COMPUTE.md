@@ -6,6 +6,72 @@ and [Scaling Book GPU chapter](https://jax-ml.github.io/scaling-book/gpus/) info
 how we separated compute, memory and communication constraints. They are systems
 references, not libraries used by the executor.
 
+## Model, fleet, and data scale
+
+The [systems inventory](../paper/data/systems_scale.json) records counts, worker
+log excerpts, and source hashes. Encoder and predictor counts come from the
+actual loaded models. Small external proprioceptive embeddings are included in
+the totals below; action-conditioning parameters are already in the predictor.
+
+| Model / tasks | Visual encoder | Predictor | External proprio encoder | Total parameters |
+|---|---:|---:|---:|---:|
+| MetaWorld: Reach and Reach-Wall | 22,056,576 | 17,630,480 | 80 | **39,687,136** |
+| Push-T | 22,056,576 | 17,626,480 | 80 | **39,683,136** |
+| PointMaze | 22,056,576 | 17,626,480 | 80 | **39,683,136** |
+| Wall | 22,056,576 | 17,626,480 | 48 | **39,683,104** |
+| DROID | 303,154,176 | 228,835,328 | 0 | **531,989,504** |
+
+The simulator models use DINOv2 ViT-S/14 and six predictor blocks; DROID uses
+DINOv3 ViT-L/16 and twelve predictor blocks. The five full model configurations
+sum to **690,726,016 parameters**. Counting their shared DINOv2 encoder once
+gives **624,556,288 parameters**. Reach and Reach-Wall use the same checkpoint;
+neither separate tasks, intervention arms, nor GPU replicas multiply this total.
+Optimizer state and optional visualization heads are excluded. The external
+proprio encoder is a bias-bearing 1×1 convolution with 16 outputs: 80 parameters
+for four inputs, 48 for two inputs. DROID has no such encoder.
+
+At 03:51 UTC on September 13, the campaign recorded **eight qualified hosts
+running concurrently, with 56 GPUs**: 24 RTX 5090s, 16 RTX 4090s, eight RTX PRO
+6000s and eight A100s. This is concurrent fleet capacity; per-GPU activity varied
+as scenarios completed and queues were reassigned. The inventory binds that
+snapshot to the eight provider receiving records.
+
+| Staged dataset assets | Size (decimal GB) | Source |
+|---|---:|---|
+| 126 MetaWorld state/action Parquet shards | 0.737 | Pinned official manifest in the systems inventory |
+| Push-T noisy-action archive | 2.785 | Pinned ZIP, SHA-256 verified locally |
+| PointMaze archive | 0.718 | [Pinned navigation assets](../configs/navigation_assets.json) |
+| Wall archive | 1.668 | Same navigation manifest |
+| 16 Franka recordings and companions for DROID evaluation | 2.106 | [Pinned DROID assets](../configs/droid_assets.json) |
+
+These assets total **8.015 GB**, counting each staged source once. Push-T and
+navigation rows are compressed ZIP sizes; Franka sizes are HDF5 recordings and
+companions. External MetaWorld videos are additional to the Parquet subtotal.
+The source inventory indexed **12,600 MetaWorld trajectory records** and
+**18,706 Push-T trajectory records**, **31,306 total**. These are corpus inventory
+counts, not the number of independent experiment evaluations. The DROID entry covers the released
+evaluation recordings, not the full raw training corpus. Separately, the
+mechanism campaign's cloud audit checked **287 output archives / 12.786 GB**
+against existing download-hash receipts. Input and output volumes are not pooled.
+
+## Batched matrix operations
+
+The CEM planner batches 300 candidate trajectories per GPU. At B3, the refined
+edit flattens each 256×400 activation field, projects it onto three fitted
+features, adds an intercept, and applies a precomputed 4×4 coefficient map. A
+final batched product with four basis directions reconstructs the edit. The
+response inverse is calibrated offline; the online path uses thin matrix
+products instead of rerunning response probes for each candidate. See
+[`compose_map` and the output hook](../src/offline_study/fixed_response.py).
+
+An excluded engineering benchmark timed ten warmed forecasts per mode:
+strict FP32 **3.13847 s**, TF32 **2.85019 s**, BF16 **2.77808 s** median. The
+ratios are **1.10× and 1.13× forecast speedups**; both alternatives changed
+predictions. The protected comparison retained strict FP32. These measurements
+describe whole forecasts, not an isolated GEMM benchmark or full-episode speedup.
+
+## Execution design
+
 | Principle | Application | Implementation |
 |---|---|---|
 | Replicate a model that fits | Independent single-GPU scenario jobs; keep eight paired arms together | [Static queue](../scripts/vast/run_fresh_static_queue.py) |
