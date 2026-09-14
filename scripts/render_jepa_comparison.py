@@ -30,14 +30,16 @@ def main():
         for package, version in data['versions'].items():
             if importlib.metadata.version(package) != version:
                 raise ValueError(f'Requires {package}=={version}')
-        if len(data['capture']['frames']) != 100 or not np.isclose(data['capture']['dt'], .0125):
-            raise ValueError('Expected the two complete recorded 80 Hz episodes')
+        if not 2 <= len(data['capture']['frames']) <= 400 or not np.isclose(data['capture']['dt'], .0125):
+            raise ValueError('Expected complete 80 Hz episodes of at most 400 recorded states')
     args.output.mkdir(parents=True)
-    # A successful reaching task is complete before the native time limit.
-    # Hold its actual first-success state rather than replaying post-success
+    # Hold the actual first-success state rather than replaying post-success
     # controller oscillation. Never manufacture a successful endpoint.
     endpoints = [next((i + 1 for i, success in enumerate(d['capture']['successes'])
                        if success), len(d['capture']['frames']) - 1) for d in records]
+    frame_count = max(endpoints) + 1
+    sample_indices = set(np.linspace(0, frame_count - 1, 5).astype(int).tolist())
+    limits = [d.get('qualitative_episode_limit', len(d['capture']['frames'])) for d in records]
     envs = []; renderers = []; errors = [0., 0.]; samples = []
     camera = mujoco.MjvCamera()
     camera.type = mujoco.mjtCamera.mjCAMERA_FREE
@@ -60,7 +62,7 @@ def main():
             renderers.append(mujoco.Renderer(env.model, height=960, width=960))
         with imageio.get_writer(mp4, fps=80, codec='libx264', quality=8, macro_block_size=1,
                 ffmpeg_params=['-pix_fmt', 'yuv420p', '-movflags', '+faststart']) as writer:
-            for i in range(100):
+            for i in range(frame_count):
                 canvas = Image.new('RGB', (1920, 1080), '#101820')
                 draw = ImageDraw.Draw(canvas)
                 for j, (env, renderer, data) in enumerate(zip(envs, renderers, records)):
@@ -73,24 +75,24 @@ def main():
                     env._prev_obs = np.array(saved['state'][18:36])
                     error = float(np.max(np.abs(env._get_obs().astype(np.float32)-np.array(saved['state']))))
                     errors[j] = max(errors[j], error)
-                    if error > 1e-6:
+                    if not np.isfinite(error) or error > 1e-6:
                         raise ValueError(f'{data["task"]} frame {i} differs: {error}')
                     renderer.update_scene(env.data, camera=camera)
                     canvas.paste(Image.fromarray(renderer.render().copy()), (j*960, 68))
                     draw.text((j*960+24, 14), ['Reach', 'Reach-Wall'][j], font=font(34, True), fill='white')
                     if i >= endpoints[j]:
                         outcome = 'Target reached' if any(record['successes']) else 'Time limit · target not reached'
-                        draw.text((j*960+24, 1039), outcome, font=font(25), fill='#ccd7df')
+                        draw.text((j*960+24, 1039), outcome + f' · {limits[j]}-step limit', font=font(25), fill='#ccd7df')
                     else:
-                        draw.text((j*960+24, 1039), f'{frame_index*.0125:.2f} s · JEPA-WM planning',
+                        draw.text((j*960+24, 1039), f'{frame_index*.0125:.2f} s · {limits[j]}-step limit',
                                   font=font(25), fill='#ccd7df')
                 draw.line((960, 0, 960, 1080), fill='#101820', width=6)
                 draw.text((1420, 18), 'Green marker: target', font=font(25), fill='#78d9be')
-                if i in (0, 25, 50, 75, 99):
+                if i in sample_indices:
                     samples.append(canvas.resize((960, 540), Image.Resampling.LANCZOS))
-                if i == 50:
+                if i == frame_count // 2:
                     canvas.save(args.output/'preview.png')
-                for _ in range(40 if i == 99 else 1):
+                for _ in range(40 if i == frame_count - 1 else 1):
                     writer.append_data(np.asarray(canvas))
     finally:
         for renderer in renderers: renderer.close()
@@ -110,7 +112,8 @@ def main():
         for i in range(image.n_frames):
             image.seek(i); durations.append(image.info['duration'])
     receipt = {'role': 'qualitative_replay_holding_each_task_at_first_success_or_time_limit',
-        'tasks': ['reach', 'reach-wall'], 'seed': 0, 'new_model_inference': False,
+        'tasks': ['reach', 'reach-wall'], 'seeds': [d['seed'] for d in records], 'new_model_inference': False,
+        'episode_limits': limits,
         'sources': [{'input_sha256': sha(p), 'unique_states_checked': endpoint + 1,
                      'display_endpoint_frame': endpoint, 'state_max_abs_error': e}
                     for p, endpoint, e in zip(args.inputs, endpoints, errors)],
@@ -118,7 +121,7 @@ def main():
         'camera': {'lookat': list(camera.lookat), 'distance': camera.distance,
                    'azimuth': camera.azimuth, 'elevation': camera.elevation},
         'display_changes': 'Shared camera and green target site; physics and actions restored unchanged',
-        'recorded_motion_seconds_per_task': 1.2375, 'final_hold_seconds': .5,
+        'recorded_motion_seconds': [len(d['capture']['actions']) * .0125 for d in records], 'final_hold_seconds': .5,
         'displayed_motion_seconds': [endpoint * .0125 for endpoint in endpoints],
         'success_flags': [bool(any(d['capture']['successes'])) for d in records],
         'gif_fps': 50, 'gif_dither': 'none',

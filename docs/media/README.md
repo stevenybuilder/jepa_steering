@@ -4,14 +4,17 @@
 
 The README shows frozen, unsteered JEPA-WM replanning on Reach and Reach-Wall.
 Both runs use seed 0, selected before capture. Each panel holds at its first
-successful state or the episode limit. Reach succeeds after 0.50 seconds;
-Reach-Wall reaches the 1.2375-second limit without success. The saved complete
-episodes remain available below. These qualitative recordings are separate from
-the benchmark evaluation.
+successful state. Reach succeeds after 0.50 seconds; Reach-Wall succeeds after
+1.80 seconds. Reach uses the native 100-step limit. Reach-Wall uses a separate
+400-step recording, extending the episode limit while keeping the same checkpoint,
+seed, CEM settings, and precision. The original 100-step Reach-Wall recording
+timed out and remains available below. One longer attempt was recorded, with all
+399 executed actions and 400 states retained. These qualitative recordings are
+separate from the benchmark evaluation.
 
 The 1080p video renders the recorded motion at 80 frames per second. The GIF uses
 50 frames per second with uniform 20 ms timing and a shared palette without
-dithering. Holding Reach at its first success removes the subsequent controller
+dithering. Holding each task at its first success removes the subsequent controller
 oscillation from the showcase. Every displayed state is checked against the
 saved MuJoCo observation, with zero discrepancy in both tasks. Targets, actions,
 and physical states are unchanged; the existing goal marker is coloured green.
@@ -20,9 +23,11 @@ The shared camera keeps the wall and goal visible. Labels sit outside the
 workspace. The presentation follows the clear task views in
 [Sholto Douglas's robotics videos](https://sholtodouglas.github.io/).
 
-[Capture protocol](../../paper/data/jepa_media_capture_protocol.json) ·
+[Original capture protocol](../../paper/data/jepa_media_capture_protocol.json) ·
+[Longer Reach-Wall protocol](../../paper/data/jepa_media_extended_protocol.json) ·
 [Reach actions and states](../../paper/data/jepa_episode_reach.json) ·
-[Reach-Wall actions and states](../../paper/data/jepa_episode_reach_wall.json)
+[Longer Reach-Wall actions and states](../../paper/data/jepa_episode_reach_wall_extended.json) ·
+[Original Reach-Wall actions and states](../../paper/data/jepa_episode_reach_wall.json)
 
 ## Reproduce the README replay
 
@@ -31,7 +36,7 @@ Pillow, imageio, imageio-ffmpeg, packaging, and FFmpeg. From the repository root
 
 ```bash
 python scripts/render_jepa_comparison.py \
-  --inputs paper/data/jepa_episode_reach.json paper/data/jepa_episode_reach_wall.json \
+  --inputs paper/data/jepa_episode_reach.json paper/data/jepa_episode_reach_wall_extended.json \
   --output /tmp/jepa-comparison-render
 ```
 

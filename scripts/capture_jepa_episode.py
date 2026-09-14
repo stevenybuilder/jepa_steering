@@ -3,7 +3,7 @@
 Run on a qualified worker with the existing checkpoint and environment. This
 does not rent hardware or add a result to the scientific evaluation panel.
 The task and seed are explicit; a failed episode is retained as faithfully as
-a successful one. Render the captured physics with render_jepa_episode.py.
+a successful one. Render paired captures with render_jepa_comparison.py.
 """
 import argparse
 import contextlib
@@ -74,11 +74,20 @@ def validate_capture(record, expected_steps=None):
         expected_steps = record.get("expected_steps", 100)
     if len(record['actions']) != expected_steps or len(record['frames']) != expected_steps + 1:
         raise ValueError('Incomplete episode: retain diagnostics, do not publish a full-episode clip')
+    for key in ('rewards', 'successes'):
+        if len(record[key]) != expected_steps or not np.isfinite(record[key]).all():
+            raise ValueError('Invalid captured ' + key)
+    if not np.isin(record['successes'], [0., 1.]).all():
+        raise ValueError('Captured successes must be binary')
     times = np.array([f['physics']['time'] for f in record['frames']])
     if not np.allclose(np.diff(times), record['dt'], atol=1e-10, rtol=0):
         raise ValueError('Captured frame timing does not match simulator steps')
     if not np.isfinite(np.asarray(record['actions'])).all():
         raise ValueError('Nonfinite captured action')
+    for frame in record['frames']:
+        if not np.isfinite(frame['state']).all() or any(
+                not np.isfinite(value).all() for value in frame['physics'].values()):
+            raise ValueError('Nonfinite captured state')
 
 
 def main():
@@ -87,8 +96,12 @@ def main():
     ap.add_argument('--checkpoint', type=Path, required=True)
     ap.add_argument('--task', choices=['reach', 'reach-wall'], required=True)
     ap.add_argument('--seed', type=int, required=True)
+    ap.add_argument('--max-episode-steps', type=int,
+                    help='Qualitative recording only: override the native limit (100–400 steps)')
     ap.add_argument('--output', type=Path, required=True)
     args = ap.parse_args()
+    if args.max_episode_steps is not None and not 100 <= args.max_episode_steps <= 400:
+        ap.error('Qualitative episode limit must be between 100 and 400 steps')
     if args.output.exists():
         raise ValueError('Use a new output directory')
     import torch
@@ -108,6 +121,9 @@ def main():
     planning = prepare(args.vendor, args.task)
     cfg = OmegaConf.create(copy.deepcopy(planning['config']))
     cfg.local_seed = args.seed
+    native_limit = int(cfg.task_specification.max_episode_steps)
+    if args.max_episode_steps is not None:
+        cfg.task_specification.max_episode_steps = args.max_episode_steps
     agent = GC_Agent(cfg, backend.model, preprocessor=backend.preprocessor)
     env = make_env(cfg)
     record = {}
@@ -119,6 +135,10 @@ def main():
         receipt = {'role': 'new_qualitative_model_run_not_archived_evaluation_replay',
                    'task': args.task, 'seed': args.seed, 'arm': 'native',
                    'selection': 'Task and seed chosen before capture; retain entire episode regardless of outcome',
+                   'native_episode_limit': native_limit,
+                   'qualitative_episode_limit': int(cfg.task_specification.max_episode_steps),
+                   'configuration_changes': ([] if args.max_episode_steps is None else
+                       ['task_specification.max_episode_steps=' + str(args.max_episode_steps)]),
                    'checkpoint_sha256': CHECKPOINTS['metaworld'], 'planning': planning,
                    'precision': 'strict FP32, TF32 off', 'result': result, 'capture': record,
                    'generator_sha256': hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),

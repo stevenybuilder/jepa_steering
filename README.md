@@ -238,10 +238,11 @@ executed. All six layers and matched random controls are retained.
 
 ![Actual frozen JEPA-WM episodes at simulation speed: Reach and Reach-Wall, unsteered, seed 0. The target is highlighted in green.](docs/media/jepa_tasks_side_by_side.gif)
 
-**Frozen JEPA-WM, with replanning throughout each episode.** Reach reaches the
-green target; Reach-Wall does not reach it within the episode limit. Both use
-seed 0, fixed before capture. Each panel plays at simulation speed and holds at
-first success or the time limit. A shared camera keeps the wall and target visible. [1080p video](docs/media/jepa_tasks_side_by_side_hd.mp4) ·
+**Frozen JEPA-WM reaches both targets through repeated planning.** Reach succeeds
+after 0.50 seconds and Reach-Wall after 1.80 seconds of simulated motion. These
+seed-0 qualitative recordings use 100- and 400-step limits, respectively, and
+are separate from the benchmark. Each panel plays at simulation speed and holds
+at first success. The shared camera keeps the wall and target visible. [1080p video](docs/media/jepa_tasks_side_by_side_hd.mp4) ·
 [Actions, state verification, and reproduction](docs/media/README.md).
 
 ## Benchmark context

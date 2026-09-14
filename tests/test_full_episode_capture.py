@@ -62,17 +62,33 @@ def test_initial_snapshot_does_not_advance_observation_history():
     np.testing.assert_array_equal(env._prev_obs,np.zeros(18))
 
 
-def test_capture_accounts_for_native_initial_elapsed_step():
+@pytest.mark.parametrize('corruption', ['short_success', 'nan_success', 'nonbinary_success', 'nan_state'])
+def test_capture_rejects_invalid_outcomes_and_states(corruption):
+    raw = Env(); record = {}
+    env = SimpleNamespace(proprio_env=SimpleNamespace(unwrapped=raw),
+                          max_steps=lambda: 1, elapsed_steps=lambda: 0)
+    class Evaluator:
+        def unroll_agent(self, env): env.proprio_env.unwrapped.step(np.zeros(4))
+    with capture.capture_unroll(Evaluator, record): Evaluator().unroll_agent(env)
+    if corruption == 'short_success': record['successes'].clear()
+    elif corruption == 'nan_success': record['successes'][0] = float('nan')
+    elif corruption == 'nonbinary_success': record['successes'][0] = 0.5
+    else: record['frames'][0]['state'][0] = float('nan')
+    with pytest.raises(ValueError): capture.validate_capture(record)
+
+
+@pytest.mark.parametrize("limit", [100, 400])
+def test_capture_accounts_for_native_initial_elapsed_step(limit):
     raw = Env()
     env = SimpleNamespace(proprio_env=SimpleNamespace(unwrapped=raw),
-                          max_steps=lambda: 100, elapsed_steps=lambda: 1)
+                          max_steps=lambda: limit, elapsed_steps=lambda: 1)
     record = {}
     class Evaluator:
         def unroll_agent(self, env):
-            for _ in range(99): env.proprio_env.unwrapped.step(np.zeros(4))
+            for _ in range(limit - 1): env.proprio_env.unwrapped.step(np.zeros(4))
     with capture.capture_unroll(Evaluator, record):
         Evaluator().unroll_agent(env)
-    assert record['expected_steps'] == 99
+    assert record['expected_steps'] == limit - 1
     capture.validate_capture(record)
     record['actions'].pop()
     with pytest.raises(ValueError, match='Incomplete'):
