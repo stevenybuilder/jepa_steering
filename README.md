@@ -75,7 +75,10 @@ state/action records**, **2.79 GB of Push-T**, **2.39 GB of navigation datasets*
 and **2.11 GB across 16 Franka recordings and companions** for DROID evaluation.
 External MetaWorld videos are additional to this input subtotal.
 The final protected panel contains **3,072 arm evaluations**;
-the mechanism studies produced **12.8 GB of compressed output archives**.
+the earlier mechanism studies produced **12.8 GB of compressed output archives**.
+The 200-state history replication adds **14,000 batched six-step forecasts**:
+**4.2 million candidate forecasts**, with 120,000 candidate sequences evaluated
+under 35 conditions.
 [Dataset sizes, model counts, and execution details](docs/COMPUTE.md).
 
 ### Intervention families
@@ -201,32 +204,33 @@ rescues 21 failures and loses 21 successes, leaving both it and unsteered at 52/
 Push-T and DROID contribute development results; DROID uses recorded-action agreement.
 [Completed experiments and remaining evidence gaps](docs/ANALYSIS_COMPLETION.md).
 
-## Supporting check: does an internal patch reproduce an input change?
+## An action patch can match now and diverge later
 
-We change one input action and use the resulting JEPA-WM forecast as a reference.
-Then we try to reproduce it by replacing the action-derived conditioning inside
-its predictor. The action appears at H3 and again as history at H4.
+To check what an activation patch represents, we change one input action and
+use the resulting JEPA-WM forecast as a reference. The action enters the
+predictor at H3 and appears again as history at H4.
 
-Replacing the conditioning at all six blocks **only at H3** matches the immediate
-forecast, but agreement breaks at H4. Replacing it at **both appearances** matches
-the changed-input forecast through H6. This exact match checks that the internal
-replacement reproduces the same computation.
+Replacing its conditioning **only at H3** matches the immediate prediction,
+then diverges when the original action returns at H4. Replacing it at **both
+appearances** reproduces the changed-input forecast through H6.
 
-![Forecast agreement after replacing action conditioning once or at both appearances, at all blocks and at B1.](docs/figures/lcfm_context_history.png)
+![An action patch matches at H3, diverges when the action returns as history, and changes the H6 candidate choice in 42% of Reach and 59% of Reach-Wall states.](docs/figures/lcfm_context_lifetime.png)
 
-This check uses **16 starting contexts: eight per task**, each with two candidate
-banks. The one-time replacement also chooses a different candidate from the
-changed-input reference in **17 of the 32 banks**. That counts changed selections;
-we did not test whether those plans improve task success. The banks within a
-context are paired measurements, not independent episodes.
+The fresh replication uses **200 independent starting states**, 100 per task.
+The one-time patch changes the selected candidate in **42/100 Reach states**
+and **59/100 Reach-Wall states**, compared with changing the action at the input.
+Those choices have **1.81–2.56% higher reference cost on average** across
+tasks and candidate banks, including unchanged choices.
+[Selection and cost intervals for both banks](docs/figures/lcfm_replication_choices.png).
 
-![Candidate-ranking and selection agreement with the changed-input reference, across all six blocks and individual layers.](docs/figures/lcfm_history_ranking.png)
-
-The practical lesson is to check the later forecast when using an activation
-patch to represent an input change. A match at the edited step can disappear when
-the context advances. These results concern the model's two-frame context.
-[Reconstruction and all layer comparisons](docs/ACTION_COUNTERFACTUAL.md) ·
-[Candidate costs, rankings, and individual contexts](docs/LCFM_HISTORY_RANKING.md).
+For interventions in a forecasting model, matching the next prediction can
+miss an action’s later influence on planning. This test follows that influence
+through the model’s two-frame context; the selected plans are scored but not
+executed. All six layers and matched random controls are retained.
+[Complete replication, layer heatmap, and uncertainty](docs/LCFM_REPLICATION.md) ·
+[Earlier sixteen-state study](docs/ACTION_COUNTERFACTUAL.md) ·
+[Focused LCFM paper](paper/lcfm/main.pdf) ·
+[LeWM follow-up assessment](docs/LEWM_FOLLOWUP_ASSESSMENT.md).
 
 ## JEPA-WM planning in the simulator
 

@@ -1,7 +1,11 @@
 # Choosing the next LCFM experiment
 
-Discussion draft, September 13, 2026. This is a design recommendation, not a
-registered experiment or authorization to run a larger GPU study.
+Historical design discussion, September 13, 2026. The 200-scenario replication
+below was subsequently authorized and frozen in a separate
+[execution protocol](../paper/data/lcfm_replication_protocol.json). The user later
+expanded the compute budget while retaining the same scientific scope. The
+original design and budget discussion below remain unchanged as provenance.
+[Replication results](LCFM_REPLICATION.md).
 
 ## What the completed experiment tests
 

@@ -107,3 +107,35 @@ a measured kernel optimization. We do not report linear scaling, optimal hardwar
 selection, or measured end-to-end speedup. Campaign launchers retain historical
 paths and guards; they are not portable one-command rentals and require new budget
 and host validation before reuse.
+
+## Fresh action-history replication
+
+The [200-state replication](LCFM_REPLICATION.md) uses the **39,687,136-parameter
+MetaWorld model**. It evaluates **120,000 candidate sequences** under 35
+conditions, giving **4.2 million candidate forecasts** in **14,000 batched
+six-step forecasts**. The independent sample is 200 starting states; repeating
+candidate sequences across conditions does not create additional states.
+
+Each complete state stays on one GPU, including all conditions and both candidate
+banks. The final queue ran on **eight RTX 5090s and two RTX 4090s**. Full excluded
+receiving cases, each containing 70 forecasts, take 186–190 seconds on the 5090s
+and 223–230 seconds on the 4090s, with **18.38 GB peak allocated device memory**.
+These are whole-case timings, including encoding and checks.
+
+Whole-case boundary drains allow the remaining queues to be balanced using
+measured throughput. Completed cases keep their original source and runtime
+bindings; interrupted attempts remain preserved and retry with the same inputs.
+This changes work placement without changing model arithmetic or the scientific
+registry. Independent CPU audits and generation-pinned cloud readbacks run while
+other GPU cases continue. A slow host's backup route is handled separately so it
+does not stall collection from the rest of the fleet.
+
+The final statistical analysis requires every registered case, checks each
+original result-file hash, and retains all six layers and matched random
+controls. [Frozen execution source](../src/offline_study/lcfm_replication.py) ·
+[Boundary drain controller](../scripts/vast/drain_lcfm_case.py) ·
+[Case audits and aggregation](../analysis/mechanism/lcfm_replication_summary.py).
+
+All 200 scientific states and their derived records are preserved with verified
+cloud readback. The campaign is complete; its GPU instances and volumes have
+been released. The proposed LeWM pilot has not started.

@@ -8,7 +8,7 @@
 \item {\bf Claims}
     \item[] Question: Do the main claims made in the abstract and introduction accurately reflect the paper's contributions and scope?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The abstract and introduction distinguish counterfactual reconstruction, forecast error, plan selection, and physical outcomes. They explicitly limit the context experiment to a two-frame predictor and do not claim context-length scaling.
+    \item[] Justification: The abstract and introduction state the local-agreement and later-selection findings and limit the experiment to a two-frame predictor. They define the reference as a computation of the same model and do not claim physical improvement or context-length scaling.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the abstract and introduction do not include the claims made in the paper.
@@ -20,7 +20,7 @@
 \item {\bf Limitations}
     \item[] Question: Does the paper discuss the limitations of the work performed by the authors?
     \item[] Answer: \answerYes{}
-    \item[] Justification: Section 5 discusses the context window, task and checkpoint scope, statistical units, missing protected candidate costs, and the absence of training-seed replication.
+    \item[] Justification: Section~\ref{sec:scope} discusses the context window, task and checkpoint scope, candidate cost gaps, and the absence of physical-outcome or context-length comparisons.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper has no limitation while the answer \answerNo{} means that the paper has limitations, but those are not discussed in the paper. 
@@ -35,8 +35,8 @@
 
 \item {\bf Theory assumptions and proofs}
     \item[] Question: For each theoretical result, does the paper provide the full set of assumptions and a complete (and correct) proof?
-    \item[] Answer: \answerYes{}
-    \item[] Justification: Appendix~\ref{sec:decision} states the fixed-bank and unique-winner assumptions and proves the sufficient score-margin certificate. The goal-distance translation identity is derived there as well.
+    \item[] Answer: \answerNA{}
+    \item[] Justification: The paper reports an empirical intervention experiment and makes no formal theorem claim. Exact persistent-patch agreement is a computational consistency control.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include theoretical results. 
@@ -50,7 +50,7 @@
     \item {\bf Experimental result reproducibility}
     \item[] Question: Does the paper fully disclose all the information needed to reproduce the main experimental results of the paper to the extent that it affects the main claims and/or conclusions of the paper (regardless of whether the code and data are provided or not)?
     \item[] Answer: \answerNo{}
-    \item[] Justification: The paper specifies the interventions, populations, and analysis, but exact end-to-end replay also depends on pinned runtime, checkpoint, and input archives not included in this anonymous PDF. Appendix~\ref{sec:design} and the reproducibility appendix describe this boundary.
+    \item[] Justification: Section~\ref{sec:experiment} specifies the interventions, population, and analysis. Exact replay also depends on pinned runtime and input archives not included in this anonymous PDF; Appendix~\ref{app:repro} documents the evidence identities and boundary.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -87,7 +87,7 @@
 \item {\bf Experimental setting/details}
     \item[] Question: Does the paper specify all the training and test details (e.g., data splits, hyperparameters, how they were chosen, type of optimizer) necessary to understand the results?
     \item[] Answer: \answerYes{}
-    \item[] Justification: Section 3 and Appendix~\ref{sec:design} describe the frozen model, intervention sites, fitted operators, planning settings, distinct fit/development/protected populations, and task-specific evaluation endpoints.
+    \item[] Justification: Section~\ref{sec:experiment} specifies the frozen checkpoint, two-frame context, six-step horizon, donor rule, 35 conditions, both banks, and state-level statistical unit. There is no fitting in this experiment.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -98,7 +98,7 @@
 \item {\bf Experiment statistical significance}
     \item[] Question: Does the paper report error bars suitably and correctly defined or other appropriate information about the statistical significance of the experiments?
     \item[] Answer: \answerYes{}
-    \item[] Justification: Section 3, the experiment appendices, and figure captions specify context or trajectory resampling, paired comparisons, bootstrap draws, and simultaneous correction. The new history curves retain marginal intervals, explicitly distinguished from simultaneous layer contrasts.
+    \item[] Justification: Section~\ref{sec:experiment} and the captions specify 97.5\% Wilson intervals corrected across two primary task rates and marginal 95\% secondary intervals from 20,000 paired state-bootstrap draws. No exploratory sample is pooled into the replication.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -115,7 +115,7 @@
 \item {\bf Experiments compute resources}
     \item[] Question: For each experiment, does the paper provide sufficient information on the computer resources (type of compute workers, memory, time of execution) needed to reproduce the experiments?
     \item[] Answer: \answerNo{}
-    \item[] Justification: The paper reports workload sizes and numerical execution conditions but does not yet provide a complete per-experiment accounting of GPU types, memory, elapsed time, and total failed or preliminary compute.
+    \item[] Justification: The appendix gives the fresh replication workload, GPU types, representative runtime, peak memory, engineering runs, and interrupted partials. The complete compute inventory for the earlier exploratory study is not reconstructed in this draft.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not include experiments.
@@ -139,7 +139,7 @@
 \item {\bf Broader impacts}
     \item[] Question: Does the paper discuss both potential positive societal impacts and negative societal impacts of the work performed?
     \item[] Answer: \answerYes{}
-    \item[] Justification: The reproducibility appendix discusses the potential value of more informative world-model evaluation and the risk of treating improved forecasts as evidence of safe or effective physical control.
+    \item[] Justification: The reproducibility appendix discusses the value of checking intervention consistency and the risk of confusing model-reference agreement with physical safety.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that there is no societal impact of the work performed.
@@ -165,7 +165,7 @@
 \item {\bf Licenses for existing assets}
     \item[] Question: Are the creators or original owners of assets (e.g., code, data, models), used in the paper, properly credited and are the license and terms of use explicitly mentioned and properly respected?
     \item[] Answer: \answerNo{}
-    \item[] Justification: The principal world-model and steering sources are cited, but the manuscript does not yet enumerate the license and terms of every third-party code, model, and dataset asset. Raw assets are not redistributed in this PDF.
+    \item[] Justification: The principal world-model and activation-patching sources are cited, but the manuscript does not yet enumerate the license and terms of every third-party asset. Raw assets are not redistributed in this PDF.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not use existing assets.
@@ -193,7 +193,7 @@
 \item {\bf Crowdsourcing and research with human subjects}
     \item[] Question: For crowdsourcing experiments and research with human subjects, does the paper include the full text of instructions given to participants and screenshots, if applicable, as well as details about compensation (if any)? 
     \item[] Answer: \answerNA{}
-    \item[] Justification: No new crowdsourcing or human-subject experiment was conducted. The physical evaluations use simulators; DROID contributes only an existing recorded-action endpoint.
+    \item[] Justification: No new crowdsourcing or human-subject experiment was conducted. This paper uses simulator starting states and model-generated forecasts.
     \item[] Guidelines:
     \begin{itemize}
         \item The answer \answerNA{} means that the paper does not involve crowdsourcing nor research with human subjects.

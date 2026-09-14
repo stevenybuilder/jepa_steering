@@ -93,3 +93,15 @@ development prefixes, not full-task success or protected confirmation. The
 These are separate, fixed-input development measurements—not retrospective traces
 of the protected outcomes. They do not establish the cause of the net efficacy
 result; forecast-to-decision misalignment remains a candidate explanation.
+
+## Fresh action-history replication
+
+A separate [200-state replication](LCFM_REPLICATION.md) estimates how often a
+one-time action-conditioning patch changes the selected H6 candidate relative
+to changing the action at the model input. It uses 100 independent states per
+task, all 35 conditions, and two paired candidate banks. The primary rates use
+task-corrected Wilson intervals; reference-cost gaps report the size of changed
+selections. All layer and random controls remain in the public tables.
+
+The earlier sixteen-state study is retained separately. This replication adds
+14,000 six-step forecasts and no new physical-outcome evaluation.

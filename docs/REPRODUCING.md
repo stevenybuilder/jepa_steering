@@ -85,6 +85,29 @@ the README. Build with `tectonic main.tex` from that directory after regeneratin
 figures. The author line is anonymous; this is a draft, not a claim of workshop
 acceptance or a completed camera-ready submission.
 
+## LCFM action-history replication
+
+The [replication report](LCFM_REPLICATION.md) describes the separate 200-state
+protocol and links its public per-state selection and reconstruction tables.
+The two candidate banks share starting states; aggregation uses 100 independent
+states per task. The older sixteen-state study remains separate.
+
+```bash
+python scripts/check_lcfm_replication.py
+python scripts/build_lcfm_replication_figures.py
+python scripts/write_lcfm_replication_report.py
+python scripts/write_lcfm_replication_numbers.py
+python scripts/check_lcfm_manuscript.py
+tectonic paper/lcfm/main.tex
+```
+
+The checker recounts all public secondary means and checks primary Wilson
+intervals against SciPy. The figure and manuscript-value builders require the
+complete, source-bound summary. Raw archives and per-case extraction require
+authorized cloud access; their generation and download-SHA proofs are retained
+in the public summary. The statistical aggregator rejects missing or repeated
+states and requires all 200 registered cases.
+
 ## Repository curation
 
 Scientific source, tests, configurations, aggregate evidence and figure builders
