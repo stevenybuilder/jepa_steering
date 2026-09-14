@@ -1,7 +1,8 @@
 # Experiment code
 
-The package contains the frozen-model interfaces, activation interventions, and
-experiments behind the reported results. No module starts a GPU rental.
+The `offline_study` package contains the frozen-model interfaces, activation
+interventions, planning contracts, and experiment runners behind every reported
+result. No module starts a GPU rental.
 
 | Directory | Contents |
 |---|---|
