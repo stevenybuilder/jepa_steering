@@ -20,7 +20,7 @@ def check(root=ROOT):
         path = Path(name)
         if name.startswith('paper/') and not name.startswith('paper/data/'):
             errors.append(f'Manuscript directory is public: {name}')
-        if path.suffix.lower() in ('.tex', '.bib', '.sty', '.log', '.out', '.err'):
+        if path.suffix.lower() in ('.tex', '.bib', '.sty', '.log', '.out', '.err', '.pyc') or '__pycache__' in path.parts:
             errors.append(f'Private draft or log is public: {name}')
         if path.suffix.lower() == '.pdf' and not name.startswith('docs/figures/'):
             errors.append(f'PDF outside the figure assets: {name}')
