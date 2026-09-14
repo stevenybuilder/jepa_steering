@@ -6,7 +6,7 @@ from matplotlib.patches import Rectangle
 import numpy as np
 import pandas as pd
 
-from build_publication_figures import ROOT, INK, MUTED, TEAL, AMBER, clean, save, sha, style
+from build_publication_figures import ROOT, INK, MUTED, TEAL, AMBER, save, sha
 
 
 def load():
@@ -40,197 +40,251 @@ def cell(table, task, bank, arm, metric, horizon=None):
     return row
 
 
+TASKS = [('reach', 'Reach'), ('reach-wall', 'Reach-Wall')]
+
+
+def academic_style():
+    """Size figures for a full-width paper column, with ordinary panel labels."""
+    plt.rcParams.update({'font.family': 'DejaVu Sans', 'font.size': 8.5,
+        'axes.labelsize': 8.5, 'axes.titlesize': 9, 'xtick.labelsize': 8,
+        'ytick.labelsize': 8, 'legend.fontsize': 8, 'pdf.fonttype': 42,
+        'svg.fonttype': 'none', 'svg.hashsalt': 'jepa-lcfm-figures-v3',
+        'axes.labelcolor': INK, 'text.color': INK, 'axes.titlecolor': INK})
+
+
+def axes_style(ax, grid='y'):
+    ax.spines[['top', 'right']].set_visible(False)
+    for side in ('left', 'bottom'):
+        ax.spines[side].set_color('#8b9195')
+        ax.spines[side].set_linewidth(.6)
+    ax.tick_params(length=3, width=.6, pad=3, colors=INK)
+    ax.grid(axis=grid, color='#e5e7e8', lw=.5)
+    ax.set_axisbelow(True)
+
+
+def decimal(value):
+    """Fixed decimals; preserve the sign of small nonzero values without -0.000."""
+    if not np.isfinite(value):
+        raise ValueError('Nonfinite heatmap value')
+    places = 4 if 0 < abs(value) < .001 else 3
+    while value != 0 and float(f'{value:.{places}f}') == 0:
+        places += 1
+        if places > 12:
+            raise ValueError('Value requires an explicit smaller-unit label')
+    return f'{value:.{places}f}'.replace('-', '−')
+
+
+def panel(ax, label, title):
+    ax.set_title(f'{label}  {title}', loc='left', weight='bold', pad=10)
+
+
 def render():
     report, table, provenance = load()
-    style()
+    academic_style()
     render_lead(report, table, provenance)
-    fig, axes = plt.subplots(1, 2, figsize=(8.7, 4.5))
-    fig.subplots_adjust(left=.10, right=.96, bottom=.27, top=.70, wspace=.40)
-    fig.text(.045, .94, 'What a one-time action patch changes at the planning horizon',
-             fontsize=15, weight='bold', color=INK)
-    fig.text(.045, .87, 'Reference: change the input action and predict its consequences.', fontsize=11, color=MUTED)
-    tasks = [('reach', 'Reach'), ('reach-wall', 'Reach-Wall')]
+    render_choices(report, table, provenance)
+    render_history(table, provenance)
+    render_layers(table, provenance)
+
+
+def render_choices(report, table, provenance):
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 3.1))
+    fig.subplots_adjust(left=.115, right=.965, bottom=.30, top=.73, wspace=.65)
     primary = {r['task']: r for r in report['primary']}
-    for i, (task, label) in enumerate(tasks):
+    for i, (task, _) in enumerate(TASKS):
         p = primary[task]
         if p['n'] != 100:
             raise ValueError('Primary sample differs')
-        interval = np.array(p['family_95_interval'])*100
-        value = p['fraction']*100
-        axes[0].errorbar(i, value, yerr=[[value-interval[0]], [interval[1]-value]],
-                         fmt='o', color=AMBER, ms=7, capsize=4, lw=1.7)
-        axes[0].annotate(f"{p['changed']}/100", (i, interval[1]), xytext=(0, 9),
-                         textcoords='offset points', ha='center', color=INK, fontsize=10, weight='bold')
-        for bank, offset, marker, color in [('original', -.09, 'o', AMBER), ('fresh', .09, 's', TEAL)]:
+        value = p['fraction'] * 100
+        low, high = np.array(p['family_95_interval']) * 100
+        axes[0].errorbar(value, 1-i, xerr=[[value-low], [high-value]],
+                        fmt='o', color=AMBER, ms=5, capsize=3, lw=1.2)
+        axes[0].annotate(f"{p['changed']}/{p['n']}", (value, 1-i),
+                         xytext=(0, 9), textcoords='offset points', ha='center', fontsize=8)
+        for bank, offset, marker, color in [('original', .13, 'o', AMBER),
+                                           ('fresh', -.13, 's', TEAL)]:
             row = cell(table, task, bank, 'all_blocks_h3_donor', 'excess_reference_cost_percent')
             value = row['mean']
-            axes[1].errorbar(i+offset, value,
-                yerr=[[value-row.marginal_95_low], [row.marginal_95_high-value]],
-                fmt=marker, color=color, ms=6, capsize=4, lw=1.7)
+            axes[1].errorbar(value, 1-i+offset,
+                xerr=[[value-row.marginal_95_low], [row.marginal_95_high-value]],
+                fmt=marker, color=color, ms=4.5, capsize=3, lw=1.2)
             control = cell(table, task, bank, 'all_blocks_persistent_donor', 'excess_reference_cost_percent')
             if control['mean'] != 0:
                 raise ValueError('Persistent all-block control must match the reference')
     for ax in axes:
-        ax.set_xticks([0, 1], ['Reach', 'Reach-Wall'])
-        ax.set_xlim(-.45, 1.45)
-        clean(ax)
-    axes[0].set_title('How often the choice changes', loc='left', fontsize=11, weight='bold', pad=14)
-    axes[0].set_ylabel('Starting states (%)')
-    axes[0].set_ylim(0, 110); axes[0].set_yticks([0, 25, 50, 75, 100])
-    axes[1].set_title('How much that choice costs', loc='left', fontsize=11, weight='bold', pad=14)
-    axes[1].set_ylabel('Mean extra cost under reference (%)')
-    axes[1].set_ylim(bottom=0)
-    axes[1].axhline(0, color=INK, ls=':', lw=1)
-    axes[1].legend([Line2D([0], [0], marker=m, color=c, ls='none') for m, c in [('o', AMBER), ('s', TEAL)]],
-                   ['Original bank', 'Second bank'], frameon=False, fontsize=9, loc='best')
-    fig.text(.045, .13, '200 independent starting states · 100 per task · patch at all six blocks, at H3 only',
-             fontsize=10, color=INK)
-    fig.text(.045, .075, 'Left: 97.5% Wilson intervals (two-task correction). Right: 95% bootstrap intervals.',
-             fontsize=9, color=MUTED)
-    fig.text(.045, .025, 'Repeating the patch at H4 matches the reference exactly. These are model costs, not robot outcomes.',
-             fontsize=9, color=MUTED)
+        ax.set_yticks([1, 0], ['Reach', 'Reach-Wall'])
+        ax.set_ylim(-.5, 1.55)
+        axes_style(ax, 'x')
+    panel(axes[0], '(a)', 'H6 selection change')
+    axes[0].set(xlim=(0, 100), xticks=[0, 25, 50, 75, 100],
+                xlabel='States with a different choice (%)')
+    panel(axes[1], '(b)', 'H6 excess reference cost')
+    axes[1].set_xlim(left=0)
+    axes[1].set_xlabel('Mean excess cost (%)')
+    axes[1].legend([Line2D([0], [0], marker=m, color=c, ls='none')
+                    for m, c in [('o', AMBER), ('s', TEAL)]],
+                   ['Original bank', 'Second bank'], loc='lower right',
+                   frameon=False, bbox_to_anchor=(1, 1.34), ncol=2, columnspacing=.9)
+    fig.text(.115, .09, 'H3-only patch at all six blocks · 100 states per task', fontsize=8)
+    fig.text(.115, .015, '(a) Two-task corrected Wilson intervals; (b) marginal 95% bootstrap intervals.',
+             fontsize=7.4, color=MUTED)
     save(fig, 'lcfm_replication_choices', provenance)
 
-    fig, axes = plt.subplots(1, 2, figsize=(8.7, 4.5), sharey=True)
-    fig.subplots_adjust(left=.10, right=.97, bottom=.26, top=.72, wspace=.20)
-    fig.text(.045, .94, 'A patch can match now and diverge one step later',
-             fontsize=16, weight='bold', color=INK)
-    fig.text(.045, .87, 'The same action enters the predictor at H3 and again as history at H4.',
-             fontsize=11, color=MUTED)
-    for ax, (task, label) in zip(axes, tasks):
+
+def render_history(table, provenance):
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.9), sharey=True)
+    fig.subplots_adjust(left=.095, right=.98, bottom=.28, top=.86, wspace=.20)
+    for ax, (task, label) in zip(axes, TASKS):
         for bank, linestyle in [('original', '-'), ('fresh', '--')]:
-            for arm, color in [('all_blocks_h3_donor', AMBER), ('all_blocks_persistent_donor', TEAL)]:
+            for arm, color, marker in [('all_blocks_h3_donor', AMBER, 'o'),
+                                        ('all_blocks_persistent_donor', TEAL, 's')]:
                 rows = [cell(table, task, bank, arm, 'donor_reconstruction', h) for h in (3, 4, 6)]
-                if rows[0]['mean'] != 1 or (arm == 'all_blocks_persistent_donor' and any(r['mean'] != 1 for r in rows)):
+                if rows[0]['mean'] != 1 or (arm == 'all_blocks_persistent_donor'
+                                          and any(r['mean'] != 1 for r in rows)):
                     raise ValueError('Expected all-block computation parity did not hold')
-                ax.plot([3, 4, 6], [r['mean'] for r in rows], color=color, ls=linestyle, lw=1.8)
+                ax.plot([3, 4, 6], [r['mean'] for r in rows], color=color,
+                        ls=linestyle, marker=marker, ms=3.5, lw=1.3)
                 ax.fill_between([3, 4, 6], [r.marginal_95_low for r in rows],
-                                [r.marginal_95_high for r in rows], color=color, alpha=.12)
-        ax.set_title(label, loc='left', fontsize=12, weight='bold', pad=14)
-        ax.set_xticks([3, 4, 6], ['H3', 'H4', 'H6'])
-        ax.set_xlabel('Imagined step')
-        ax.set_ylim(0, 1.07)
-        ax.set_yticks([0, .25, .5, .75, 1])
-        clean(ax)
+                                [r.marginal_95_high for r in rows], color=color, alpha=.13, lw=0)
+        panel(ax, '(a)' if task == 'reach' else '(b)', label)
+        ax.set(xticks=[3, 4, 6], xticklabels=['H3', 'H4', 'H6'], xlabel='Forecast endpoint',
+               ylim=(0, 1.08), yticks=[0, .25, .5, .75, 1])
+        axes_style(ax)
     axes[0].set_ylabel('Forecast reconstruction, R')
-    handles = [Line2D([0], [0], color=AMBER, lw=2), Line2D([0], [0], color=TEAL, lw=2),
-               Line2D([0], [0], color=MUTED, lw=1.5), Line2D([0], [0], color=MUTED, lw=1.5, ls='--')]
-    fig.legend(handles, ['Patch at H3', 'Patch at H3 and H4', 'Original bank', 'Second bank'],
-               loc='lower center', bbox_to_anchor=(.51, .075), ncol=4, frameon=False, fontsize=9)
-    fig.text(.045, .025, '100 independent states per task · all six blocks patched · marginal 95% bootstrap intervals',
-             fontsize=9, color=MUTED)
+    handles = [Line2D([0], [0], color=AMBER, marker='o', lw=1.3),
+               Line2D([0], [0], color=TEAL, marker='s', lw=1.3),
+               Line2D([0], [0], color=INK, lw=1.3),
+               Line2D([0], [0], color=INK, lw=1.3, ls='--')]
+    fig.legend(handles, ['H3 only', 'H3 + H4', 'Original bank', 'Second bank'],
+               loc='lower center', bbox_to_anchor=(.54, .065), ncol=4, frameon=False,
+               columnspacing=1.3, handlelength=1.8)
+    fig.text(.095, .015, 'All six blocks · 100 states per task · marginal 95% bootstrap bands',
+             fontsize=7.5, color=MUTED)
     save(fig, 'lcfm_replication_history', provenance)
 
-    # All six layers and every single-layer control family, without layer selection.
-    modes = [('donor_h3', 'Patch once'), ('donor_persistent', 'Patch both times'),
+
+def render_layers(table, provenance):
+    modes = [('donor_h3', 'H3 only'), ('donor_persistent', 'H3 + H4'),
              ('random_range', 'Random: input range'), ('random_off_range', 'Random: orthogonal'),
              ('random_isotropic', 'Random: isotropic')]
-    arrays = []
-    for task, _ in tasks:
-        for bank in ('original', 'fresh'):
-            arrays.append(np.array([[cell(table, task, bank, f'{mode}_B{layer}',
-                'donor_reconstruction', 6)['mean'] for layer in range(6)] for mode, _ in modes]))
+    arrays = [np.array([[cell(table, task, bank, f'{mode}_B{layer}',
+        'donor_reconstruction', 6)['mean'] for layer in range(6)] for mode, _ in modes])
+        for task, _ in TASKS for bank in ('original', 'fresh')]
     limit = max(1., max(float(np.max(np.abs(a))) for a in arrays))
-    fig, axes = plt.subplots(2, 2, figsize=(9.0, 6.8))
-    fig.subplots_adjust(left=.23, right=.86, top=.81, bottom=.14, wspace=.17, hspace=.36)
-    fig.text(.045, .95, 'How much of the changed-action forecast each layer reproduces',
-             fontsize=15, weight='bold', color=INK)
-    fig.text(.045, .90, 'All six blocks and all five single-block intervention families · H6', fontsize=11, color=MUTED)
-    for i, (ax, values) in enumerate(zip(axes.flat, arrays)):
+    fig, axes = plt.subplots(2, 1, figsize=(7.2, 4.35))
+    fig.subplots_adjust(left=.20, right=.98, top=.85, bottom=.27, hspace=.68)
+    for i, ax in enumerate(axes):
+        values = np.concatenate(arrays[2*i:2*i+2], axis=1)
         picture = ax.imshow(values, vmin=-limit, vmax=limit, cmap='RdBu', aspect='auto')
-        ax.set_xticks(range(6), [f'B{j}' for j in range(6)])
-        ax.set_yticks(range(5), [label for _, label in modes] if i % 2 == 0 else [])
-        ax.tick_params(length=0, labelsize=9)
-        ax.set_title(tasks[i//2][1]+' · '+('original bank' if i % 2 == 0 else 'second bank'),
-                     loc='left', fontsize=11, weight='bold', pad=10)
-        for row in range(5):
-            for col in range(6):
-                value = values[row, col]
-                label = (f'{value:.0e}'.replace('e-0', 'e−').replace('-', '−')
-                         if 0 < abs(value) < .005 else f'{value:.2f}')
-                ax.text(col, row, label, ha='center', va='center', fontsize=8.5,
-                        color='white' if abs(values[row, col])/limit > .6 else INK)
-        for spine in ax.spines.values(): spine.set_visible(False)
-    cax = fig.add_axes([.90, .21, .015, .53])
-    fig.colorbar(picture, cax=cax, label='Forecast reconstruction, R')
-    fig.text(.045, .075, 'R = 1: matches the changed-action forecast. R = 0: the unmodified forecast’s error. Negative values retained.',
-             fontsize=9, color=MUTED)
-    fig.text(.045, .025, 'Each cell averages 100 independent states. Both banks use the same states; all intervals are in the source table.',
-             fontsize=9, color=MUTED)
-    save(fig, 'lcfm_replication_layers', provenance)
+        ax.set_xticks(range(12), [f'B{j}' for j in range(6)] * 2)
+        ax.set_yticks(range(5), [label for _, label in modes])
+        ax.tick_params(length=0, labelsize=7.5, pad=4)
+        ax.set_title(f'({chr(97+i)})  {TASKS[i][1]}', loc='left', weight='bold', pad=25)
+        for x, bank in ((.25, 'Original bank'), (.75, 'Second bank')):
+            ax.text(x, 1.035, bank, ha='center', va='bottom', transform=ax.transAxes, fontsize=8)
+        for row, col in np.ndindex(values.shape):
+            ax.text(col, row, decimal(values[row, col]), ha='center', va='center',
+                    fontsize=7.1, color='white' if abs(values[row, col])/limit > .6 else INK)
+        ax.axvline(5.5, color='white', lw=2)
+        ax.axhline(1.5, color='white', lw=1.3)
+        for spine in ax.spines.values():
+            spine.set_visible(False)
+    cax = fig.add_axes([.47, .13, .34, .022])
+    bar = fig.colorbar(picture, cax=cax, orientation='horizontal', ticks=[-1, -.5, 0, .5, 1])
+    bar.ax.tick_params(labelsize=7.5, length=2)
+    fig.text(.20, .141, 'Forecast reconstruction, R', fontsize=8, va='center')
+    fig.text(.20, .044, 'H6 · one block patched · 100 states per task', fontsize=8)
+    fig.text(.20, .008, 'R = 1: exact match; R = 0: unmodified forecast discrepancy.', fontsize=7.5, color=MUTED)
+    save(fig, 'lcfm_replication_layers', dict(provenance, plotted_mean_cells=120,
+        label_format='fixed decimals, >=3 places; extra precision retains small negative signs'))
 
 
 def render_lead(report, table, provenance):
-    """One conceptual panel and two measured panels; no illustrative data."""
-    fig = plt.figure(figsize=(10, 7.6))
-    fig.text(.045, .951, 'A patch can match now and change the later choice.',
-             fontsize=18, weight='bold', color=INK)
-    fig.text(.045, .907, 'Frozen JEPA-WM · 200 independent starting states · two-frame context',
-             fontsize=11, color=MUTED)
-    ax = fig.add_axes([.045, .565, .92, .305])
-    ax.set_xlim(0, 1); ax.set_ylim(0, 1); ax.axis('off')
-    ax.text(0, .99, 'A   The edited action is used again as history', color=INK, fontsize=12, weight='bold')
-    ax.text(.405, .83, 'H3 · new action', ha='center', color=MUTED, fontsize=10)
-    ax.text(.655, .83, 'H4 · same action, older position', ha='center', color=MUTED, fontsize=10)
-    rows = [('Change the input', .63, TEAL, True),
-            ('Patch at H3 only', .37, AMBER, False),
-            ('Patch at H3 and H4', .11, TEAL, True)]
-    def token(x, y, text, color=None):
-        ax.add_patch(Rectangle((x-.037, y-.085), .074, .17,
-                              facecolor=color or '#eef1f2', edgecolor='none'))
-        ax.text(x, y, text, ha='center', va='center', fontsize=12,
-                color='white' if color else INK)
-    for label, y, color, persists in rows:
-        ax.text(0, y, label, va='center', color=INK, fontsize=11)
-        token(.36, y, '$a_2$'); token(.45, y, '$a_3^*$', TEAL)
-        ax.annotate('', (.56, y), (.51, y), arrowprops=dict(arrowstyle='->', color=MUTED, lw=1))
-        token(.61, y, '$a_3^*$' if persists else '$a_3$', color)
-        token(.70, y, '$a_4$')
-        ax.text(.78, y, 'Reference' if label == 'Change the input' else
-                ('Exact match' if persists else 'Original action returns'),
-                va='center', fontsize=10.5, color=color, weight='bold')
-
-    left = fig.add_axes([.125, .18, .345, .275])
-    right = fig.add_axes([.64, .18, .30, .275])
-    fig.text(.045, .49, 'B   Forecasts separate after H3', fontsize=12, weight='bold', color=INK)
-    fig.text(.56, .49, 'C   The selected candidate changes', fontsize=12, weight='bold', color=INK)
+    """Rolling-context diagram, measured discrepancy, and primary selection interval."""
+    fig = plt.figure(figsize=(7.2, 4.7))
+    timeline = fig.add_axes([.055, .595, .92, .35])
+    timeline.set(xlim=(0, 1), ylim=(0, 1)); timeline.axis('off')
+    timeline.text(0, .97, '(a)  Action reuse in the rolling context', weight='bold', fontsize=9)
+    timeline.text(.40, .78, 'H3: first use', ha='center', fontsize=8)
+    timeline.text(.65, .78, 'H4: historical reuse', ha='center', fontsize=8)
+    timeline.text(.895, .78, 'H5, H6: predicted-state history', ha='center', fontsize=8)
+    rows = [('Changed input (reference)', .58, True),
+            ('Patch at H3 only', .34, False),
+            ('Patch at H3 and H4', .10, True)]
+    for label, y, persists in rows:
+        timeline.text(0, y, label, va='center', fontsize=8.5)
+        for x in (.40, .65):
+            timeline.add_patch(Rectangle((x-.085, y-.087), .17, .174,
+                facecolor='white', edgecolor='#c1c7ca', lw=.7))
+        timeline.text(.358, y, '$a_2$', ha='center', va='center', fontsize=10)
+        timeline.text(.442, y, '$a_3^*$', ha='center', va='center', fontsize=10, color=TEAL)
+        timeline.text(.608, y, '$a_3^*$' if persists else '$a_3$', ha='center',
+                      va='center', fontsize=10, color=TEAL if persists else AMBER)
+        timeline.text(.692, y, '$a_4$', ha='center', va='center', fontsize=10)
+        timeline.annotate('', (.56, y), (.49, y),
+                          arrowprops=dict(arrowstyle='->', color='#777e82', lw=.8))
+        timeline.annotate('', (.81, y), (.74, y),
+                          arrowprops=dict(arrowstyle='->', color='#777e82', lw=.8))
+        state = 'same as reference' if persists else 'differs'
+        timeline.text(.895, y, state, ha='center', va='center', fontsize=8,
+                      color=TEAL if persists else AMBER)
+    timeline.text(.40, -.06, 'both patches: exact agreement', ha='center', fontsize=7.4, color=MUTED)
+    timeline.text(.65, -.06, 'H3-only: original action', ha='center', fontsize=7.4, color=MUTED)
+    left = fig.add_axes([.085, .20, .30, .29])
+    right = fig.add_axes([.535, .20, .19, .29])
+    cost = fig.add_axes([.775, .20, .19, .29])
     for task, marker, linestyle in [('reach', 'o', '-'), ('reach-wall', 's', '--')]:
-        rows = [cell(table, task, 'original', 'all_blocks_h3_donor', 'donor_reconstruction', h) for h in (3, 4, 6)]
+        rows = [cell(table, task, 'original', 'all_blocks_h3_donor', 'donor_reconstruction', h)
+                for h in (3, 4, 6)]
         left.plot([3, 4, 6], [1-r['mean'] for r in rows], color=AMBER,
-                  marker=marker, ms=5, ls=linestyle, lw=1.7)
+                  marker=marker, ms=3.8, ls=linestyle, lw=1.3)
         left.fill_between([3, 4, 6], [1-r.marginal_95_high for r in rows],
-                          [1-r.marginal_95_low for r in rows], color=AMBER, alpha=.14)
+                          [1-r.marginal_95_low for r in rows], color=AMBER, alpha=.14, lw=0)
         for h in (3, 4, 6):
-            if cell(table, task, 'original', 'all_blocks_persistent_donor', 'donor_reconstruction', h)['mean'] != 1:
+            if cell(table, task, 'original', 'all_blocks_persistent_donor',
+                    'donor_reconstruction', h)['mean'] != 1:
                 raise ValueError('The persistent-patch parity control failed')
-    left.plot([3, 4, 6], [0, 0, 0], color=TEAL, lw=2)
-    left.text(4.16, .57, 'Patch once', color=AMBER, fontsize=10, weight='bold')
-    left.text(4.12, .035, 'Patch both appearances', color=TEAL, fontsize=10, weight='bold')
-    left.set_ylim(-.035, .65); left.set_xlim(2.9, 6.1)
-    left.set_xticks([3, 4, 6], ['H3', 'H4', 'H6'])
-    left.set_yticks([0, .25, .5], ['0 · exact', '0.25', '0.50'])
-    left.set_ylabel('Forecast distance to reference\n(relative to unmodified forecast)', fontsize=9.5)
-    left.set_xlabel('Imagined step', fontsize=10)
-    clean(left)
+    left.plot([3, 4, 6], [0, 0, 0], color=TEAL, lw=1.5)
+    panel(left, '(b)', 'Forecast discrepancy')
+    left.set(ylim=(-.035, .65), xlim=(2.9, 6.1), xticks=[3, 4, 6],
+             xticklabels=['H3', 'H4', 'H6'], yticks=[0, .25, .5],
+             ylabel='Relative discrepancy, E', xlabel='Forecast endpoint')
+    axes_style(left)
     primary = {r['task']: r for r in report['primary']}
-    for y, task, label in [(1, 'reach', 'Reach'), (0, 'reach-wall', 'Reach-Wall')]:
-        p = primary[task]; value = p['fraction']*100
-        low, high = np.array(p['family_95_interval'])*100
+    for y, (task, _) in zip([1, 0], TASKS):
+        p = primary[task]; value = p['fraction'] * 100
+        low, high = np.array(p['family_95_interval']) * 100
         right.errorbar(value, y, xerr=[[value-low], [high-value]], fmt='o',
-                       color=AMBER, ms=8, lw=2, capsize=4)
-        right.text(value, y+.24, f"{p['changed']}%", ha='center', fontsize=23, weight='bold', color=INK)
-        cost = cell(table, task, 'original', 'all_blocks_h3_donor', 'excess_reference_cost_percent')['mean']
-        right.text(0, y-.29, f'{cost:.2f}% mean extra reference cost', fontsize=9.5, color=MUTED)
-    right.set_xlim(0, 100); right.set_ylim(-.5, 1.6)
-    right.set_xticks([0, 25, 50, 75, 100]); right.set_yticks([1, 0], ['Reach', 'Reach-Wall'])
-    right.set_xlabel('Starting states with a different H6 choice (%)', fontsize=9.5)
-    clean(right); right.grid(False)
-    fig.text(.105, .108, 'Reach: solid / circles   ·   Reach-Wall: dashed / squares', fontsize=9, color=MUTED)
-    fig.text(.045, .061, 'Reference: the same model with one input action changed. Patching both appearances restores exact agreement.',
-             fontsize=10, color=INK)
-    fig.text(.045, .025, 'Original candidate bank · 100 states per task · B: 95% bootstrap bands · C: two-task corrected Wilson intervals · model costs',
-             fontsize=8.5, color=MUTED)
-    save(fig, 'lcfm_context_lifetime', provenance)
+                       color=AMBER, ms=5, lw=1.2, capsize=3)
+        right.annotate(f"{p['changed']}/{p['n']}", (value, y), xytext=(0, 9),
+                       textcoords='offset points', ha='center', fontsize=8)
+        row = cell(table, task, 'original', 'all_blocks_h3_donor', 'excess_reference_cost_percent')
+        control = cell(table, task, 'original', 'all_blocks_persistent_donor', 'excess_reference_cost_percent')
+        if control['mean'] != 0:
+            raise ValueError('Persistent all-block control must match the reference')
+        cost.errorbar(row['mean'], y, xerr=[[row['mean']-row.marginal_95_low],
+                      [row.marginal_95_high-row['mean']]], fmt='o', color=AMBER, ms=5, lw=1.2, capsize=3)
+        cost.annotate(f"{row['mean']:.2f}%", (row['mean'], y), xytext=(0, 9),
+                      textcoords='offset points', ha='center', fontsize=8)
+    cost.set(xlim=(0, 3), ylim=(-.55, 1.55), xticks=[0, 1, 2, 3], yticks=[1, 0], yticklabels=[],
+             xlabel='Mean excess cost (%)')
+    axes_style(cost, 'x')
+    panel(right, '(c)', 'Selection change and excess cost')
+    right.set(xlim=(0, 100), ylim=(-.55, 1.55), xticks=[0, 25, 50, 75, 100],
+              yticks=[1, 0], yticklabels=['Reach', 'Reach-Wall'],
+              xlabel='States with a different choice (%)')
+    axes_style(right, 'x')
+    handles = [Line2D([0], [0], color=AMBER, lw=1.5),
+               Line2D([0], [0], color=TEAL, lw=1.5),
+               Line2D([0], [0], color=INK, marker='o', lw=1, ms=3.5),
+               Line2D([0], [0], color=INK, marker='s', lw=1, ls='--', ms=3.5)]
+    fig.legend(handles, ['H3 only', 'H3 + H4', 'Reach', 'Reach-Wall'],
+               loc='lower center', bbox_to_anchor=(.53, .068), ncol=4,
+               frameon=False, handlelength=1.8, columnspacing=1.6)
+    fig.text(.085, .025, 'Original bank · 100 states per task · (b) 95% bootstrap bands · (c) corrected Wilson and 95% bootstrap intervals',
+             fontsize=7.2, color=MUTED)
+    save(fig, 'lcfm_context_lifetime', dict(provenance, discrepancy_metric='E=1-R',
+        selection_intervals='97.5% Wilson per task; two-task family coverage >=95%'))
 
 
 if __name__ == '__main__':
