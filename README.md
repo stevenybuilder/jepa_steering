@@ -20,9 +20,13 @@ Three findings explain how steering affects this world model:
 - **An edit can change how the planner searches.** Even when its first choice
   stays the same, changes to other candidate scores can lead later search steps
   toward different action sequences. Both learned and random edits have this effect.
-- **Numerical precision can reverse a geometry result.** Cubic interpolation
-  reconstructs omitted activations better in FP32; linear interpolation wins in
-  BF16 with the same weights and inputs.
+- **Numerical precision can reverse a geometry result.** We ask how the
+  predictor's activations vary along a line of actions: take a held-out action,
+  predict its activation from its neighbors, and see whether a curved (cubic)
+  or straight-line (linear) fit predicts it better. In FP32 the curved fit
+  wins at every block; in BF16, with the same weights and inputs, the
+  straight-line fit wins. A conclusion about the geometry of the activation
+  space can depend on the arithmetic used to measure it.
 
 [Methods](docs/METHODS.md) · [All results](docs/RESULTS.md) · [Reproduce](docs/REPRODUCING.md)
 
