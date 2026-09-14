@@ -1,6 +1,6 @@
 # Tests
 
-`unit/` contains the portable CPU suite used by CI. Its subdirectories follow the
+`unit/` contains the portable CPU suite that CI runs on every push. Its subdirectories follow the
 code's subjects: models, interventions, planning, experiments, runtime, and
 analysis. Tests cover numerical behavior, statistical summaries, protocol checks,
 source identities, and figure generation.
