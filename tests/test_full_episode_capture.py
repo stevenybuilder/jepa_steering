@@ -60,3 +60,20 @@ def test_initial_snapshot_does_not_advance_observation_history():
     env=Env(); env.data.time=1.
     capture.snapshot(env)
     np.testing.assert_array_equal(env._prev_obs,np.zeros(18))
+
+
+def test_capture_accounts_for_native_initial_elapsed_step():
+    raw = Env()
+    env = SimpleNamespace(proprio_env=SimpleNamespace(unwrapped=raw),
+                          max_steps=lambda: 100, elapsed_steps=lambda: 1)
+    record = {}
+    class Evaluator:
+        def unroll_agent(self, env):
+            for _ in range(99): env.proprio_env.unwrapped.step(np.zeros(4))
+    with capture.capture_unroll(Evaluator, record):
+        Evaluator().unroll_agent(env)
+    assert record['expected_steps'] == 99
+    capture.validate_capture(record)
+    record['actions'].pop()
+    with pytest.raises(ValueError, match='Incomplete'):
+        capture.validate_capture(record)

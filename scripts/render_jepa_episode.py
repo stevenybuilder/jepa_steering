@@ -48,7 +48,6 @@ def main():
             max_error = max(max_error, error)
             if error > 1e-6:
                 raise ValueError(f'Captured state differs on frame {i}: {error}')
-            if i % 2: continue
             renderer.update_scene(env.data, camera='corner2')
             scene = renderer.scene
             mujoco.mjv_initGeom(scene.geoms[scene.ngeom], type=mujoco.mjtGeom.mjGEOM_SPHERE,
@@ -69,16 +68,18 @@ def main():
         env.close()
     args.output.mkdir(parents=True)
     mp4 = args.output/'jepa_episode_hd.mp4'; gif = args.output/'jepa_episode.gif'
-    with imageio.get_writer(mp4, fps=40, codec='libx264', quality=8, macro_block_size=1,
+    with imageio.get_writer(mp4, fps=80, codec='libx264', quality=8, macro_block_size=1,
             ffmpeg_params=['-pix_fmt','yuv420p','-movflags','+faststart']) as writer:
         for image in frames[:-1]: writer.append_data(np.asarray(image))
-        for _ in range(20): writer.append_data(np.asarray(frames[-1]))
-    small = [im.resize((1280,720), Image.Resampling.LANCZOS) for im in frames]
+        for _ in range(40): writer.append_data(np.asarray(frames[-1]))
+    gif_indices = list(range(0, len(frames)-1, 2)) + [len(frames)-1]
+    small = [frames[i].resize((1280,720), Image.Resampling.LANCZOS) for i in gif_indices]
     contact = Image.new('RGB',(1280,720*len(small)))
     for i,im in enumerate(small): contact.paste(im,(0,720*i))
     palette = contact.quantize(colors=256, method=Image.Quantize.MEDIANCUT)
     indexed = [im.quantize(palette=palette,dither=Image.Dither.NONE) for im in small]
-    durations = [20 if i%2==0 else 30 for i in range(len(frames)-1)] + [500]
+    ticks = [round(i*record['dt']*100) for i in gif_indices]
+    durations = [10*(b-a) for a,b in zip(ticks,ticks[1:])] + [500]
     indexed[0].save(gif,save_all=True,append_images=indexed[1:],duration=durations,
                     loop=0,optimize=False,disposal=2)
     receipt = {'input_sha256':sha(args.input),'renderer_sha256':sha(__file__),

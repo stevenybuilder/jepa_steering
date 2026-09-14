@@ -180,55 +180,93 @@ def margins():
 
 
 def architecture():
-    fig, ax = plt.subplots(figsize=(8.2, 5.0))
-    fig.subplots_adjust(left=.03, right=.98, top=.97, bottom=.02)
-    ax.set(xlim=(0, 10), ylim=(0, 6))
-    ax.axis("off")
-    def box(x, y, w, h, label, color="#f3f6f7", edge="#d2dde1", size=10):
-        ax.add_patch(FancyBboxPatch((x, y), w, h, boxstyle="round,pad=.035,rounding_size=.07", facecolor=color, edgecolor=edge, lw=1, zorder=3 if label else 0))
-        ax.text(x+w/2, y+h/2, label, ha="center", va="center", fontsize=size, color=INK, linespacing=1.3, zorder=4)
-    def arrow(points, color=MUTED):
-        if len(points)>2:
-            ax.plot(*zip(*points[:-1]), color=color, lw=1.15, zorder=2)
-        ax.annotate("", xy=points[-1], xytext=points[-2], arrowprops=dict(arrowstyle="->", color=color, lw=1.15), zorder=2)
-    ax.text(.1, 5.63, "How JEPA-WM plans with predicted futures", fontsize=18, weight="bold", color=INK)
-    ax.text(.1, 5.22, "Frozen JEPA-WM  ·  alternative intervention sites at imagined step H3", fontsize=10.5, color=MUTED)
-    box(.12, 3.97, 2.02, .65, "Image + robot state")
-    box(.12, 2.94, 2.02, .65, "Frozen encoders")
-    arrow([(1.13, 3.93), (1.13, 3.63)])
-    box(2.72, 2.77, 4.44, 1.7, "", color="#f6f8f7")
-    ax.text(4.94, 4.27, "Action-conditioned predictor", ha="center", fontsize=11, weight="bold", color=INK)
-    xs = np.linspace(2.94, 6.35, 6)
-    for i, x in enumerate(xs):
-        box(x, 3.22, .49, .59, f"B{i}", color="#e5eef6" if i == 3 else "white", edge=BLUE if i == 3 else "#d2dde1", size=9.5)
-        if i<5: arrow([(x+.52, 3.515), (xs[i+1]-.055, 3.515)])
-    arrow([(2.18, 3.265), (2.47, 3.265), (2.47, 3.515), (2.90, 3.515)])
-    box(2.27, 3.69, .34, .35, "V", "#e4f3ee", TEAL, 10)
-    ax.text(2.25, 4.20, "visual", fontsize=8.5, color=TEAL)
-    box(xs[3]+.51, 3.91, .27, .26, "R", "#e8eef7", BLUE, 9)
-    ax.plot([xs[3]+.59, xs[3]+.59], [3.55, 3.88], color=BLUE, lw=1, zorder=2)
-    # Preserve topological order: R follows B3 and precedes B4; compact marker
-    # is offset above the connecting edge to avoid becoming a seventh block.
-    box(xs[3]+.055, 2.87, .35, .28, "A", "#faf0df", AMBER, 9)
-    box(7.75, 3.13, 2.05, .78, "Predicted future\nembeddings")
-    arrow([(7.20, 3.515), (7.71, 3.515)])
-    box(7.75, 1.70, 2.05, .80, "Distance to\nencoded goal")
-    arrow([(8.78, 3.08), (8.78, 2.54)])
-    box(.12, 1.71, 2.02, .78, "300 candidate\naction sequences")
-    box(2.83, 1.71, 2.17, .78, "Action encoder")
-    arrow([(2.18, 2.10), (2.79, 2.10)])
-    ax.plot([3.92, 3.92], [2.53, 2.71], color=AMBER, lw=1.1, zorder=2)
-    ax.plot([xs[0]+.245, xs[-1]+.245], [2.71, 2.71], color=AMBER, lw=1.1, zorder=2)
-    for x in xs:
-        arrow([(x+.245, 2.71), (x+.245, 3.17)], AMBER)
-    ax.text(5.20, 2.53, "every block", fontsize=8.5, color=MUTED)
-    box(4.60, .40, 2.30, .72, "CEM: sample around\nthe best ten plans", color="#eaf4f2", edge=TEAL)
-    arrow([(8.78, 1.66), (8.78, 1.35), (5.75, 1.35), (5.75, 1.16)])
-    arrow([(4.56, .76), (1.13, .76), (1.13, 1.67)])
-    ax.text(2.85, .87, "resample + rescore", ha="center", fontsize=9, color=TEAL)
-    box(7.75, .40, 2.05, .72, "Start executing\nObserve + replan", size=9.5)
-    arrow([(6.94, .76), (7.71, .76)])
-    save(fig, "architecture_readable", dict(scope="Inference schematic, not result. V=visual input only; A=B3 action condition; R=B3 output. Alternative arms; action conditioning reaches all blocks. No model weights updated."))
+    """Editorial vector schematic: three stages, orthogonal routing, precise sites."""
+    from matplotlib.patches import Rectangle, Circle
+    with plt.rc_context({"font.family": "Arial", "font.size": 11}):
+        fig, ax = plt.subplots(figsize=(12.8, 7.4))
+        fig.subplots_adjust(left=.015, right=.985, top=.99, bottom=.02)
+        ax.set(xlim=(0, 12.5), ylim=(0, 7.4))
+        ax.axis("off")
+        ink, muted, rule = "#172b3a", "#65727d", "#cbd3d9"
+        navy, blue, teal, amber = "#244d70", "#426e9a", "#267b78", "#af7430"
+
+        def text(x, y, label, size=11, color=ink, weight="normal", **kw):
+            return ax.text(x, y, label, fontsize=size if size>=20 else size*1.2, color=color, weight=weight,
+                           va="center", linespacing=1.4, **kw)
+
+        def block(x, y, w, h, label, fill="white", edge=rule, color=ink, size=11, weight="normal"):
+            ax.add_patch(Rectangle((x,y),w,h,facecolor=fill,edgecolor=edge,lw=.95,zorder=3))
+            text(x+w/2,y+h/2,label,size,color,weight,ha="center",zorder=4)
+
+        def arrow(points, color=muted, lw=1.25):
+            if len(points)>2:
+                ax.plot(*zip(*points[:-1]),color=color,lw=lw,zorder=1,
+                        solid_capstyle="butt",solid_joinstyle="miter")
+            ax.annotate("",xy=points[-1],xytext=points[-2],
+                        arrowprops=dict(arrowstyle="-|>",color=color,lw=lw,
+                                        mutation_scale=9,shrinkA=0,shrinkB=0),zorder=2)
+
+        def badge(x,y,letter,color):
+            ax.add_patch(Circle((x,y),.145,facecolor="white",edgecolor=color,lw=1.4,zorder=6))
+            text(x,y,letter,9.5,color,"bold",ha="center",zorder=7)
+
+        text(.38,6.98,"How JEPA-WM plans with predicted futures",22,weight="bold")
+        text(.38,6.53,"Frozen MetaWorld model  /  alternative steering sites at imagined step H3",11,muted)
+        for x, right, label in [( .38,2.70,"01   ENCODE"),(3.25,8.42,"02   PREDICT"),(9.05,12.12,"03   PLAN")]:
+            text(x,5.99,label,9.5,muted,"bold")
+            ax.plot([x,right],[5.76,5.76],color=rule,lw=.8)
+
+        # Observation path. V is on the visual input edge, after the encoders.
+        text(1.52,5.27,"Image + robot state",11.5,ha="center")
+        arrow([(1.52,5.02),(1.52,4.79)])
+        block(.38,4.04,2.28,.72,"Frozen encoders",fill="#f5f7f8",weight="bold")
+        arrow([(2.66,4.40),(3.27,4.40)])
+        badge(2.965,4.94,"V",teal)
+        ax.plot([2.965,2.965],[4.78,4.40],color=teal,lw=1,zorder=2)
+
+        # Six distinct predictor blocks. R lies on the B3 -> B4 edge.
+        text(5.85,5.31,"Action-conditioned predictor",12,weight="bold",ha="center")
+        xs = [3.30+i*.86 for i in range(6)]
+        for i,x in enumerate(xs):
+            block(x,3.98,.64,.84,f"B{i}",fill=navy if i==3 else "#f5f7f8",
+                  edge=navy if i==3 else rule,color="white" if i==3 else ink,
+                  size=11,weight="bold" if i==3 else "normal")
+            if i<5: arrow([(x+.64,4.40),(xs[i+1]-.04,4.40)])
+        r_x=(xs[3]+.64+xs[4])/2
+        badge(r_x,4.99,"R",blue)
+        ax.plot([r_x,r_x],[4.83,4.40],color=blue,lw=1,zorder=2)
+        arrow([(xs[-1]+.64,4.40),(9.07,4.40)])
+        block(9.10,3.98,2.92,.84,"Predicted future\nembeddings",size=11.5)
+
+        # Candidate actions enter an encoder and condition every block.
+        block(.38,2.23,2.28,.82,"300 candidate\naction sequences",size=11.5)
+        block(3.30,2.23,2.66,.82,"Action encoder",fill="#f5f7f8",weight="bold")
+        arrow([(2.66,2.64),(3.25,2.64)])
+        ax.plot([4.55,4.55],[3.05,3.39],color=amber,lw=1.2,zorder=1)
+        centers=[x+.32 for x in xs]
+        ax.plot([centers[0],centers[-1]],[3.39,3.39],color=amber,lw=1.2,zorder=1)
+        for x in centers: arrow([(x,3.39),(x,3.93)],amber,1.2)
+        badge(centers[3],3.67,"A",amber)
+        text(6.75,2.74,"Conditioning at\nevery block",10,muted,ha="center")
+
+        # Goal scoring and CEM feedback loop; routes keep clear of all text.
+        arrow([(10.56,3.91),(10.56,3.10)])
+        block(9.10,2.23,2.92,.82,"Distance to\nencoded goal",size=11.5)
+        block(4.43,.85,3.93,.79,"CEM: sample around\nthe best ten plans",
+              fill="#edf3f7",edge=navy,size=11.5,weight="bold")
+        arrow([(10.56,2.19),(10.56,1.91),(6.40,1.91),(6.40,1.69)])
+        arrow([(4.38,1.245),(1.52,1.245),(1.52,2.18)],navy)
+        text(2.90,1.47,"resample + rescore",10,navy,ha="center")
+        block(9.10,.85,2.92,.79,"Execute prefix\nObserve + replan",size=11.5)
+        arrow([(8.40,1.245),(9.05,1.245)],navy)
+
+        ax.plot([.38,12.12],[.53,.53],color=rule,lw=.7)
+        for x,letter,label,color in [(.55,"V","Visual input",teal),(3.55,"A","B3 action condition",amber),
+                                    (7.30,"R","B3 predictor output",blue)]:
+            badge(x,.24,letter,color)
+            text(x+.26,.24,label,10,color)
+        save(fig,"architecture_readable",dict(scope="Inference schematic, not result. V=visual input only; A=B3 action condition; R=B3 output. Alternative arms; action conditioning reaches all blocks. No model weights updated.",
+             design="Three-stage vector schematic; square modules; orthogonal feedback loop; steering sites on exact edges."))
 
 
 def geometry():

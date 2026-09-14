@@ -44,7 +44,9 @@ def capture_unroll(evaluator_class, record):
         raw = env.proprio_env.unwrapped
         record.update(dt=float(raw.dt), rand_vec=np.asarray(raw._last_rand_vec).tolist(),
                       target=np.asarray(raw._target_pos).tolist(), frames=[snapshot(raw)],
-                      actions=[], rewards=[], successes=[])
+                      actions=[], rewards=[], successes=[],
+                      expected_steps=int(env.max_steps()-env.elapsed_steps())
+                      if hasattr(env, 'max_steps') else 100)
         step = raw.step
         def recorded_step(action):
             action_copy = np.asarray(action).copy().tolist()
@@ -67,7 +69,9 @@ def capture_unroll(evaluator_class, record):
         evaluator_class.unroll_agent = original
 
 
-def validate_capture(record, expected_steps=100):
+def validate_capture(record, expected_steps=None):
+    if expected_steps is None:
+        expected_steps = record.get("expected_steps", 100)
     if len(record['actions']) != expected_steps or len(record['frames']) != expected_steps + 1:
         raise ValueError('Incomplete episode: retain diagnostics, do not publish a full-episode clip')
     times = np.array([f['physics']['time'] for f in record['frames']])

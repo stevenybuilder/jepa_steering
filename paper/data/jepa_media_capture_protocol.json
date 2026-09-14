@@ -1,0 +1,25 @@
+{
+  "role": "qualitative full-episode media, no new efficacy analysis",
+  "tasks": [
+    "reach",
+    "reach-wall"
+  ],
+  "arm": "native",
+  "seed": 0,
+  "episodes_per_task": 1,
+  "elementary_steps": 100,
+  "planner_candidates": 300,
+  "cem_iterations": 15,
+  "precision": "strict FP32, TF32 off",
+  "checkpoint_sha256": "c3297772c7af4e84c28bd0c0937e22398a888848305014bb3ab3f1508a310bd8",
+  "selection": "Both tasks and seed fixed before capture. Show both complete episodes regardless of outcome. No seed or arm search.",
+  "capture_script_sha256": "7b83b84accbdb88283342d81d0805be03dcd5e76c4841deea3c40b103a65c182",
+  "status": "fixed_before_new_capture",
+  "correction": {
+    "reason": "Native unroll begins at elapsed step 1 of 100, executing 99 actions. Original validator incorrectly expected 100 captured actions. No change to native loop, task, seed, or planner.",
+    "expected_captured_actions": 99,
+    "original_capture_retained": true,
+    "technical_retry_same_seed": true,
+    "corrected_capture_script_sha256": "1eabe4cfd4443691c2d2438454bc0693475373175302e918e9dae332a23e4a10"
+  }
+}

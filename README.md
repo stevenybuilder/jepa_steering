@@ -9,15 +9,14 @@ action-conditioning edits, matched random controls, and component ablations.
 Representational geometry motivates the edits; forecasting and planning are the
 outcomes we follow.
 
-The experiments connect **prediction, context history, and action selection**:
+The experiments follow a correction from the model's forecast to the planner's decisions:
 
-- **A local patch can lose agreement with the intended action change.** Patching
-  every appearance across all blocks reproduces its forecast; a one-time patch
-  loses about half the reconstruction by H6.
-- **Better forecasts and different plans are separate outcomes.** Forecast MSE
-  improves **2.36% / 2.19%**. In a separate fixed-bank test, the first choice
-  changes in **1/192 states**, while adaptive search can still return different plans.
-- **Measured geometry can reverse with precision.** FP32 favors cubic over linear
+- **Forecast correction varies by layer and task.** The learned rank-four B3 edit
+  reduces H6 proprioceptive MSE by **2.36% on Reach and 2.19% on Reach-Wall**.
+- **A corrected forecast can leave the first choice unchanged.** The learned edit
+  changes the best of 300 candidates in **1/192 states**. Later adaptive search
+  can still return different plans under both learned and random edits.
+- **Measured geometry depends on precision.** FP32 favors cubic over linear
   reconstruction at every block; BF16 favors linear under the same weights and inputs.
 
 [LCFM paper](paper/lcfm/main.pdf) · [Full study](paper/workshop/main.pdf) · [Methods](docs/METHODS.md) · [All results](docs/RESULTS.md) · [Reproduce](docs/REPRODUCING.md)
@@ -90,47 +89,6 @@ alternative interventions. Directions and calibration are fitted on fitting
 trajectories; recorded development trajectories inform the recipe. The final
 four-task confirmation uses new scenarios after that recipe is frozen.
 [Operator equations, fitting, and dose definitions](docs/METHODS.md).
-
-## A changed action must remain changed when it becomes history
-
-We replace an action in the input and compare that rollout with an internal
-patch intended to reproduce the same change. The action appears twice in
-JEPA-WM's two-frame context: first at H3, then as the older action at H4.
-**Patching the first appearance matches the changed-action forecast at H3,
-but the agreement breaks when the original action returns at H4.**
-
-![Counterfactual reconstruction at H3, H4 and H6, comparing patches at the first appearance with patches at both appearances.](docs/figures/lcfm_context_history.png)
-
-The upper panels replace the action-derived condition at all six blocks.
-Patching both appearances reproduces the input-action change exactly through
-H6; the one-time patch ends near **R = 0.50**. R measures agreement with the
-changed-action forecast: 1 is exact and 0 is the unmodified forecast.
-
-The lower panels show B1 as a **post hoc illustration**, where patching both
-appearances helps but is not exact. The complete six-layer comparison finds a
-positive persistence effect at B0–B3 in both tasks and both banks; B4/B5 remain
-unresolved. All sixteen contexts and both candidate banks are retained.
-
-**Why it matters for world models:** a local activation patch can be an incomplete
-version of the input change it is meant to represent. Testing only the edited
-step misses this. The comparison follows the model’s predictions as its two-frame
-context advances.
-[All six layers, all 72 contrasts, and action-range controls](docs/ACTION_COUNTERFACTUAL.md).
-
-### The history mismatch changes candidate selection
-
-We also checked the H6 candidate costs from these action-substitution patches.
-For all-block patches, omitting the H4 occurrence changes the winning candidate in **17 of 32 action
-banks**—two banks for each of sixteen contexts. The H3-only patch retains an
-average of **5.75–6.88 of the reference’s top ten candidates**; patching both
-appearances at all blocks preserves all ten and the same winner.
-
-![H6 candidate-ranking, elite, and winner agreement with the coherent action change, across all blocks and single-layer patches.](docs/figures/lcfm_history_ranking.png)
-
-Single-layer patches show where that agreement changes. At B1, persistence
-improves mean rank agreement and elite overlap in both tasks and both banks;
-winner agreement improves in three of the four task/bank cells. All six layers
-and individual context results are in the [ranking analysis](docs/LCFM_HISTORY_RANKING.md).
 
 ## Better forecasts, first choices, and replanning
 
@@ -241,16 +199,42 @@ rescues 21 failures and loses 21 successes, leaving both it and unsteered at 52/
 Push-T and DROID contribute development results; DROID uses recorded-action agreement.
 [Completed experiments and remaining evidence gaps](docs/ANALYSIS_COMPLETION.md).
 
-## What the simulated tasks require
+## Supporting check: does an internal patch reproduce an input change?
 
-![Reach and Reach-Wall task demonstrations using MetaWorld scripted policies, with the true target highlighted in green. These are not JEPA-WM rollouts.](docs/media/task_demonstration.gif)
+We change one input action and use the resulting JEPA-WM forecast as a reference.
+Then we try to reproduce it by replacing the action-derived conditioning inside
+its predictor. The action appears at H3 and again as history at H4.
 
-**Task illustration using MetaWorld scripted policies, not a JEPA-WM result.**
-The robot moves to the green target; Reach-Wall adds an obstacle. The clip runs
-at simulation speed, with a brief final hold. [HD video](docs/media/task_demonstration_hd.mp4).
+Replacing the conditioning at all six blocks **only at H3** matches the immediate
+forecast, but agreement breaks at H4. Replacing it at **both appearances** matches
+the changed-input forecast through H6. This exact match checks that the internal
+replacement reproduces the same computation.
 
-The measured three-arm JEPA comparison shows the first fifteen actions
-(0.19 seconds of simulated motion). [Measured prefixes and verification](docs/media/README.md).
+![Forecast agreement after replacing action conditioning once or at both appearances, at all blocks and at B1.](docs/figures/lcfm_context_history.png)
+
+This check uses **16 starting contexts: eight per task**, each with two candidate
+banks. The one-time replacement also chooses a different candidate from the
+changed-input reference in **17 of the 32 banks**. That counts changed selections;
+we did not test whether those plans improve task success. The banks within a
+context are paired measurements, not independent episodes.
+
+![Candidate-ranking and selection agreement with the changed-input reference, across all six blocks and individual layers.](docs/figures/lcfm_history_ranking.png)
+
+The practical lesson is to check the later forecast when using an activation
+patch to represent an input change. A match at the edited step can disappear when
+the context advances. These results concern the model's two-frame context.
+[Reconstruction and all layer comparisons](docs/ACTION_COUNTERFACTUAL.md) ·
+[Candidate costs, rankings, and individual contexts](docs/LCFM_HISTORY_RANKING.md).
+
+## JEPA-WM planning in the simulator
+
+![Actual frozen JEPA-WM episodes at simulation speed: Reach and Reach-Wall, unsteered, seed 0. The target is highlighted in green.](docs/media/jepa_full_episodes.gif)
+
+**Frozen JEPA-WM, with replanning throughout each episode.** Reach reaches the
+green target; Reach-Wall does not reach it within the episode limit. Both use
+seed 0, fixed before capture. Motion plays at simulation speed, with a brief
+hold between tasks. [1080p video](docs/media/jepa_full_episodes_hd.mp4) ·
+[Actions, state verification, and reproduction](docs/media/README.md).
 
 ## Benchmark context
 

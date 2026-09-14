@@ -1,6 +1,6 @@
 # LCFM workshop manuscript
 
-**Context-Consistent Steering for Planning in JEPA World Models**
+**How Activation Edits Affect Predictions and Planning in JEPA-WM**
 
 Separate anonymous draft for the NeurIPS 2026 Long Context Foundation Models workshop. The main text is eight pages, followed by references and appendices. The original [full-study manuscript](../workshop/main.pdf) remains separate. This PDF has not been submitted.
 
@@ -16,7 +16,7 @@ The template requires the NeurIPS checklist. It is included after the appendices
 
 ## Revision and focused analysis
 
-The September 13 revision plan guides this version. Action-history consistency is the first main result, followed by forecast accuracy, fixed-bank choice, adaptive search, physical execution, numerical geometry, and protected evaluation. Identifying repository links are removed from the manuscript; the PDF metadata has no author name.
+The September 13 revision plan guides this version. The main results follow forecast accuracy, fixed-bank choice, adaptive search, and physical execution. The action-history experiment is a supporting diagnostic, with its sixteen-context sample and changed-input reference stated explicitly, followed by numerical geometry and protected evaluation. Identifying repository links are removed from the manuscript; the PDF metadata has no author name.
 
 The new [context-history figure](../../docs/figures/lcfm_context_history.pdf) uses only the already completed action-counterfactual experiment. It retains both tasks, both original/fresh banks, and H3/H4/H6. All-block patches form the primary illustration. B1 is explicitly a post hoc single-block example, and all six layers and all 72 registered contrasts remain in the appendix. The raw-action reference and all-block persistent patch agree exactly; the B1 persistent patch does not.
 
@@ -38,3 +38,15 @@ tectonic paper/lcfm/main.tex
 ```
 
 The figure builder verifies the immutable source-table hash, all sixty displayed task/bank/arm/horizon cells, finite intervals, and eight contexts per task. The manuscript checker validates the frozen protected report, 32 protected and 48 historical values, figure paths, and citation keys. Rendered pages are inspected for legibility, clipping, and the main-text page boundary.
+
+
+## Plain-language revision
+
+The manuscript applies [blader/humanizer](https://github.com/blader/humanizer)
+version 3.0.0, commit `9862685f575c65a8247f90369951df1b3416e3d6`, as an editorial
+skill: identify formulaic prose, rewrite, then check the revision for unsupported
+additions and lost technical meaning. The tool does not check scientific evidence.
+The September 13 revision changes the title, abstract, introduction, result order,
+and discussion. It states what 17/32 counts, names the reference forecast, and
+keeps the proposed larger study separate from completed results.
+[Follow-up design and sample-size rationale](../../docs/LCFM_FOLLOWUP_DESIGN.md).

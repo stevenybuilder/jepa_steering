@@ -42,8 +42,10 @@ establishes that automatic rewriting improves scientific accuracy.
 | [Vale](https://github.com/vale-cli/vale) | 6,103 | Offline, configurable prose linting for repeated style checks | Rules can find wording problems, but cannot decide what a result means |
 | [academic-humanizer](https://github.com/AIScientists-Dev/academic-humanizer) | 1,523 | Academic editing guidance that keeps claims tied to evidence | Mechanical preservation of paragraph structure would retain the old draft's main problem |
 
-The current rewrite uses these as editorial references. It does not install an
-automated rewriting service or use detector scores as a quality measure.
+The LCFM rewrite applies the humanizer 3.0.0 editing process at commit
+`9862685f575c65a8247f90369951df1b3416e3d6`: identify patterns, rewrite, check for
+remaining patterns and changed meaning, then write the final prose. No detector
+score is used as a quality measure.
 
 ## Editing rules for this repository
 
@@ -61,14 +63,13 @@ The final opening identifies the model, intervention families, geometry question
 and Joseph et al.'s Physics Emergence Zone study. It summarizes measured findings
 without making the lack of behavioral gain the entire research contribution.
 The architecture, paired simulator GIF, decision-margin plot, and layer heatmap
-remain visible. Secondary geometry, history, attention, and benchmark details are
-expandable. This follows the supplied README review's advice on density while
+remain visible. Geometry, history, and attention analyses remain visible; the full six-task
+results table is expandable. This follows the supplied README review's advice on density while
 rejecting an unsupported causal chain from development margins to protected success.
 
-The paired GIF and HD MP4 replay the first registered extension case (episode 4)
-in each task, with all three saved plan arms. No favorable-outcome selection or
-new model inference is involved. All fifteen states per trajectory, rewards,
-and success/termination flags are checked against the saved execution. See the
-[media receipt and reproduction](media/README.md). The clips cover 0.1875 seconds
-of simulator time, slowed 16× with initial/final holds; they do not show complete
-task episodes.
+The README GIF and 1080p video show new unsteered JEPA-WM episodes on Reach and
+Reach-Wall at simulation speed. Task and seed were fixed before capture. Every
+saved simulator observation is checked against restored physics; labels stay
+outside the robot view. The earlier three-arm, fifteen-action comparison remains
+available in the [media documentation](media/README.md). Those earlier prefixes
+cover 0.1875 seconds and use slowed playback; the full model clips do not.

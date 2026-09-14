@@ -19,7 +19,7 @@
 \newcommand{\RMS}{\operatorname{RMS}}
 \newcommand{\Var}{\operatorname{Var}}
 \newcommand{\figroot}{../../docs/figures}
-\title{Context-Consistent Steering for Planning\\in JEPA World Models}
+\title{How Activation Edits Affect Predictions\\and Planning in JEPA-WM}
 \author{Anonymous authors}
 
 \begin{document}
@@ -27,18 +27,18 @@
 \maketitle
 
 \begin{abstract}
-An internal edit can change a world model's forecast without changing the selected action, and a patch that matches an input counterfactual at one step can diverge as context advances. We study both effects in frozen JEPA-WM checkpoints using low-rank predictor corrections, action-conditioning patches, and controlled planning replays. Across sixteen development contexts, replacing an action-derived condition at both appearances in a two-frame context reproduces the raw-action counterfactual exactly through six forecast steps when all predictor blocks are patched. Replacing only its first appearance loses roughly half of the reconstruction by the final step. Separately, a learned rank-four correction improves proprioceptive forecast MSE by 2.36\% and 2.19\% on two tasks. A score-margin bound certifies unchanged winners in 184 of 192 fixed candidate banks, while adaptive search can still return different plans. Physical replay and a 3,072-run protected evaluation do not establish improved control performance. These results distinguish counterfactual consistency, forecast accuracy, and planning utility. The context study tests repeated action history in a short rolling window; it does not measure long-token context or context-length scaling.
+JEPA-WM chooses actions by predicting their consequences and scoring the predicted futures against a goal. We keep its checkpoints frozen and test how activation edits affect forecasts and planning. A learned rank-four predictor correction reduces six-step proprioceptive forecast MSE by 2.36\% on Reach and 2.19\% on Reach-Wall. In a separate comparison over 192 starting states, it changes the best of 300 candidate plans once; a cost-gap bound certifies unchanged choices in 184 states. Repeating the full adaptive search produces different plans under both learned and random edits, without an established advantage for the learned edit. A supporting experiment examines how an action-conditioning patch behaves as a two-frame context advances. Across sixteen development contexts, replacing both appearances of an action reproduces the changed-input forecast exactly; replacing only its first appearance matches initially but diverges later. The one-time patch selects a different candidate in 17 of 32 paired banks. This measures disagreement with a model reference, not better robot performance. Short physical replays and a 3,072-run protected evaluation leave improved task outcomes unresolved. The study measures forecast correction and its effects on planning within a fixed, short context window.
 \end{abstract}
 
 \section{Introduction}
 
-A predictive world model supports planning by forecasting the consequences of candidate actions. Improving its predictions is useful to a planner when the change helps it select actions with better outcomes. To study this connection, we keep JEPA-WM checkpoints frozen and intervene inside their action-conditioned predictor \citep{terver2025jepawm}. Low-rank corrections, visual and action-conditioning edits, and matched random controls let us measure changes in predicted futures, goal scores, selected plans, and physical execution separately.
+JEPA-WM plans by forecasting candidate action sequences and choosing those whose predicted outcomes approach a goal \citep{terver2025jepawm}. We investigate whether correcting the predictor's activations improves those forecasts and changes the plans it selects. The encoders and predictor remain frozen. We compare learned low-rank corrections and visual/action-conditioning edits with matched random controls and component ablations.
 
-Sequential prediction adds another question: does an internal intervention keep representing the intended change as the model consumes its evolving context? In the predictor studied here, an action enters two successive context windows. Replacing its internal representation once need not reproduce changing the input action itself. We compare one-time and history-consistent donor patches with a coherent raw-action substitution, holding model weights and candidate banks fixed. Patching both appearances at every block reproduces the specified counterfactual through H6; patching only the first appearance matches initially, then diverges.
+Prediction error and planning cost ask different questions. Forecast error compares the predicted outcome of an action with what happened. The planner instead compares predicted futures with a goal and selects among competing actions. We measure both, then follow the selected actions through adaptive search and simulator execution. Separate development studies supply each diagnostic; a final protected evaluation tests task success on fresh scenarios.
 
-This is a concrete issue for interventions in agents that repeatedly forecast, act, and update their context. Our empirical scope is a two-frame predictor with six-step imagined rollouts and receding-horizon planning over longer simulator episodes. We do not enlarge the model's context window or test long-token retrieval. The connection to longer-horizon agents is the need to check how an intervention behaves when the edited information is reused, rather than assuming its first-step effect persists.
+An action-history experiment asks whether an internal patch reproduces the input change it is meant to represent. JEPA-WM uses each action in two consecutive context windows. Replacing its conditioning once can match the immediate forecast and then diverge when the original action returns as history. We compare that one-time replacement with replacement at both appearances, using a direct input-action change as the reference. The sixteen-context experiment tests this specific computation in a two-frame window. Whether the same issue occurs in models with longer contexts remains an open question.
 
-Our representational questions are informed by Joseph et al.'s Physics Emergence Zone analysis \citep{joseph2026interpretingphysics}, which combines layerwise probes, subspace analyses, and targeted interventions in video models. Here the target is an action-conditioned world model whose predictions drive a sampling planner. The contributions are a controlled action-history test, a fixed-bank bound connecting score perturbations to plan selection, and an evaluation that follows forecast corrections through adaptive search and physical execution. Layer sweeps and numerical controls qualify the interpretation of the internal edits. These experiments use separate populations; they do not establish one causal chain explaining protected behavior.
+Joseph et al.'s Physics Emergence Zone study probes physical variables across video-model layers and tests interventions on their representations \citep{joseph2026interpretingphysics}. Their approach motivates our layer sweeps and tests of representational geometry. We examine an action-conditioned predictor used by a planner, and include numerical-precision controls because the apparent geometry changes between FP32 and BF16.
 
 \begin{figure}[t]
 \centering
@@ -78,34 +78,6 @@ Fitting trajectories determine the operators. Separate recorded development traj
 Statistical units are source trajectories for recorded forecasts and starting scenarios for planning and behavior. Candidate plans are not independent replicates. Registered uncertainty uses paired bootstrap resampling and correction across the specified comparisons: six for the search extension, twelve for physical replay, and 48 for protected behavior. Each uses 20,000 draws. Details and source identities are retained in the appendices and accompanying reports. Push-T and DROID appear only in earlier development results; DROID measures recorded-action agreement.
 
 \section{Results}
-
-\subsection{An action patch must follow the action through context}
-\label{sec:main-history}
-
-We replace the H3 action with a donor action and use the resulting raw-input rollout as the counterfactual reference. The predictor's action encoder maps 20 action coordinates into a 400-dimensional condition. At H3 the changed action occupies the newest context position; at H4 it occupies the older position. We compare condition replacement at H3 only with replacement at both H3 and H4. The experiment retains sixteen development contexts (eight each on Reach and Reach-Wall), original and freshly seeded candidate banks, and all six predictor blocks, for 1,120 H6 forecasts. Candidate banks share contexts and are not independent samples.
-
-Let $\hat z_{\rm cf}$ denote the coherent raw-action forecast and $\hat z_{\rm native}$ the unmodified forecast. At each measured endpoint we report
-\begin{equation}
- R=1-\frac{D(\hat z_{\rm patch},\hat z_{\rm cf})}{D(\hat z_{\rm native},\hat z_{\rm cf})},
- \label{eq:history-main}
-\end{equation}
-where $D$ averages candidate-wise visual MSE plus 0.1 times proprioceptive MSE before taking the ratio. $R=1$ is exact counterfactual reconstruction and $R=0$ is the unmodified forecast's error. This measures agreement with another model rollout, not with the physical future.
-
-Replacing both appearances at all six blocks reproduces the raw-action substitution byte-exactly through H6. Replacing all blocks only at H3 matches at H3, then diverges when the original action returns as history at H4. Its H6 reconstruction is $R=0.5029$--$0.5079$ across the four task/bank cells (Figure~\ref{fig:main-history}). Exact all-block parity is a computational consistency control: replacing every occurrence reconstructs the changed input's computation. The one-time patch measures what is lost when that replacement is incomplete.
-
-\begin{figure}[t]
-\centering
-\includegraphics[width=\textwidth]{\figroot/lcfm_context_history.pdf}
-\caption{\textbf{Matching a changed action now does not ensure matching its later forecast.} Upper panels retain all-block patches; lower panels show B1 as an explicitly post hoc illustration of a single-block edit. Both tasks, both banks, and all sixteen contexts are retained. The dotted line is the coherent raw-action reference. Bands are existing marginal 95\% context-bootstrap intervals, not simultaneous layer comparisons. The all-block persistent patch matches exactly; the B1 persistent patch does not. Only H3, H4, and H6 are measured here.}
-\label{fig:main-history}
-\end{figure}
-
-Single-block interventions give a depth-dependent response. Persistent minus H3-only reconstruction is positively separated at B0--B3 in both tasks and both banks: sixteen of twenty-four cells under the registered simultaneous correction. B4/B5 remain unresolved. B1 has the largest observed persistence difference, $\Delta R=0.4991$--$0.5057$; its persistent H6 reconstruction is $0.7320$--$0.7421$, versus $0.2286$--$0.2387$ for H3-only. B1 is an illustrative post hoc choice, not a newly selected steering site. Appendix~\ref{sec:history} retains all six layers, input-range controls, and all 72 primary contrasts.
-
-\paragraph{The mismatch reaches candidate selection.}
-A post hoc reanalysis of the saved H6 costs compares each patch with the coherent raw-action reference. For all-block H3-only patches, mean Spearman agreement is 0.878--0.894 and mean top-ten overlap is 5.75--6.88 across task/bank cells. Their winning candidate differs from the reference in 17 of 32 banks (two banks per context); persistent all-block patches agree exactly. B1 persistence improves mean rank agreement and elite overlap in every task/bank cell, while winner agreement improves in three of four. These descriptive comparisons retain all sites and contexts. They measure fixed-bank selection, not a new CEM or physical rollout (Appendix~\ref{app:history-ranking}).
-
-For world-model intervention studies, the practical consequence is to validate an intended input counterfactual across the rolling context, not just at the first edited step. The experiment does not show that every useful activation edit must correspond to a raw-action change. Nor does it establish that history consistency improves physical control; the static steering experiments below test different operators and outcomes.
 
 \subsection{The learned edit improves some forecasts}
 
@@ -151,6 +123,34 @@ Thus we can detect better same-action forecasts in this experiment without estab
 \label{fig:physical-prefix}
 \end{figure}
 
+\subsection{A one-time action patch diverges when the context advances}
+\label{sec:main-history}
+
+We replace the H3 action with a donor action and use the resulting raw-input rollout as the counterfactual reference. The predictor's action encoder maps 20 action coordinates into a 400-dimensional condition. At H3 the changed action occupies the newest context position; at H4 it occupies the older position. We compare condition replacement at H3 only with replacement at both H3 and H4. The experiment retains sixteen development contexts (eight each on Reach and Reach-Wall), original and freshly seeded candidate banks, and all six predictor blocks, for 1,120 H6 forecasts. Candidate banks share contexts and are not independent samples.
+
+Let $\hat z_{\rm cf}$ denote the coherent raw-action forecast and $\hat z_{\rm native}$ the unmodified forecast. At each measured endpoint we report
+\begin{equation}
+ R=1-\frac{D(\hat z_{\rm patch},\hat z_{\rm cf})}{D(\hat z_{\rm native},\hat z_{\rm cf})},
+ \label{eq:history-main}
+\end{equation}
+where $D$ averages candidate-wise visual MSE plus 0.1 times proprioceptive MSE before taking the ratio. $R=1$ is exact counterfactual reconstruction and $R=0$ is the unmodified forecast's error. This measures agreement with another model rollout, not with the physical future.
+
+Replacing both appearances at all six blocks reproduces the raw-action substitution byte-exactly through H6. Replacing all blocks only at H3 matches at H3, then diverges when the original action returns as history at H4. Its H6 reconstruction is $R=0.5029$--$0.5079$ across the four task/bank cells (Figure~\ref{fig:main-history}). Exact all-block parity is a computational consistency control: replacing every occurrence reconstructs the changed input's computation. The H3-only comparison measures the consequence of omitting the action's second appearance.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\textwidth]{\figroot/lcfm_context_history.pdf}
+\caption{\textbf{Matching a changed action now does not ensure matching its later forecast.} Upper panels retain all-block patches; lower panels show B1 as an explicitly post hoc illustration of a single-block edit. Both tasks, both banks, and all sixteen contexts are retained. The dotted line is the coherent raw-action reference. Bands are existing marginal 95\% context-bootstrap intervals, not simultaneous layer comparisons. The all-block persistent patch matches exactly; the B1 persistent patch does not. Only H3, H4, and H6 are measured here.}
+\label{fig:main-history}
+\end{figure}
+
+Single-block interventions vary by layer. The improvement from replacing both appearances has intervals above zero at B0--B3 in both tasks and both banks: sixteen of twenty-four cells under the registered simultaneous correction. B4/B5 remain unresolved. B1 has the largest observed persistence difference, $\Delta R=0.4991$--$0.5057$; its persistent H6 reconstruction is $0.7320$--$0.7421$, versus $0.2286$--$0.2387$ for H3-only. B1 is an illustrative post hoc choice, not a newly selected steering site. Appendix~\ref{sec:history} retains all six layers, input-range controls, and all 72 primary contrasts.
+
+\paragraph{The mismatch reaches candidate selection.}
+A post hoc reanalysis of the saved H6 costs compares each patch with the coherent raw-action reference. For all-block H3-only patches, mean Spearman agreement is 0.878--0.894 and mean top-ten overlap is 5.75--6.88 across task/bank cells. Their winning candidate differs from the reference in 17 of 32 banks (two banks per context); persistent all-block patches agree exactly. The independent sample remains sixteen contexts. A different selected candidate is neither a task-success event nor evidence of a better plan. B1 persistence improves mean rank agreement and elite overlap in every task/bank cell, while winner agreement improves in three of four. The candidate selected by the one-time all-block patch has 2.53\% to 3.92\% higher cost under the reference on average across the four task/bank groups, including unchanged selections. This percentage divides each context's excess reference cost by its minimum reference cost before averaging. These descriptive comparisons retain all sites and contexts. They measure fixed-bank selection, not a new CEM or physical rollout (Appendix~\ref{app:history-ranking}).
+
+The result supports checking later forecasts when an activation patch is intended to reproduce an input change. Exact agreement at the edited step does not establish agreement after the context advances. The all-block repeated replacement is a consistency control. The experiment does not test a method for improving physical control, and its sixteen contexts provide limited evidence about how frequently candidate choices change in other states.
+
 \subsection{Local geometry depends on how the predictor is computed}
 
 With weights, inputs, and interpolation coefficients fixed across 64 contexts, cubic activation reconstruction outperforms linear reconstruction at every block in FP32; BF16 reverses the comparison. Rounding only the FP32 output does not reproduce actual BF16 computation. A separate five-task interpolation study finds small, mixed downstream forecast benefits after matching requested edit doses. An apparent geometric advantage therefore needs numerical controls and a separate test of its effect on prediction (Appendix~\ref{sec:geometry}).
@@ -185,15 +185,17 @@ Action conditioning only & 47.92 & 17.71 & 81.25 & 78.13\\
 
 \section{Discussion and limitations}
 
-The action-history test identifies a specific source of mismatch between a local patch and an input counterfactual: the same action-derived information is reused at the next prediction step. An evaluation at the edited step alone misses this difference. In longer-horizon agents, repeated observations, cached features, and action histories provide further places to test this issue, but our experiment establishes it only for the two-frame JEPA-WM predictor. H6 is not evidence of long-context scaling, and exact reproduction of a model counterfactual is not evidence of physical correctness.
+The learned correction improves some forecasts, but a planner responds to relative goal costs. In the fixed candidate banks, the correction rarely changes the lowest-cost plan. The cost-gap bound accounts for most of these stable choices. CEM can still change its later proposals and returned actions under both learned and random edits. The physical replay detects lower prediction error for the same actions while leaving differences in goal attainment unresolved.
 
-The planning experiments address a separate requirement: an edit must change candidate-relative costs enough to alter the relevant selection decision. A shared activation correction can do this because its effect on squared goal distance depends on each candidate's original prediction. Candidate-specific edit coefficients are therefore not necessary. The fixed-bank bound explains many unchanged initial winners, while adaptive search measures later plan changes. Neither analysis identifies the cause of protected outcome changes: those episodes used different inputs and randomness and did not retain numerical candidate costs or elite identities.
+The history experiment has a narrower interpretation. Its reference is the forecast produced by a changed input action. Replacing the corresponding conditioning everywhere reproduces that computation, as expected. Omitting the historical appearance changes later forecasts and sometimes the selected candidate. The 17/32 count describes two banks within each of sixteen contexts; it is not a success rate or 32 independent observations. We have not shown that the disagreement causes worse physical outcomes. The fixed two-frame window also limits what this experiment says about longer-context models.
 
-Our physical follow-up executes three selected plans per state, not all 300 candidates, and measures H3 while CEM optimizes H6. It cannot establish the true physical ranking of the complete candidate bank. The study uses one released checkpoint per task, task-specific fitted edits, and 96 protected scenarios per task, without independent training-seed replication. Development diagnostics informed the analysis. All 48 protected contrast intervals include zero, leaving small behavioral effects unresolved. Full tables retain random controls, unfavorable results, and unavailable historical cells.
+A follow-up should first estimate the frequency and size of these selection changes on new independent trajectories. It should pair conditions within each trajectory and report uncertainty across trajectories, keeping additional candidate banks as repeated measurements. Testing a planning benefit requires a specified steering rule, concurrent unsteered and matched random controls, and simulator outcomes. Sample size should follow the smallest useful effect and variability of the paired outcomes. A larger replication of exact computational agreement alone would not establish a better planning method. These are proposed experiments; the present paper reports the completed sixteen-context study.
+
+Our physical follow-up executes three selected plans per state and measures H3 while CEM optimizes H6. It therefore cannot recover the physical ranking of all 300 candidates. The protected evaluation uses 96 scenarios per task, one released checkpoint per task, and task-specific fitted edits, without independent training-seed replication. All 48 simultaneous contrast intervals include zero, leaving small behavioral effects unresolved. Because the development diagnostics and protected episodes use different inputs and randomness, the diagnostics do not identify the cause of individual protected outcomes.
 
 \section{Conclusion}
 
-Frozen JEPA-WM lets us test how changes inside a predictor affect the computations a planner uses. Replacing an action-derived condition across both context appearances reproduces a specified input-action counterfactual; a one-time patch agrees initially and diverges later. Learned corrections improve some forecasts, a score-margin bound identifies stable fixed-bank choices, and adaptive search can still produce different plans. Measuring these stages separately gives world-model researchers a way to distinguish a consistent intervention, a better forecast, and a better control decision.
+Activation edits in frozen JEPA-WM can reduce forecast error and change the plans returned by adaptive search. In the measured fixed candidate banks, the learned correction usually leaves the first choice unchanged, with a simple cost-gap bound certifying most cases. The action-history check shows why an internal replacement should be evaluated after the context advances: a one-time patch can reproduce an immediate forecast and miss the later effect of the same input change. Establishing a control benefit requires comparisons against simulator outcomes; the completed behavioral evaluation does not establish that benefit.
 
 \clearpage
 \bibliographystyle{plainnat}

@@ -76,3 +76,31 @@ python -m pytest -q tests/test_lcfm_history_ranking.py
 The analysis command uses the committed cost-vector export and refuses to overwrite existing outputs. To rebuild that export from the original preserved case files, use `--export-source PATH_TO_COMPLETE16_CASES --output NEW_DIRECTORY`.
 
 [Analysis code](../analysis/mechanism/lcfm_history_ranking.py) · [Input vectors](../paper/data/lcfm_history_ranking_inputs.json) · [Input checksum manifest](../paper/data/lcfm_history_ranking_inputs_manifest.json) · [Analysis receipt](../paper/data/lcfm_history_ranking_report.json) · [All case metrics](../paper/data/lcfm_history_ranking_cases.csv) · [All paired differences](../paper/data/lcfm_history_ranking_paired_differences.csv)
+
+
+## How large are the changed choices?
+
+A second post hoc CPU recount evaluates the candidate selected by each patch
+under the changed-input reference's cost function. For reference costs C and
+patch-selected candidate j, excess cost is C(j) − min C. Its percentage is
+100 × (C(j) − min C) / min C, calculated per context before averaging. All
+reference minima are positive. This measures model-reference cost, not physical
+regret, forecast error, or task success.
+
+| Task | Bank | Mean excess reference cost | Mean excess (%) | Median excess (%) |
+|---|---|---:|---:|---:|
+| Reach | Original | 0.05470 | 2.84 | 0.00 |
+| Reach | Fresh | 0.06605 | 3.92 | 3.32 |
+| Reach-Wall | Original | 0.05329 | 2.53 | 3.15 |
+| Reach-Wall | Fresh | 0.05963 | 2.85 | 1.35 |
+
+Each row includes all eight contexts, including unchanged selections with zero
+excess cost. Both-appearance all-block patches have zero excess in every bank.
+These are descriptive results from the same sixteen contexts, with no new tests.
+[Every case](../paper/data/lcfm_history_selection_cost_cases.csv) ·
+[Calculation protocol](../paper/data/lcfm_history_selection_cost_protocol.json) ·
+[Summary and source hashes](../paper/data/lcfm_history_selection_cost_summary.json).
+
+```bash
+python -m analysis.mechanism.lcfm_history_selection_cost --output /tmp/new-selection-cost-recount
+```
