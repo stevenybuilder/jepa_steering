@@ -20,7 +20,8 @@ def read(path):
 def process_identity(pid):
     proc = Path('/proc')/str(pid)
     try:
-        args = (proc/'cmdline').read_bytes().rstrip(b'\0').split(b'\0')
+        command = (proc/'cmdline').read_bytes().rstrip(b'\0')
+        args = command.split(b'\0') if command else []
         stat = (proc/'stat').read_text()
     except FileNotFoundError:
         return None
@@ -28,6 +29,15 @@ def process_identity(pid):
     if tail[0] == 'Z':
         return None
     return {'start_ticks': tail[19], 'args': [value.decode() for value in args]}
+
+
+def assert_same_process(current, original):
+    # Linux can clear cmdline before the dying process reaches zombie state.
+    # Its unchanged start time distinguishes that transition from PID reuse.
+    if current['start_ticks'] != original['start_ticks']:
+        raise ValueError('PID identity changed')
+    if current['args'] and current['args'] != original['args']:
+        raise ValueError('Executor command changed')
 
 
 def validate_process(identity, task, manifest_sha, output):
@@ -89,8 +99,10 @@ def main():
         if current is None:
             reason = 'Executor finished before a stop was needed'
             break
-        if current != identity:
-            raise ValueError('PID identity changed; no signal sent')
+        assert_same_process(current, identity)
+        if not current['args']:
+            time.sleep(.1)
+            continue
         state = snapshot(args.output, args.task, args.manifest_sha256)
         if target is None and state['incomplete']:
             if len(state['incomplete']) != 1:
@@ -104,8 +116,7 @@ def main():
                 current = process_identity(args.pid)
                 if current is None:
                     break
-                if current != identity:
-                    raise ValueError('PID reused after termination signal')
+                assert_same_process(current, identity)
                 time.sleep(.1)
             else:
                 raise RuntimeError('Executor has not exited; do not reassign its work')

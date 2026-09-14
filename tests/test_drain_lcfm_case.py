@@ -4,7 +4,7 @@ from pathlib import Path
 
 import pytest
 
-from scripts.vast.drain_lcfm_case import snapshot, validate_process
+from scripts.vast.drain_lcfm_case import assert_same_process, snapshot, validate_process
 
 
 def identity():
@@ -57,3 +57,12 @@ def test_partially_written_json_is_retried_without_counting_completion(tmp_path)
     directory = record(tmp_path, 0, False)
     (directory/'REPLICATION_CASE.json').write_text('{')
     assert snapshot(tmp_path, 'reach', 'frozen') == {'complete': [], 'incomplete': []}
+
+
+def test_empty_command_during_linux_exit_is_not_pid_reuse():
+    original = {'start_ticks': '100', 'args': ['python', '-m', 'owned']}
+    assert_same_process({'start_ticks': '100', 'args': []}, original)
+    with pytest.raises(ValueError, match='PID identity'):
+        assert_same_process({'start_ticks': '200', 'args': []}, original)
+    with pytest.raises(ValueError, match='command changed'):
+        assert_same_process({'start_ticks': '100', 'args': ['unrelated']}, original)
