@@ -2,6 +2,9 @@
 
 **When does changing a predicted future change the plan?**
 
+> **Accepted at the NeurIPS 2026 Workshop on Long-Context Foundation Models (LCFM)** as a long paper:
+> *Second-Read Divergence: Context Reuse in JEPA-WM*.
+
 JEPA-WM plans by predicting what candidate actions will lead to, then choosing
 among those futures. We keep its checkpoints frozen and test **activation
 steering inside the predictor**: learned low-rank corrections, visual and
